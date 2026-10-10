@@ -1,0 +1,52 @@
+name: 检查、构建、测试
+
+# 每次推到 main、以及每个 PR 都跑一遍。
+#
+# 和 pages.yml 分工不同：那个只管把网页产物发到 GitHub Pages，不装工具链；
+# 这个装工具链，跑检查 / 构建 / 测试。
+#
+# 三件事分开跑而不是串成一条命令，是为了在 Actions 页面上能一眼看出是哪一步挂了。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 装 MoonBit 工具链
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: 打印版本
+        run: |
+          moon version --all
+          # 验收要求 moonc 不低于 0.10.14。这里不写死版本，但把版本打进日志，
+          # 万一以后工具链降级了能从日志看出来
+          moonc -v
+
+      # 依赖装到 .mooncakes/，缓存起来省得每次重新下
+      - name: 缓存依赖
+        uses: actions/cache@v4
+        with:
+          path: ~/.moon/registry
+          key: moon-registry-${{ hashFiles('moon.mod') }}
+          restore-keys: moon-registry-
+
+      - name: 解析依赖
+        run: moon update
+
+      - name: 检查（全目标，零警告才算过）
+        run: moon check --target all --deny-warn
+
+      - name: 构建
+        run: moon build
+
+      - name: 测试
+        run: moon test

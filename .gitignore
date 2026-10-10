@@ -1,0 +1,18 @@
+# MoonBit 编译输出
+_build/
+.mooncakes/
+_coverage/
+
+# 测试覆盖率文件
+moonbit-coverage-*.txt
+
+# 编辑器 / 系统
+.DS_Store
+.vscode/
+*.swp
+*.swo
+
+# AI 助手的交接文档。本地留着方便接着干活，
+# 但不进仓库——里面记的是开发过程中的内部决策
+CLAUDE.md
+.claude/

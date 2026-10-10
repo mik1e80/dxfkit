@@ -1,0 +1,12 @@
+import {
+  "moonbitlang/core/math",
+}
+
+// 库本体：只用 MoonBit 自带的核心库（`moonbitlang/core`），零第三方依赖。
+//
+// `moonbitlang/core/*` 不算第三方依赖——它是语言自带的，也不用写进 `moon.mod`。
+// 但现在要在 `moon.pkg` 里显式列出来（新版本的编译器会为不写导入的用法报警告，
+// 而本项目的标准是零警告）。
+//
+// 现在只用到 `math`（三角函数、开方）。后面解析和几何求值加进来，
+// 还会用到 `string`（数字解析）、`encoding/utf8`（解码）等。
