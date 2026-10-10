@@ -1,0 +1,14 @@
+# 测试语料按二进制处理，不做换行转换。
+#
+# 这批 DXF 文件里**换行本身就是被测对象**——有 LF 的、有 CRLF 的，
+# 解析器必须两种都认。让 git 在 checkout 时统一成一种，就等于把测试数据改了，
+# 测试会变成「在一台机器上过、在另一台上不过」。
+testdata/** -text
+
+# 源码和文档统一用 LF
+*.mbt text eol=lf
+*.md text eol=lf
+*.pkg text eol=lf
+*.mod text eol=lf
+*.yml text eol=lf
+*.sh text eol=lf

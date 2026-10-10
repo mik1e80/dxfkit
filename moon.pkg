@@ -1,5 +1,7 @@
 import {
   "moonbitlang/core/math",
+  "moonbitlang/core/string",
+  "moonbitlang/core/encoding/utf8",
 }
 
 // 库本体：只用 MoonBit 自带的核心库（`moonbitlang/core`），零第三方依赖。
@@ -8,5 +10,7 @@ import {
 // 但现在要在 `moon.pkg` 里显式列出来（新版本的编译器会为不写导入的用法报警告，
 // 而本项目的标准是零警告）。
 //
-// 现在只用到 `math`（三角函数、开方）。后面解析和几何求值加进来，
-// 还会用到 `string`（数字解析）、`encoding/utf8`（解码）等。
+// 现在用到：
+//   math           三角函数、开方（向量旋转、极角）
+//   string         数字解析（组码的值、代码页编号）
+//   encoding/utf8  文本解码

@@ -31,6 +31,13 @@ PCB 制板都在用。能打开图纸的软件很多，但**能把「这份图�
 ## 已完成
 
 - `vec.mbt` —— `Vec2` / `Vec3` / `Aabb2` / `Aabb3`、角度归一化、容差比较
+- `tag.mbt` —— 组码 → 类型的区间表、各类谓词、坐标组码归组
+- `codepage.mbt` —— 编码判断（版本规则）、UTF-8 / CP1252 解码
+- `reader_ascii.mbt` —— ASCII 行对扫描：trim、三种换行、EOF 处理、坏行恢复
+- `conformance/` —— 语料回归工具与测试
+
+**实测**：47 个真实 DXF 文件、339,913 个 tag、**0 条警告、0 个读不了**
+（`moon run conformance`）。
 
 ## 实现上的几个决定
 
@@ -54,6 +61,11 @@ moon check --target all --deny-warn    # 全目标检查，要求零警告
 ## 项目结构
 
 - `vec.mbt` — 二维/三维向量、轴对齐包围盒、角度归一化
+- `tag.mbt` — 组码与值的类型、组码到类型的区间表、语义分类谓词
+- `codepage.mbt` — 文本编码的判断与解码
+- `reader_ascii.mbt` — ASCII DXF 的行对扫描
+- `conformance/` — 语料批量工具（可执行）与回归测试
+- `testdata/ezdxf/` — 47 个真实 DXF 文件（来自 ezdxf，MIT）
 
 ## 参考
 

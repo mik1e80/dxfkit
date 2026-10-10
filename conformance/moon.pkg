@@ -1,0 +1,19 @@
+import {
+  "mik1e80/dxfkit",
+  "moonbitlang/x/fs",
+  "moonbitlang/core/env",
+}
+
+// 这个包干两件事：**批量跑语料**（可执行）和**回归测试**。
+//
+// 为什么要有可执行那一半：`moon check` 不编译测试文件，所以「只被测试用到」
+// 的函数和导入都会被报成 unused。让源文件真的调用它们，问题就没了——
+// 顺带还得到一个能随时手跑的语料报告工具。
+//
+// **必须单独一个包**，因为库本体不能导入 `moonbitlang/x/fs`——
+// 网页版是同一份库代码编译成 JS 的，而浏览器里没有 `fs`。
+// 把读文件关在这个包里，库本体的「三端都能跑」才是真的。
+//
+// `-all+wasm+native`：`fs` 只有这两个后端有实现，js 上编不过。
+supported_targets = "-all+wasm+native"
+pkgtype(kind: "executable")
