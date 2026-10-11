@@ -39,7 +39,7 @@ PCB 制板**都在用它。但**能打开图纸的软件多，能告诉你图纸
 
 ```text
 解析    ASCII DXF（R10–R2018 多版本规则、三种换行、坏行恢复）
-        子类驱动的组码解释、未知 tag 保留
+        子类驱动的组码解释、未知 tag 保留；大文件可流式扫描
 实体    18 种：LINE / CIRCLE / ARC / ELLIPSE / SPLINE / POINT、
         LWPOLYLINE / POLYLINE / TEXT / MTEXT / ATTRIB、INSERT（含嵌套块）、
         SOLID / HATCH / DIMENSION 等；认不出的保留原记录
@@ -49,7 +49,7 @@ PCB 制板**都在用它。但**能打开图纸的软件多，能告诉你图纸
 形态    库 + 命令行 + 网页
 ```
 
-还没做的：二进制 DXF、写回文件、引用完整性校验、大文件流式遍历。
+还没做的：二进制 DXF、写回文件、引用完整性校验。
 
 ## 用法
 
@@ -57,6 +57,7 @@ PCB 制板**都在用它。但**能打开图纸的软件多，能告诉你图纸
 moon run cli check 图纸.dxf                 # 加工前检查（有致命问题退出码 1）
 moon run cli check 图纸.dxf --min-gap 0.5   # 带最小净距阈值（单位同图纸）
 moon run cli svg 图纸.dxf > 预览.svg         # 画出来看一眼
+moon run cli stats 大图纸.dxf                # 流式统计，整份不进内存
 ```
 
 网页版：打开 [`web/index.html`](web/index.html) 直接就能用（双击即可，

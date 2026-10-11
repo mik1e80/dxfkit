@@ -82,3 +82,4 @@ SOFTWARE.
 | 依赖 | 用途 | 用在哪 | 许可证 |
 | --- | --- | --- | --- |
 | `moonbitlang/x` | 读文件（`fs`）；命令行退出码（`sys`） | **只有 `conformance/` 和 `cli/` 两个子包**，库本体和网页版都不碰 | Apache-2.0 |
+| `moonbitlang/async` | 分块读文件（`fs` 的 `read_at`，`moonbitlang/x/fs` 只能一次读完） | **只有 `cli/` 子包**（`stats` 命令） | Apache-2.0 |

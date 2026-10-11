@@ -18,9 +18,10 @@ description = "MoonBit 实现的 DXF（CAD 图纸）工具链：解析、校验�
 // 好处是 native / wasm / js 后端都能跑，没有 FFI 也没有 JS 依赖——
 // 网页版才能是「同一份代码编译成的 JS」而不是重写一遍。
 //
-// 下面这个依赖**只有 `conformance/` 子包用**（读真实 DXF 文件跑回归测试）。
-// 库本体不碰它，所以上面那条约束仍然成立。
+// 下面这些依赖**只有子包用**（conformance 读语料、cli 读文件和
+// 分块流式读大文件）。库本体不碰它们，所以上面那条约束仍然成立。
 
 import {
   "moonbitlang/x@0.5.5",
+  "moonbitlang/async@0.22.1",
 }

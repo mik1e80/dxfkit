@@ -3,6 +3,7 @@
 //     dxfkit check 图纸.dxf                 # 加工前检查
 //     dxfkit check 图纸.dxf --min-gap 0.5   # 带最小净距阈值
 //     dxfkit svg 图纸.dxf > 预览.svg         # 画成 SVG
+//     dxfkit stats 大图纸.dxf                # 流式统计（整份不进内存）
 //
 // 退出码是给脚本用的：**0 没致命问题、1 有致命问题、2 用不了**
 //（参数不对 / 文件读不了）。注意 0 的含义是「这次检查没发现问题」——
@@ -12,7 +13,7 @@
 // CLI 只是门面，改门面碰不坏引擎。
 
 ///|
-fn main {
+async fn main {
   let args = @env.args()
   if args.length() < 2 {
     usage()
@@ -23,6 +24,7 @@ fn main {
     "help" | "--help" | "-h" => usage()
     "check" => run_check(args[2:])
     "svg" => run_svg(args[2:])
+    "stats" => run_stats(args[2:])
     cmd => {
       println("不认识的命令「\{cmd}」")
       usage()
@@ -117,6 +119,203 @@ fn run_svg(args : ArrayView[String]) -> Unit {
 }
 
 ///|
+/// 流式统计：一块一块地读，边读边数——**整个文件不进内存**，
+/// 多大的图纸都能跑。走 `moonbitlang/async/fs`：`moonbitlang/x/fs`
+/// 只有「一次读完」，没有带偏移量的读取。
+///
+/// 只报能流出来算的东西（tag 数、段、版本、编码、警告数）；
+/// 要看几何走 `check` / `svg`——那两个需要整份图纸，是另一条路。
+async fn run_stats(args : ArrayView[String]) -> Unit {
+  let mut path = ""
+  for a in args {
+    if path == "" {
+      path = a
+    } else {
+      println("多余的参数「\{a}」")
+      @sys.exit(2)
+      return
+    }
+  }
+  if path == "" {
+    println("要给一个 DXF 文件：dxfkit stats 图纸.dxf")
+    @sys.exit(2)
+    return
+  }
+  let file = @asyncfs.open(path, mode=@asyncfs.Mode::ReadOnly) catch {
+    err => {
+      println("打不开 \{path}：\{err}")
+      @sys.exit(2)
+      return
+    }
+  }
+  let size = file.size() catch {
+    err => {
+      let _ = file.close()
+      println("读不了文件大小：\{err}")
+      @sys.exit(2)
+      return
+    }
+  }
+  let stream = @dxfkit.TagStream::new()
+  let tracker = StatsTracker::new()
+  // 256 KB 一块：太小系统调用多，太大缓冲区本身占内存——关键是**固定**，
+  // 文件再大也不涨
+  let chunk = 262144
+  let buf : FixedArray[Byte] = FixedArray::make(chunk, b'\x00')
+  let mut pos = 0L
+  let mut failure : String? = None
+  while pos < size && failure is None {
+    let remain = (size - pos).to_int()
+    let want = if remain < chunk { remain } else { chunk }
+    let n = file.read_at(buf, position=pos, offset=0, len=want) catch {
+      err => {
+        failure = Some("读文件失败：\{err}")
+        0
+      }
+    }
+    if n <= 0 {
+      break
+    }
+    let part : Array[Byte] = []
+    for i = 0; i < n; i = i + 1 {
+      part.push(buf[i])
+    }
+    let tags = stream.feed(Bytes::from_array(part))
+    tracker.feed(tags)
+    pos = pos + n.to_int64()
+  }
+  let tail = stream.finish()
+  tracker.feed(tail)
+  let _ = file.close()
+  match failure {
+    Some(msg) => {
+      println(msg)
+      @sys.exit(2)
+      return
+    }
+    None => ()
+  }
+  let warnings = stream.warnings()
+  println("图纸 \{path}")
+  println("文件 \{size} 字节，一块 \{chunk} 字节地读（整份不进内存）")
+  let ver = tracker.version()
+  let ver_note = if ver == "" {
+    "（没有 HEADER）"
+  } else {
+    ver
+  }
+  println(
+    "编码 \{stream.encoding().unwrap().to_display()} · 版本 \{ver_note}",
+  )
+  println("tag \{tracker.tag_count()} 个 · 警告 \{warnings.length()} 条")
+  // 段里数的是组码 0 记录：HEADER 的变量不是记录，所以它显示 0
+  let sb = StringBuilder()
+  for s in tracker.sections() {
+    if sb.to_string().length() > 0 {
+      sb.write_string("  ")
+    }
+    sb.write_string("\{s.0}(\{s.1})")
+  }
+  println("段        \{sb}")
+  @sys.exit(0)
+}
+
+///|
+/// `stats` 的流式统计：从连续喂进来的 tag 里摘版本号、段和记录数、总数。
+///
+/// 只认 tag 序列、不碰文件，所以天然是流式的——喂进来多少统计多少。
+struct StatsTracker {
+  mut count : Int
+  mut ver : String
+  /// 当前段名（`ENDSEC` 之后清空）
+  mut section : String?
+  /// 刚看到 `0 / SECTION`，下一对 `2 / 名字` 是段名
+  mut want_section_name : Bool
+  sections : Array[(String, Int)]
+  /// 刚看到 `9 / $XXX`，下一条是它的值——盯 `$ACADVER`
+  mut want_var : String?
+}
+
+///|
+fn StatsTracker::new() -> StatsTracker {
+  {
+    count: 0,
+    ver: "",
+    section: None,
+    want_section_name: false,
+    sections: [],
+    want_var: None,
+  }
+}
+
+///|
+fn StatsTracker::feed(self : StatsTracker, tags : Array[@dxfkit.Tag]) -> Unit {
+  for t in tags {
+    self.count = self.count + 1
+    // $ACADVER：9 是变量名，紧跟的那条是值
+    match self.want_var {
+      Some(name) => {
+        if t.code == 1 && name == "$ACADVER" {
+          self.ver = t.value.as_string()
+        }
+        self.want_var = None
+      }
+      None => ()
+    }
+    if t.code == 9 {
+      self.want_var = Some(t.value.as_string())
+    }
+    if t.code == 0 {
+      let kind = t.value.as_string()
+      if kind == "SECTION" {
+        self.section = None
+        self.want_section_name = true
+      } else if kind == "ENDSEC" {
+        self.section = None
+      } else {
+        // 段里的记录（SECTION / ENDSEC 自己不算）
+        self.bump_current()
+      }
+    } else if t.code == 2 && self.want_section_name {
+      self.section = Some(t.value.as_string())
+      self.want_section_name = false
+      self.sections.push((t.value.as_string(), 0))
+    }
+  }
+}
+
+///|
+fn StatsTracker::bump_current(self : StatsTracker) -> Unit {
+  match self.section {
+    Some(name) => {
+      let mut i = 0
+      while i < self.sections.length() {
+        if self.sections[i].0 == name {
+          self.sections[i] = (name, self.sections[i].1 + 1)
+        }
+        i = i + 1
+      }
+    }
+    None => ()
+  }
+}
+
+///|
+fn StatsTracker::tag_count(self : StatsTracker) -> Int {
+  self.count
+}
+
+///|
+fn StatsTracker::version(self : StatsTracker) -> String {
+  self.ver
+}
+
+///|
+fn StatsTracker::sections(self : StatsTracker) -> Array[(String, Int)] {
+  self.sections.copy()
+}
+
+///|
 /// 读文件并扫描。读不了返回 `None`（问题已经打在屏幕上了）。
 fn scan_file(path : String) -> @dxfkit.TagScan? {
   let data = @fs.read_file_to_bytes(path) catch {
@@ -150,6 +349,8 @@ fn usage() -> Unit {
   println("        退化几何、文字未转曲线。有致命问题退出码 1，读不了 2，其余 0")
   println("  dxfkit svg <图纸.dxf> [--tol 0.05]")
   println("        把图纸画成 SVG 打到 stdout（重定向存成文件）")
+  println("  dxfkit stats <图纸.dxf>")
+  println("        流式统计：tag 数、段、版本、编码。整份不进内存，多大都能跑")
   println("  dxfkit help")
   println("")
   println("容差和净距都用图纸自己的单位；--min-gap 不给就不查净距")
