@@ -264,6 +264,160 @@ test "缺短长轴比的椭圆跳过并警告" {
   assert_eq(es.warnings.length(), 1)
 }
 
+// ── 多段线 ──────────────────────────────────────────────────────────────
+
+///|
+test "LWPOLYLINE 顶点与闭合标志" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLWPOLYLINE\n100\nAcDbEntity\n8\n0\n100\nAcDbPolyline\n90\n3\n70\n1\n" +
+    "10\n0.0\n20\n0.0\n10\n10.0\n20\n0.0\n10\n10.0\n20\n5.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.warnings.length(), 0)
+  match es.entities[0].geom {
+    Polyline(vertices~, closed~) => {
+      assert_true(closed)
+      assert_eq(vertices.length(), 3)
+      assert_true(vertices[1].at.x == 10.0 && vertices[1].at.y == 0.0)
+      assert_true(vertices[2].at.y == 5.0)
+    }
+    _ => fail("不是多段线")
+  }
+}
+
+///|
+test "LWPOLYLINE 的凸度挂在顶点上" {
+  // 42 跟在对应顶点的 20 后面——按顺序扫才对得上，get 只会拿第一对
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLWPOLYLINE\n100\nAcDbPolyline\n90\n2\n70\n0\n" +
+    "10\n0.0\n20\n0.0\n42\n0.5\n10\n10.0\n20\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  match d.entities().entities[0].geom {
+    Polyline(vertices~, ..) => {
+      assert_true(vertices[0].bulge == 0.5)
+      assert_true(vertices[1].bulge == 0.0)
+    }
+    _ => fail("不是多段线")
+  }
+}
+
+///|
+test "LWPOLYLINE 解析不出顶点时跳过" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nLWPOLYLINE\n100\nAcDbPolyline\n90\n3\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.entities.length(), 0)
+  assert_eq(es.warnings.length(), 1)
+}
+
+///|
+test "老式 POLYLINE 的顶点在后续记录里" {
+  // POLYLINE → VERTEX… → SEQEND：一条实体横跨多条记录
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nPOLYLINE\n8\n轮廓\n66\n1\n70\n0\n" +
+    "0\nVERTEX\n8\n轮廓\n10\n0.0\n20\n0.0\n30\n0.0\n" +
+    "0\nVERTEX\n8\n轮廓\n10\n5.0\n20\n0.0\n30\n0.0\n42\n1.0\n" +
+    "0\nVERTEX\n8\n轮廓\n10\n5.0\n20\n5.0\n30\n0.0\n" +
+    "0\nSEQEND\n8\n轮廓\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  // 三个 VERTEX 和 SEQEND 都不该成为独立实体
+  assert_eq(es.entities.length(), 1)
+  assert_eq(es.warnings.length(), 0)
+  assert_true(es.entities[0].kind() == "POLYLINE")
+  match es.entities[0].geom {
+    Polyline(vertices~, closed~) => {
+      assert_eq(vertices.length(), 3)
+      assert_false(closed)
+      assert_true(vertices[1].bulge == 1.0)
+    }
+    _ => fail("不是多段线")
+  }
+}
+
+///|
+test "多边形网格的 POLYLINE 进 Unknown" {
+  // 70 = 16 是多边形网格：顶点记录另有含义，按多段线解析会得到假线
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nPOLYLINE\n66\n1\n70\n16\n" +
+    "0\nVERTEX\n10\n0.0\n20\n0.0\n30\n0.0\n" +
+    "0\nSEQEND\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.entities.length(), 1)
+  assert_false(es.entities[0].is_decoded())
+}
+
+///|
+test "缺 SEQEND 的 POLYLINE 尽力而为" {
+  // 文件被截断时不该整条丢掉——读到哪算哪
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nPOLYLINE\n70\n0\n" +
+    "0\nVERTEX\n10\n0.0\n20\n0.0\n30\n0.0\n" +
+    "0\nVERTEX\n10\n1.0\n20\n1.0\n30\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.entities.length(), 1)
+  match es.entities[0].geom {
+    Polyline(vertices~, ..) => assert_eq(vertices.length(), 2)
+    _ => fail("不是多段线")
+  }
+}
+
+///|
+test "多段线的包围盒" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLWPOLYLINE\n100\nAcDbPolyline\n70\n1\n" +
+    "10\n0.0\n20\n0.0\n10\n4.0\n20\n0.0\n10\n0.0\n20\n3.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let b = d.entities().entities[0].bounds().unwrap()
+  assert_true(b.min.x == 0.0 && b.min.y == 0.0)
+  assert_true(b.max.x == 4.0 && b.max.y == 3.0)
+}
+
+///|
+test "圆弧段的包围盒会被撑开" {
+  // 两点 + bulge 1（半圆）：矢高 = |b| × 弦长 / 2 = 0.5，盒子四边撑开
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLWPOLYLINE\n100\nAcDbPolyline\n70\n0\n" +
+    "10\n0.0\n20\n0.0\n42\n1.0\n10\n1.0\n20\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let b = d.entities().entities[0].bounds().unwrap()
+  assert_true(b.min.x == -0.5 && b.min.y == -0.5)
+  assert_true(b.max.x == 1.5 && b.max.y == 0.5)
+}
+
+///|
+test "闭合多段线的收尾边也算凸度" {
+  // 最后一个顶点的 bulge 管的是连回第一点的那条边——只在闭合时有意义
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLWPOLYLINE\n100\nAcDbPolyline\n70\n1\n" +
+    "10\n0.0\n20\n0.0\n10\n1.0\n20\n0.0\n10\n1.0\n20\n1.0\n42\n1.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  // 收尾边 (1,1)→(0,0)，弦长 √2，矢高 = √2/2
+  let b = d.entities().entities[0].bounds().unwrap()
+  assert_true((b.min.x + 0.7071067811865476).abs() < 1.0e-9)
+  assert_true((b.max.y - 1.7071067811865476).abs() < 1.0e-9)
+}
+
 // ── Unknown 兜底 ────────────────────────────────────────────────────────
 
 ///|

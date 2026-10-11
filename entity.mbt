@@ -58,6 +58,11 @@ pub(all) enum Geometry {
     start_param~ : Double,
     end_param~ : Double
   )
+  /// 多段线：一串顶点，每段可以是直线（bulge = 0）或圆弧（bulge ≠ 0）。
+  ///
+  /// 轻量的 LWPOLYLINE 和带 VERTEX 记录的 POLYLINE 都归到这里——
+  /// 顶点从哪来不一样，形状表示是一样的。
+  Polyline(vertices~ : Array[PolyVertex], closed~ : Bool)
   /// 认不出的实体类型。**不等于坏记录**——只是解析器还没解码它
   Unknown
 }
@@ -67,6 +72,19 @@ pub(all) enum Geometry {
 pub(all) struct Entity {
   common : EntityCommon
   geom : Geometry
+}
+
+///|
+/// 多段线的一个顶点。
+pub(all) struct PolyVertex {
+  at : Vec3
+  /// 到下一个顶点的凸度（bulge）——圆弧段的「弯度」，
+  /// `tan(圆心角 / 4)`：0 = 直线段，正 = 逆时针鼓，负 = 顺时针鼓。
+  /// 最后一个顶点的 bulge 只在闭合时有意义（它管连回第一点的那条边）。
+  ///
+  /// 可变是因为解析顺序：`42` 在它所属顶点的 `20` **之后**才出现，
+  /// 顶点先落地、凸度后补上。
+  mut bulge : Double
 }
 
 ///|
@@ -150,6 +168,7 @@ pub fn Geometry::bounds(self : Geometry) -> Aabb2? {
       Some(arc_bounds(center, radius, start_angle, end_angle))
     // 弧段用整椭圆的盒——永远包含，只是偏大；精确的弧段盒留给离散层
     Ellipse(center~, major~, ratio~, ..) => Some(ellipse_bounds(center, major, ratio))
+    Polyline(vertices~, closed~) => Some(polyline_bounds(vertices, closed))
     Unknown => None
   }
 }
@@ -254,6 +273,46 @@ fn ellipse_bounds(center : Vec3, major : Vec3, ratio : Double) -> Aabb2 {
     .expand(Vec2::new(c.x + half_x, c.y + half_y))
 }
 
+///|
+/// 多段线的二维包围盒：顶点盒，加上圆弧段的鼓出部分。
+///
+/// 圆弧段的处理是**保守**的：矢高（弧离弦的最大距离）是 `|b|·弦长/2`，
+/// 把这段的盒子四边各撑开矢高——永远包含，但偏大。半圆以上的段
+/// （|b| > 1）弦短弧长，矢高会低估，改用「整圆在半径 2r 的圆里」兜底。
+/// 精确到象限点的弧段盒留给离散层——那里会真正把弧变成点。
+fn polyline_bounds(vertices : Array[PolyVertex], closed : Bool) -> Aabb2 {
+  let mut box = Aabb2::empty()
+  for v in vertices {
+    box = box.expand(v.at.xy())
+  }
+  let n = vertices.length()
+  if n < 2 {
+    return box
+  }
+  let segments = if closed { n } else { n - 1 }
+  let mut i = 0
+  while i < segments {
+    let a = vertices[i]
+    let b = vertices[(i + 1) % n]
+    if a.bulge != 0.0 {
+      let ax = a.at.xy()
+      let bx = b.at.xy()
+      let chord = ax.distance(bx)
+      let abs_b = a.bulge.abs()
+      let pad = if abs_b <= 1.0 {
+        abs_b * chord / 2.0
+      } else {
+        2.0 * (chord * (1.0 + abs_b * abs_b) / (4.0 * abs_b))
+      }
+      box = box
+        .expand(Vec2::new(ax.x.min(bx.x) - pad, ax.y.min(bx.y) - pad))
+        .expand(Vec2::new(ax.x.max(bx.x) + pad, ax.y.max(bx.y) + pad))
+    }
+    i = i + 1
+  }
+  box
+}
+
 // ── 解析 ────────────────────────────────────────────────────────────────
 
 ///|
@@ -263,13 +322,132 @@ fn ellipse_bounds(center : Vec3, major : Vec3, ratio : Double) -> Aabb2 {
 pub fn parse_entities(section : Section) -> Entities {
   let entities : Array[Entity] = []
   let warnings : Array[String] = []
-  for record in section.records {
-    match parse_entity(record, warnings) {
-      Some(e) => entities.push(e)
-      None => ()
+  let records = section.records
+  let mut i = 0
+  while i < records.length() {
+    let record = records[i]
+    if record.kind == "POLYLINE" {
+      // 顶点不在这一条记录里——跟在后面的 VERTEX 记录中，`SEQEND` 收尾
+      let mut j = i + 1
+      while j < records.length() && records[j].kind == "VERTEX" {
+        j = j + 1
+      }
+      match parse_polyline_entity(record, records[i + 1 : j], warnings) {
+        Some(e) => entities.push(e)
+        None => ()
+      }
+      if j < records.length() && records[j].kind == "SEQEND" {
+        j = j + 1
+      }
+      i = j
+    } else if record.kind == "VERTEX" || record.kind == "SEQEND" {
+      // 没有主人的结构性记录——不是实体，跳过
+      i = i + 1
+    } else {
+      match parse_entity(record, warnings) {
+        Some(e) => entities.push(e)
+        None => ()
+      }
+      i = i + 1
     }
   }
   { entities, warnings }
+}
+
+///|
+/// 取一个子类里的 tag；没有这个子类（老格式）时退回公共部分。
+///
+/// **顺序敏感的场景要用它**：多段线的顶点是同一组码重复出现，
+/// 成组顺序本身携带信息，`get` / `all_of` 都给不了。
+fn subclass_tags(record : Record, name : String) -> Array[Tag] {
+  for sc in record.subclasses {
+    if sc.name == name {
+      return sc.tags
+    }
+  }
+  record.common
+}
+
+///|
+/// 解析 LWPOLYLINE（轻量多段线，R13 起）。
+///
+/// 顶点在 `AcDbPolyline` 子类里**成组重复出现**：每个顶点一对 `10/20`，
+/// 可选的 `42`（凸度）跟在它的 `20` 后面。所以按顺序扫，不能用 `get`
+/// 取——`get` 只会拿到第一对。组码 90（顶点数）不可信，以扫描结果为准。
+fn parse_lwpolyline(record : Record, warnings : Array[String]) -> Geometry? {
+  let elevation = record.get_double(38, 0.0)
+  let vertices : Array[PolyVertex] = []
+  let mut pending_x : Double? = None
+  for t in subclass_tags(record, "AcDbPolyline") {
+    match t.code {
+      10 => pending_x = Some(t.value.as_double())
+      20 =>
+        match pending_x {
+          Some(x) => {
+            vertices.push({
+              at: Vec3::new(x, t.value.as_double(), elevation),
+              bulge: 0.0,
+            })
+            pending_x = None
+          }
+          None => ()
+        }
+      42 =>
+        if vertices.length() > 0 {
+          vertices[vertices.length() - 1].bulge = t.value.as_double()
+        }
+      _ => ()
+    }
+  }
+  if vertices.length() == 0 {
+    warnings.push("LWPOLYLINE 解析不出顶点，已跳过")
+    return None
+  }
+  let closed = (record.get_int(70, 0) & 1) != 0
+  Some(Polyline(vertices=vertices, closed=closed))
+}
+
+///|
+/// 实体的公共外壳。单记录实体和 POLYLINE 这种多记录实体共用。
+fn common_of(record : Record) -> EntityCommon {
+  {
+    kind: record.kind,
+    layer: record.get_string(8),
+    handle: handle_of(record),
+    record,
+  }
+}
+
+///|
+/// 翻译一条 POLYLINE（连同它后面的 VERTEX 记录）。
+///
+/// 老的 POLYLINE 顶点在**独立记录**里——DXF 里少数「一条实体横跨
+/// 多条记录」的地方。顶点上的 42 和 LWPOLYLINE 是一个意思。
+fn parse_polyline_entity(
+  record : Record,
+  vertex_records : ArrayView[Record],
+  warnings : Array[String],
+) -> Entity? {
+  let common = common_of(record)
+  let flags = record.get_int(70, 0)
+  // 16 = 多边形网格、64 = 多面网格：它们的顶点记录另有含义（面还要
+  // 引用顶点编号），按普通多段线解析会得到一堆假线——**按 Unknown 保留**，
+  // 让检查环节知道有东西没被理解，而不是报一堆错的几何
+  if (flags & 16) != 0 || (flags & 64) != 0 {
+    return Some({ common, geom: Unknown })
+  }
+  let vertices : Array[PolyVertex] = []
+  for vr in vertex_records {
+    match vr.point(0) {
+      Some(at) => vertices.push({ at, bulge: vr.get_double(42, 0.0) })
+      None => ()
+    }
+  }
+  if vertices.length() == 0 {
+    warnings.push("POLYLINE 解析不出顶点，已跳过")
+    return None
+  }
+  Some({ common, geom: Polyline(vertices=vertices, closed=(flags & 1) != 0) })
 }
 
 ///|
@@ -289,12 +467,7 @@ fn number_of(record : Record, code : Int) -> Double? {
 /// 最小间隙检查里，报一条警告、少一条实体，比一个错的位置诚实。
 fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
   let kind = record.kind
-  let common : EntityCommon = {
-    kind,
-    layer: record.get_string(8),
-    handle: handle_of(record),
-    record,
-  }
+  let common = common_of(record)
   match kind {
     "LINE" =>
       match (record.point(0), record.point(1)) {
@@ -389,6 +562,11 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
           warnings.push("\{kind} 缺圆心或长轴端点（10/20、11/21），已跳过")
           None
         }
+      }
+    "LWPOLYLINE" =>
+      match parse_lwpolyline(record, warnings) {
+        Some(geom) => Some({ common, geom })
+        None => None
       }
     _ => Some({ common, geom: Unknown })
   }
