@@ -216,9 +216,9 @@ pub fn Geometry::bounds(self : Geometry) -> Aabb2? {
   match self {
     Line(start~, end~) => Some(Aabb2::empty().expand(start.xy()).expand(end.xy()))
     Point(at~) => Some(Aabb2::empty().expand(at.xy()))
-    Circle(center~, radius~) => Some(circle_bounds(center, radius))
+    Circle(center~, radius~) => Some(circle_bounds(center.xy(), radius))
     Arc(center~, radius~, start_angle~, end_angle~) =>
-      Some(arc_bounds(center, radius, start_angle, end_angle))
+      Some(arc_bounds(center.xy(), radius, start_angle, end_angle))
     // 弧段用整椭圆的盒——永远包含，只是偏大；精确的弧段盒留给离散层
     Ellipse(center~, major~, ratio~, ..) => Some(ellipse_bounds(center, major, ratio))
     Polyline(vertices~, closed~) => Some(polyline_bounds(vertices, closed))
@@ -297,40 +297,58 @@ fn point_on_circle(c : Vec2, r : Double, angle : Double) -> Vec2 {
 ///|
 /// 整圆的二维包围盒。半径取绝对值——负半径的圆是坏数据，
 /// 但盒子的形状还是它，报不报让检查环节决定。
-fn circle_bounds(center : Vec3, radius : Double) -> Aabb2 {
+fn circle_bounds(center : Vec2, radius : Double) -> Aabb2 {
   let r = radius.abs()
-  let c = center.xy()
   Aabb2::empty()
-    .expand(Vec2::new(c.x - r, c.y - r))
-    .expand(Vec2::new(c.x + r, c.y + r))
+    .expand(Vec2::new(center.x - r, center.y - r))
+    .expand(Vec2::new(center.x + r, center.y + r))
+}
+
+///|
+/// DXF 圆弧（起止角语义）的二维包围盒。
+/// 「起止角相等按整圈」是 `arc_sweep` 的语义，严格对应 DXF 的 ARC。
+fn arc_bounds(
+  center : Vec2,
+  radius : Double,
+  start_angle : Double,
+  end_angle : Double,
+) -> Aabb2 {
+  arc_bounds_with_sweep(
+    center,
+    radius,
+    start_angle,
+    arc_sweep(start_angle, end_angle),
+  )
 }
 
 ///|
 /// 圆弧的二维包围盒：两个端点，加上跨过的象限点。
 ///
 /// 光取端点是错的——0° 到 270° 的弧，最右边其实在 90° 的象限点上。
-fn arc_bounds(
-  center : Vec3,
+///
+/// 跨度由调用方给：DXF 的 ARC 走 `arc_sweep`（起止相等 = 整圈）；
+/// 多段线的 bulge 段走 `angle_span`——bulge 的弧不适用「起止相等
+/// 按整圈」，近直线的微小 bulge 会被误判成巨大圆弧。
+fn arc_bounds_with_sweep(
+  center : Vec2,
   radius : Double,
-  start_angle : Double,
-  end_angle : Double,
+  start : Double,
+  sweep : Double,
 ) -> Aabb2 {
-  let sweep = arc_sweep(start_angle, end_angle)
   if sweep >= two_pi - 1.0e-12 {
     // 整圈，直接给整圆的盒
     return circle_bounds(center, radius)
   }
   let r = radius.abs()
-  let c = center.xy()
   let mut box = Aabb2::empty()
-  box = box.expand(point_on_circle(c, r, start_angle))
-  box = box.expand(point_on_circle(c, r, end_angle))
+  box = box.expand(point_on_circle(center, r, start))
+  box = box.expand(point_on_circle(center, r, start + sweep))
   // 跨过的象限点（0° / 90° / 180° / 270°）
   let mut k = 0
   while k < 4 {
     let q = k.to_double() * 1.5707963267948966
-    if angle_span(start_angle, q) <= sweep {
-      box = box.expand(point_on_circle(c, r, q))
+    if angle_span(start, q) <= sweep {
+      box = box.expand(point_on_circle(center, r, q))
     }
     k = k + 1
   }
@@ -355,12 +373,10 @@ fn ellipse_bounds(center : Vec3, major : Vec3, ratio : Double) -> Aabb2 {
 }
 
 ///|
-/// 多段线的二维包围盒：顶点盒，加上圆弧段的鼓出部分。
+/// 多段线的二维包围盒：顶点盒，加上圆弧段的精确范围。
 ///
-/// 圆弧段的处理是**保守**的：矢高（弧离弦的最大距离）是 `|b|·弦长/2`，
-/// 把这段的盒子四边各撑开矢高——永远包含，但偏大。半圆以上的段
-/// （|b| > 1）弦短弧长，矢高会低估，改用「整圆在半径 2r 的圆里」兜底。
-/// 精确到象限点的弧段盒留给离散层——那里会真正把弧变成点。
+/// bulge 段换算成圆弧（`arc_from_bulge`，离散层）后按端点 + 象限点
+/// 取盒——之前「弦 + 矢高撑开」那版保守估计已经不需要了。
 fn polyline_bounds(vertices : Array[PolyVertex], closed : Bool) -> Aabb2 {
   let mut box = Aabb2::empty()
   for v in vertices {
@@ -378,16 +394,17 @@ fn polyline_bounds(vertices : Array[PolyVertex], closed : Bool) -> Aabb2 {
     if a.bulge != 0.0 {
       let ax = a.at.xy()
       let bx = b.at.xy()
-      let chord = ax.distance(bx)
-      let abs_b = a.bulge.abs()
-      let pad = if abs_b <= 1.0 {
-        abs_b * chord / 2.0
-      } else {
-        2.0 * (chord * (1.0 + abs_b * abs_b) / (4.0 * abs_b))
+      if ax.distance(bx) > 0.0 {
+        let arc = arc_from_bulge(ax, bx, a.bulge)
+        box = box.union(
+          arc_bounds_with_sweep(
+            arc.center,
+            arc.radius,
+            arc.start_angle,
+            angle_span(arc.start_angle, arc.end_angle),
+          ),
+        )
       }
-      box = box
-        .expand(Vec2::new(ax.x.min(bx.x) - pad, ax.y.min(bx.y) - pad))
-        .expand(Vec2::new(ax.x.max(bx.x) + pad, ax.y.max(bx.y) + pad))
     }
     i = i + 1
   }

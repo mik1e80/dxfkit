@@ -390,8 +390,9 @@ test "多段线的包围盒" {
 }
 
 ///|
-test "圆弧段的包围盒会被撑开" {
-  // 两点 + bulge 1（半圆）：矢高 = |b| × 弦长 / 2 = 0.5，盒子四边撑开
+test "圆弧段的包围盒是精确的" {
+  // 两点 + bulge 1（半圆）：b > 0 是逆时针，弧从弦下方过——
+  // 精确盒是 (0, -0.5) 到 (1, 0)，不是把弦盒四边各撑开的保守盒
   let d = drawing_utf8(
     "0\nSECTION\n2\nENTITIES\n" +
     "0\nLWPOLYLINE\n100\nAcDbPolyline\n70\n0\n" +
@@ -399,8 +400,8 @@ test "圆弧段的包围盒会被撑开" {
     "0\nENDSEC\n0\nEOF\n",
   )
   let b = d.entities().entities[0].bounds().unwrap()
-  assert_true(b.min.x == -0.5 && b.min.y == -0.5)
-  assert_true(b.max.x == 1.5 && b.max.y == 0.5)
+  assert_true(b.min.x.abs() < 1.0e-9 && (b.min.y + 0.5).abs() < 1.0e-9)
+  assert_true((b.max.x - 1.0).abs() < 1.0e-9 && b.max.y.abs() < 1.0e-9)
 }
 
 ///|
@@ -412,10 +413,12 @@ test "闭合多段线的收尾边也算凸度" {
     "10\n0.0\n20\n0.0\n10\n1.0\n20\n0.0\n10\n1.0\n20\n1.0\n42\n1.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  // 收尾边 (1,1)→(0,0)，弦长 √2，矢高 = √2/2
+  // 收尾边 (1,1)→(0,0) 的半圆：圆心 (0.5, 0.5)、半径 √2/2。
+  // 逆时针从 45° 到 -135°，跨过的象限点是 90° 和 180°——
+  // 精确盒的左边和上边由这两个象限点定
   let b = d.entities().entities[0].bounds().unwrap()
-  assert_true((b.min.x + 0.7071067811865476).abs() < 1.0e-9)
-  assert_true((b.max.y - 1.7071067811865476).abs() < 1.0e-9)
+  assert_true((b.min.x + 0.2071067811865476).abs() < 1.0e-9)
+  assert_true((b.max.y - 1.2071067811865475).abs() < 1.0e-9)
 }
 
 // ── 文字 ────────────────────────────────────────────────────────────────

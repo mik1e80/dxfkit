@@ -157,6 +157,53 @@ test "没有 HEADER 段的最小文件：不该崩，也不能假装知道版本
   assert_true(scan.encoding is @dxfkit.Cp1252)
 }
 
+// ── 几何离散 ────────────────────────────────────────────────────────────
+
+///|
+test "语料几何离散：曲线都能摊平" {
+  // 容差 0.01（图纸单位）。文件单位不统一，这里只钉总数当锚点，
+  // 以及「离散结果不空、点数至少 2」这个基本不变量
+  let tol = 0.01
+  let mut total_points = 0
+  let mut curves = 0
+  let problems : Array[String] = []
+  for path in corpus_files() {
+    let es = @dxfkit.build_drawing(scan_corpus_file(path)).entities()
+    for e in es.entities {
+      let pts = match e.geom {
+        @dxfkit.Polyline(vertices~, closed~) =>
+          @dxfkit.polyline_points(vertices, closed, tol)
+        @dxfkit.Circle(center~, radius~) => @dxfkit.circle_points(center.xy(), radius, tol)
+        @dxfkit.Arc(center~, radius~, start_angle~, end_angle~) =>
+          @dxfkit.arc_points(center.xy(), radius, start_angle, end_angle, tol)
+        _ => []
+      }
+      if pts.length() > 0 {
+        curves = curves + 1
+        total_points = total_points + pts.length()
+        // 半径为 0 的退化圆/弧只出一个点——数据本来就坏（语料里
+        // circle_radius_le_0.dxf 就是干这个的），检查环节会报它，
+        // 这里只保证不炸
+        let degenerate = match e.geom {
+          @dxfkit.Circle(radius~, ..) => radius.abs() == 0.0
+          @dxfkit.Arc(radius~, ..) => radius.abs() == 0.0
+          _ => false
+        }
+        if pts.length() < 2 && !degenerate {
+          problems.push("\{path}：\{e.kind()} 离散成了单点")
+        }
+      }
+    }
+  }
+  // 2026-10-11 实测的锚点（tol=0.01）；多段线 / 圆 / 弧以外的曲线
+  // （椭圆、样条）还没接进离散，以后的批次会把这两个数字顶上去
+  assert_eq(curves, 2429)
+  assert_eq(total_points, 18482)
+  if problems.length() > 0 {
+    fail("有曲线离散异常：" + join_problems(problems))
+  }
+}
+
 // ── 实体层 ──────────────────────────────────────────────────────────────
 
 ///|
