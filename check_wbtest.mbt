@@ -23,7 +23,8 @@ test "文字未转曲线：按图层汇总" {
     "0\nSECTION\n2\nENTITIES\n" +
     "0\nTEXT\n8\n标注\n10\n0.0\n20\n0.0\n40\n1.0\n1\nA\n" +
     "0\nTEXT\n8\n标注\n10\n1.0\n20\n0.0\n40\n1.0\n1\nB\n" +
-    "0\nLINE\n8\n轮廓\n10\n0.0\n20\n0.0\n11\n1.0\n21\n0.0\n" +
+    "0\nLWPOLYLINE\n8\n轮廓\n100\nAcDbPolyline\n70\n1\n" +
+    "10\n0.0\n20\n0.0\n10\n1.0\n20\n0.0\n10\n1.0\n20\n1.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
   let r = d.check(0.01)
@@ -112,6 +113,85 @@ test "干净图纸零发现" {
   assert_true(r.verdict().contains("没发现问题"))
 }
 
+// ── 轮廓闭合 ────────────────────────────────────────────────────────────
+
+///|
+test "首尾相接的线段串成闭合轮廓" {
+  // 三条线拼一个三角形，端点在容差内对上——不该报
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLINE\n10\n0.0\n20\n0.0\n11\n1.0\n21\n0.0\n" +
+    "0\nLINE\n10\n1.0\n20\n0.0\n11\n1.0\n21\n1.0\n" +
+    "0\nLINE\n10\n1.0\n20\n1.0\n11\n0.0\n21\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let r = d.check(0.001)
+  assert_eq(r.count(Fatal), 0)
+  assert_eq(r.count(Warn), 0)
+}
+
+///|
+test "缺一边的轮廓被报出，缝宽对得上" {
+  // 三角形缺一条斜边：两个松散端点是 (0,0) 和 (1,1)，缝 = √2
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLINE\n10\n0.0\n20\n0.0\n11\n1.0\n21\n0.0\n" +
+    "0\nLINE\n10\n1.0\n20\n0.0\n11\n1.0\n21\n1.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let r = d.check(0.001)
+  assert_eq(r.count(Warn), 1)
+  let f = first_of(r, "轮廓闭合").unwrap()
+  assert_true(f.message.contains("1 处"))
+  assert_true(f.message.contains("1.41"))
+}
+
+///|
+test "不同图层不串链" {
+  // 两条线端点重合但在不同图层——串链只在图层内部做，
+  // 两边各自是一条没闭合的轮廓
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nTABLES\n0\nTABLE\n2\nLAYER\n" +
+    "0\nLAYER\n100\nAcDbLayerTableRecord\n2\n甲\n70\n0\n62\n7\n" +
+    "0\nLAYER\n100\nAcDbLayerTableRecord\n2\n乙\n70\n0\n62\n7\n" +
+    "0\nENDTAB\n0\nENDSEC\n" +
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLINE\n8\n甲\n10\n0.0\n20\n0.0\n11\n1.0\n21\n0.0\n" +
+    "0\nLINE\n8\n乙\n10\n1.0\n20\n0.0\n11\n2.0\n21\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let r = d.check(0.001)
+  assert_eq(r.count(Warn), 2)
+}
+
+///|
+test "关闭图层上的缺口不报" {
+  // 不切的图层不查闭合（图层检查里会提示它是关闭的）
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nTABLES\n0\nTABLE\n2\nLAYER\n" +
+    "0\nLAYER\n100\nAcDbLayerTableRecord\n2\n废\n70\n0\n62\n-7\n" +
+    "0\nENDTAB\n0\nENDSEC\n" +
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLINE\n8\n废\n10\n0.0\n20\n0.0\n11\n1.0\n21\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let r = d.check(0.001)
+  assert_eq(r.count(Warn), 0)
+  assert_eq(r.count(Info), 1)
+}
+
+///|
+test "闭合的多段线不参与串链" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLWPOLYLINE\n100\nAcDbPolyline\n70\n1\n" +
+    "10\n0.0\n20\n0.0\n10\n1.0\n20\n0.0\n10\n1.0\n20\n1.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let r = d.check(0.001)
+  assert_eq(r.findings.length(), 0)
+}
+
 ///|
 test "引用图层表里没有的图层" {
   let d = drawing_utf8(
@@ -119,7 +199,8 @@ test "引用图层表里没有的图层" {
     "0\nLAYER\n100\nAcDbLayerTableRecord\n2\n0\n70\n0\n62\n7\n" +
     "0\nENDTAB\n0\nENDSEC\n" +
     "0\nSECTION\n2\nENTITIES\n" +
-    "0\nLINE\n8\n幽灵\n10\n0.0\n20\n0.0\n11\n1.0\n21\n0.0\n" +
+    "0\nLWPOLYLINE\n8\n幽灵\n100\nAcDbPolyline\n70\n1\n" +
+    "10\n0.0\n20\n0.0\n10\n1.0\n20\n0.0\n10\n1.0\n20\n1.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
   let r = d.check(0.01)

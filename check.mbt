@@ -95,7 +95,12 @@ pub fn Drawing::check(self : Drawing, tol : Double) -> Report {
   }
   // 文字和图层按图层汇总——不然一份图纸几百条文字会刷屏
   check_texts(exp.placed, findings)
-  check_layers(self, exp.placed, findings)
+  let tables = match self.section("TABLES") {
+    Some(t) => Some(parse_tables(t))
+    None => None
+  }
+  check_layers(tables, exp.placed, findings)
+  check_closure(exp.placed, tables, tol, findings)
   { findings, }
 }
 
@@ -197,12 +202,12 @@ fn check_texts(placed : Array[Placed], findings : Array[Finding]) -> Unit {
 ///|
 /// 图层相关的提醒：关闭 / 冻结的图层上有东西、引用了图层表里没有的图层。
 fn check_layers(
-  d : Drawing,
+  tables : Tables?,
   placed : Array[Placed],
   findings : Array[Finding],
 ) -> Unit {
-  let tables = match d.section("TABLES") {
-    Some(t) => parse_tables(t)
+  let tables = match tables {
+    Some(t) => t
     None => return
   }
   for l in tables.layers {
@@ -242,6 +247,153 @@ fn check_layers(
       severity: Warn,
       message: "图层「\{u.0}」不在图层表里，但有 \{u.1} 条实体引用它",
     })
+  }
+}
+
+///|
+/// 轮廓闭合：同一个图层里的开放折线按端点容差串成链条，
+/// 串不动之后头尾还对不上的，就是没闭合的轮廓。
+///
+/// 为什么不标致命：**判断不了意图**——轮廓件缺一段确实会散架，
+/// 但刻线、折弯线和有意留的开口本来就是开口。报出来让人确认，
+/// 比替用户下结论诚实。
+///
+/// 只在会被切到的图层上查：关闭 / 冻结的图层本来就不切
+///（那条在图层检查里单独提示过），再报一遍只会吓人。
+///
+/// 串链是朴素的贪心——每层边的数量是图纸实体级的（几百上千），
+/// O(n²) 在单张图上跑得动；真遇到几万条再上空间索引。
+fn check_closure(
+  placed : Array[Placed],
+  tables : Tables?,
+  tol : Double,
+  findings : Array[Finding],
+) -> Unit {
+  // 这层有没有「会被切到的开放折线」
+  let names : Array[String] = []
+  for p in placed {
+    let open = match p.flat {
+      Outline(closed~, ..) => !closed
+      _ => false
+    }
+    if !open || is_uncut_layer(tables, p.layer) {
+      continue
+    }
+    let mut seen = false
+    for n in names {
+      if n == p.layer {
+        seen = true
+      }
+    }
+    if !seen {
+      names.push(p.layer)
+    }
+  }
+  for layer in names {
+    // 这一层的开放折线，每条只留两个端点（中间的点不影响串链）
+    let edges : Array[(Vec2, Vec2)] = []
+    for p in placed {
+      if p.layer != layer {
+        continue
+      }
+      match p.flat {
+        Outline(points~, closed~) => {
+          if !closed && points.length() >= 2 {
+            edges.push((points[0], points[points.length() - 1]))
+          }
+        }
+        _ => ()
+      }
+    }
+    let (open_count, worst_gap, at) = open_chains(edges, tol)
+    if open_count > 0 {
+      findings.push({
+        check: "轮廓闭合",
+        severity: Warn,
+        message: "图层「\{layer}」上有 \{open_count} 处轮廓没闭合——最宽的缝 \{worst_gap}（(\{at.x}, \{at.y}) 附近）；如果它们是轮廓，切开后零件会散架",
+      })
+    }
+  }
+}
+
+///|
+/// 把一组开放段按端点（容差内）串成链，数出没闭合的条数。
+/// 返回（没闭合的条数、最宽的缝、缝的位置）。
+fn open_chains(
+  edges : Array[(Vec2, Vec2)],
+  tol : Double,
+) -> (Int, Double, Vec2) {
+  let used : Array[Bool] = []
+  for _ in edges {
+    used.push(false)
+  }
+  let mut open = 0
+  let mut worst = 0.0
+  let mut at = Vec2::zero()
+  let mut i = 0
+  while i < edges.length() {
+    if used[i] {
+      i = i + 1
+      continue
+    }
+    used[i] = true
+    let mut head = edges[i].0
+    let mut tail = edges[i].1
+    // 两头都往外接，接到接不动为止
+    let mut grew = true
+    while grew {
+      grew = false
+      let mut j = 0
+      while j < edges.length() {
+        if used[j] {
+          j = j + 1
+          continue
+        }
+        let (a, b) = edges[j]
+        if tail.distance(a) <= tol {
+          tail = b
+          used[j] = true
+          grew = true
+        } else if tail.distance(b) <= tol {
+          tail = a
+          used[j] = true
+          grew = true
+        } else if head.distance(a) <= tol {
+          head = b
+          used[j] = true
+          grew = true
+        } else if head.distance(b) <= tol {
+          head = a
+          used[j] = true
+          grew = true
+        }
+        j = j + 1
+      }
+    }
+    let gap = head.distance(tail)
+    if gap > tol {
+      open = open + 1
+      if gap > worst {
+        worst = gap
+        at = head
+      }
+    }
+    i = i + 1
+  }
+  (open, worst, at)
+}
+
+///|
+/// 这个图层会不会被切到。图层表里查不到时按「会切」处理——
+/// 宁可多查一遍，漏查的会切出废件。
+fn is_uncut_layer(tables : Tables?, name : String) -> Bool {
+  match tables {
+    Some(t) =>
+      match t.layer(name) {
+        Some(l) => l.is_off() || l.frozen
+        None => false
+      }
+    None => false
   }
 }
 
