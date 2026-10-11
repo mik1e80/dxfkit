@@ -59,6 +59,15 @@ SOFTWARE.
 - 组码 → 数据类型的区间划分（二进制格式要用），照 `lldxf/types.py` 核对
 - 二进制 DXF 的字节布局（22 字节魔数、两种组码编码、各类型的字节数），
   照 `lldxf/tagger.py` 核对
+- **bulge（凸度）→ 圆弧的换算公式**，照 `math/bulge.py` 移植成
+  MoonBit（`flatten.mbt`）。那个文件的公式源头是 Lee Mac 的
+  Bulge to Arc 推导；移植时逐行核对过。换算公式本身是数学事实，
+  这里照实说明出处
+- 样条权重的组码与加载顺序，照 `entities/spline.py` 的
+  `load_spline_data` 核对（组码是格式规范的一部分，核对是为了不出错）
+
+另外，NURBS 求值用的是 de Boor 算法（The NURBS Book 的 A3.1 式）——
+教科书算法，没有复制任何代码。
 
 因为它没有代码进入本项目，MIT 许可证的条款不触发。
 
@@ -72,4 +81,4 @@ SOFTWARE.
 
 | 依赖 | 用途 | 用在哪 | 许可证 |
 | --- | --- | --- | --- |
-| `moonbitlang/x` | 读文件（`fs`） | **只有 `conformance/` 子包**，库本体不碰 | Apache-2.0 |
+| `moonbitlang/x` | 读文件（`fs`）；命令行退出码（`sys`） | **只有 `conformance/` 和 `cli/` 两个子包**，库本体和网页版都不碰 | Apache-2.0 |
