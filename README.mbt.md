@@ -2,8 +2,8 @@
 
 用 MoonBit 写的 DXF（CAD 图纸）工具链。回答一个问题：**这份图纸能不能上机床。**
 
-> **项目状态**：开发中（2026-10 月）。目前只有向量与包围盒基础。
-> 这份文档随功能落地逐步展开，不写还没做的东西。
+> **项目状态**：开发中（2026-10 月）。解析器与图纸骨架（结构层、HEADER、
+> TABLES）已落地。这份文档随功能落地逐步展开，不写还没做的东西。
 
 ## 为什么需要它
 
@@ -34,10 +34,15 @@ PCB 制板都在用。能打开图纸的软件很多，但**能把「这份图�
 - `tag.mbt` —— 组码 → 类型的区间表、各类谓词、坐标组码归组
 - `codepage.mbt` —— 编码判断（版本规则）、UTF-8 / CP1252 解码
 - `reader_ascii.mbt` —— ASCII 行对扫描：trim、三种换行、EOF 处理、坏行恢复
+- `structure.mbt` —— 段 → 记录 → 子类三级切分，坏结构尽力而为
+- `subclass.mbt` —— 老格式（R10/R12 没有 `100` 标记）按类型合成子类名
+- `header.mbt` —— HEADER 变量成对扫描、单位换算表、图纸范围
+- `tables.mbt` —— 图层（含开关/冻结/锁定）、线型、文字样式、块记录
 - `conformance/` —— 语料回归工具与测试
 
 **实测**：47 个真实 DXF 文件、339,913 个 tag、**0 条警告、0 个读不了**
-（`moon run conformance`）。
+（`moon run conformance`）。结构报告（`moon run conformance --info`）
+能打出每份文件的版本、段、图层、单位、范围。
 
 ## 实现上的几个决定
 
@@ -64,6 +69,10 @@ moon check --target all --deny-warn    # 全目标检查，要求零警告
 - `tag.mbt` — 组码与值的类型、组码到类型的区间表、语义分类谓词
 - `codepage.mbt` — 文本编码的判断与解码
 - `reader_ascii.mbt` — ASCII DXF 的行对扫描
+- `structure.mbt` — 段 / 记录 / 子类的三级切分
+- `subclass.mbt` — 老格式记录的子类名合成
+- `header.mbt` — HEADER 变量、单位、图纸范围
+- `tables.mbt` — TABLES 段：图层、线型、文字样式、块记录
 - `conformance/` — 语料批量工具（可执行）与回归测试
 - `testdata/ezdxf/` — 47 个真实 DXF 文件（来自 ezdxf，MIT）
 
