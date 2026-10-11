@@ -1,0 +1,16 @@
+import {
+  "mik1e80/dxfkit",
+  "moonbitlang/x/fs",
+  "moonbitlang/x/sys",
+  "moonbitlang/core/env",
+  "moonbitlang/core/string",
+}
+
+// 命令行入口：`dxfkit check 图纸.dxf`。
+//
+// 单独一个包（和 conformance 一样）：库本体不能导入 fs / sys——
+// 网页版是同一份库代码编译成 JS 的，浏览器里没有文件系统。
+//
+// `-all+wasm+native`：fs 和 sys 只有这两个后端有实现。
+supported_targets = "-all+wasm+native"
+pkgtype(kind: "executable")
