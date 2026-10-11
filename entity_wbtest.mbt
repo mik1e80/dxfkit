@@ -637,6 +637,91 @@ test "没有 BLOCKS 段时是空表" {
   assert_eq(bs.warnings.length(), 0)
 }
 
+// ── 填充面与标注 ────────────────────────────────────────────────────────
+
+///|
+test "SOLID 解析出四个角点" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nSOLID\n8\n0\n" +
+    "10\n0.0\n20\n0.0\n30\n0.0\n11\n2.0\n21\n0.0\n31\n0.0\n" +
+    "12\n0.0\n22\n1.0\n32\n0.0\n13\n2.0\n23\n1.0\n33\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let e = d.entities().entities[0]
+  assert_true(e.kind() == "SOLID")
+  match e.geom {
+    Face(corners~) => assert_eq(corners.length(), 4)
+    _ => fail("不是填充面")
+  }
+  let b = e.bounds().unwrap()
+  assert_true(b.min.x == 0.0 && b.min.y == 0.0)
+  assert_true(b.max.x == 2.0 && b.max.y == 1.0)
+}
+
+///|
+test "SOLID 少第四个角点是三角形" {
+  // 13 和 12 重合时省略 13——保留三个角点，不补假点
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nSOLID\n" +
+    "10\n0.0\n20\n0.0\n11\n2.0\n21\n0.0\n12\n1.0\n22\n1.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  match d.entities().entities[0].geom {
+    Face(corners~) => assert_eq(corners.length(), 3)
+    _ => fail("不是填充面")
+  }
+}
+
+///|
+test "缺角点的填充面跳过并警告" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\n3DFACE\n10\n0.0\n20\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.entities.length(), 0)
+  assert_eq(es.warnings.length(), 1)
+}
+
+///|
+test "DIMENSION 解析：定义点、匿名块、测量值" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nDIMENSION\n8\n标注\n" +
+    "10\n5.0\n20\n6.0\n30\n0.0\n11\n5.0\n21\n8.0\n31\n0.0\n" +
+    "70\n0\n1\n<>\n42\n120.5\n2\n*D1\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let e = d.entities().entities[0]
+  assert_true(e.kind() == "DIMENSION")
+  assert_true(e.is_decoded())
+  match e.geom {
+    Dimension(at~, block~, measurement~) => {
+      assert_true(at.x == 5.0 && at.y == 6.0)
+      assert_true(block == "*D1")
+      assert_true(measurement == 120.5)
+    }
+    _ => fail("不是标注")
+  }
+}
+
+///|
+test "R12 的标注没有匿名块" {
+  // 老版本标注直接画在图形里，没有 *D 开头的匿名块——保留空串
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nDIMENSION\n10\n1.0\n20\n2.0\n30\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.warnings.length(), 0)
+  match es.entities[0].geom {
+    Dimension(block~, measurement~, ..) => {
+      assert_true(block == "")
+      assert_true(measurement == 0.0)
+    }
+    _ => fail("不是标注")
+  }
+}
+
 // ── Unknown 兜底 ────────────────────────────────────────────────────────
 
 ///|

@@ -74,6 +74,19 @@ pub(all) enum Geometry {
   /// 真正的形状要展开块内容再做嵌套变换——那是几何层的事，
   /// 这里只记录引用本身。
   Insert(at~ : Vec3, block~ : String, scale~ : Vec3, rotation~ : Double)
+  /// 填充面（SOLID / TRACE / 3DFACE 共用）：角点列表，三个或四个。
+  ///
+  /// 三角形就是只有三个角点（DXF 里第四个和第三个重合）。
+  /// 注意 SOLID 的角点是「10、11、13、12」的蝴蝶结顺序——把四点
+  /// 直接连成多边形会自交，这里按文件顺序原样存。
+  Face(corners~ : Array[Vec3])
+  /// 标注（DIMENSION）：定义点、匿名块名、测量值。
+  ///
+  /// 箭头、界线、文字都画在匿名块（`*D1` 之类）里。**标注放错图层
+  /// 是加工图纸的经典事故**（轮廓图层上睡着一条标注），所以它必须
+  /// 是解码出来的实体，而不是 `Unknown`。老版本（R12）没有匿名块，
+  /// `block` 是空串。
+  Dimension(at~ : Vec3, block~ : String, measurement~ : Double)
   /// 认不出的实体类型。**不等于坏记录**——只是解析器还没解码它
   Unknown
 }
@@ -204,6 +217,15 @@ pub fn Geometry::bounds(self : Geometry) -> Aabb2? {
     // 块引用的范围要展开块内容才知道；这里先记插入点，
     // 展开（嵌套变换）是几何层的任务
     Insert(at~, ..) => Some(Aabb2::empty().expand(at.xy()))
+    Face(corners~) => {
+      let mut box = Aabb2::empty()
+      for p in corners {
+        box = box.expand(p.xy())
+      }
+      Some(box)
+    }
+    // 标注的真实范围在匿名块里；定义点先记下
+    Dimension(at~, ..) => Some(Aabb2::empty().expand(at.xy()))
     Unknown => None
   }
 }
@@ -682,6 +704,38 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
         }
         None => {
           warnings.push("INSERT 缺插入点坐标（10/20），已跳过")
+          None
+        }
+      }
+    "SOLID" | "TRACE" | "3DFACE" =>
+      match (record.point(0), record.point(1), record.point(2)) {
+        (Some(a), Some(b), Some(c)) => {
+          let corners : Array[Vec3] = [a, b, c]
+          match record.point(3) {
+            Some(d) => corners.push(d)
+            None => ()
+          }
+          Some({ common, geom: Face(corners=corners) })
+        }
+        _ => {
+          warnings.push("\{kind} 缺角点坐标（10/11/12），已跳过")
+          None
+        }
+      }
+    "DIMENSION" =>
+      match record.point(0) {
+        Some(at) =>
+          Some({
+            common,
+            geom: Dimension(
+              at=at,
+              // R12 的标注没有匿名块，缺块名不算坏记录
+              block=record.get_string(2),
+              measurement=record.get_double(42, 0.0),
+            ),
+          })
+        None => {
+          warnings.push("\{kind} 缺定义点坐标（10/20），已跳过")
           None
         }
       }
