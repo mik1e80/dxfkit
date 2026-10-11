@@ -418,6 +418,101 @@ test "闭合多段线的收尾边也算凸度" {
   assert_true((b.max.y - 1.7071067811865476).abs() < 1.0e-9)
 }
 
+// ── 文字 ────────────────────────────────────────────────────────────────
+
+///|
+test "TEXT 解析：插入点、字高、旋转角" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nTEXT\n8\n标注\n" +
+    "10\n1.0\n20\n2.0\n30\n0.0\n40\n2.5\n50\n90\n1\n轮廓外圈\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let e = d.entities().entities[0]
+  assert_true(e.kind() == "TEXT")
+  assert_true(e.is_decoded())
+  match e.geom {
+    Text(at~, height~, value~, rotation~) => {
+      assert_true(at.x == 1.0 && at.y == 2.0)
+      assert_true(height == 2.5)
+      assert_true(value == "轮廓外圈")
+      assert_true((rotation - 1.5707963267948966).abs() < 1.0e-12)
+    }
+    _ => fail("不是文字")
+  }
+}
+
+///|
+test "MTEXT 的内容按出现顺序拼接" {
+  // 正文超过 250 字符会被切成多个 3，最后一段在 1 里。
+  // 格式化代码原样保留——`\P` 是 MTEXT 的换行
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nMTEXT\n8\n0\n10\n0.0\n20\n0.0\n40\n1.0\n" +
+    "3\n前半\\P\n3\n中段\n1\n后半\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  match d.entities().entities[0].geom {
+    Text(value~, ..) => assert_true(value == "前半\\P中段后半")
+    _ => fail("不是文字")
+  }
+}
+
+///|
+test "没有内容的 TEXT 保留空串" {
+  // 内容为空是合法的（ATTDEF 常被清空），不算坏记录
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nTEXT\n10\n0.0\n20\n0.0\n40\n1.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.warnings.length(), 0)
+  match es.entities[0].geom {
+    Text(value~, ..) => assert_true(value == "")
+    _ => fail("不是文字")
+  }
+}
+
+///|
+test "缺字高的文字跳过并警告" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nTEXT\n10\n0.0\n20\n0.0\n1\n内容\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.entities.length(), 0)
+  assert_eq(es.warnings.length(), 1)
+}
+
+///|
+test "ATTRIB 与 TEXT 走同一条路" {
+  // 属性（块引用上的填写值）和定义（块里的占位）形状一致，
+  // 都用 Text 表示，具体类型看 kind
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nATTRIB\n8\n0\n10\n3.0\n20\n4.0\n40\n1.5\n" +
+    "2\n标高\n70\n0\n1\n基准A\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let e = d.entities().entities[0]
+  assert_true(e.kind() == "ATTRIB")
+  match e.geom {
+    Text(at~, value~, ..) => {
+      assert_true(at.x == 3.0 && at.y == 4.0)
+      assert_true(value == "基准A")
+    }
+    _ => fail("不是文字")
+  }
+}
+
+///|
+test "文字的包围盒是插入点" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nTEXT\n10\n7.0\n20\n8.0\n40\n1.0\n1\n基准\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let b = d.entities().entities[0].bounds().unwrap()
+  assert_true(b.min.x == 7.0 && b.max.x == 7.0)
+  assert_true(b.min.y == 8.0 && b.max.y == 8.0)
+}
+
 // ── Unknown 兜底 ────────────────────────────────────────────────────────
 
 ///|

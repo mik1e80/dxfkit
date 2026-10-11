@@ -63,6 +63,12 @@ pub(all) enum Geometry {
   /// 轻量的 LWPOLYLINE 和带 VERTEX 记录的 POLYLINE 都归到这里——
   /// 顶点从哪来不一样，形状表示是一样的。
   Polyline(vertices~ : Array[PolyVertex], closed~ : Bool)
+  /// 文字（TEXT / MTEXT / ATTRIB / ATTDEF 共用）：插入点、字高、内容、旋转角。
+  ///
+  /// 内容**原样保留**：MTEXT 的格式化代码（`\P` 换行、`\f` 字体…）不解释，
+  /// 那是渲染和离散层的事。具体哪种看 `kind`——加工检查里它们都是
+  /// 「文字没转成曲线」这一条。
+  Text(at~ : Vec3, height~ : Double, value~ : String, rotation~ : Double)
   /// 认不出的实体类型。**不等于坏记录**——只是解析器还没解码它
   Unknown
 }
@@ -169,6 +175,9 @@ pub fn Geometry::bounds(self : Geometry) -> Aabb2? {
     // 弧段用整椭圆的盒——永远包含，只是偏大；精确的弧段盒留给离散层
     Ellipse(center~, major~, ratio~, ..) => Some(ellipse_bounds(center, major, ratio))
     Polyline(vertices~, closed~) => Some(polyline_bounds(vertices, closed))
+    // 文字按插入点记——真实占用范围要字体度量。加工检查里文字本身是
+    // 「未转曲线」的警告项，不是切割几何
+    Text(at~, ..) => Some(Aabb2::empty().expand(at.xy()))
     Unknown => None
   }
 }
@@ -408,6 +417,20 @@ fn parse_lwpolyline(record : Record, warnings : Array[String]) -> Geometry? {
 }
 
 ///|
+/// MTEXT 的内容：正文超过 250 字符会被切成多个 `3`，最后一段在 `1` 里。
+/// **按出现顺序拼起来**；格式化代码（`\P` 换行、`\f` 字体…）原样保留——
+/// 解释它们是渲染 / 离散层的事。
+fn mtext_value(record : Record) -> String {
+  let sb = StringBuilder()
+  for t in subclass_tags(record, "AcDbMText") {
+    if t.code == 3 || t.code == 1 {
+      sb.write_string(t.value.as_string())
+    }
+  }
+  sb.to_string()
+}
+
+///|
 /// 实体的公共外壳。单记录实体和 POLYLINE 这种多记录实体共用。
 fn common_of(record : Record) -> EntityCommon {
   {
@@ -560,6 +583,36 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
           }
         _ => {
           warnings.push("\{kind} 缺圆心或长轴端点（10/20、11/21），已跳过")
+          None
+        }
+      }
+    "TEXT" | "MTEXT" | "ATTRIB" | "ATTDEF" =>
+      match record.point(0) {
+        Some(at) =>
+          match number_of(record, 40) {
+            Some(height) => {
+              let value = if kind == "MTEXT" {
+                mtext_value(record)
+              } else {
+                record.get_string(1)
+              }
+              Some({
+                common,
+                geom: Text(
+                  at=at,
+                  height=height,
+                  value=value,
+                  rotation=to_radians(record.get_double(50, 0.0)),
+                ),
+              })
+            }
+            None => {
+              warnings.push("\{kind} 缺字高（40），已跳过")
+              None
+            }
+          }
+        None => {
+          warnings.push("\{kind} 缺插入点坐标（10/20），已跳过")
           None
         }
       }
