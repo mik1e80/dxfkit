@@ -2,7 +2,7 @@
 
 用 MoonBit 写的 DXF（CAD 图纸）工具链。回答一个问题：**这份图纸能不能上机床。**
 
-> **项目状态**：开发中（2026-10 月）。解析器、图纸骨架和实体层已落地。
+> **项目状态**：开发中（2026-10 月）。解析器、图纸骨架、实体层和几何离散已落地。
 > 这份文档随功能落地逐步展开，不写还没做的东西。
 
 ## 为什么需要它
@@ -41,12 +41,16 @@ PCB 制板都在用。能打开图纸的软件很多，但**能把「这份图�
 - `entity.mbt` —— 实体层：LINE / POINT / CIRCLE / ARC / ELLIPSE / SPLINE、
   LWPOLYLINE / POLYLINE（含 bulge）、TEXT / MTEXT / ATTRIB、INSERT 与块定义、
   SOLID / HATCH / DIMENSION；认不出的实体保留原记录进 `Unknown`
+- `flatten.mbt` —— 几何离散：bulge 圆弧（照 ezdxf 公式移植）、圆 / 弧、
+  椭圆、NURBS 样条（de Boor、含有理权重），自适应细分，容差是弦高
+- `expand.mbt` —— 块展开：INSERT 嵌套变换（仿射复合）、图层 0 继承、循环检测
 - `conformance/` —— 语料回归工具与测试
 
 **实测**：47 个真实 DXF 文件、339,913 个 tag、**0 条警告、0 个读不了**
 （`moon run conformance`）。结构报告（`moon run conformance --info`）
-能打出每份文件的版本、段、图层、单位、范围。实体层在同一份语料上
-**5524 个实体、5404 个解码（98%）、0 条警告**。
+能打出每份文件的版本、段、图层、单位、范围。同一份语料上：实体层
+**5524 个实体、5404 个解码（98%）、0 条警告**；几何层
+**3559 条曲线摊成 21430 个点、块展开 6210 条几何**，两边零异常。
 
 ## 实现上的几个决定
 
@@ -78,6 +82,8 @@ moon check --target all --deny-warn    # 全目标检查，要求零警告
 - `header.mbt` — HEADER 变量、单位、图纸范围
 - `tables.mbt` — TABLES 段：图层、线型、文字样式、块记录
 - `entity.mbt` — 实体层：几何翻译、块定义与引用、`Unknown` 兜底
+- `flatten.mbt` — 几何离散：曲线 → 折线点列（容差 = 弦高）
+- `expand.mbt` — 块展开：INSERT → 世界坐标几何
 - `conformance/` — 语料批量工具（可执行）与回归测试
 - `testdata/ezdxf/` — 47 个真实 DXF 文件（来自 ezdxf，MIT）
 
