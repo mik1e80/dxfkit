@@ -199,6 +199,22 @@ test "语料几何离散：曲线都能摊平" {
   }
 }
 
+///|
+test "语料块展开：全部解开，零警告" {
+  // 2026-10-11 实测：47 个文件的 INSERT 全部展开成 6210 条世界坐标
+  // 几何，**一条警告都没有**——语料里没有一个解不开的块引用
+  //（缺块、循环都没有）。以后这条挂了，多半是展开逻辑动了
+  let mut total = 0
+  let mut warns = 0
+  for path in corpus_files() {
+    let exp = @dxfkit.build_drawing(scan_corpus_file(path)).expand(0.05)
+    total = total + exp.placed.length()
+    warns = warns + exp.warnings.length()
+  }
+  assert_eq(total, 6210)
+  assert_eq(warns, 0)
+}
+
 // ── 实体层 ──────────────────────────────────────────────────────────────
 
 ///|
