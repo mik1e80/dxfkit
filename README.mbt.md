@@ -49,6 +49,7 @@ PCB 制板都在用。能打开图纸的软件很多，但**能把「这份图�
   自相交、重复切割、最小间隙（阈值由调用方给）；只报告不修改
 - `preview.mbt` —— SVG 预览：世界坐标折线 → 图（y 翻转、图层颜色、
   关闭/冻结图层淡画、文字转义）
+- `cli/` —— 命令行：`check`（退出码 0/1/2）、`svg`
 - `conformance/` —— 语料回归工具与测试
 
 **实测**：47 个真实 DXF 文件、339,913 个 tag、**0 条警告、0 个读不了**
@@ -93,6 +94,7 @@ moon check --target all --deny-warn    # 全目标检查，要求零警告
 - `expand.mbt` — 块展开：INSERT → 世界坐标几何
 - `check.mbt` — 加工前检查（能上机床吗）
 - `preview.mbt` — SVG 预览
+- `cli/` — 命令行入口（可执行）
 - `conformance/` — 语料批量工具（可执行）与回归测试
 - `testdata/ezdxf/` — 47 个真实 DXF 文件（来自 ezdxf，MIT）
 
