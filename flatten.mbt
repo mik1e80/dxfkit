@@ -203,3 +203,298 @@ fn append_segment_points(
     i = i + 1
   }
 }
+
+// ── 参数曲线：自适应细分 ────────────────────────────────────────────────
+//
+// 椭圆和样条没有像圆弧那样的简单分段公式（椭圆各处的曲率半径不一样、
+// 样条连节点都不等距），所以共用一套自适应细分：曲线中点到弦的距离
+// 不超过容差就收，超了就一分二。
+
+///|
+/// 点到线段（不是直线）的距离。自适应细分的判据用得上。
+fn dist_to_segment(p : Vec2, a : Vec2, b : Vec2) -> Double {
+  let ab = b.sub(a)
+  let len2 = ab.dot(ab)
+  if len2 == 0.0 {
+    return p.distance(a)
+  }
+  let mut t = p.sub(a).dot(ab) / len2
+  if t < 0.0 {
+    t = 0.0
+  }
+  if t > 1.0 {
+    t = 1.0
+  }
+  p.distance(a.add(ab.scale(t)))
+}
+
+///|
+/// 参数曲线的自适应细分。`out` 进来时应该已经含有 `t0` 处的点；
+/// 本函数只负责把后面的点补上。
+///
+/// 深度封顶 16 层——病态数据不该把内存炸了。
+fn sample_curve(
+  eval : (Double) -> Vec2,
+  t0 : Double,
+  t1 : Double,
+  p0 : Vec2,
+  p1 : Vec2,
+  tol : Double,
+  depth : Int,
+  out : Array[Vec2],
+) -> Unit {
+  let tm = 0.5 * (t0 + t1)
+  let pm = eval(tm)
+  if depth <= 0 || dist_to_segment(pm, p0, p1) <= tol {
+    out.push(p1)
+    return
+  }
+  sample_curve(eval, t0, tm, p0, pm, tol, depth - 1, out)
+  sample_curve(eval, tm, t1, pm, p1, tol, depth - 1, out)
+}
+
+// ── 椭圆 ────────────────────────────────────────────────────────────────
+
+///|
+/// 椭圆（弧）的起止参数跨过的角度。
+///
+/// 起止相同（或反了）按**整椭圆**——和圆弧「起止相等按整圈」同精神。
+fn ellipse_span(start_param : Double, end_param : Double) -> Double {
+  let mut span = end_param - start_param
+  if span < 0.0 {
+    span = span + 6.283185307179586
+  }
+  if span < 1.0e-12 {
+    span = 6.283185307179586
+  }
+  span
+}
+
+///|
+/// 椭圆（弧）→ 折线点列。
+///
+/// 点 = 圆心 + 长轴·cos p + 短轴·sin p——p 是**参数**，不是极角，
+/// 椭圆上等参数的点和等角度的点不是一回事。取到整椭圆时不重复首点。
+pub fn ellipse_points(
+  center : Vec3,
+  major : Vec3,
+  ratio : Double,
+  start_param : Double,
+  end_param : Double,
+  tol : Double,
+) -> Array[Vec2] {
+  let c = center.xy()
+  let m = major.xy()
+  let n = Vec2::new(-m.y * ratio, m.x * ratio)
+  let eval = fn (p : Double) -> Vec2 {
+    Vec2::new(
+      c.x + m.x * @math.cos(p) + n.x * @math.sin(p),
+      c.y + m.y * @math.cos(p) + n.y * @math.sin(p),
+    )
+  }
+  let span = ellipse_span(start_param, end_param)
+  let full = span >= 6.283185307179586 - 1.0e-12
+  let t0 = start_param
+  let t1 = start_param + span
+  let pts : Array[Vec2] = []
+  let first = eval(t0)
+  pts.push(first)
+  sample_curve(eval, t0, t1, first, eval(t1), tol, 16, pts)
+  if full {
+    // 整椭圆是闭合的——去掉重复的收尾点，和多段线一个约定
+    let out : Array[Vec2] = []
+    let mut i = 0
+    while i < pts.length() - 1 {
+      out.push(pts[i])
+      i = i + 1
+    }
+    return out
+  }
+  pts
+}
+
+// ── 样条（NURBS）──────────────────────────────────────────────────────
+
+///|
+/// 单个权重的安全取值：数组短了按 1（普通 B 样条）。
+fn weight_at(weights : Array[Double], i : Int) -> Double {
+  if i < weights.length() {
+    weights[i]
+  } else {
+    1.0
+  }
+}
+
+///|
+/// NURBS 求值：参数 t 处的点（de Boor 算法，NURBS Book 的 A3.1）。
+///
+/// 有理样条走齐次坐标（w·x, w·y, w）算，最后除回去——权重全 1
+/// 就退化成普通 B 样条。
+///
+/// **数据不自洽时退化成第一个控制点**（控制点不够、节点数对不上）：
+/// 不猜形状，也不炸——校验层负责把这种记录报出来。
+fn nurbs_point(
+  degree : Int,
+  knots : Array[Double],
+  ctrl : Array[Vec2],
+  weights : Array[Double],
+  t : Double,
+) -> Vec2 {
+  let p = degree
+  let n_ctrl = ctrl.length()
+  if n_ctrl == 0 {
+    return Vec2::zero()
+  }
+  // 节点数必须正好是「控制点数 + 次数 + 1」，不然 de Boor 的下标会错位
+  if p < 1 || n_ctrl <= p || knots.length() != n_ctrl + p + 1 {
+    return ctrl[0]
+  }
+  let n = n_ctrl - 1
+  let mut u = t
+  if u < knots[p] {
+    u = knots[p]
+  }
+  if u > knots[n + 1] {
+    u = knots[n + 1]
+  }
+  // 找 u 落在哪个节点区间（线性扫——控制点几十上百个，够用）
+  let mut span = p
+  while span < n && u >= knots[span + 1] {
+    span = span + 1
+  }
+  // 齐次坐标：d = (w·x, w·y, w)
+  let dx : Array[Double] = []
+  let dy : Array[Double] = []
+  let dw : Array[Double] = []
+  let mut j = 0
+  while j <= p {
+    let i = span - p + j
+    let w = weight_at(weights, i)
+    dx.push(ctrl[i].x * w)
+    dy.push(ctrl[i].y * w)
+    dw.push(w)
+    j = j + 1
+  }
+  let mut r = 1
+  while r <= p {
+    let mut jj = p
+    while jj >= r {
+      let i = span - p + jj
+      let denom = knots[span + 1 + jj - r] - knots[i]
+      // 重节点会让分母为零——那一步的贡献就是取左端，跳过
+      let alpha = if denom == 0.0 {
+        0.0
+      } else {
+        (u - knots[i]) / denom
+      }
+      dx[jj] = (1.0 - alpha) * dx[jj - 1] + alpha * dx[jj]
+      dy[jj] = (1.0 - alpha) * dy[jj - 1] + alpha * dy[jj]
+      dw[jj] = (1.0 - alpha) * dw[jj - 1] + alpha * dw[jj]
+      jj = jj - 1
+    }
+    r = r + 1
+  }
+  let w = dw[p]
+  if w == 0.0 {
+    Vec2::new(dx[p], dy[p])
+  } else {
+    Vec2::new(dx[p] / w, dy[p] / w)
+  }
+}
+
+///|
+/// 样条 → 折线点列（xy 投影）。
+///
+/// 参数域是 [U[p], U[n+1]]——首尾各 p 个钳制节点的写法，端点正好是
+/// 首末控制点。在这个区间里自适应细分；数据不自洽的退回单点。
+pub fn spline_points(
+  degree : Int,
+  knots : Array[Double],
+  control_points : Array[Vec3],
+  weights : Array[Double],
+  tol : Double,
+) -> Array[Vec2] {
+  let ctrl : Array[Vec2] = []
+  for cp in control_points {
+    ctrl.push(cp.xy())
+  }
+  let n_ctrl = ctrl.length()
+  let p = degree
+  if n_ctrl == 0 {
+    return []
+  }
+  if p < 1 || n_ctrl <= p || knots.length() != n_ctrl + p + 1 {
+    return [ctrl[0]]
+  }
+  let t0 = knots[p]
+  let t1 = knots[n_ctrl]
+  if t1 <= t0 {
+    return [ctrl[0]]
+  }
+  let eval = fn (t : Double) -> Vec2 { nurbs_point(p, knots, ctrl, weights, t) }
+  let pts : Array[Vec2] = []
+  let first = eval(t0)
+  pts.push(first)
+  sample_curve(eval, t0, t1, first, eval(t1), tol, 16, pts)
+  pts
+}
+
+// ── 伞函数：几何 → 折线 ────────────────────────────────────────────────
+
+///|
+/// 离散之后的形状。
+pub(all) enum Flat {
+  /// 折线点列；闭合的不重复首点
+  Outline(points~ : Array[Vec2], closed~ : Bool)
+  /// 孤点（POINT）
+  Dot(at~ : Vec2)
+  /// 没有可离散的几何（文字、块引用、填充、认不出的类型）——
+  /// **不是错误**：检查环节要单独统计这些，而不是当成空图纸
+  Empty
+}
+
+///|
+/// 把实体几何离散成折线。容差是弦高。
+pub fn Geometry::flatten(self : Geometry, tol : Double) -> Flat {
+  match self {
+    Line(start~, end~) => Outline(points=[start.xy(), end.xy()], closed=false)
+    Point(at~) => Dot(at=at.xy())
+    Circle(center~, radius~) =>
+      Outline(points=circle_points(center.xy(), radius, tol), closed=true)
+    Arc(center~, radius~, start_angle~, end_angle~) => {
+      // DXF 的 ARC 是逆时针从起角到止角；起止一样按整圈（arc_sweep）
+      let sweep = arc_sweep(start_angle, end_angle)
+      if sweep >= two_pi - 1.0e-12 {
+        Outline(points=circle_points(center.xy(), radius, tol), closed=true)
+      } else {
+        Outline(
+          points=arc_points(center.xy(), radius, start_angle, start_angle + sweep, tol),
+          closed=false,
+        )
+      }
+    }
+    Ellipse(center~, major~, ratio~, start_param~, end_param~) => {
+      let span = ellipse_span(start_param, end_param)
+      Outline(
+        points=ellipse_points(center, major, ratio, start_param, end_param, tol),
+        closed=span >= two_pi - 1.0e-12,
+      )
+    }
+    Polyline(vertices~, closed~) =>
+      Outline(points=polyline_points(vertices, closed, tol), closed=closed)
+    Spline(degree~, knots~, control_points~, weights~) =>
+      Outline(
+        points=spline_points(degree, knots, control_points, weights, tol),
+        closed=false,
+      )
+    Face(corners~) => {
+      // 按文件顺序原样连线——SOLID 的角点是蝴蝶结顺序，自交是数据本身的
+      let pts : Array[Vec2] = []
+      for c in corners {
+        pts.push(c.xy())
+      }
+      Outline(points=pts, closed=true)
+    }
+    Text(..) | Insert(..) | Dimension(..) | Hatch(..) | Unknown => Empty
+  }
+}

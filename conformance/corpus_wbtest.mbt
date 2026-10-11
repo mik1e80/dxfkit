@@ -170,12 +170,8 @@ test "语料几何离散：曲线都能摊平" {
   for path in corpus_files() {
     let es = @dxfkit.build_drawing(scan_corpus_file(path)).entities()
     for e in es.entities {
-      let pts = match e.geom {
-        @dxfkit.Polyline(vertices~, closed~) =>
-          @dxfkit.polyline_points(vertices, closed, tol)
-        @dxfkit.Circle(center~, radius~) => @dxfkit.circle_points(center.xy(), radius, tol)
-        @dxfkit.Arc(center~, radius~, start_angle~, end_angle~) =>
-          @dxfkit.arc_points(center.xy(), radius, start_angle, end_angle, tol)
+      let pts = match e.geom.flatten(tol) {
+        @dxfkit.Outline(points~, ..) => points
         _ => []
       }
       if pts.length() > 0 {
@@ -195,10 +191,9 @@ test "语料几何离散：曲线都能摊平" {
       }
     }
   }
-  // 2026-10-11 实测的锚点（tol=0.01）；多段线 / 圆 / 弧以外的曲线
-  // （椭圆、样条）还没接进离散，以后的批次会把这两个数字顶上去
-  assert_eq(curves, 2429)
-  assert_eq(total_points, 18482)
+  // 2026-10-11 实测的锚点（tol=0.01）：椭圆与样条接进离散之后的数字
+  assert_eq(curves, 3559)
+  assert_eq(total_points, 21430)
   if problems.length() > 0 {
     fail("有曲线离散异常：" + join_problems(problems))
   }

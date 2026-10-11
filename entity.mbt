@@ -87,11 +87,18 @@ pub(all) enum Geometry {
   /// 是解码出来的实体，而不是 `Unknown`。老版本（R12）没有匿名块，
   /// `block` 是空串。
   Dimension(at~ : Vec3, block~ : String, measurement~ : Double)
-  /// 样条曲线（SPLINE）：次数、节点向量、控制点。
+  /// 样条曲线（SPLINE）：次数、节点向量、控制点、权重。
   ///
   /// 曲线的真实形状要按 NURBS 求值——那是离散层的事，这里把定义
   /// 数据原样收好（节点数和控制点数是否自洽留给校验层）。
-  Spline(degree~ : Int, knots~ : Array[Double], control_points~ : Array[Vec3])
+  /// 权重（组码 41）只有有理样条才写；缺省补 1——权重全 1 就是
+  /// 普通的 B 样条。
+  Spline(
+    degree~ : Int,
+    knots~ : Array[Double],
+    control_points~ : Array[Vec3],
+    weights~ : Array[Double]
+  )
   /// 区域填充（HATCH）：标高点、是否实体填充、图案名、边界路径数。
   ///
   /// 边界能由线 / 弧 / 椭圆 / 样条四种边组合，还有老式的多段线写法——
@@ -532,17 +539,19 @@ fn mtext_value(record : Record) -> String {
 ///|
 /// 解析 SPLINE 的定义数据。
 ///
-/// 节点（`40`）和控制点（`10/20/30`）都是**同一组码重复出现**的，
-/// 控制点还是三码一组的坐标——按顺序扫，缺 `30` 的按 z=0 处理
-/// （和 `Record::point` 一个约定）。
+/// 节点（`40`）、权重（`41`）和控制点（`10/20/30`）都是**同一组码
+/// 重复出现**的，控制点还是三码一组的坐标——按顺序扫，缺 `30` 的
+/// 按 z=0 处理（和 `Record::point` 一个约定）。
 fn parse_spline(record : Record) -> Geometry {
   let knots : Array[Double] = []
+  let weights : Array[Double] = []
   let control : Array[Vec3] = []
   let mut px : Double? = None
   let mut py : Double? = None
   for t in subclass_tags(record, "AcDbSpline") {
     match t.code {
       40 => knots.push(t.value.as_double())
+      41 => weights.push(t.value.as_double())
       10 => {
         // 上一个点没等到 30 就被新点顶掉：按 z = 0 收掉
         match (px, py) {
@@ -569,10 +578,16 @@ fn parse_spline(record : Record) -> Geometry {
     (Some(x), Some(y)) => control.push(Vec3::new(x, y, 0.0))
     _ => ()
   }
+  // 权重要和控制点一一对应：非有理样条不写 41，缺的补 1——
+  // 补完两边长度永远一致，求值层就不用再管有没有权重了
+  while weights.length() < control.length() {
+    weights.push(1.0)
+  }
   Spline(
     degree=record.get_int(71, 3),
     knots=knots,
     control_points=control,
+    weights=weights,
   )
 }
 

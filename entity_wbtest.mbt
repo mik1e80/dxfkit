@@ -742,11 +742,35 @@ test "SPLINE 解析出次数、节点、控制点" {
   assert_true(e.kind() == "SPLINE")
   assert_true(e.is_decoded())
   match e.geom {
-    Spline(degree~, knots~, control_points~) => {
+    Spline(degree~, knots~, control_points~, weights~) => {
       assert_eq(degree, 3)
       assert_eq(knots.length(), 8)
       assert_eq(control_points.length(), 4)
       assert_true(control_points[1].x == 1.0 && control_points[1].y == 2.0)
+      // 没写 41：权重补 1，和普通 B 样条等价
+      assert_eq(weights.length(), 4)
+      assert_true(weights[0] == 1.0 && weights[3] == 1.0)
+    }
+    _ => fail("不是样条")
+  }
+}
+
+///|
+test "有理样条的权重（组码 41）解析" {
+  // 权重是组码 41（ezdxf 的 load_spline_data 里核过）——不是 42，
+  // 42 在 SPLINE 里是节点容差那个标量
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nSPLINE\n100\nAcDbSpline\n71\n2\n" +
+    "40\n0.0\n40\n0.0\n40\n0.0\n40\n1.0\n40\n1.0\n40\n1.0\n" +
+    "41\n1.0\n41\n2.0\n41\n1.0\n" +
+    "10\n0.0\n20\n0.0\n30\n0.0\n10\n1.0\n20\n1.0\n30\n0.0\n" +
+    "10\n2.0\n20\n0.0\n30\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  match d.entities().entities[0].geom {
+    Spline(weights~, ..) => {
+      assert_eq(weights.length(), 3)
+      assert_true(weights[1] == 2.0)
     }
     _ => fail("不是样条")
   }

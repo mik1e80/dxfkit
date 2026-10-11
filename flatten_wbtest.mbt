@@ -150,3 +150,144 @@ test "零长弦上的 bulge 当直线" {
   let pts = polyline_points(verts, false, 0.01)
   assert_eq(pts.length(), 1)
 }
+
+// ── 椭圆 ────────────────────────────────────────────────────────────────
+
+///|
+test "椭圆离散：点都在椭圆上，极值对得上" {
+  // 长轴 2、短长轴比 0.5（短轴 1）——整椭圆的盒子是 (-2,-1) 到 (2,1)
+  let pts = ellipse_points(
+    Vec3::new(0.0, 0.0, 0.0),
+    Vec3::new(2.0, 0.0, 0.0),
+    0.5,
+    0.0,
+    6.283185307179586,
+    0.01,
+  )
+  let mut lo_x = 1.0e9
+  let mut hi_x = -1.0e9
+  let mut lo_y = 1.0e9
+  let mut hi_y = -1.0e9
+  for p in pts {
+    lo_x = lo_x.min(p.x)
+    hi_x = hi_x.max(p.x)
+    lo_y = lo_y.min(p.y)
+    hi_y = hi_y.max(p.y)
+    // 点在椭圆上：(x/2)² + y² = 1
+    assert_true(((p.x / 2.0) * (p.x / 2.0) + p.y * p.y - 1.0).abs() < 1.0e-9)
+  }
+  // 细分的半分割会把 0° / 90° / 180° / 270° 四个参数点都采到
+  assert_true((lo_x + 2.0).abs() < 1.0e-9 && (hi_x - 2.0).abs() < 1.0e-9)
+  assert_true((lo_y + 1.0).abs() < 1.0e-9 && (hi_y - 1.0).abs() < 1.0e-9)
+}
+
+///|
+test "椭圆弧：起点是起始参数处的点" {
+  // 圆心 (1,1)、长轴 (3,0)、比例 0.5（短轴 (0, 1.5)），取四分之一
+  let pts = ellipse_points(
+    Vec3::new(1.0, 1.0, 0.0),
+    Vec3::new(3.0, 0.0, 0.0),
+    0.5,
+    0.0,
+    1.5707963267948966,
+    0.01,
+  )
+  // 参数 0 = 圆心 + 长轴
+  assert_true((pts[0].x - 4.0).abs() < 1.0e-9)
+  assert_true((pts[0].y - 1.0).abs() < 1.0e-9)
+  // 参数 π/2 = 圆心 + 短轴 = (1, 2.5)
+  let last = pts[pts.length() - 1]
+  assert_true((last.x - 1.0).abs() < 1.0e-9)
+  assert_true((last.y - 2.5).abs() < 1.0e-9)
+}
+
+// ── 样条（NURBS）──────────────────────────────────────────────────────
+
+///|
+test "钳制三次 B 样条：过首末控制点，中点可手算" {
+  // 节点 [0,0,0,0,1,1,1,1] 是标准钳制写法，两个端点就是首末控制点
+  let ctrl : Array[Vec2] = [
+    Vec2::new(0.0, 0.0),
+    Vec2::new(1.0, 2.0),
+    Vec2::new(3.0, 2.0),
+    Vec2::new(4.0, 0.0),
+  ]
+  let knots : Array[Double] = [0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0]
+  let w : Array[Double] = [1.0, 1.0, 1.0, 1.0]
+  let p0 = nurbs_point(3, knots, ctrl, w, 0.0)
+  assert_true(p0.x == 0.0 && p0.y == 0.0)
+  let p1 = nurbs_point(3, knots, ctrl, w, 1.0)
+  assert_true((p1.x - 4.0).abs() < 1.0e-9 && p1.y.abs() < 1.0e-9)
+  // 对称位置的中点 = (P0 + 3P1 + 3P2 + P3) / 8 = (2, 1.5)
+  let mid = nurbs_point(3, knots, ctrl, w, 0.5)
+  assert_true((mid.x - 2.0).abs() < 1.0e-9)
+  assert_true((mid.y - 1.5).abs() < 1.0e-9)
+}
+
+///|
+test "有理样条：权重把曲线拉向控制点" {
+  // 二次、控制点 (0,0) (1,1) (2,0)：非有理中点 (1, 0.5)
+  let ctrl : Array[Vec2] = [
+    Vec2::new(0.0, 0.0),
+    Vec2::new(1.0, 1.0),
+    Vec2::new(2.0, 0.0),
+  ]
+  let knots : Array[Double] = [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+  let plain = nurbs_point(2, knots, ctrl, [1.0, 1.0, 1.0], 0.5)
+  assert_true((plain.x - 1.0).abs() < 1.0e-9)
+  assert_true((plain.y - 0.5).abs() < 1.0e-9)
+  // 中间权重 2：中点 = (1.5, 1) / 1.5 = (1, 2/3)——被拉向中间控制点
+  let weighted = nurbs_point(2, knots, ctrl, [1.0, 2.0, 1.0], 0.5)
+  assert_true((weighted.x - 1.0).abs() < 1.0e-9)
+  assert_true((weighted.y - 0.6666666666666666).abs() < 1.0e-9)
+}
+
+///|
+test "数据不自洽的样条退化成单点，不炸" {
+  // 控制点比次数还少——求值退回第一个控制点，校验层负责报它
+  let pts = spline_points(
+    3,
+    [0.0, 0.0, 0.0, 0.0, 1.0],
+    [Vec3::new(5.0, 5.0, 0.0)],
+    [1.0],
+    0.1,
+  )
+  assert_eq(pts.length(), 1)
+  assert_true(pts[0].x == 5.0)
+}
+
+// ── 伞函数 ──────────────────────────────────────────────────────────────
+
+///|
+test "flatten：圆出闭合轮廓、直线出两点" {
+  let circle = Circle(center=Vec3::zero(), radius=1.0)
+  match circle.flatten(0.05) {
+    Outline(points~, closed~) => {
+      assert_true(closed)
+      assert_true(points.length() > 8)
+    }
+    _ => fail("圆应该出闭合轮廓")
+  }
+  let line = Line(start=Vec3::zero(), end=Vec3::new(1.0, 1.0, 0.0))
+  match line.flatten(0.05) {
+    Outline(points~, closed~) => {
+      assert_false(closed)
+      assert_eq(points.length(), 2)
+    }
+    _ => fail("线段应该出两点轮廓")
+  }
+}
+
+///|
+test "flatten：文字和块引用进 Empty" {
+  // 不是「离散失败」——这一层对它们没有几何，检查环节单独统计
+  let text = Text(at=Vec3::zero(), height=1.0, value="基准", rotation=0.0)
+  assert_true(text.flatten(0.1) is Empty)
+  let insert = Insert(
+    at=Vec3::zero(),
+    block="孔位",
+    scale=Vec3::new(1.0, 1.0, 1.0),
+    rotation=0.0,
+  )
+  assert_true(insert.flatten(0.1) is Empty)
+}
