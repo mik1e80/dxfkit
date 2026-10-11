@@ -69,6 +69,11 @@ pub(all) enum Geometry {
   /// 那是渲染和离散层的事。具体哪种看 `kind`——加工检查里它们都是
   /// 「文字没转成曲线」这一条。
   Text(at~ : Vec3, height~ : Double, value~ : String, rotation~ : Double)
+  /// 块引用（INSERT）：插入点、块名、缩放、旋转角（弧度）。
+  ///
+  /// 真正的形状要展开块内容再做嵌套变换——那是几何层的事，
+  /// 这里只记录引用本身。
+  Insert(at~ : Vec3, block~ : String, scale~ : Vec3, rotation~ : Double)
   /// 认不出的实体类型。**不等于坏记录**——只是解析器还没解码它
   Unknown
 }
@@ -78,6 +83,24 @@ pub(all) enum Geometry {
 pub(all) struct Entity {
   common : EntityCommon
   geom : Geometry
+}
+
+///|
+/// 一个块定义。
+pub(all) struct Block {
+  /// 块名。`INSERT` 靠它引用（`*Model_Space` 之类带星号的是系统块）
+  name : String
+  /// 基点——块内容坐标相对它，引用时先减基点
+  base : Vec3
+  /// 块的内容（和 ENTITIES 段一样的实体流，到 `ENDBLK` 为止）
+  entities : Array[Entity]
+}
+
+///|
+/// BLOCKS 段里解析出来的块定义。
+pub(all) struct Blocks {
+  blocks : Array[Block]
+  warnings : Array[String]
 }
 
 ///|
@@ -178,6 +201,9 @@ pub fn Geometry::bounds(self : Geometry) -> Aabb2? {
     // 文字按插入点记——真实占用范围要字体度量。加工检查里文字本身是
     // 「未转曲线」的警告项，不是切割几何
     Text(at~, ..) => Some(Aabb2::empty().expand(at.xy()))
+    // 块引用的范围要展开块内容才知道；这里先记插入点，
+    // 展开（嵌套变换）是几何层的任务
+    Insert(at~, ..) => Some(Aabb2::empty().expand(at.xy()))
     Unknown => None
   }
 }
@@ -329,9 +355,19 @@ fn polyline_bounds(vertices : Array[PolyVertex], closed : Bool) -> Aabb2 {
 ///
 /// 入口是 ENTITIES 段；将来块定义（BLOCKS 段）里的实体也走这里。
 pub fn parse_entities(section : Section) -> Entities {
-  let entities : Array[Entity] = []
   let warnings : Array[String] = []
-  let records = section.records
+  let entities = parse_records(section.records[:], warnings)
+  { entities, warnings }
+}
+
+///|
+/// 扫一段记录流，翻译成实体（ENTITIES 段和 BLOCKS 段里块的内容共用）。
+///
+/// 「多记录实体」在这里消化：POLYLINE 吃掉后面的 VERTEX 直到 `SEQEND`；
+/// INSERT 后面跟着的 ATTRIB（块引用的属性值）**不吞**——它们作为独立
+/// 实体留在列表里（属性文字也可能没转曲线），只跳过收尾的 `SEQEND`。
+fn parse_records(records : ArrayView[Record], warnings : Array[String]) -> Array[Entity] {
+  let entities : Array[Entity] = []
   let mut i = 0
   while i < records.length() {
     let record = records[i]
@@ -360,7 +396,7 @@ pub fn parse_entities(section : Section) -> Entities {
       i = i + 1
     }
   }
-  { entities, warnings }
+  entities
 }
 
 ///|
@@ -621,6 +657,34 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
         Some(geom) => Some({ common, geom })
         None => None
       }
+    "INSERT" =>
+      match record.point(0) {
+        Some(at) => {
+          let block = record.get_string(2)
+          if block == "" {
+            warnings.push("INSERT 缺块名（2），已跳过")
+            None
+          } else {
+            Some({
+              common,
+              geom: Insert(
+                at=at,
+                block=block,
+                scale=Vec3::new(
+                  record.get_double(41, 1.0),
+                  record.get_double(42, 1.0),
+                  record.get_double(43, 1.0),
+                ),
+                rotation=to_radians(record.get_double(50, 0.0)),
+              ),
+            })
+          }
+        }
+        None => {
+          warnings.push("INSERT 缺插入点坐标（10/20），已跳过")
+          None
+        }
+      }
     _ => Some({ common, geom: Unknown })
   }
 }
@@ -634,6 +698,60 @@ pub fn Drawing::entities(self : Drawing) -> Entities {
       let entities : Array[Entity] = []
       let warnings : Array[String] = []
       { entities, warnings }
+    }
+  }
+}
+
+///|
+/// 解析 BLOCKS 段：每个 `BLOCK` 到 `ENDBLK` 之间的记录就是块的内容，
+/// 走和 ENTITIES 段同一套翻译（`parse_records`）。
+pub fn parse_blocks(section : Section) -> Blocks {
+  let blocks : Array[Block] = []
+  let warnings : Array[String] = []
+  let records = section.records
+  let mut i = 0
+  while i < records.length() {
+    if records[i].kind != "BLOCK" {
+      i = i + 1
+      continue
+    }
+    let head = records[i]
+    let mut j = i + 1
+    while j < records.length() && records[j].kind != "ENDBLK" {
+      j = j + 1
+    }
+    let name = head.get_string(2)
+    if name == "" {
+      warnings.push("BLOCK 没有名字，已跳过")
+    } else {
+      let base = match head.point(0) {
+        Some(p) => p
+        // 基点缺失按原点处理并记一条——块的内容至少要看得见
+        None => {
+          warnings.push("块「\{name}」缺基点（10/20），按原点处理")
+          Vec3::zero()
+        }
+      }
+      let entities = parse_records(records[i + 1 : j], warnings)
+      blocks.push({ name, base, entities })
+    }
+    if j < records.length() {
+      j = j + 1
+    }
+    i = j
+  }
+  { blocks, warnings }
+}
+
+///|
+/// 图纸的 BLOCKS 段。没有 BLOCKS 段时是空表。
+pub fn Drawing::blocks(self : Drawing) -> Blocks {
+  match self.section("BLOCKS") {
+    Some(s) => parse_blocks(s)
+    None => {
+      let blocks : Array[Block] = []
+      let warnings : Array[String] = []
+      { blocks, warnings }
     }
   }
 }

@@ -513,6 +513,130 @@ test "文字的包围盒是插入点" {
   assert_true(b.min.y == 8.0 && b.max.y == 8.0)
 }
 
+// ── 块定义与引用 ────────────────────────────────────────────────────────
+
+///|
+test "BLOCKS 段解析出块名、基点和内容" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nBLOCKS\n" +
+    "0\nBLOCK\n8\n0\n2\n孔位\n70\n0\n10\n0.0\n20\n0.0\n30\n0.0\n" +
+    "0\nCIRCLE\n8\n0\n10\n1.0\n20\n1.0\n30\n0.0\n40\n0.5\n" +
+    "0\nENDBLK\n8\n0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let bs = d.blocks()
+  assert_eq(bs.warnings.length(), 0)
+  assert_eq(bs.blocks.length(), 1)
+  assert_true(bs.blocks[0].name == "孔位")
+  assert_eq(bs.blocks[0].entities.length(), 1)
+  match bs.blocks[0].entities[0].geom {
+    Circle(radius~, ..) => assert_true(radius == 0.5)
+    _ => fail("块里不是圆")
+  }
+}
+
+///|
+test "块内容走到多记录实体也一样" {
+  // 块里的 POLYLINE 同样有 VERTEX / SEQEND——翻译走的是同一条路
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nBLOCKS\n" +
+    "0\nBLOCK\n2\n槽\n70\n0\n10\n0.0\n20\n0.0\n30\n0.0\n" +
+    "0\nPOLYLINE\n70\n1\n" +
+    "0\nVERTEX\n10\n0.0\n20\n0.0\n30\n0.0\n" +
+    "0\nVERTEX\n10\n1.0\n20\n0.0\n30\n0.0\n" +
+    "0\nSEQEND\n" +
+    "0\nENDBLK\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let bs = d.blocks()
+  assert_eq(bs.blocks[0].entities.length(), 1)
+  assert_true(bs.blocks[0].entities[0].kind() == "POLYLINE")
+}
+
+///|
+test "缺 ENDBLK 时尽力而为" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nBLOCKS\n0\nBLOCK\n2\n半截\n10\n0.0\n20\n0.0\n30\n0.0\n" +
+    "0\nLINE\n10\n0.0\n20\n0.0\n11\n1.0\n21\n1.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let bs = d.blocks()
+  assert_eq(bs.blocks.length(), 1)
+  assert_eq(bs.blocks[0].entities.length(), 1)
+}
+
+///|
+test "INSERT 解析：块名、插入点、缩放、旋转" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nINSERT\n8\n0\n10\n10.0\n20\n20.0\n30\n0.0\n" +
+    "41\n2.0\n42\n3.0\n43\n1.0\n50\n90\n2\n孔位\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let e = d.entities().entities[0]
+  assert_true(e.kind() == "INSERT")
+  match e.geom {
+    Insert(at~, block~, scale~, rotation~) => {
+      assert_true(at.x == 10.0 && at.y == 20.0)
+      assert_true(block == "孔位")
+      assert_true(scale.x == 2.0 && scale.y == 3.0 && scale.z == 1.0)
+      assert_true((rotation - 1.5707963267948966).abs() < 1.0e-12)
+    }
+    _ => fail("不是块引用")
+  }
+}
+
+///|
+test "缩放和旋转缺省是 1 / 0" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nINSERT\n10\n0.0\n20\n0.0\n2\n孔位\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  match d.entities().entities[0].geom {
+    Insert(scale~, rotation~, ..) => {
+      assert_true(scale.x == 1.0 && scale.y == 1.0 && scale.z == 1.0)
+      assert_true(rotation == 0.0)
+    }
+    _ => fail("不是块引用")
+  }
+}
+
+///|
+test "INSERT 缺块名跳过并警告" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nINSERT\n10\n0.0\n20\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.entities.length(), 0)
+  assert_eq(es.warnings.length(), 1)
+}
+
+///|
+test "INSERT 后面的 ATTRIB 是独立实体" {
+  // 66=1 时后面跟着属性值、SEQEND 收尾——ATTRIB **不吞**：
+  // 属性文字同样可能没转曲线，检查环节要看得见
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nINSERT\n10\n0.0\n20\n0.0\n2\n孔位\n66\n1\n" +
+    "0\nATTRIB\n10\n1.0\n20\n1.0\n40\n1.0\n1\nM6\n" +
+    "0\nSEQEND\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.entities.length(), 2)
+  assert_true(es.entities[0].kind() == "INSERT")
+  assert_true(es.entities[1].kind() == "ATTRIB")
+}
+
+///|
+test "没有 BLOCKS 段时是空表" {
+  let d = drawing_of("0\nSECTION\n2\nENTITIES\n0\nENDSEC\n0\nEOF\n")
+  let bs = d.blocks()
+  assert_eq(bs.blocks.length(), 0)
+  assert_eq(bs.warnings.length(), 0)
+}
+
 // ── Unknown 兜底 ────────────────────────────────────────────────────────
 
 ///|
