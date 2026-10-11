@@ -157,6 +157,96 @@ test "没有 HEADER 段的最小文件：不该崩，也不能假装知道版本
   assert_true(scan.encoding is @dxfkit.Cp1252)
 }
 
+// ── 实体层 ──────────────────────────────────────────────────────────────
+
+///|
+test "语料整体：实体解析的锚点" {
+  // 47 个文件：5524 个实体、5404 个解码、**0 条警告**（2026-10-11 实测）。
+  // 警告是 0 不是巧合——ezdxf 的语料都用标准写法，缺必填字段的记录
+  // 一条都没有；以后这条挂了，要么语料变了，要么解析器动错了
+  let mut total = 0
+  let mut decoded = 0
+  let mut warns = 0
+  for path in corpus_files() {
+    let es = @dxfkit.build_drawing(scan_corpus_file(path)).entities()
+    total = total + es.entities.length()
+    warns = warns + es.warnings.length()
+    for e in es.entities {
+      if e.is_decoded() {
+        decoded = decoded + 1
+      }
+    }
+  }
+  assert_eq(total, 5524)
+  assert_eq(decoded, 5404)
+  assert_eq(warns, 0)
+}
+
+///|
+test "语料里未解码的实体类型都在预期清单里" {
+  // 未解码不是错误——是「解析器还没覆盖的类型」。真冒出清单外的新类型，
+  // 这条会挂，提醒来对一遍（清单只比类型，不比个数；个数见注释）。
+  // 实测分布：IMAGE 64（图片）、VIEWPORT 41（布局视口）、RAY 3、
+  // XLINE 2、MULTILEADER 2、ACAD_TABLE 2、WIPEOUT 2、
+  // POLYLINE 2（网格类，有意挡在 Unknown 外）、MESH 1、3DSOLID 1
+  let expected : Array[String] = [
+    "3DSOLID",
+    "ACAD_TABLE",
+    "IMAGE",
+    "MESH",
+    "MULTILEADER",
+    "POLYLINE",
+    "RAY",
+    "VIEWPORT",
+    "WIPEOUT",
+    "XLINE",
+  ]
+  let seen : Array[String] = []
+  for path in corpus_files() {
+    let es = @dxfkit.build_drawing(scan_corpus_file(path)).entities()
+    for e in es.entities {
+      if !e.is_decoded() {
+        let k = e.kind()
+        let mut found = false
+        for s in seen {
+          if s == k {
+            found = true
+          }
+        }
+        if !found {
+          seen.push(k)
+        }
+      }
+    }
+  }
+  let problems : Array[String] = []
+  for k in seen {
+    let mut known = false
+    for e in expected {
+      if e == k {
+        known = true
+      }
+    }
+    if !known {
+      problems.push("出现了没预期的未解码类型：\{k}")
+    }
+  }
+  for e in expected {
+    let mut present = false
+    for s in seen {
+      if s == e {
+        present = true
+      }
+    }
+    if !present {
+      problems.push("清单里的 \{e} 不再未解码了——解码了？更新清单")
+    }
+  }
+  if problems.length() > 0 {
+    fail("未解码清单对不上：" + join_problems(problems))
+  }
+}
+
 ///|
 test "circle.dxf 声明的是 CP1252 但实际是 UTF-8" {
   // 这是编码判断的活例子：它是 AC1027（R2013），按规则**强制 UTF-8**，

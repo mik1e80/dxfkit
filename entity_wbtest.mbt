@@ -722,18 +722,137 @@ test "R12 的标注没有匿名块" {
   }
 }
 
-// ── Unknown 兜底 ────────────────────────────────────────────────────────
+// ── 样条与填充 ──────────────────────────────────────────────────────────
 
 ///|
-test "认不出的实体保留类型和原记录" {
-  // HATCH 还没解码，但它必须出现在列表里——加工检查要先知道
-  // 「有多少实体我看不懂」，才谈得上给结论
+test "SPLINE 解析出次数、节点、控制点" {
+  // 三次样条（degree 3）、4 个控制点 → 节点数 = 4 + 3 + 1 = 8
   let d = drawing_utf8(
-    "0\nSECTION\n2\nENTITIES\n0\nHATCH\n5\n3A\n8\n填充\n100\nAcDbHatch\n2\nSOLID\n" +
+    "0\nSECTION\n2\nENTITIES\n0\nSPLINE\n8\n0\n100\nAcDbSpline\n" +
+    "71\n3\n72\n8\n73\n4\n" +
+    "40\n0.0\n40\n0.0\n40\n0.0\n40\n0.0\n40\n1.0\n40\n1.0\n40\n1.0\n40\n1.0\n" +
+    "10\n0.0\n20\n0.0\n30\n0.0\n10\n1.0\n20\n2.0\n30\n0.0\n" +
+    "10\n3.0\n20\n2.0\n30\n0.0\n10\n4.0\n20\n0.0\n30\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let e = d.entities().entities[0]
+  assert_true(e.kind() == "SPLINE")
+  assert_true(e.is_decoded())
+  match e.geom {
+    Spline(degree~, knots~, control_points~) => {
+      assert_eq(degree, 3)
+      assert_eq(knots.length(), 8)
+      assert_eq(control_points.length(), 4)
+      assert_true(control_points[1].x == 1.0 && control_points[1].y == 2.0)
+    }
+    _ => fail("不是样条")
+  }
+}
+
+///|
+test "SPLINE 控制点缺 30 按 z=0" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nSPLINE\n100\nAcDbSpline\n71\n1\n" +
+    "40\n0.0\n40\n1.0\n10\n0.0\n20\n0.0\n10\n1.0\n20\n1.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  match d.entities().entities[0].geom {
+    Spline(control_points~, ..) => {
+      assert_eq(control_points.length(), 2)
+      assert_true(control_points[0].z == 0.0)
+      assert_true(control_points[1].z == 0.0)
+    }
+    _ => fail("不是样条")
+  }
+}
+
+///|
+test "SPLINE 的包围盒用控制点（保守）" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nSPLINE\n100\nAcDbSpline\n71\n1\n" +
+    "40\n0.0\n40\n1.0\n10\n0.0\n20\n0.0\n30\n0.0\n10\n4.0\n20\n3.0\n30\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let b = d.entities().entities[0].bounds().unwrap()
+  assert_true(b.min.x == 0.0 && b.min.y == 0.0)
+  assert_true(b.max.x == 4.0 && b.max.y == 3.0)
+}
+
+///|
+test "HATCH 实体填充解析" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nHATCH\n8\n0\n100\nAcDbHatch\n" +
+    "10\n0.0\n20\n0.0\n30\n0.0\n2\nSOLID\n70\n1\n71\n0\n91\n2\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
   let e = d.entities().entities[0]
   assert_true(e.kind() == "HATCH")
+  assert_true(e.is_decoded())
+  match e.geom {
+    Hatch(solid~, pattern~, paths~, ..) => {
+      assert_true(solid)
+      assert_true(pattern == "SOLID")
+      assert_eq(paths, 2)
+    }
+    _ => fail("不是填充")
+  }
+}
+
+///|
+test "HATCH 图案填充" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nHATCH\n10\n0.0\n20\n0.0\n30\n0.0\n" +
+    "2\nANSI31\n70\n0\n91\n1\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  match d.entities().entities[0].geom {
+    Hatch(solid~, pattern~, ..) => {
+      assert_false(solid)
+      assert_true(pattern == "ANSI31")
+    }
+    _ => fail("不是填充")
+  }
+}
+
+///|
+test "缺标高点的 HATCH 跳过并警告" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nHATCH\n2\nSOLID\n70\n1\n91\n1\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.entities.length(), 0)
+  assert_eq(es.warnings.length(), 1)
+}
+
+///|
+test "扩展标注类型走同一条路" {
+  // R2007 给弧长标注、大半径标注起了独立实体名，记录形状和 DIMENSION 一样
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nARC_DIMENSION\n8\n标注\n" +
+    "10\n1.0\n20\n2.0\n30\n0.0\n2\n*D2\n42\n30.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let e = d.entities().entities[0]
+  assert_true(e.kind() == "ARC_DIMENSION")
+  match e.geom {
+    Dimension(block~, ..) => assert_true(block == "*D2")
+    _ => fail("不是标注")
+  }
+}
+
+// ── Unknown 兜底 ────────────────────────────────────────────────────────
+
+///|
+test "认不出的实体保留类型和原记录" {
+  // MLINE（多线）不在解码清单里，但它必须出现在列表里——加工检查
+  // 要先知道「有多少实体我看不懂」，才谈得上给结论
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nMLINE\n5\n3A\n8\n填充\n100\nAcDbMline\n2\nSTANDARD\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let e = d.entities().entities[0]
+  assert_true(e.kind() == "MLINE")
   assert_false(e.is_decoded())
   assert_true(e.bounds() is None)
   // 字段还在原记录里，将来解码不用重新读文件

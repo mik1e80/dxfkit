@@ -87,6 +87,17 @@ pub(all) enum Geometry {
   /// 是解码出来的实体，而不是 `Unknown`。老版本（R12）没有匿名块，
   /// `block` 是空串。
   Dimension(at~ : Vec3, block~ : String, measurement~ : Double)
+  /// 样条曲线（SPLINE）：次数、节点向量、控制点。
+  ///
+  /// 曲线的真实形状要按 NURBS 求值——那是离散层的事，这里把定义
+  /// 数据原样收好（节点数和控制点数是否自洽留给校验层）。
+  Spline(degree~ : Int, knots~ : Array[Double], control_points~ : Array[Vec3])
+  /// 区域填充（HATCH）：标高点、是否实体填充、图案名、边界路径数。
+  ///
+  /// 边界能由线 / 弧 / 椭圆 / 样条四种边组合，还有老式的多段线写法——
+  /// **边界几何这版不展开**（加工切的是轮廓实体，填充多是区域标记），
+  /// 先记录身份，让统计和检查环节看得见它。
+  Hatch(at~ : Vec3, solid~ : Bool, pattern~ : String, paths~ : Int)
   /// 认不出的实体类型。**不等于坏记录**——只是解析器还没解码它
   Unknown
 }
@@ -226,6 +237,19 @@ pub fn Geometry::bounds(self : Geometry) -> Aabb2? {
     }
     // 标注的真实范围在匿名块里；定义点先记下
     Dimension(at~, ..) => Some(Aabb2::empty().expand(at.xy()))
+    // 控制点盒是保守的——曲线整体在控制点的凸包里，盒装得下
+    Spline(control_points~, ..) =>
+      if control_points.length() == 0 {
+        None
+      } else {
+        let mut box = Aabb2::empty()
+        for p in control_points {
+          box = box.expand(p.xy())
+        }
+        Some(box)
+      }
+    // 填充的真实范围要展开边界；标高点先记下
+    Hatch(at~, ..) => Some(Aabb2::empty().expand(at.xy()))
     Unknown => None
   }
 }
@@ -489,6 +513,53 @@ fn mtext_value(record : Record) -> String {
 }
 
 ///|
+/// 解析 SPLINE 的定义数据。
+///
+/// 节点（`40`）和控制点（`10/20/30`）都是**同一组码重复出现**的，
+/// 控制点还是三码一组的坐标——按顺序扫，缺 `30` 的按 z=0 处理
+/// （和 `Record::point` 一个约定）。
+fn parse_spline(record : Record) -> Geometry {
+  let knots : Array[Double] = []
+  let control : Array[Vec3] = []
+  let mut px : Double? = None
+  let mut py : Double? = None
+  for t in subclass_tags(record, "AcDbSpline") {
+    match t.code {
+      40 => knots.push(t.value.as_double())
+      10 => {
+        // 上一个点没等到 30 就被新点顶掉：按 z = 0 收掉
+        match (px, py) {
+          (Some(x), Some(y)) => control.push(Vec3::new(x, y, 0.0))
+          _ => ()
+        }
+        px = Some(t.value.as_double())
+        py = None
+      }
+      20 => py = Some(t.value.as_double())
+      30 =>
+        match (px, py) {
+          (Some(x), Some(y)) => {
+            control.push(Vec3::new(x, y, t.value.as_double()))
+            px = None
+            py = None
+          }
+          _ => ()
+        }
+      _ => ()
+    }
+  }
+  match (px, py) {
+    (Some(x), Some(y)) => control.push(Vec3::new(x, y, 0.0))
+    _ => ()
+  }
+  Spline(
+    degree=record.get_int(71, 3),
+    knots=knots,
+    control_points=control,
+  )
+}
+
+///|
 /// 实体的公共外壳。单记录实体和 POLYLINE 这种多记录实体共用。
 fn common_of(record : Record) -> EntityCommon {
   {
@@ -722,7 +793,28 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
           None
         }
       }
-    "DIMENSION" =>
+    "SPLINE" => Some({ common, geom: parse_spline(record) })
+    "HATCH" =>
+      match record.point(0) {
+        Some(at) =>
+          Some({
+            common,
+            geom: Hatch(
+              at=at,
+              solid=record.get_int(70, 0) != 0,
+              pattern=record.get_string(2),
+              paths=record.get_int(91, 0),
+            ),
+          })
+        None => {
+          warnings.push("\{kind} 缺标高点坐标（10/20），已跳过")
+          None
+        }
+      }
+    // ARC_DIMENSION / LARGE_RADIAL_DIMENSION 是 R2007 起给弧长标注和
+    // 大半径标注起的独立实体名，记录形状和 DIMENSION 一样（同一套
+    // AcDbDimension 子类）——借用同一条路（语料里实测到了这两种）
+    "DIMENSION" | "ARC_DIMENSION" | "LARGE_RADIAL_DIMENSION" =>
       match record.point(0) {
         Some(at) =>
           Some({
