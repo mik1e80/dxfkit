@@ -215,6 +215,64 @@ test "语料块展开：全部解开，零警告" {
   assert_eq(warns, 0)
 }
 
+// ── 流式扫描 ────────────────────────────────────────────────────────────
+
+///|
+test "流式扫描与整份扫描逐 tag 等价" {
+  // 块大小取 4096 和 8191（8191 是奇数，和 CRLF 错位，迟早劈到
+  // `\r\n` 中间）——两个入口对同一份文件必须给出逐 tag 相同的结果
+  let mut checked = 0
+  for path in corpus_files() {
+    let data = @fs.read_file_to_bytes(path) catch {
+      @fs.IOError(msg) => fail("读不了 \{path}：\{msg}")
+    }
+    let batch = @dxfkit.scan_tags(data)
+    for chunk in [4096, 8191] {
+      let stream = @dxfkit.TagStream::new()
+      let tags : Array[@dxfkit.Tag] = []
+      let mut i = 0
+      while i < data.length() {
+        let stop = if i + chunk > data.length() {
+          data.length()
+        } else {
+          i + chunk
+        }
+        let part : Array[Byte] = []
+        let mut j = i
+        while j < stop {
+          part.push(data[j])
+          j = j + 1
+        }
+        tags.append(stream.feed(Bytes::from_array(part)))
+        i = stop
+      }
+      tags.append(stream.finish())
+      if tags.length() != batch.tags.length() {
+        fail(
+          "\{path}（块大小 \{chunk}）：流式 \{tags.length()} 个 tag，整份 \{batch.tags.length()} 个",
+        )
+      }
+      let mut k = 0
+      while k < tags.length() {
+        if tags[k].code != batch.tags[k].code ||
+          tags[k].to_display() != batch.tags[k].to_display() {
+          fail("\{path}（块大小 \{chunk}）第 \{k} 条 tag 不一致")
+        }
+        k = k + 1
+      }
+      if stream.warnings().length() != batch.warnings.length() {
+        fail("\{path}（块大小 \{chunk}）：警告数不一致")
+      }
+      if stream.encoding().unwrap().to_display() != batch.encoding.to_display() {
+        fail("\{path}（块大小 \{chunk}）：编码判断不一致")
+      }
+      checked = checked + 1
+    }
+  }
+  // 47 个文件 × 2 种块大小
+  assert_eq(checked, 94)
+}
+
 // ── 加工检查 ────────────────────────────────────────────────────────────
 
 ///|

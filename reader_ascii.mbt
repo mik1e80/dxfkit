@@ -36,59 +36,19 @@ pub(all) struct TagScan {
 /// 碰到 `EOF` 就停——真实的 DXF 文件在 `EOF` 之后还可能有垃圾字节
 /// （实测 ezdxf 的语料里就有 `R12_with_trash_beyond_EOF.dxf`），
 /// 那些不是数据，继续解会把噪声当成 tag。
+///
+/// 这是**整份扫描**的入口；分块扫描走 `stream.mbt` 的 `TagStream`。
+/// 两个入口共用同一套状态机（这里就是它的一次性封装），
+/// 行为不会有两套。
 pub fn scan_tags(data : Bytes) -> TagScan {
-  let encoding = decide_encoding(data)
-  let tags : Array[Tag] = []
-  let warnings : Array[String] = []
-  let mut pos = 0
-  let mut line_no = 0
-  // 上一行读到的组码。DXF 的 tag 是成对的，读到一个组码就得等它的值
-  let mut pending : Int? = None
-  let mut done = false
-
-  while pos < data.length() && !done {
-    let end = line_end(data, pos)
-    let line_start = pos
-    pos = advance_past_newline(data, end)
-    line_no = line_no + 1
-
-    match pending {
-      None => {
-        // 这一行应该是组码
-        match parse_group_code(data, line_start, end) {
-          Some(code) => pending = Some(code)
-          None =>
-            // 组码行读不出整数。跳过这一行继续——比整份文件失败强
-            if line_is_blank(data, line_start, end) {
-              () // 空行是正常现象，不报警告
-            } else {
-              warnings.push(
-                "第 \{line_no} 行：这一行应该是组码，但读不出整数（" +
-                "内容：\{preview(data, line_start, end)}），已跳过",
-              )
-            }
-        }
-      }
-      Some(code) => {
-        let value = parse_value(code, data, line_start, end, encoding)
-        tags.push(Tag::new(code, value))
-        pending = None
-        // `0 / EOF` 是文件结束标志，后面的都不看
-        if code == 0 && value.as_string() == "EOF" {
-          done = true
-        }
-      }
-    }
+  let stream = TagStream::new()
+  let tags = stream.feed(data)
+  tags.append(stream.finish())
+  {
+    tags,
+    warnings: stream.warnings(),
+    encoding: stream.encoding().unwrap(),
   }
-
-  match pending {
-    Some(code) =>
-      warnings.push(
-        "文件在最后一行截断了：组码 \{code} 后面没有值（可能是文件被切断了）",
-      )
-    None => ()
-  }
-  { tags, warnings, encoding }
 }
 
 ///|
