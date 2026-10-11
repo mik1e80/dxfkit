@@ -11,6 +11,9 @@
 //
 // 坐标分组的约定（`tag.mbt` 里 `point_code_parts` 管这个）：
 // `10/20/30` 是第 0 个点、`11/21/31` 是第 1 个（LINE 的起点和终点）。
+//
+// 角度：圆弧的起止角在文件里写的是**度数**，解析时换算成弧度——
+// 内部一律用弧度（`vec.mbt` 的角度工具都是弧度）。
 
 // ── 数据模型 ────────────────────────────────────────────────────────────
 
@@ -35,6 +38,26 @@ pub(all) enum Geometry {
   Line(start~ : Vec3, end~ : Vec3)
   /// 单点
   Point(at~ : Vec3)
+  /// 圆：圆心、半径。
+  ///
+  /// **半径可能是 0 或负数**——坏图纸里真实存在，部分机床遇到直接报错。
+  /// 保留原值（不替换、不跳过），让加工检查去报这一条。
+  Circle(center~ : Vec3, radius~ : Double)
+  /// 圆弧：圆心、半径、起止角（弧度）。
+  ///
+  /// 起止角可能大于一圈（370 度绕回 10 度的写法真实存在），
+  /// 判跨度用 `arc_sweep` 归一。
+  Arc(center~ : Vec3, radius~ : Double, start_angle~ : Double, end_angle~ : Double)
+  /// 椭圆（弧）：圆心、长轴向量（圆心指向长轴端点）、短长轴比、起止参数（弧度）。
+  ///
+  /// 参数 p 对应的点是 `圆心 + 长轴·cos p + 短轴·sin p`，整椭圆是 0 到 2π。
+  Ellipse(
+    center~ : Vec3,
+    major~ : Vec3,
+    ratio~ : Double,
+    start_param~ : Double,
+    end_param~ : Double
+  )
   /// 认不出的实体类型。**不等于坏记录**——只是解析器还没解码它
   Unknown
 }
@@ -122,6 +145,11 @@ pub fn Geometry::bounds(self : Geometry) -> Aabb2? {
   match self {
     Line(start~, end~) => Some(Aabb2::empty().expand(start.xy()).expand(end.xy()))
     Point(at~) => Some(Aabb2::empty().expand(at.xy()))
+    Circle(center~, radius~) => Some(circle_bounds(center, radius))
+    Arc(center~, radius~, start_angle~, end_angle~) =>
+      Some(arc_bounds(center, radius, start_angle, end_angle))
+    // 弧段用整椭圆的盒——永远包含，只是偏大；精确的弧段盒留给离散层
+    Ellipse(center~, major~, ratio~, ..) => Some(ellipse_bounds(center, major, ratio))
     Unknown => None
   }
 }
@@ -130,6 +158,100 @@ pub fn Geometry::bounds(self : Geometry) -> Aabb2? {
 /// 实体的二维包围盒。`Unknown` 返回 `None`。
 pub fn Entity::bounds(self : Entity) -> Aabb2? {
   self.geom.bounds()
+}
+
+// ── 角度与几何辅助 ──────────────────────────────────────────────────────
+
+///|
+/// 一整圈（弧度）。`vec.mbt` 的 `normalize_angle` 里是同一个值，
+/// 这里要用在「起止角相等按整圈」的判断上。
+let two_pi : Double = 6.283185307179586
+
+///|
+/// 度 → 弧度。DXF 文本里的角度一律是度数（圆弧起止角、文字旋转角），
+/// 本项目的内部表示一律是弧度（`normalize_angle`、`angle_span` 都是弧度）。
+fn to_radians(deg : Double) -> Double {
+  deg * 0.017453292519943295
+}
+
+///|
+/// 圆弧从起角到止角跨过的弧度。
+///
+/// 起止角相等（模一整圈）按**整圈**处理——`0 到 360 度`这种写法
+/// 指的是整圆，不是零度弧（`370 度绕回 10 度`是它的亲戚，同一个问题）。
+fn arc_sweep(start : Double, end : Double) -> Double {
+  let span = angle_span(start, end)
+  if span < 1.0e-12 {
+    two_pi
+  } else {
+    span
+  }
+}
+
+///|
+/// 圆上的点（角度是弧度）。
+fn point_on_circle(c : Vec2, r : Double, angle : Double) -> Vec2 {
+  Vec2::new(c.x + r * @math.cos(angle), c.y + r * @math.sin(angle))
+}
+
+///|
+/// 整圆的二维包围盒。半径取绝对值——负半径的圆是坏数据，
+/// 但盒子的形状还是它，报不报让检查环节决定。
+fn circle_bounds(center : Vec3, radius : Double) -> Aabb2 {
+  let r = radius.abs()
+  let c = center.xy()
+  Aabb2::empty()
+    .expand(Vec2::new(c.x - r, c.y - r))
+    .expand(Vec2::new(c.x + r, c.y + r))
+}
+
+///|
+/// 圆弧的二维包围盒：两个端点，加上跨过的象限点。
+///
+/// 光取端点是错的——0° 到 270° 的弧，最右边其实在 90° 的象限点上。
+fn arc_bounds(
+  center : Vec3,
+  radius : Double,
+  start_angle : Double,
+  end_angle : Double,
+) -> Aabb2 {
+  let sweep = arc_sweep(start_angle, end_angle)
+  if sweep >= two_pi - 1.0e-12 {
+    // 整圈，直接给整圆的盒
+    return circle_bounds(center, radius)
+  }
+  let r = radius.abs()
+  let c = center.xy()
+  let mut box = Aabb2::empty()
+  box = box.expand(point_on_circle(c, r, start_angle))
+  box = box.expand(point_on_circle(c, r, end_angle))
+  // 跨过的象限点（0° / 90° / 180° / 270°）
+  let mut k = 0
+  while k < 4 {
+    let q = k.to_double() * 1.5707963267948966
+    if angle_span(start_angle, q) <= sweep {
+      box = box.expand(point_on_circle(c, r, q))
+    }
+    k = k + 1
+  }
+  box
+}
+
+///|
+/// 椭圆的二维包围盒。
+///
+/// 长轴向量 M 和短轴向量 N（M 逆时针转 90 度、乘短长轴比）：
+/// 椭圆上的点写成 `center + M·cos p + N·sin p`，两个方向的最大偏移
+/// 分别是 `√(Mx² + Nx²)` 和 `√(My² + Ny²)`——对整椭圆是精确的。
+fn ellipse_bounds(center : Vec3, major : Vec3, ratio : Double) -> Aabb2 {
+  let m = major.xy()
+  let n = Vec2::new(-m.y * ratio, m.x * ratio)
+  let half_x = (m.x * m.x + n.x * n.x).sqrt()
+  let half_y = (m.y * m.y + n.y * n.y).sqrt()
+  let c = center.xy()
+  Aabb2::empty()
+    .expand(Vec2::new(c.x - half_x, c.y - half_y))
+    .expand(Vec2::new(c.x + half_x, c.y + half_y))
 }
 
 // ── 解析 ────────────────────────────────────────────────────────────────
@@ -148,6 +270,16 @@ pub fn parse_entities(section : Section) -> Entities {
     }
   }
   { entities, warnings }
+}
+
+///|
+/// 取一个组码的数值。**没写返回 `None`**——和 `get_double` 的默认值
+/// 是两回事：这里要区分「写了 0」和「根本没写」，缺必填字段是要报警的。
+fn number_of(record : Record, code : Int) -> Double? {
+  match record.get(code) {
+    Some(t) => Some(t.value.as_double())
+    None => None
+  }
 }
 
 ///|
@@ -177,6 +309,84 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
         Some(at) => Some({ common, geom: Point(at=at) })
         None => {
           warnings.push("\{kind} 缺坐标（10/20），已跳过")
+          None
+        }
+      }
+    "CIRCLE" =>
+      match (record.point(0), number_of(record, 40)) {
+        (Some(center), Some(radius)) =>
+          Some({ common, geom: Circle(center=center, radius=radius) })
+        (None, _) => {
+          warnings.push("\{kind} 缺圆心坐标（10/20），已跳过")
+          None
+        }
+        (_, None) => {
+          warnings.push("\{kind} 缺半径（40），已跳过")
+          None
+        }
+      }
+    "ARC" =>
+      match (
+        record.point(0),
+        number_of(record, 40),
+        number_of(record, 50),
+        number_of(record, 51),
+      ) {
+        (Some(center), Some(radius), Some(a0), Some(a1)) =>
+          Some({
+            common,
+            geom: Arc(
+              center=center,
+              radius=radius,
+              start_angle=to_radians(a0),
+              end_angle=to_radians(a1),
+            ),
+          })
+        (None, _, _, _) => {
+          warnings.push("\{kind} 缺圆心坐标（10/20），已跳过")
+          None
+        }
+        (_, None, _, _) => {
+          warnings.push("\{kind} 缺半径（40），已跳过")
+          None
+        }
+        (_, _, _, _) => {
+          warnings.push("\{kind} 缺起止角（50/51），已跳过")
+          None
+        }
+      }
+    "ELLIPSE" =>
+      match (record.point(0), record.point(1)) {
+        (Some(center), Some(major_end)) =>
+          match number_of(record, 40) {
+            Some(ratio) => {
+              // 41/42 省略时是整椭圆——语义明确，不报警
+              let start_param = match number_of(record, 41) {
+                Some(v) => v
+                None => 0.0
+              }
+              let end_param = match number_of(record, 42) {
+                Some(v) => v
+                None => two_pi
+              }
+              Some({
+                common,
+                geom: Ellipse(
+                  center=center,
+                  major=major_end.sub(center),
+                  ratio=ratio,
+                  start_param=start_param,
+                  end_param=end_param,
+                ),
+              })
+            }
+            None => {
+              warnings.push("\{kind} 缺短长轴比（40），推不出形状，已跳过")
+              None
+            }
+          }
+        _ => {
+          warnings.push("\{kind} 缺圆心或长轴端点（10/20、11/21），已跳过")
           None
         }
       }

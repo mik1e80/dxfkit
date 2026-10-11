@@ -119,6 +119,151 @@ test "单点的包围盒是零尺寸" {
   assert_true(b.min.y == 8.0 && b.max.y == 8.0)
 }
 
+// ── CIRCLE / ARC / ELLIPSE ──────────────────────────────────────────────
+
+///|
+test "CIRCLE 解析与包围盒" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nCIRCLE\n8\n0\n10\n5.0\n20\n6.0\n30\n0.0\n40\n2.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let e = d.entities().entities[0]
+  assert_true(e.is_decoded())
+  match e.geom {
+    Circle(center~, radius~) => {
+      assert_true(center.x == 5.0 && center.y == 6.0)
+      assert_true(radius == 2.0)
+    }
+    _ => fail("不是圆")
+  }
+  let b = e.bounds().unwrap()
+  assert_true(b.min.x == 3.0 && b.min.y == 4.0)
+  assert_true(b.max.x == 7.0 && b.max.y == 8.0)
+}
+
+///|
+test "半径为负的圆保留原值" {
+  // 坏图纸里真实存在，部分机床遇到直接报错——**保留原值**，
+  // 让加工检查去报这一条，解析阶段不该把它抹平或跳过
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nCIRCLE\n10\n0.0\n20\n0.0\n30\n0.0\n40\n-2.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let e = d.entities().entities[0]
+  match e.geom {
+    Circle(radius~, ..) => assert_true(radius == -2.0)
+    _ => fail("不是圆")
+  }
+  // 盒子的形状还是它——用绝对值
+  let b = e.bounds().unwrap()
+  assert_true(b.min.x == -2.0 && b.max.x == 2.0)
+}
+
+///|
+test "缺半径的圆跳过并警告" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nCIRCLE\n10\n0.0\n20\n0.0\n0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.entities.length(), 0)
+  assert_eq(es.warnings.length(), 1)
+}
+
+///|
+test "ARC 的角度换算成弧度" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nARC\n10\n0.0\n20\n0.0\n30\n0.0\n40\n1.0\n" +
+    "50\n90\n51\n180\n0\nENDSEC\n0\nEOF\n",
+  )
+  match d.entities().entities[0].geom {
+    Arc(start_angle~, end_angle~, ..) => {
+      assert_true((start_angle - 1.5707963267948966).abs() < 1.0e-12)
+      assert_true((end_angle - 3.141592653589793).abs() < 1.0e-12)
+    }
+    _ => fail("不是圆弧")
+  }
+}
+
+///|
+test "ARC 包围盒含跨过的象限点" {
+  // 0° 到 270° 的弧，最右边其实在 90° 的象限点上——
+  // 光取两个端点会把包围盒算漏
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nARC\n10\n0.0\n20\n0.0\n30\n0.0\n40\n1.0\n" +
+    "50\n0\n51\n270\n0\nENDSEC\n0\nEOF\n",
+  )
+  let b = d.entities().entities[0].bounds().unwrap()
+  assert_true((b.min.x + 1.0).abs() < 1.0e-9 && (b.min.y + 1.0).abs() < 1.0e-9)
+  assert_true((b.max.x - 1.0).abs() < 1.0e-9 && (b.max.y - 1.0).abs() < 1.0e-9)
+}
+
+///|
+test "起止角相等按整圈" {
+  // 0 到 360 度指的是整圆，不是零度弧
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nARC\n10\n0.0\n20\n0.0\n30\n0.0\n40\n2.0\n" +
+    "50\n0\n51\n360\n0\nENDSEC\n0\nEOF\n",
+  )
+  let b = d.entities().entities[0].bounds().unwrap()
+  assert_true((b.min.x + 2.0).abs() < 1.0e-9 && (b.max.x - 2.0).abs() < 1.0e-9)
+  assert_true((b.min.y + 2.0).abs() < 1.0e-9 && (b.max.y - 2.0).abs() < 1.0e-9)
+}
+
+///|
+test "缺起止角的圆弧跳过并警告" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nARC\n10\n0.0\n20\n0.0\n30\n0.0\n40\n1.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.entities.length(), 0)
+  assert_eq(es.warnings.length(), 1)
+}
+
+///|
+test "ELLIPSE 全椭圆的包围盒" {
+  // 长轴 (2, 0)、短长轴比 0.5 → 短轴 1——盒子 (-2,-1) 到 (2,1)
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nELLIPSE\n10\n0.0\n20\n0.0\n30\n0.0\n" +
+    "11\n2.0\n21\n0.0\n31\n0.0\n40\n0.5\n41\n0.0\n42\n6.283185307179586\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let e = d.entities().entities[0]
+  assert_true(e.is_decoded())
+  let b = e.bounds().unwrap()
+  assert_true((b.min.x + 2.0).abs() < 1.0e-9 && (b.min.y + 1.0).abs() < 1.0e-9)
+  assert_true((b.max.x - 2.0).abs() < 1.0e-9 && (b.max.y - 1.0).abs() < 1.0e-9)
+}
+
+///|
+test "ELLIPSE 省略起止参数时是整椭圆" {
+  // 41/42 缺省的语义明确（整个椭圆），不报警
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nELLIPSE\n10\n0.0\n20\n0.0\n11\n2.0\n21\n0.0\n40\n0.5\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.warnings.length(), 0)
+  match es.entities[0].geom {
+    Ellipse(start_param~, end_param~, ..) => {
+      assert_true(start_param == 0.0)
+      assert_true(end_param == 6.283185307179586)
+    }
+    _ => fail("不是椭圆")
+  }
+}
+
+///|
+test "缺短长轴比的椭圆跳过并警告" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nELLIPSE\n10\n0.0\n20\n0.0\n11\n2.0\n21\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let es = d.entities()
+  assert_eq(es.entities.length(), 0)
+  assert_eq(es.warnings.length(), 1)
+}
+
 // ── Unknown 兜底 ────────────────────────────────────────────────────────
 
 ///|
