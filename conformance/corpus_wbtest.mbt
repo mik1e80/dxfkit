@@ -215,6 +215,28 @@ test "语料块展开：全部解开，零警告" {
   assert_eq(warns, 0)
 }
 
+// ── 加工检查 ────────────────────────────────────────────────────────────
+
+///|
+test "语料加工检查：锚点" {
+  // 2026-10-11 实测。唯一一条致命是 circle_radius_le_0.dxf 里句柄 2E
+  // 的圆（半径 -1）——**那个文件就是为这个场景造的**，被精确逮到。
+  // 警告构成：退化几何 25、文字未转曲线 47、图层引用 8（图层表里
+  // 没有的图层）；提示 1（有实体画在冻结图层上）
+  let mut fatal = 0
+  let mut warn = 0
+  let mut info = 0
+  for path in corpus_files() {
+    let r = @dxfkit.build_drawing(scan_corpus_file(path)).check(0.05)
+    fatal = fatal + r.count(@dxfkit.Fatal)
+    warn = warn + r.count(@dxfkit.Warn)
+    info = info + r.count(@dxfkit.Info)
+  }
+  assert_eq(fatal, 1)
+  assert_eq(warn, 80)
+  assert_eq(info, 1)
+}
+
 // ── 实体层 ──────────────────────────────────────────────────────────────
 
 ///|

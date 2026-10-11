@@ -80,8 +80,9 @@ fn insert_transform(at : Vec3, base : Vec2, scale : Vec3, rotation : Double) -> 
 ///|
 /// 展开之后的一条几何：世界坐标。
 pub(all) struct Placed {
-  /// 块内实体的类型名（INSERT 自己不会出现在结果里）
-  kind : String
+  /// 源实体——类型名、句柄、原记录都在里面。检查报告要引用它们
+  ///（「图层『轮廓』句柄 2D 的圆半径是负数」），所以不能只留离散结果
+  entity : Entity
   /// 生效图层——块内画在图层 0 上的实体继承引用的图层
   layer : String
   flat : Flat
@@ -181,7 +182,7 @@ fn expand_entity(
         e.layer()
       }
       out.push({
-        kind: e.kind(),
+        entity: e,
         layer: eff,
         flat: transform_flat(e.geom.flatten(ctx.tol), xform),
       })

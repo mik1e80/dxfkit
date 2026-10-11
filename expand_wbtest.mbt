@@ -30,7 +30,7 @@ test "平移：块内容搬到插入点，图层 0 继承引用的图层" {
   let exp = d.expand(0.01)
   assert_eq(exp.warnings.length(), 0)
   assert_eq(exp.placed.length(), 1)
-  assert_true(exp.placed[0].kind == "LINE")
+  assert_true(exp.placed[0].entity.kind() == "LINE")
   assert_true(exp.placed[0].layer == "轮廓")
   match exp.placed[0].flat {
     Outline(points~, ..) => {
