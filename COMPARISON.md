@@ -60,7 +60,18 @@
 
 ## MoonBit 生态
 
-`dxf` 相关的 MoonBit 包**目前为 0**。唯一沾边的是 `f4ah6o/jww_parser`，
-它解析日本 JW-CAD 的 `.jww` 并**写出** DXF——不读 DXF。
+**读 DXF 的包目前为 0。**（2026-10-11 用 `moon search` 实时检索注册表，
+相关命中逐一拉源码核对过——不是看描述。）沾边的有三个，方向都不同：
 
-（这个结论是检索 mooncakes 注册表全部 2920 个包得出的，不是抽样。）
+- `f4ah6o/jww_parser` —— 读日本 JW-CAD 的 `.jww`，**写出** DXF
+  （源码里是 `jww_to_dxf` / `to_dxf_string`）：只写不读，和 dxfkit
+  方向相反。
+- `cjcjwe/gcode-toolkit` —— G-code 的解析、校验、重写和刀路审查
+  （源码里是 `MotionStatistics`：快移 / 圆弧计数、切割距离、进给率）。
+  在加工链的**下游**（图纸 → CAM → G-code）；dxfkit 在**上游**审图纸
+  本身，互补而非重叠。
+- `zgfzgf899/moonbit-vector-trace-plan` —— **位图**矢量描摹 + 路径规划
+  （源码的 `image.mbt` 构造像素图）。输入是像素图不是 CAD 图纸，产出
+  的路径清单没有图层 / 块 / 曲线语义——输入和语义都不同。
+
+**对着图纸做加工前检查这一层，生态里没有第二家。**
