@@ -92,6 +92,35 @@ pub(all) struct CheckOptions {
 }
 
 ///|
+/// 严重程度的中文标签。
+pub fn severity_label(sev : Severity) -> String {
+  match sev {
+    Info => "提示"
+    Warn => "警告"
+    Fatal => "致命"
+  }
+}
+
+///|
+/// 报告 → 纯文本：每条发现一行 `[严重程度] [检查项] 说明`，
+/// 末尾是统计和结论。CLI 和网页版都从这里取排版——两边永远不会打架。
+pub fn Report::to_text(self : Report) -> String {
+  let sb = StringBuilder()
+  if self.findings.length() == 0 {
+    sb.write_string("（没有发现）\n")
+  } else {
+    for f in self.findings {
+      sb.write_string("[\{severity_label(f.severity)}] [\{f.check}] \{f.message}\n")
+    }
+  }
+  sb.write_string(
+    "致命 \{self.count(Fatal)} · 警告 \{self.count(Warn)} · 提示 \{self.count(Info)}\n",
+  )
+  sb.write_string(self.verdict())
+  sb.to_string()
+}
+
+///|
 /// 加工前检查。
 ///
 /// `tol` 既是离散容差、也是判定尺度（重合、闭合都拿它比）。

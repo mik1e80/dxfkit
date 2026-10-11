@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>dxfkit —— 这份图纸能上机床吗</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="page-head">
+      <h1>dxfkit</h1>
+      <p>
+        把一张 DXF 图纸拖进来，看看<strong>它能不能上机床</strong>。
+        看图软件能告诉你图纸长什么样，但告诉不了你轮廓闭没闭合、
+        有没有同一段线画了两遍、材料最窄的地方有多窄——那些要从图纸的
+        几何本身算出来。这个页面就是干这件事的，判定逻辑是 MoonBit 写的
+        （<code>mik1e80/dxfkit</code>），<code>dist/web.js</code> 是
+        <code>moon build --target js</code> 的产物。
+      </p>
+    </header>
+
+    <main class="panes">
+      <section class="pane">
+        <div class="pane-head">
+          <h2>图纸文件</h2>
+          <span class="status" id="status">等待文件</span>
+        </div>
+        <div class="dropzone" id="dropzone">
+          <div class="dropzone-hint">
+            <p class="dropzone-big">把 DXF 文件拖到这里</p>
+            <p>
+              或者<button type="button" class="link" id="pick">选一个文件</button>，
+              也可以<button type="button" class="link" id="sample">用内置样例试一下</button>
+            </p>
+            <p class="dropzone-small">全程在浏览器里完成，文件不会上传到任何地方</p>
+          </div>
+          <input type="file" id="file" accept=".dxf" hidden />
+        </div>
+        <div class="preview" id="preview"></div>
+      </section>
+
+      <section class="pane">
+        <div class="pane-head">
+          <h2>加工前检查</h2>
+          <label class="gap-field">
+            最小净距
+            <input type="number" id="min-gap" value="0" min="0" step="any" />
+            <span class="gap-hint">0 = 不查（单位同图纸）</span>
+          </label>
+        </div>
+        <pre class="report" id="report">拖进一张 DXF，这里出检查报告。</pre>
+      </section>
+    </main>
+
+    <script src="dist/web.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

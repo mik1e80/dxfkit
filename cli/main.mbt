@@ -74,18 +74,7 @@ fn run_check(args : ArrayView[String]) -> Unit {
   println("图纸 \{path} · 容差 \{tol} · \{gap_note}")
   println("────────────────────────────────────────")
   let report = drawing.check({ tol, min_gap })
-  if report.findings.length() == 0 {
-    println("（没有发现）")
-  } else {
-    for f in report.findings {
-      println("[\{severity_tag(f.severity)}] [\{f.check}] \{f.message}")
-    }
-  }
-  println("────────────────────────────────────────")
-  println(
-    "致命 \{report.count(@dxfkit.Fatal)} · 警告 \{report.count(@dxfkit.Warn)} · 提示 \{report.count(@dxfkit.Info)}",
-  )
-  println(report.verdict())
+  println(report.to_text())
   if report.has_fatal() {
     @sys.exit(1)
   } else {
@@ -148,16 +137,6 @@ fn parse_num(s : String, fallback : Double) -> Double {
       println("看不懂的数字「\{s}」，按 \{fallback} 处理")
       fallback
     }
-  }
-}
-
-///|
-/// 严重程度 → 报告里的中文标签。
-fn severity_tag(sev : @dxfkit.Severity) -> String {
-  match sev {
-    @dxfkit.Fatal => "致命"
-    @dxfkit.Warn => "警告"
-    @dxfkit.Info => "提示"
   }
 }
 

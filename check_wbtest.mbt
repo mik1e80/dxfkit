@@ -266,6 +266,19 @@ test "不同图层不算重复" {
   assert_true(first_of(r, "自相交") is None)
 }
 
+///|
+test "报告排版：每条一行，末尾统计和结论" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nCIRCLE\n10\n0.0\n20\n0.0\n40\n-1.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let text = d.check({ tol: 0.01, min_gap: 0.0 }).to_text()
+  assert_true(text.contains("[致命] [退化几何]"))
+  assert_true(text.contains("部分机床直接报错"))
+  assert_true(text.contains("致命 1 · 警告 0 · 提示 0"))
+  assert_true(text.contains("不能上机床"))
+}
+
 // ── 最小间隙 ────────────────────────────────────────────────────────────
 
 ///|
