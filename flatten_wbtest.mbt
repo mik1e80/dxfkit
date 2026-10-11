@@ -279,10 +279,18 @@ test "flatten：圆出闭合轮廓、直线出两点" {
 }
 
 ///|
-test "flatten：文字和块引用进 Empty" {
-  // 不是「离散失败」——这一层对它们没有几何，检查环节单独统计
-  let text = Text(at=Vec3::zero(), height=1.0, value="基准", rotation=0.0)
-  assert_true(text.flatten(0.1) is Empty)
+test "flatten：文字出 Label，块引用进 Empty" {
+  // 文字没有折线形状，但有位置和原文——预览要靠 Label 画它
+  let text = Text(at=Vec3::new(1.0, 2.0, 0.0), height=2.5, value="基准", rotation=0.0)
+  match text.flatten(0.1) {
+    Label(at~, height~, value~) => {
+      assert_true(at.x == 1.0 && at.y == 2.0)
+      assert_true(height == 2.5)
+      assert_true(value == "基准")
+    }
+    _ => fail("文字应该出 Label")
+  }
+  // 块引用自己会被展开层消化，离散这层对它没有几何
   let insert = Insert(
     at=Vec3::zero(),
     block="孔位",

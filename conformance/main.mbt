@@ -2,8 +2,8 @@
 //
 //     moon run conformance                  # 每个文件的 tag 数、警告数、编码
 //     moon run conformance --info           # 结构报告：版本、段、图层、块
+//     moon run conformance --svg 文件.dxf    # 画成 SVG 打到 stdout
 //     moon run conformance 某文件.dxf        # 只跑一个（默认是 tag 报告）
-//     moon run conformance --info 某文件.dxf
 //
 // 用途有两个：改了解析器之后**一眼看出有没有文件被跑挂**，
 // 以及把每个文件的实际数字记下来当锚点。
@@ -12,13 +12,20 @@
 fn main {
   let args = @env.args()
   let mut info_mode = false
+  let mut svg_mode = false
   let mut targets : Array[String] = []
   for i = 1; i < args.length(); i = i + 1 {
     if args[i] == "--info" {
       info_mode = true
+    } else if args[i] == "--svg" {
+      svg_mode = true
     } else {
       targets.push(args[i])
     }
+  }
+  if svg_mode {
+    report_svg(targets)
+    return
   }
   if targets.length() == 0 {
     targets = corpus_files() catch {
@@ -32,6 +39,28 @@ fn main {
     report_info(targets)
   } else {
     report_tags(targets)
+  }
+}
+
+///|
+/// SVG 预览：把文件展开后的几何画成 SVG 打到 stdout——
+///
+///     moon run conformance --svg 某文件.dxf > 预览.svg
+fn report_svg(targets : Array[String]) -> Unit {
+  if targets.length() == 0 {
+    println("--svg 后面要给一个文件：moon run conformance --svg 某文件.dxf")
+    return
+  }
+  // 预览的离散容差取 0.05——和语料锚点一个口径，肉眼够用
+  for path in targets {
+    let scan = scan_corpus_file(path) catch {
+      err => {
+        println("读不了 \{path}：\{err}")
+        continue
+      }
+    }
+    let drawing = @dxfkit.build_drawing(scan)
+    println(drawing.to_svg(0.05))
   }
 }
 

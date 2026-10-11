@@ -203,6 +203,13 @@ fn transform_flat(flat : Flat, xform : Affine) -> Flat {
       Outline(points=out, closed=closed)
     }
     Dot(at~) => Dot(at=xform.apply(at))
+    // 文字：位置跟着变换走；字高按缩放的比例因子放大
+    //（均匀缩放精确，非均匀取几何平均——预览够用）。
+    // 旋转这版不带，斜着排的字画出来是平的。
+    Label(at~, height~, value~) => {
+      let scale = (xform.a * xform.d - xform.b * xform.c).abs().sqrt()
+      Label(at=xform.apply(at), height=height * scale, value=value)
+    }
     Empty => Empty
   }
 }

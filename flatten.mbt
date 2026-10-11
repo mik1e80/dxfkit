@@ -448,7 +448,11 @@ pub(all) enum Flat {
   Outline(points~ : Array[Vec2], closed~ : Bool)
   /// 孤点（POINT）
   Dot(at~ : Vec2)
-  /// 没有可离散的几何（文字、块引用、填充、认不出的类型）——
+  /// 文字（TEXT / MTEXT / ATTRIB / ATTDEF）的离散形态：
+  /// 插入点、字高、原文。它没有「折线形状」可给——预览按位置画字，
+  /// 加工检查把它当「未转曲线」的警告项。
+  Label(at~ : Vec2, height~ : Double, value~ : String)
+  /// 没有可离散的几何（块引用自己会被展开、填充、认不出的类型）——
   /// **不是错误**：检查环节要单独统计这些，而不是当成空图纸
   Empty
 }
@@ -495,6 +499,7 @@ pub fn Geometry::flatten(self : Geometry, tol : Double) -> Flat {
       }
       Outline(points=pts, closed=true)
     }
-    Text(..) | Insert(..) | Dimension(..) | Hatch(..) | Unknown => Empty
+    Text(at~, height~, value~, ..) => Label(at=at.xy(), height=height, value=value)
+    Insert(..) | Dimension(..) | Hatch(..) | Unknown => Empty
   }
 }
