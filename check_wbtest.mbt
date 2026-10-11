@@ -192,6 +192,80 @@ test "闭合的多段线不参与串链" {
   assert_eq(r.findings.length(), 0)
 }
 
+// ── 自相交与重复切割 ────────────────────────────────────────────────────
+
+///|
+test "8 字形轮廓被报自相交" {
+  // 闭合蝴蝶结：两条对角边在中点穿过（非相邻段）
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLWPOLYLINE\n100\nAcDbPolyline\n70\n1\n" +
+    "10\n0.0\n20\n0.0\n10\n2.0\n20\n2.0\n10\n2.0\n20\n0.0\n10\n0.0\n20\n2.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let r = d.check(0.001)
+  assert_eq(r.count(Warn), 1)
+  assert_true(first_of(r, "自相交").unwrap().message.contains("1 条"))
+}
+
+///|
+test "两条重合的线被报重复切割" {
+  // 同一段线画两遍——串链会把它们串成一个零面积的环（不算开口），
+  // 但重复切割必须报
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLINE\n8\n轮廓\n10\n0.0\n20\n0.0\n11\n1.0\n21\n0.0\n" +
+    "0\nLINE\n8\n轮廓\n10\n0.0\n20\n0.0\n11\n1.0\n21\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let r = d.check(0.001)
+  assert_eq(r.count(Warn), 1)
+  assert_true(first_of(r, "重复切割").unwrap().message.contains("1 对"))
+}
+
+///|
+test "部分重叠也算重复切割" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLINE\n10\n0.0\n20\n0.0\n11\n2.0\n21\n0.0\n" +
+    "0\nLINE\n10\n1.0\n20\n0.0\n11\n3.0\n21\n0.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let r = d.check(0.001)
+  assert_true(first_of(r, "重复切割") is Some(_))
+}
+
+///|
+test "相邻段不算重复，正常折线零发现" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLWPOLYLINE\n100\nAcDbPolyline\n70\n1\n" +
+    "10\n0.0\n20\n0.0\n10\n4.0\n20\n0.0\n10\n4.0\n20\n3.0\n10\n0.0\n20\n3.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let r = d.check(0.001)
+  assert_eq(r.findings.length(), 0)
+}
+
+///|
+test "不同图层不算重复" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nTABLES\n0\nTABLE\n2\nLAYER\n" +
+    "0\nLAYER\n100\nAcDbLayerTableRecord\n2\n甲\n70\n0\n62\n7\n" +
+    "0\nLAYER\n100\nAcDbLayerTableRecord\n2\n乙\n70\n0\n62\n7\n" +
+    "0\nENDTAB\n0\nENDSEC\n" +
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLWPOLYLINE\n8\n甲\n100\nAcDbPolyline\n70\n1\n" +
+    "10\n0.0\n20\n0.0\n10\n1.0\n20\n0.0\n10\n1.0\n20\n1.0\n" +
+    "0\nLWPOLYLINE\n8\n乙\n100\nAcDbPolyline\n70\n1\n" +
+    "10\n0.0\n20\n0.0\n10\n1.0\n20\n0.0\n10\n1.0\n20\n1.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let r = d.check(0.001)
+  assert_true(first_of(r, "重复切割") is None)
+  assert_true(first_of(r, "自相交") is None)
+}
+
 ///|
 test "引用图层表里没有的图层" {
   let d = drawing_utf8(

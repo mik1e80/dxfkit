@@ -101,6 +101,7 @@ pub fn Drawing::check(self : Drawing, tol : Double) -> Report {
   }
   check_layers(tables, exp.placed, findings)
   check_closure(exp.placed, tables, tol, findings)
+  check_crossings(exp.placed, tables, tol, findings)
   { findings, }
 }
 
@@ -381,6 +382,241 @@ fn open_chains(
     i = i + 1
   }
   (open, worst, at)
+}
+
+// ── 自相交与重复切割 ────────────────────────────────────────────────────
+//
+// 两条检查都要「线段和线段比」，朴素两两配对是 O(n²)——图纸上千条
+// 线段就顶不住了。做法是按 min_x 排序后扫掠：每段只需要和 min_x
+// 落在自己 x 区间内的段比（再加 y 方向的包围盒粗筛），
+// 典型图纸上候选对是线性的。
+
+///|
+/// 一条待检线段：两个端点 + 包围盒 + 身份（哪条折线的第几段）。
+priv struct CutSeg {
+  a : Vec2
+  b : Vec2
+  min_x : Double
+  max_x : Double
+  min_y : Double
+  max_y : Double
+  /// 属于第几条展开几何（数组下标）
+  owner : Int
+  /// 折线里的第几段
+  seg : Int
+  /// 折线总段数（判断环绕相邻用）
+  count : Int
+  closed : Bool
+}
+
+///|
+/// 自相交（轮廓自己和自己交叉）与重复切割（线段重叠）。
+///
+/// - **自相交**只算「真正穿过」：交点严格在两段内部。端点相接不算
+///   （可能是合法的连接点），共线重叠也不在这里报（归重复切割）。
+/// - **重复切割**算共线重叠：同一刀会切两遍，激光会烧焦、铣刀多切一刀。
+/// - 相邻段不参与（正常折线的相邻段本来就首尾相接）。
+/// - 只在会被切到的图层上查，和闭合检查一个口径。
+fn check_crossings(
+  placed : Array[Placed],
+  tables : Tables?,
+  tol : Double,
+  findings : Array[Finding],
+) -> Unit {
+  let layers : Array[String] = []
+  for p in placed {
+    let is_outline = match p.flat {
+      Outline(..) => true
+      _ => false
+    }
+    if is_outline && !is_uncut_layer(tables, p.layer) {
+      push_unique(layers, p.layer)
+    }
+  }
+  for layer in layers {
+    // 收集这个图层的全部线段
+    let segs : Array[CutSeg] = []
+    let mut pi = 0
+    while pi < placed.length() {
+      let p = placed[pi]
+      if p.layer == layer {
+        match p.flat {
+          Outline(points~, closed~) => {
+            let n = points.length()
+            if n >= 2 {
+              let count = if closed { n } else { n - 1 }
+              let mut i = 0
+              while i < count {
+                let a = points[i]
+                let b = points[(i + 1) % n]
+                segs.push({
+                  a,
+                  b,
+                  min_x: a.x.min(b.x),
+                  max_x: a.x.max(b.x),
+                  min_y: a.y.min(b.y),
+                  max_y: a.y.max(b.y),
+                  owner: pi,
+                  seg: i,
+                  count,
+                  closed,
+                })
+                i = i + 1
+              }
+            }
+          }
+          _ => ()
+        }
+      }
+      pi = pi + 1
+    }
+    if segs.length() < 2 {
+      continue
+    }
+    // 按 min_x 排序后扫掠
+    segs.sort_by(fn (s1, s2) {
+      if s1.min_x < s2.min_x {
+        -1
+      } else if s1.min_x > s2.min_x {
+        1
+      } else {
+        0
+      }
+    })
+    let self_crossed : Array[Int] = []
+    let mut dup_pairs = 0
+    let mut dup_len = 0.0
+    let mut dup_at = Vec2::zero()
+    let mut dup_has = false
+    let mut i = 0
+    while i < segs.length() {
+      let s = segs[i]
+      let mut j = i + 1
+      while j < segs.length() && segs[j].min_x <= s.max_x + tol {
+        let t = segs[j]
+        // y 方向粗筛
+        if !(t.min_y > s.max_y + tol || s.min_y > t.max_y + tol) {
+          if !(s.owner == t.owner && adjacent_segs(s, t)) {
+            if s.owner == t.owner && proper_cross(s.a, s.b, t.a, t.b) {
+              push_unique_int(self_crossed, s.owner)
+            }
+            let over = overlap_length(s.a, s.b, t.a, t.b, tol)
+            if over > tol {
+              dup_pairs = dup_pairs + 1
+              dup_len = dup_len + over
+              if !dup_has {
+                dup_at = s.a
+                dup_has = true
+              }
+            }
+          }
+        }
+        j = j + 1
+      }
+      i = i + 1
+    }
+    if self_crossed.length() > 0 {
+      findings.push({
+        check: "自相交",
+        severity: Warn,
+        message: "图层「\{layer}」有 \{self_crossed.length()} 条轮廓自己和自己交叉——切出来会多切一道口子",
+      })
+    }
+    if dup_pairs > 0 {
+      findings.push({
+        check: "重复切割",
+        severity: Warn,
+        message: "图层「\{layer}」有 \{dup_pairs} 对线段重叠（共 \{dup_len} 长度，(\{dup_at.x}, \{dup_at.y}) 附近）——同一刀会切两遍，激光会烧焦",
+      })
+    }
+  }
+}
+
+///|
+/// 同一折线里的相邻段（闭合折线首尾相接的那对也算）。
+fn adjacent_segs(s : CutSeg, t : CutSeg) -> Bool {
+  let d = if s.seg > t.seg {
+    s.seg - t.seg
+  } else {
+    t.seg - s.seg
+  }
+  if d == 1 {
+    return true
+  }
+  s.closed && d == s.count - 1
+}
+
+///|
+/// 两段**真正穿过**（交点严格在两段的内部）才算交叉。
+/// 端点相接、共线重叠都不算——前者可能是合法的连接，
+/// 后者归「重复切割」。
+fn proper_cross(a1 : Vec2, a2 : Vec2, b1 : Vec2, b2 : Vec2) -> Bool {
+  let d1 = orient(a1, a2, b1)
+  let d2 = orient(a1, a2, b2)
+  let d3 = orient(b1, b2, a1)
+  let d4 = orient(b1, b2, a2)
+  ((d1 > 0.0 && d2 < 0.0) || (d1 < 0.0 && d2 > 0.0)) &&
+  ((d3 > 0.0 && d4 < 0.0) || (d3 < 0.0 && d4 > 0.0))
+}
+
+///|
+/// 叉积的符号判断点在直线的哪一侧。
+fn orient(a : Vec2, b : Vec2, c : Vec2) -> Double {
+  b.sub(a).cross(c.sub(a))
+}
+
+///|
+/// 两段共线时重叠部分的长度；不共线（或离得太远）返回 0。
+///
+/// 判定：b 的两个端点到 a 所在直线的垂直距离都在容差内
+///（直线段是线性的，端点贴线整段就贴线），
+/// 再把两段投影到 a 的方向上取区间交。
+fn overlap_length(
+  a1 : Vec2,
+  a2 : Vec2,
+  b1 : Vec2,
+  b2 : Vec2,
+  tol : Double,
+) -> Double {
+  let dir = a2.sub(a1)
+  let len = dir.length()
+  if len <= tol {
+    // a 自身就是零长度段——退化几何那条会报它
+    return 0.0
+  }
+  let unit = dir.scale(1.0 / len)
+  let normal = unit.perp()
+  if (b1.sub(a1).dot(normal)).abs() > tol || (b2.sub(a1).dot(normal)).abs() > tol {
+    return 0.0
+  }
+  let t1 = b1.sub(a1).dot(unit)
+  let t2 = b2.sub(a1).dot(unit)
+  let over = t1.max(t2).min(len) - t1.min(t2).max(0.0)
+  if over < 0.0 {
+    0.0
+  } else {
+    over
+  }
+}
+
+///|
+fn push_unique(names : Array[String], v : String) -> Unit {
+  for n in names {
+    if n == v {
+      return
+    }
+  }
+  names.push(v)
+}
+
+///|
+fn push_unique_int(ids : Array[Int], v : Int) -> Unit {
+  for n in ids {
+    if n == v {
+      return
+    }
+  }
+  ids.push(v)
 }
 
 ///|
