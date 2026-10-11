@@ -79,10 +79,24 @@ pub fn Report::verdict(self : Report) -> String {
 }
 
 ///|
+/// 检查参数。
+pub(all) struct CheckOptions {
+  /// 离散 / 重合判定的容差
+  tol : Double
+  /// 允许的最小净距：两条轮廓靠近到这个值以内就报。
+  ///
+  /// **0 表示不查这条**——净距合不合格取决于材料与工艺
+  ///（1 毫米的钢和 1 毫米的纸板不是一回事，激光和铣刀也不是），
+  /// 没有能通用的默认值，必须由调用方给。
+  min_gap : Double
+}
+
+///|
 /// 加工前检查。
 ///
 /// `tol` 既是离散容差、也是判定尺度（重合、闭合都拿它比）。
-pub fn Drawing::check(self : Drawing, tol : Double) -> Report {
+pub fn Drawing::check(self : Drawing, opt : CheckOptions) -> Report {
+  let tol = opt.tol
   let findings : Array[Finding] = []
   let exp = self.expand(tol)
   // 展开过程中的问题（缺块、循环引用）本身就是检查结论
@@ -102,6 +116,7 @@ pub fn Drawing::check(self : Drawing, tol : Double) -> Report {
   check_layers(tables, exp.placed, findings)
   check_closure(exp.placed, tables, tol, findings)
   check_crossings(exp.placed, tables, tol, findings)
+  check_min_gap(exp.placed, tables, opt, findings)
   { findings, }
 }
 
@@ -434,42 +449,7 @@ fn check_crossings(
     }
   }
   for layer in layers {
-    // 收集这个图层的全部线段
-    let segs : Array[CutSeg] = []
-    let mut pi = 0
-    while pi < placed.length() {
-      let p = placed[pi]
-      if p.layer == layer {
-        match p.flat {
-          Outline(points~, closed~) => {
-            let n = points.length()
-            if n >= 2 {
-              let count = if closed { n } else { n - 1 }
-              let mut i = 0
-              while i < count {
-                let a = points[i]
-                let b = points[(i + 1) % n]
-                segs.push({
-                  a,
-                  b,
-                  min_x: a.x.min(b.x),
-                  max_x: a.x.max(b.x),
-                  min_y: a.y.min(b.y),
-                  max_y: a.y.max(b.y),
-                  owner: pi,
-                  seg: i,
-                  count,
-                  closed,
-                })
-                i = i + 1
-              }
-            }
-          }
-          _ => ()
-        }
-      }
-      pi = pi + 1
-    }
+    let segs = layer_segments(placed, layer)
     if segs.length() < 2 {
       continue
     }
@@ -530,6 +510,47 @@ fn check_crossings(
       })
     }
   }
+}
+
+///|
+/// 收集一个图层里所有可切轮廓的线段。
+fn layer_segments(placed : Array[Placed], layer : String) -> Array[CutSeg] {
+  let segs : Array[CutSeg] = []
+  let mut pi = 0
+  while pi < placed.length() {
+    let p = placed[pi]
+    if p.layer == layer {
+      match p.flat {
+        Outline(points~, closed~) => {
+          let n = points.length()
+          if n >= 2 {
+            let count = if closed { n } else { n - 1 }
+            let mut i = 0
+            while i < count {
+              let a = points[i]
+              let b = points[(i + 1) % n]
+              segs.push({
+                a,
+                b,
+                min_x: a.x.min(b.x),
+                max_x: a.x.max(b.x),
+                min_y: a.y.min(b.y),
+                max_y: a.y.max(b.y),
+                owner: pi,
+                seg: i,
+                count,
+                closed,
+              })
+              i = i + 1
+            }
+          }
+        }
+        _ => ()
+      }
+    }
+    pi = pi + 1
+  }
+  segs
 }
 
 ///|
@@ -597,6 +618,157 @@ fn overlap_length(
   } else {
     over
   }
+}
+
+// ── 最小间隙 ────────────────────────────────────────────────────────────
+//
+// 两条轮廓之间留的料太窄：激光会烧糊、铣刀会崩。对应 stlkit 里的
+// 「壁厚」——那边是三维里量的，这边是在平面里量的净距。
+//
+// 判定上有两个分寸：
+//
+// - **只比不同实体之间**。一条折线自己相邻的段永远贴在一起
+//  （离散之后更是如此），比它们没有意义；同一个实体的远亲段
+//  （折回来自已贴近自己）这版不查——那是单条折线自身的形状问题，
+//   报出来噪音大过价值。
+// - **端点相接的不算**。一条轮廓常常由多条线首尾串成，
+//   邻居之间「净距 0」是串接，不是缺陷。
+
+///|
+/// 最小间隙检查。`min_gap` 为 0 时不查（见 `CheckOptions`）。
+fn check_min_gap(
+  placed : Array[Placed],
+  tables : Tables?,
+  opt : CheckOptions,
+  findings : Array[Finding],
+) -> Unit {
+  if opt.min_gap <= 0.0 {
+    return
+  }
+  let tol = opt.tol
+  let layers : Array[String] = []
+  for p in placed {
+    let is_outline = match p.flat {
+      Outline(..) => true
+      _ => false
+    }
+    if is_outline && !is_uncut_layer(tables, p.layer) {
+      push_unique(layers, p.layer)
+    }
+  }
+  for layer in layers {
+    let segs = layer_segments(placed, layer)
+    if segs.length() < 2 {
+      continue
+    }
+    segs.sort_by(fn (s1, s2) {
+      if s1.min_x < s2.min_x {
+        -1
+      } else if s1.min_x > s2.min_x {
+        1
+      } else {
+        0
+      }
+    })
+    let near : Array[(Int, Int)] = []
+    let mut worst = opt.min_gap
+    let mut at = Vec2::zero()
+    let mut i = 0
+    while i < segs.length() {
+      let s = segs[i]
+      let mut j = i + 1
+      while j < segs.length() && segs[j].min_x <= s.max_x + opt.min_gap {
+        let t = segs[j]
+        if s.owner != t.owner &&
+          !(t.min_y > s.max_y + opt.min_gap || s.min_y > t.max_y + opt.min_gap) {
+          // 端点相接的（串成一条轮廓的邻居）不算净距问题
+          let touching = s.a.distance(t.a) <= tol ||
+            s.a.distance(t.b) <= tol ||
+            s.b.distance(t.a) <= tol ||
+            s.b.distance(t.b) <= tol
+          if !touching {
+            let gap = segment_gap(s.a, s.b, t.a, t.b)
+            if gap < opt.min_gap {
+              push_unique_pair(near, s.owner, t.owner)
+              if gap < worst {
+                worst = gap
+                at = s.a
+              }
+            }
+          }
+        }
+        j = j + 1
+      }
+      i = i + 1
+    }
+    if near.length() > 0 {
+      findings.push({
+        check: "最小间隙",
+        severity: Warn,
+        message: "图层「\{layer}」有 \{near.length()} 对轮廓靠得太近——最窄处净距 \{worst}（(\{at.x}, \{at.y}) 附近），这么窄的材料激光会烧糊、铣刀会崩",
+      })
+    }
+  }
+}
+
+///|
+/// 两段之间的最小距离。相交（含端点接触）算 0——
+/// 四个「端点到对方段」的距离对相交的段是给不出 0 的，得先判相交。
+fn segment_gap(a1 : Vec2, a2 : Vec2, b1 : Vec2, b2 : Vec2) -> Double {
+  if segments_intersect(a1, a2, b1, b2) {
+    return 0.0
+  }
+  let d1 = dist_to_segment(a1, b1, b2)
+  let d2 = dist_to_segment(a2, b1, b2)
+  let d3 = dist_to_segment(b1, a1, a2)
+  let d4 = dist_to_segment(b2, a1, a2)
+  d1.min(d2).min(d3).min(d4)
+}
+
+///|
+/// 两条线段是否相交（含端点接触、含共线重叠）——标准的方向判定。
+fn segments_intersect(a1 : Vec2, a2 : Vec2, b1 : Vec2, b2 : Vec2) -> Bool {
+  let d1 = orient(b1, b2, a1)
+  let d2 = orient(b1, b2, a2)
+  let d3 = orient(a1, a2, b1)
+  let d4 = orient(a1, a2, b2)
+  if ((d1 > 0.0 && d2 < 0.0) || (d1 < 0.0 && d2 > 0.0)) &&
+    ((d3 > 0.0 && d4 < 0.0) || (d3 < 0.0 && d4 > 0.0)) {
+    return true
+  }
+  // 共线情形：某个端点在另一条段上
+  if d1 == 0.0 && on_segment(b1, b2, a1) {
+    return true
+  }
+  if d2 == 0.0 && on_segment(b1, b2, a2) {
+    return true
+  }
+  if d3 == 0.0 && on_segment(a1, a2, b1) {
+    return true
+  }
+  if d4 == 0.0 && on_segment(a1, a2, b2) {
+    return true
+  }
+  false
+}
+
+///|
+/// 已知 p 在直线 ab 上，判断它在不在**线段** ab 的范围内（包围盒判定）。
+fn on_segment(a : Vec2, b : Vec2, p : Vec2) -> Bool {
+  p.x >= a.x.min(b.x) && p.x <= a.x.max(b.x) && p.y >= a.y.min(b.y) && p.y <= a.y.max(b.y)
+}
+
+///|
+/// 往「实体对」表里加一对（小下标记在前），去重。
+fn push_unique_pair(pairs : Array[(Int, Int)], a : Int, b : Int) -> Unit {
+  let x = if a < b { a } else { b }
+  let y = if a < b { b } else { a }
+  for p in pairs {
+    if p.0 == x && p.1 == y {
+      return
+    }
+  }
+  pairs.push((x, y))
 }
 
 ///|

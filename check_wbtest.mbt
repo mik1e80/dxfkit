@@ -27,7 +27,7 @@ test "文字未转曲线：按图层汇总" {
     "10\n0.0\n20\n0.0\n10\n1.0\n20\n0.0\n10\n1.0\n20\n1.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.01)
+  let r = d.check({ tol: 0.01, min_gap: 0.0 })
   assert_eq(r.count(Warn), 1)
   let f = match first_of(r, "文字未转曲线") {
     Some(f) => f
@@ -45,7 +45,7 @@ test "半径非正的圆：负的致命、零的警告" {
     "0\nCIRCLE\n5\n1B\n10\n5.0\n20\n0.0\n40\n0.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.01)
+  let r = d.check({ tol: 0.01, min_gap: 0.0 })
   assert_eq(r.count(Fatal), 1)
   // 零半径的报「退化成一个点」；单点轮廓不重复报
   assert_eq(r.count(Warn), 1)
@@ -62,7 +62,7 @@ test "零长度线段被报出" {
     "10\n0.0\n20\n0.0\n10\n0.0\n20\n0.0\n10\n1.0\n20\n0.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.01)
+  let r = d.check({ tol: 0.01, min_gap: 0.0 })
   let f = match first_of(r, "退化几何") {
     Some(f) => f
     None => fail("没报退化几何")
@@ -81,7 +81,7 @@ test "冻结图层上的实体给提示" {
     "0\nLINE\n8\n辅助\n10\n0.0\n20\n0.0\n11\n1.0\n21\n0.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.01)
+  let r = d.check({ tol: 0.01, min_gap: 0.0 })
   assert_eq(r.count(Info), 1)
   assert_eq(r.count(Warn), 0)
   assert_true(first_of(r, "图层").unwrap().message.contains("冻结"))
@@ -94,7 +94,7 @@ test "展开失败进检查报告" {
     "0\nSECTION\n2\nENTITIES\n0\nINSERT\n10\n0.0\n20\n0.0\n2\n没有\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.01)
+  let r = d.check({ tol: 0.01, min_gap: 0.0 })
   assert_eq(r.count(Warn), 1)
   assert_true(first_of(r, "解析").unwrap().message.contains("没有"))
 }
@@ -108,7 +108,7 @@ test "干净图纸零发现" {
     "10\n0.0\n20\n5.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.01)
+  let r = d.check({ tol: 0.01, min_gap: 0.0 })
   assert_eq(r.findings.length(), 0)
   assert_true(r.verdict().contains("没发现问题"))
 }
@@ -125,7 +125,7 @@ test "首尾相接的线段串成闭合轮廓" {
     "0\nLINE\n10\n1.0\n20\n1.0\n11\n0.0\n21\n0.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.001)
+  let r = d.check({ tol: 0.001, min_gap: 0.0 })
   assert_eq(r.count(Fatal), 0)
   assert_eq(r.count(Warn), 0)
 }
@@ -139,7 +139,7 @@ test "缺一边的轮廓被报出，缝宽对得上" {
     "0\nLINE\n10\n1.0\n20\n0.0\n11\n1.0\n21\n1.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.001)
+  let r = d.check({ tol: 0.001, min_gap: 0.0 })
   assert_eq(r.count(Warn), 1)
   let f = first_of(r, "轮廓闭合").unwrap()
   assert_true(f.message.contains("1 处"))
@@ -160,7 +160,7 @@ test "不同图层不串链" {
     "0\nLINE\n8\n乙\n10\n1.0\n20\n0.0\n11\n2.0\n21\n0.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.001)
+  let r = d.check({ tol: 0.001, min_gap: 0.0 })
   assert_eq(r.count(Warn), 2)
 }
 
@@ -175,7 +175,7 @@ test "关闭图层上的缺口不报" {
     "0\nLINE\n8\n废\n10\n0.0\n20\n0.0\n11\n1.0\n21\n0.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.001)
+  let r = d.check({ tol: 0.001, min_gap: 0.0 })
   assert_eq(r.count(Warn), 0)
   assert_eq(r.count(Info), 1)
 }
@@ -188,7 +188,7 @@ test "闭合的多段线不参与串链" {
     "10\n0.0\n20\n0.0\n10\n1.0\n20\n0.0\n10\n1.0\n20\n1.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.001)
+  let r = d.check({ tol: 0.001, min_gap: 0.0 })
   assert_eq(r.findings.length(), 0)
 }
 
@@ -203,7 +203,7 @@ test "8 字形轮廓被报自相交" {
     "10\n0.0\n20\n0.0\n10\n2.0\n20\n2.0\n10\n2.0\n20\n0.0\n10\n0.0\n20\n2.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.001)
+  let r = d.check({ tol: 0.001, min_gap: 0.0 })
   assert_eq(r.count(Warn), 1)
   assert_true(first_of(r, "自相交").unwrap().message.contains("1 条"))
 }
@@ -218,7 +218,7 @@ test "两条重合的线被报重复切割" {
     "0\nLINE\n8\n轮廓\n10\n0.0\n20\n0.0\n11\n1.0\n21\n0.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.001)
+  let r = d.check({ tol: 0.001, min_gap: 0.0 })
   assert_eq(r.count(Warn), 1)
   assert_true(first_of(r, "重复切割").unwrap().message.contains("1 对"))
 }
@@ -231,7 +231,7 @@ test "部分重叠也算重复切割" {
     "0\nLINE\n10\n1.0\n20\n0.0\n11\n3.0\n21\n0.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.001)
+  let r = d.check({ tol: 0.001, min_gap: 0.0 })
   assert_true(first_of(r, "重复切割") is Some(_))
 }
 
@@ -243,7 +243,7 @@ test "相邻段不算重复，正常折线零发现" {
     "10\n0.0\n20\n0.0\n10\n4.0\n20\n0.0\n10\n4.0\n20\n3.0\n10\n0.0\n20\n3.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.001)
+  let r = d.check({ tol: 0.001, min_gap: 0.0 })
   assert_eq(r.findings.length(), 0)
 }
 
@@ -261,9 +261,69 @@ test "不同图层不算重复" {
     "10\n0.0\n20\n0.0\n10\n1.0\n20\n0.0\n10\n1.0\n20\n1.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.001)
+  let r = d.check({ tol: 0.001, min_gap: 0.0 })
   assert_true(first_of(r, "重复切割") is None)
   assert_true(first_of(r, "自相交") is None)
+}
+
+// ── 最小间隙 ────────────────────────────────────────────────────────────
+
+///|
+test "同心方框净距不足被报出" {
+  // 外框 10×10、内框贴边留 0.9；要求的净距是 1 → 差一点点，报
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLWPOLYLINE\n100\nAcDbPolyline\n70\n1\n" +
+    "10\n0.0\n20\n0.0\n10\n10.0\n20\n0.0\n10\n10.0\n20\n10.0\n10\n0.0\n20\n10.0\n" +
+    "0\nLWPOLYLINE\n100\nAcDbPolyline\n70\n1\n" +
+    "10\n0.9\n20\n0.9\n10\n9.1\n20\n0.9\n10\n9.1\n20\n9.1\n10\n0.9\n20\n9.1\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let r = d.check({ tol: 0.001, min_gap: 1.0 })
+  assert_eq(r.count(Warn), 1)
+  let f = first_of(r, "最小间隙").unwrap()
+  assert_true(f.message.contains("1 对"))
+  assert_true(f.message.contains("0.9"))
+}
+
+///|
+test "净距够宽不报" {
+  // 同样的方框，缝放宽到 1.2（要求 1）
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLWPOLYLINE\n100\nAcDbPolyline\n70\n1\n" +
+    "10\n0.0\n20\n0.0\n10\n10.0\n20\n0.0\n10\n10.0\n20\n10.0\n10\n0.0\n20\n10.0\n" +
+    "0\nLWPOLYLINE\n100\nAcDbPolyline\n70\n1\n" +
+    "10\n1.2\n20\n1.2\n10\n8.8\n20\n1.2\n10\n8.8\n20\n8.8\n10\n1.2\n20\n8.8\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let r = d.check({ tol: 0.001, min_gap: 1.0 })
+  assert_true(first_of(r, "最小间隙") is None)
+}
+
+///|
+test "端点相接的轮廓不算净距问题" {
+  // L 形的两条线在拐角相接——那是串接，不是窄缝
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLINE\n10\n0.0\n20\n0.0\n11\n5.0\n21\n0.0\n" +
+    "0\nLINE\n10\n5.0\n20\n0.0\n11\n5.0\n21\n5.0\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let r = d.check({ tol: 0.001, min_gap: 1.0 })
+  assert_true(first_of(r, "最小间隙") is None)
+}
+
+///|
+test "min_gap 为 0 时不查净距" {
+  let d = drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n" +
+    "0\nLINE\n10\n0.0\n20\n0.0\n11\n10.0\n21\n0.0\n" +
+    "0\nLINE\n10\n0.0\n20\n0.5\n11\n10.0\n21\n0.5\n" +
+    "0\nENDSEC\n0\nEOF\n",
+  )
+  let r = d.check({ tol: 0.001, min_gap: 0.0 })
+  assert_true(first_of(r, "最小间隙") is None)
 }
 
 ///|
@@ -277,7 +337,7 @@ test "引用图层表里没有的图层" {
     "10\n0.0\n20\n0.0\n10\n1.0\n20\n0.0\n10\n1.0\n20\n1.0\n" +
     "0\nENDSEC\n0\nEOF\n",
   )
-  let r = d.check(0.01)
+  let r = d.check({ tol: 0.01, min_gap: 0.0 })
   assert_eq(r.count(Warn), 1)
   assert_true(first_of(r, "图层").unwrap().message.contains("幽灵"))
 }

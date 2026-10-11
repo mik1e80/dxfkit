@@ -227,8 +227,12 @@ test "语料加工检查：锚点" {
   let mut fatal = 0
   let mut warn = 0
   let mut info = 0
+  // 净距不查（min_gap = 0）：语料单位不统一（米制、毫米制混着），
+  // 净距阈值没有跨文件通用的值
   for path in corpus_files() {
-    let r = @dxfkit.build_drawing(scan_corpus_file(path)).check(0.05)
+    let r = @dxfkit
+      .build_drawing(scan_corpus_file(path))
+      .check({ tol: 0.05, min_gap: 0.0 })
     fatal = fatal + r.count(@dxfkit.Fatal)
     warn = warn + r.count(@dxfkit.Warn)
     info = info + r.count(@dxfkit.Info)
