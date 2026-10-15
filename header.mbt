@@ -56,7 +56,7 @@ pub fn parse_header(section : Section) -> Header {
         values.push(tags[j])
         j = j + 1
       }
-      vars.push({ name: tags[i].value.as_string(), values })
+      vars.push({ name: tags[i].value.as_string(), values, })
       i = j
     }
   }
@@ -139,6 +139,15 @@ pub fn Header::get_point(self : Header, name : String) -> Vec3? {
 /// 1 英寸无从判断，差 25.4 倍。加工检查会把这一条报出来。
 pub fn Header::insunits(self : Header) -> Int {
   self.get_int("$INSUNITS", 0)
+}
+
+///|
+/// 仅显示HEADER中的单位声明，不改变坐标或自动换算检查阈值。
+pub fn Drawing::declared_unit_label(self : Drawing) -> String {
+  match self.section("HEADER") {
+    Some(section) => unit_name(parse_header(section).insunits())
+    None => "未声明"
+  }
 }
 
 ///|

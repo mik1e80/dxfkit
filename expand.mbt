@@ -31,7 +31,7 @@ priv struct Affine {
 
 ///|
 fn Affine::identity() -> Affine {
-  { a: 1.0, b: 0.0, c: 0.0, d: 1.0, tx: 0.0, ty: 0.0 }
+  { a: 1.0, b: 0.0, c: 0.0, d: 1.0, tx: 0.0, ty: 0.0, }
 }
 
 ///|
@@ -58,7 +58,12 @@ fn Affine::compose(self : Affine, inner : Affine) -> Affine {
 ///|
 /// 一条 INSERT 的变换：块内坐标先减基点，再缩放（sx/sy），
 /// 再旋转，最后平移到插入点。线性部分就是 R·S。
-fn insert_transform(at : Vec3, base : Vec2, scale : Vec3, rotation : Double) -> Affine {
+fn insert_transform(
+  at : Vec3,
+  base : Vec2,
+  scale : Vec3,
+  rotation : Double,
+) -> Affine {
   let cs = @math.cos(rotation)
   let sn = @math.sin(rotation)
   let a = cs * scale.x
@@ -111,17 +116,23 @@ priv struct ExpandCtx {
 /// 再套上当前累积的变换。展开不了的东西（缺块、循环、太深）
 /// **跳过并警告**，不猜位置。
 pub fn Drawing::expand(self : Drawing, tol : Double) -> Expansion {
-  let es = self.entities()
-  let ctx : ExpandCtx = {
-    blocks: self.blocks().blocks,
-    tol,
-    warnings: es.warnings.copy(),
+  if !positive_tolerance(tol) {
+    return {
+      placed: [],
+      warnings: ["离散容差必须是正的有限数字"],
+    }
   }
+  let es = self.entities()
+  let blocks = self.blocks()
+  let warnings = self.warnings.copy()
+  warnings.append(es.warnings)
+  warnings.append(blocks.warnings)
+  let ctx : ExpandCtx = { blocks: blocks.blocks, tol, warnings, }
   let placed : Array[Placed] = []
   for e in es.entities {
     expand_entity(e, ctx, Affine::identity(), "", [], placed)
   }
-  { placed, warnings: ctx.warnings }
+  { placed, warnings: ctx.warnings, }
 }
 
 ///|
@@ -138,6 +149,12 @@ fn expand_entity(
 ) -> Unit {
   match e.geom {
     Insert(at~, block~, scale~, rotation~) => {
+      if e.common.record.get_double(70, 1.0) != 1.0 ||
+        e.common.record.get_double(71, 1.0) != 1.0 {
+        ctx.warnings.push(
+          "INSERT 阵列暂只展开首个实例，其他行列未检查：\{block}",
+        )
+      }
       let mut found : Block? = None
       for b in ctx.blocks {
         if b.name == block {
@@ -145,7 +162,10 @@ fn expand_entity(
         }
       }
       match found {
-        None => ctx.warnings.push("引用了不存在的块「\{block}」，已跳过")
+        None =>
+          ctx.warnings.push(
+            "引用了不存在的块「\{block}」，已跳过",
+          )
         Some(b) => {
           let mut cyclic = false
           for n in path {
@@ -154,7 +174,9 @@ fn expand_entity(
             }
           }
           if cyclic {
-            ctx.warnings.push("块「\{block}」在展开链上重复出现（循环引用），已截断")
+            ctx.warnings.push(
+              "块「\{block}」在展开链上重复出现（循环引用），已截断",
+            )
           } else if path.length() >= 8 {
             ctx.warnings.push("块嵌套超过 8 层（\{block}），已截断")
           } else {
@@ -164,11 +186,15 @@ fn expand_entity(
             } else {
               e.layer()
             }
-            let inner_xform = xform.compose(insert_transform(at, b.base.xy(), scale, rotation))
+            let inner_xform = xform.compose(
+              insert_transform(at, b.base.xy(), scale, rotation),
+            )
             let new_path = path.copy()
             new_path.push(block)
             for inner in b.entities {
-              expand_entity(inner, ctx, inner_xform, insert_layer, new_path, out)
+              expand_entity(
+                inner, ctx, inner_xform, insert_layer, new_path, out,
+              )
             }
           }
         }
@@ -181,13 +207,48 @@ fn expand_entity(
       } else {
         e.layer()
       }
-      out.push({
-        entity: e,
-        layer: eff,
-        flat: transform_flat(e.geom.flatten(ctx.tol), xform),
-      })
+      let stretch = xform.stretch_bound()
+      if !finite_number(stretch) ||
+        !finite_number(xform.tx) ||
+        !finite_number(xform.ty) {
+        ctx.warnings.push(
+          "实体 \{e.kind()} 的变换超出有限坐标范围，已跳过",
+        )
+        return
+      }
+      let local_tol = if stretch > 0.0 { ctx.tol / stretch } else { ctx.tol }
+      let mut flat = match e.geom.flatten_checked(local_tol) {
+        Ok(flat) => transform_flat(flat, xform)
+        Err(msg) => {
+          ctx.warnings.push(
+            "实体 \{e.kind()}（句柄 \{e.common.handle}）未能离散：\{msg}",
+          )
+          Empty
+        }
+      }
+      if !flat_is_finite(flat) {
+        ctx.warnings.push(
+          "实体 \{e.kind()}（句柄 \{e.common.handle}）变换后坐标溢出，已跳过几何",
+        )
+        flat = Empty
+      }
+      out.push({ entity: e, layer: eff, flat, })
     }
   }
+}
+
+///|
+/// sqrt(||A||1 * ||A||∞) 是最大拉伸的上界，先归一化避免中间平方溢出。
+fn Affine::stretch_bound(self : Affine) -> Double {
+  let scale = self.a.abs().max(self.b.abs()).max(self.c.abs()).max(self.d.abs())
+  if scale == 0.0 || !finite_number(scale) {
+    return scale
+  }
+  let a = (self.a / scale).abs()
+  let b = (self.b / scale).abs()
+  let c = (self.c / scale).abs()
+  let d = (self.d / scale).abs()
+  scale * ((a + c).max(b + d) * (a + b).max(c + d)).sqrt()
 }
 
 ///|
@@ -200,7 +261,7 @@ fn transform_flat(flat : Flat, xform : Affine) -> Flat {
       for p in points {
         out.push(xform.apply(p))
       }
-      Outline(points=out, closed=closed)
+      Outline(points=out, closed~)
     }
     Dot(at~) => Dot(at=xform.apply(at))
     // 文字：位置跟着变换走；字高按缩放的比例因子放大
@@ -208,7 +269,7 @@ fn transform_flat(flat : Flat, xform : Affine) -> Flat {
     // 旋转这版不带，斜着排的字画出来是平的。
     Label(at~, height~, value~) => {
       let scale = (xform.a * xform.d - xform.b * xform.c).abs().sqrt()
-      Label(at=xform.apply(at), height=height * scale, value=value)
+      Label(at=xform.apply(at), height=height * scale, value~)
     }
     Empty => Empty
   }

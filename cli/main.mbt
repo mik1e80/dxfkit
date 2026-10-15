@@ -6,8 +6,7 @@
 //     dxfkit stats 大图纸.dxf                # 流式统计（整份不进内存）
 //
 // 退出码是给脚本用的：**0 没致命问题、1 有致命问题、2 用不了**
-//（参数不对 / 文件读不了）。注意 0 的含义是「这次检查没发现问题」——
-// 检查项有限，不构成保证（`verdict()` 里就是这么措辞的）。
+//（参数不对 / 文件读不了）。普通模式0仍可能有警告；--strict将警告也作为1。
 //
 // 这一层只做「读文件 → 调库 → 排版输出」——判定逻辑全在库里，
 // CLI 只是门面，改门面碰不坏引擎。
@@ -38,14 +37,36 @@ fn run_check(args : ArrayView[String]) -> Unit {
   let mut path = ""
   let mut tol = 0.05
   let mut min_gap = 0.0
+  let mut strict = false
   let mut i = 0
   while i < args.length() {
     if args[i] == "--tol" && i + 1 < args.length() {
-      tol = parse_num(args[i + 1], tol)
+      tol = match parse_num(args[i + 1]) {
+        Some(value) => value
+        None => {
+          println("--tol 必须是正的有限数字")
+          @sys.exit(2)
+          return
+        }
+      }
       i = i + 2
     } else if args[i] == "--min-gap" && i + 1 < args.length() {
-      min_gap = parse_num(args[i + 1], min_gap)
+      min_gap = match parse_num(args[i + 1]) {
+        Some(value) => value
+        None => {
+          println("--min-gap 必须是非负有限数字")
+          @sys.exit(2)
+          return
+        }
+      }
       i = i + 2
+    } else if args[i] == "--strict" {
+      strict = true
+      i = i + 1
+    } else if args[i].has_prefix("--") {
+      println("未知选项或缺少参数值「\{args[i]}」")
+      @sys.exit(2)
+      return
     } else if path == "" {
       path = args[i]
       i = i + 1
@@ -57,6 +78,11 @@ fn run_check(args : ArrayView[String]) -> Unit {
   }
   if path == "" {
     println("要给一个 DXF 文件：dxfkit check 图纸.dxf")
+    @sys.exit(2)
+    return
+  }
+  if tol <= 0.0 || min_gap < 0.0 {
+    println("--tol 必须大于0，--min-gap 必须非负")
     @sys.exit(2)
     return
   }
@@ -73,11 +99,18 @@ fn run_check(args : ArrayView[String]) -> Unit {
   } else {
     "最小净距 不查（用 --min-gap 指定）"
   }
-  println("图纸 \{path} · 容差 \{tol} · \{gap_note}")
-  println("────────────────────────────────────────")
-  let report = drawing.check({ tol, min_gap })
+  println(
+    "图纸 \{path} · 单位声明 \{drawing.declared_unit_label()} · 容差 \{tol} · \{gap_note}",
+  )
+  println(
+    "坐标及阈值按图纸原始单位解释；单位声明需由使用者确认。",
+  )
+  println(
+    "────────────────────────────────────────",
+  )
+  let report = drawing.check({ tol, min_gap, })
   println(report.to_text())
-  if report.has_fatal() {
+  if report.has_fatal() || (strict && report.count(@dxfkit.Warn) > 0) {
     @sys.exit(1)
   } else {
     @sys.exit(0)
@@ -91,8 +124,19 @@ fn run_svg(args : ArrayView[String]) -> Unit {
   let mut i = 0
   while i < args.length() {
     if args[i] == "--tol" && i + 1 < args.length() {
-      tol = parse_num(args[i + 1], tol)
+      tol = match parse_num(args[i + 1]) {
+        Some(value) => value
+        None => {
+          println("--tol 必须是正的有限数字")
+          @sys.exit(2)
+          return
+        }
+      }
       i = i + 2
+    } else if args[i].has_prefix("--") {
+      println("未知选项或缺少参数值「\{args[i]}」")
+      @sys.exit(2)
+      return
     } else if path == "" {
       path = args[i]
       i = i + 1
@@ -104,6 +148,11 @@ fn run_svg(args : ArrayView[String]) -> Unit {
   }
   if path == "" {
     println("要给一个 DXF 文件：dxfkit svg 图纸.dxf > 预览.svg")
+    @sys.exit(2)
+    return
+  }
+  if tol <= 0.0 {
+    println("--tol 必须大于0")
     @sys.exit(2)
     return
   }
@@ -120,7 +169,7 @@ fn run_svg(args : ArrayView[String]) -> Unit {
 
 ///|
 /// 流式统计：一块一块地读，边读边数——**整个文件不进内存**，
-/// 多大的图纸都能跑。走 `moonbitlang/async/fs`：`moonbitlang/x/fs`
+/// 警告、未完成行和统计表仍可能增长。走 `moonbitlang/async/fs`：`moonbitlang/x/fs`
 /// 只有「一次读完」，没有带偏移量的读取。
 ///
 /// 只报能流出来算的东西（tag 数、段、版本、编码、警告数）；
@@ -165,8 +214,8 @@ async fn run_stats(args : ArrayView[String]) -> Unit {
   let mut pos = 0L
   let mut failure : String? = None
   while pos < size && failure is None {
-    let remain = (size - pos).to_int()
-    let want = if remain < chunk { remain } else { chunk }
+    let remain = size - pos
+    let want = if remain < chunk.to_int64() { remain.to_int() } else { chunk }
     let n = file.read_at(buf, position=pos, offset=0, len=want) catch {
       err => {
         failure = Some("读文件失败：\{err}")
@@ -197,13 +246,11 @@ async fn run_stats(args : ArrayView[String]) -> Unit {
   }
   let warnings = stream.warnings()
   println("图纸 \{path}")
-  println("文件 \{size} 字节，一块 \{chunk} 字节地读（整份不进内存）")
+  println(
+    "文件 \{size} 字节，一块 \{chunk} 字节地读（整份不进内存）",
+  )
   let ver = tracker.version()
-  let ver_note = if ver == "" {
-    "（没有 HEADER）"
-  } else {
-    ver
-  }
+  let ver_note = if ver == "" { "（没有 HEADER）" } else { ver }
   println(
     "编码 \{stream.encoding().unwrap().to_display()} · 版本 \{ver_note}",
   )
@@ -328,14 +375,13 @@ fn scan_file(path : String) -> @dxfkit.TagScan? {
 }
 
 ///|
-/// 命令行里的数字。解析不了就提示并退回默认值——
-/// 不为一个笔误把整个检查停掉。
-fn parse_num(s : String, fallback : Double) -> Double {
-  @string.parse_double(s) catch {
-    _ => {
-      println("看不懂的数字「\{s}」，按 \{fallback} 处理")
-      fallback
-    }
+/// 命令行数字必须有限，非法值由调用方以参数错误报告。
+fn parse_num(s : String) -> Double? {
+  let n = @string.parse_double(s) catch { _ => return None }
+  if n.is_nan() || n.is_inf() {
+    None
+  } else {
+    Some(n)
   }
 }
 
@@ -344,14 +390,27 @@ fn usage() -> Unit {
   println("dxfkit —— DXF 图纸的加工前检查")
   println("")
   println("用法：")
-  println("  dxfkit check <图纸.dxf> [--tol 0.05] [--min-gap 0.5]")
-  println("        加工前检查：轮廓闭合、自相交、重复切割、最小间隙、")
-  println("        退化几何、文字未转曲线。有致命问题退出码 1，读不了 2，其余 0")
+  println("  dxfkit check <图纸.dxf> [--tol 0.05] [--min-gap 0.5] [--strict]")
+  println(
+    "        加工前检查：轮廓闭合、自相交、重复切割、最小间隙、",
+  )
+  println(
+    "        退化几何、文字未转曲线。有致命问题退出码 1，读不了 2，其余 0",
+  )
+  println(
+    "        --strict 将警告也视为退出码1；0只表示当前检查范围内未触发退出条件",
+  )
   println("  dxfkit svg <图纸.dxf> [--tol 0.05]")
-  println("        把图纸画成 SVG 打到 stdout（重定向存成文件）")
+  println(
+    "        把图纸画成 SVG 打到 stdout（重定向存成文件）",
+  )
   println("  dxfkit stats <图纸.dxf>")
-  println("        流式统计：tag 数、段、版本、编码。整份不进内存，多大都能跑")
+  println(
+    "        流式统计：tag 数、段、版本、编码；不保存完整文件，警告和未完成行仍占内存",
+  )
   println("  dxfkit help")
   println("")
-  println("容差和净距都用图纸自己的单位；--min-gap 不给就不查净距")
+  println(
+    "容差和净距都用图纸自己的单位；--min-gap 不给就不查净距",
+  )
 }

@@ -1,11 +1,11 @@
-// 加工前检查：回答「这份图纸能不能上机床」。
+// 对已支持的二维轮廓做几何辅助检查，不能判断完整可加工性。
 //
 // 检查在**展开之后**的世界坐标折线上做：块引用已经摊平、曲线已经
 // 离散——检查不该关心「这条线在哪个块的哪一层引用里」。需要原始
 // 实体信息的地方（句柄、半径），`Placed` 里带着源实体。
 //
 // 每条发现带严重程度：Info 只是说明情况、Warn 影响加工质量、
-// Fatal 会导致加工失败或废件。
+// Fatal 表示本工具要求优先修正的输入或几何问题。
 //
 // **这一层只报告，不修改。** 替用户改图纸（自动闭合、删重复线）
 // 是另一个产品——工具把问题指出来，改不改归设计者。
@@ -16,11 +16,11 @@
 ///|
 /// 发现的严重程度。
 pub(all) enum Severity {
-  /// 只说明情况，不影响加工
+  /// 辅助信息
   Info
-  /// 影响加工质量，建议处理
+  /// 需要使用者复核的问题或覆盖限制
   Warn
-  /// 会导致加工失败或废件
+  /// 严重输入或几何问题
   Fatal
 }
 
@@ -67,13 +67,13 @@ pub fn Report::has_fatal(self : Report) -> Bool {
 pub fn Report::verdict(self : Report) -> String {
   let fatal = self.count(Fatal)
   if fatal > 0 {
-    "不能上机床：\{fatal} 个致命问题"
+    "本次检查发现 \{fatal} 个严重问题，请修正并复核图纸。"
   } else {
     let warn = self.count(Warn)
     if warn > 0 {
-      "还有 \{warn} 个警告要确认"
+      "本次检查发现 \{warn} 个警告，请复核图纸与加工条件。"
     } else {
-      "这次检查没发现问题（检查项有限，不构成保证）"
+      "本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。"
     }
   }
 }
@@ -83,7 +83,7 @@ pub fn Report::verdict(self : Report) -> String {
 pub(all) struct CheckOptions {
   /// 离散 / 重合判定的容差
   tol : Double
-  /// 允许的最小净距：两条轮廓靠近到这个值以内就报。
+  /// 同图层不同实体的折线距离低于此值时提示；不测单实体窄颈。
   ///
   /// **0 表示不查这条**——净距合不合格取决于材料与工艺
   ///（1 毫米的钢和 1 毫米的纸板不是一回事，激光和铣刀也不是），
@@ -110,7 +110,9 @@ pub fn Report::to_text(self : Report) -> String {
     sb.write_string("（没有发现）\n")
   } else {
     for f in self.findings {
-      sb.write_string("[\{severity_label(f.severity)}] [\{f.check}] \{f.message}\n")
+      sb.write_string(
+        "[\{severity_label(f.severity)}] [\{f.check}] \{f.message}\n",
+      )
     }
   }
   sb.write_string(
@@ -127,10 +129,67 @@ pub fn Report::to_text(self : Report) -> String {
 pub fn Drawing::check(self : Drawing, opt : CheckOptions) -> Report {
   let tol = opt.tol
   let findings : Array[Finding] = []
+  if !positive_tolerance(tol) ||
+    !finite_number(opt.min_gap) ||
+    opt.min_gap < 0.0 {
+    return {
+      findings: [
+        {
+          check: "参数",
+          severity: Fatal,
+          message: "容差必须是正的有限数字，最小净距必须是非负有限数字",
+        },
+      ],
+    }
+  }
   let exp = self.expand(tol)
   // 展开过程中的问题（缺块、循环引用）本身就是检查结论
   for w in exp.warnings {
-    findings.push({ check: "解析", severity: Warn, message: w })
+    findings.push({ check: "解析", severity: Warn, message: w, })
+  }
+  // 已解码不等于已检查几何。不能让未支持实体或空图纸得到无问题结论。
+  let unsupported : Array[(String, Int)] = []
+  let unconverted_ocs : Array[(String, Int)] = []
+  let mut outlines = 0
+  for p in exp.placed {
+    match p.flat {
+      Outline(points~, ..) =>
+        if points.length() >= 2 {
+          outlines = outlines + 1
+        }
+      _ => ()
+    }
+    match p.entity.geom {
+      Hatch(..) | Dimension(..) | Unknown => bump(unsupported, p.entity.kind())
+      _ => ()
+    }
+    let record = p.entity.common.record
+    if record.get_double(210, 0.0) != 0.0 ||
+      record.get_double(220, 0.0) != 0.0 ||
+      record.get_double(230, 1.0) != 1.0 {
+      bump(unconverted_ocs, p.entity.kind())
+    }
+  }
+  for item in unconverted_ocs {
+    findings.push({
+      check: "检查覆盖",
+      severity: Warn,
+      message: "\{item.1} 个 \{item.0} 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核",
+    })
+  }
+  for item in unsupported {
+    findings.push({
+      check: "检查覆盖",
+      severity: Warn,
+      message: "\{item.1} 个 \{item.0} 实体的轮廓未参与检查；保留记录不表示已验证几何",
+    })
+  }
+  if outlines == 0 {
+    findings.push({
+      check: "检查覆盖",
+      severity: Warn,
+      message: "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据",
+    })
   }
   // 退化几何：逐条看，每条都要能定位（图层 + 句柄）
   for p in exp.placed {
@@ -211,7 +270,7 @@ fn check_radius(
     findings.push({
       check: "退化几何",
       severity: Fatal,
-      message: "\{where_of(p)}的\{what}半径是负数（\{radius}）——部分机床直接报错",
+      message: "\{where_of(p)}的\{what}半径是负数（\{radius}），需要修正几何定义",
     })
   } else if radius == 0.0 {
     findings.push({
@@ -342,11 +401,10 @@ fn check_closure(
         continue
       }
       match p.flat {
-        Outline(points~, closed~) => {
+        Outline(points~, closed~) =>
           if !closed && points.length() >= 2 {
             edges.push((points[0], points[points.length() - 1]))
           }
-        }
         _ => ()
       }
     }
@@ -355,7 +413,7 @@ fn check_closure(
       findings.push({
         check: "轮廓闭合",
         severity: Warn,
-        message: "图层「\{layer}」上有 \{open_count} 处轮廓没闭合——最宽的缝 \{worst_gap}（(\{at.x}, \{at.y}) 附近）；如果它们是轮廓，切开后零件会散架",
+        message: "图层「\{layer}」上有 \{open_count} 处轮廓没闭合——最宽的缝 \{worst_gap}（(\{at.x}, \{at.y}) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断",
       })
     }
   }
@@ -483,7 +541,7 @@ fn check_crossings(
       continue
     }
     // 按 min_x 排序后扫掠
-    segs.sort_by(fn (s1, s2) {
+    segs.sort_by(fn(s1, s2) {
       if s1.min_x < s2.min_x {
         -1
       } else if s1.min_x > s2.min_x {
@@ -528,14 +586,14 @@ fn check_crossings(
       findings.push({
         check: "自相交",
         severity: Warn,
-        message: "图层「\{layer}」有 \{self_crossed.length()} 条轮廓自己和自己交叉——切出来会多切一道口子",
+        message: "图层「\{layer}」有 \{self_crossed.length()} 条轮廓自相交，请确认是否符合设计",
       })
     }
     if dup_pairs > 0 {
       findings.push({
         check: "重复切割",
         severity: Warn,
-        message: "图层「\{layer}」有 \{dup_pairs} 对线段重叠（共 \{dup_len} 长度，(\{dup_at.x}, \{dup_at.y}) 附近）——同一刀会切两遍，激光会烧焦",
+        message: "图层「\{layer}」有 \{dup_pairs} 对线段重叠（共 \{dup_len} 长度，(\{dup_at.x}, \{dup_at.y}) 附近），请确认是否存在重复路径",
       })
     }
   }
@@ -585,11 +643,7 @@ fn layer_segments(placed : Array[Placed], layer : String) -> Array[CutSeg] {
 ///|
 /// 同一折线里的相邻段（闭合折线首尾相接的那对也算）。
 fn adjacent_segs(s : CutSeg, t : CutSeg) -> Bool {
-  let d = if s.seg > t.seg {
-    s.seg - t.seg
-  } else {
-    t.seg - s.seg
-  }
+  let d = if s.seg > t.seg { s.seg - t.seg } else { t.seg - s.seg }
   if d == 1 {
     return true
   }
@@ -636,7 +690,7 @@ fn overlap_length(
   }
   let unit = dir.scale(1.0 / len)
   let normal = unit.perp()
-  if (b1.sub(a1).dot(normal)).abs() > tol || (b2.sub(a1).dot(normal)).abs() > tol {
+  if b1.sub(a1).dot(normal).abs() > tol || b2.sub(a1).dot(normal).abs() > tol {
     return 0.0
   }
   let t1 = b1.sub(a1).dot(unit)
@@ -690,7 +744,7 @@ fn check_min_gap(
     if segs.length() < 2 {
       continue
     }
-    segs.sort_by(fn (s1, s2) {
+    segs.sort_by(fn(s1, s2) {
       if s1.min_x < s2.min_x {
         -1
       } else if s1.min_x > s2.min_x {
@@ -734,7 +788,7 @@ fn check_min_gap(
       findings.push({
         check: "最小间隙",
         severity: Warn,
-        message: "图层「\{layer}」有 \{near.length()} 对轮廓靠得太近——最窄处净距 \{worst}（(\{at.x}, \{at.y}) 附近），这么窄的材料激光会烧糊、铣刀会崩",
+        message: "图层「\{layer}」有 \{near.length()} 对实体轮廓距离低于阈值——折线最小距离 \{worst}（(\{at.x}, \{at.y}) 附近）；请结合单位、离散容差与工艺复核",
       })
     }
   }
@@ -784,7 +838,10 @@ fn segments_intersect(a1 : Vec2, a2 : Vec2, b1 : Vec2, b2 : Vec2) -> Bool {
 ///|
 /// 已知 p 在直线 ab 上，判断它在不在**线段** ab 的范围内（包围盒判定）。
 fn on_segment(a : Vec2, b : Vec2, p : Vec2) -> Bool {
-  p.x >= a.x.min(b.x) && p.x <= a.x.max(b.x) && p.y >= a.y.min(b.y) && p.y <= a.y.max(b.y)
+  p.x >= a.x.min(b.x) &&
+  p.x <= a.x.max(b.x) &&
+  p.y >= a.y.min(b.y) &&
+  p.y <= a.y.max(b.y)
 }
 
 ///|

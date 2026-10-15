@@ -4,11 +4,12 @@
 // 这里只管「命令行这层」自己不把数字看错。
 
 ///|
-test "数字解析：正常值原样，坏输入退回默认" {
-  assert_true(parse_num("0.5", 1.0) == 0.5)
-  assert_true(parse_num("2", 1.0) == 2.0)
-  // 解析不了的会先打一行提示，然后退回默认
-  assert_true(parse_num("半毫米", 1.0) == 1.0)
+test "数字解析：拒绝非法值，不静默退回默认" {
+  assert_true(parse_num("0.5") == Some(0.5))
+  assert_true(parse_num("2") == Some(2.0))
+  assert_true(parse_num("半毫米") is None)
+  assert_true(parse_num("NaN") is None)
+  assert_true(parse_num("Infinity") is None)
 }
 
 ///|

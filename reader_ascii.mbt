@@ -44,11 +44,7 @@ pub fn scan_tags(data : Bytes) -> TagScan {
   let stream = TagStream::new()
   let tags = stream.feed(data)
   tags.append(stream.finish())
-  {
-    tags,
-    warnings: stream.warnings(),
-    encoding: stream.encoding().unwrap(),
-  }
+  { tags, warnings: stream.warnings(), encoding: stream.encoding().unwrap(), }
 }
 
 ///|
@@ -128,6 +124,9 @@ fn parse_group_code(data : Bytes, from : Int, to : Int) -> Int? {
     if c < 0x30 || c > 0x39 {
       return None
     }
+    if value > 214748364 || (value == 214748364 && c - 0x30 > 7) {
+      return None
+    }
     value = value * 10 + (c - 0x30)
     i = i + 1
   }
@@ -172,32 +171,47 @@ fn parse_value(
   from : Int,
   to : Int,
   encoding : Encoding,
-) -> TagValue {
-  match code_type(code) {
-    Str => Str(decode_text(slice_range(data, from, to), encoding))
-    Bin => Str(decode_text(slice_range(data, from, to), encoding))
-    F64 => F64(parse_double_trimmed(data, from, to))
-    I16 => I16(parse_double_trimmed(data, from, to).to_int())
-    I32 => I32(parse_double_trimmed(data, from, to).to_int())
-    I64 => I64(parse_double_trimmed(data, from, to).to_int64())
-    Bool => Bool(parse_double_trimmed(data, from, to) != 0.0)
+) -> Result[TagValue, String] {
+  let kind = code_type(code)
+  if kind is Str || kind is Bin {
+    return Ok(Str(decode_text(slice_range(data, from, to), encoding)))
   }
-}
-
-///|
-/// 解析一个数值（先 trim 两侧空白）。
-///
-/// 读不出数字时**返回 0 而不是报错**——报错会让一个格式良好但某个值
-/// 写坏了的文件整份读不了。0 是安全的默认值（坐标 0、标志位假）。
-/// 真要报的话应该由结构层去做，那里才知道这个值重不重要。
-fn parse_double_trimmed(data : Bytes, from : Int, to : Int) -> Double {
   let (start, stop) = trim_ascii_range(data, from, to)
-  if start >= stop {
-    return 0.0
-  }
-  let s = bytes_to_ascii(data, start, stop)
-  @string.parse_double(s[:]) catch {
-    _ => 0.0
+  let text = bytes_to_ascii(data, start, stop)
+  match kind {
+    F64 => {
+      let value = @string.parse_double(text[:]) catch {
+        _ => return Err("不是有效浮点数")
+      }
+      if !finite_number(value) {
+        return Err("数值必须有限")
+      }
+      Ok(F64(value))
+    }
+    I16 | I32 => {
+      let value = @string.parse_int(text[:]) catch {
+        _ => return Err("不是有效整数或超出32位范围")
+      }
+      if kind is I16 && (value < -32768 || value > 65535) {
+        return Err("数值超出16位范围")
+      }
+      Ok(if kind is I16 { I16(value) } else { I32(value) })
+    }
+    I64 => {
+      let value = @string.parse_int64(text[:]) catch {
+        _ => return Err("不是有效64位整数")
+      }
+      Ok(I64(value))
+    }
+    Bool =>
+      if text == "0" {
+        Ok(Bool(false))
+      } else if text == "1" {
+        Ok(Bool(true))
+      } else {
+        Err("布尔数值必须为0或1")
+      }
+    Str | Bin => Ok(Str(text))
   }
 }
 

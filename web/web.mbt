@@ -4,8 +4,7 @@
 //（MoonBit 的 `Bytes` 是编译器的内部表示，过不了边界；字符串两边都认），
 // 结果排成文本或 SVG 字符串回去。
 //
-// dxfkit 的管线是**不抛异常**的（「解析器永不 panic」是项目约定），
-// 所以唯一会失败的只有 base64 解码本身。`svg` 的返回值会被页面塞进
+// 格式与几何诊断进入报告；这层还处理base64解码错误。`svg` 的返回值会被页面塞进
 // innerHTML，解码失败的文案走独立的 `svg_error`——不把错误信息
 // 往 HTML 里拼。
 
@@ -19,7 +18,8 @@ pub fn check(file_base64 : String, min_gap : Double) -> String {
     Err(msg) => return "读不了：\{msg}"
   }
   let drawing = @dxfkit.build_drawing(@dxfkit.scan_tags(data))
-  drawing.check({ tol: 0.05, min_gap }).to_text()
+  "单位声明：\{drawing.declared_unit_label()}；坐标及阈值使用图纸原始单位，请先确认。\n" +
+  drawing.check({ tol: 0.05, min_gap, }).to_text()
 }
 
 ///|

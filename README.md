@@ -1,89 +1,108 @@
 # dxfkit
 
-用 MoonBit 写的 DXF（CAD 图纸）工具链。回答一个问题：**这份图纸能不能上机床。**
+MoonBit DXF 工具库：读取 ASCII DXF，将支持的二维曲线离散为折线，检查几何问题，并提供 SVG 预览、命令行和网页入口。
 
-> **项目状态**：开发中（2026-10 月）。库、命令行、网页三种形态都已落地：
-> 解析器、图纸骨架、实体层、几何离散（曲线折线化、块展开）、
-> **加工前检查**（轮廓闭合、自相交、重复切割、最小间隙、退化几何、
-> 文字未转曲线）和 **SVG 预览**，197 个测试。
-> 这里列的每一条都是已经能跑的。
+[在线试用](https://mik1e80.github.io/dxfkit/) · [接口与边界](README.mbt.md) · [项目对比](COMPARISON.md) · [第三方声明](THIRD_PARTY_NOTICES.md)
 
-## 为什么需要它
+源码修订版本 **0.1.1**。本次修订尚未发布到 Mooncakes。
 
-DXF 是 CAD 之间交换图纸的通用格式——机械制图、建筑设计、**激光切割、CNC 加工、
-PCB 制板**都在用它。但**能打开图纸的软件多，能告诉你图纸能不能加工的少**：
+## 解决什么问题
 
-- 轮廓没闭合，切完零件直接散架
-- 同一段线画了两遍，激光会烧焦、铣刀会多切一刀
-- 圆的半径是 0 或者负数，部分机床直接报错
-- 图纸上还有没转成曲线的文字，机床不认字符串，那块字直接不切
-- 两条轮廓靠得太近，中间那点材料扛不住激光的热、也扛不住铣刀的力
+面向已有 DXF 图纸的读取、预览与加工前辅助检查。例如，激光切割前复核轮廓是否开放、是否有重复线段，以及同图层不同实体的轮廓距离是否低于指定值。
 
-这些从预览图上看都不出来——图看着是好好的。
+项目以 DXF 的既有格式和几何算法为基础，参考 Python [ezdxf](https://ezdxf.readthedocs.io/en/stable/) 的能力组织。库可被其他 MoonBit 程序调用，CLI 可用于批量处理，网页可在本地浏览器处理文件。
 
-## 和 stlkit 的关系
+**检查结果不是可加工证明。** 材料、刀具、切缝、进给、机床和 CAM 策略不在本工具的验证范围内。
 
-这个项目和 [stlkit](https://github.com/mik1e80/stlkit) 是同一个思路的两个领域：
+## 已实现能力
 
-| | stlkit | dxfkit |
-| --- | --- | --- |
-| 问的问题 | 这个模型能不能 **3D 打印** | 这份图纸能不能**上机床** |
-| 格式 | STL / OBJ / 3MF / PLY | DXF |
-| 维度 | 三维网格 | 二维图纸 |
-| 核心分析 | 水密性、非流形边、**壁厚** | 轮廓闭合性、自相交、**最小间隙** |
+| 层次 | 内容 |
+| --- | --- |
+| 读取 | ASCII DXF 组码、三种换行、分段与子类、HEADER、图层和块；保留未知实体记录并给出诊断 |
+| 实体 | 线、点、圆、圆弧、椭圆、样条、多段线、文字、INSERT 等；部分实体仅提取元数据 |
+| 几何 | bulge 圆弧、椭圆、连续正权重 NURBS 的 XY 离散；嵌套块仿射变换 |
+| 检查 | 退化几何、文字、图层、端点闭合、单实体自交、共线重叠、指定净距与检查覆盖提示 |
+| 输出 | SVG 预览、文字报告、CLI 退出码 |
+| 大文件 | `TagStream` 分块扫描与 CLI `stats`，不保存整份文件或全量 tag 列表 |
 
-**上一版是往模型里面打射线量壁厚，这一版是在平面内量轮廓之间的净距**——
-同一个思路，3D 投到 2D。
+HATCH 边界、DIMENSION 关联几何、未知实体、非默认 OCS 和 INSERT 阵列的其余实例未完整检查，报告会提示覆盖限制。解码出实体身份不代表已验证其几何。
 
-## 能做什么
-
-```text
-解析    ASCII DXF（R10–R2018 多版本规则、三种换行、坏行恢复）
-        子类驱动的组码解释、未知 tag 保留；大文件可流式扫描
-实体    18 种：LINE / CIRCLE / ARC / ELLIPSE / SPLINE / POINT、
-        LWPOLYLINE / POLYLINE / TEXT / MTEXT / ATTRIB、INSERT（含嵌套块）、
-        SOLID / HATCH / DIMENSION 等；认不出的保留原记录
-几何    曲线折线化（bulge 圆弧、NURBS 样条，容差是弦高）、块展开
-检查    加工前检查：轮廓闭合、自相交、重复切割、最小间隙、退化几何、文字未转曲线
-预览    SVG 渲染
-形态    库 + 命令行 + 网页
-```
-
-还没做的：二进制 DXF、写回文件、引用完整性校验。
-
-## 用法
+## 实际使用示例
 
 ```bash
-moon run cli check 图纸.dxf                 # 加工前检查（有致命问题退出码 1）
-moon run cli check 图纸.dxf --min-gap 0.5   # 带最小净距阈值（单位同图纸）
-moon run cli svg 图纸.dxf > 预览.svg         # 画出来看一眼
-moon run cli stats 大图纸.dxf                # 流式统计，整份不进内存
+moon update
+moon run cli check examples/plate.dxf --min-gap 0.5 --strict
+moon run cli svg examples/plate.dxf > plate.svg
+moon run cli check examples/issues.dxf
+moon run cli svg examples/curves.dxf > curves.svg
+moon run cli stats testdata/ezdxf/circle_radius_le_0.dxf
 ```
 
-网页版：打开 [`web/index.html`](web/index.html) 直接就能用（双击即可，
-不用构建），或者在线版 <https://mik1e80.github.io/dxfkit/>。
-把 DXF 拖进去，左边出预览、右边出检查报告；点「用内置样例试一下」
-可以先看一张故意画坏的图纸长什么样。
+- `plate.dxf`：声明毫米单位的 100×60 外框及四个半径 3 的孔，用来演示有明确尺寸的二维图纸复核。
+- `issues.dxf`：重复线段、开放边界和负半径，演示发现具体问题。
+- `curves.dxf`：负 bulge 与 S 形样条，复现本次修复的曲线离散问题。
 
-网页产物是 `moon build --target js` 编出来的、提交进仓库的——
-改了库代码记得跑一次 `bash web/build.sh` 重新生成。
+这些文件是项目自建示例，不代表生产设备或材料的加工认证。`testdata/ezdxf/` 另有 47 个第三方 DXF 回归文件；来源及完整 MIT 条款见第三方声明。
 
-## 文档
+## CLI 和网页
 
-详细的实现说明在 [`README.mbt.md`](README.mbt.md)；
-和成熟框架 `ezdxf` 的逐项对比在 [`COMPARISON.md`](COMPARISON.md)。
+`check` 支持 `--tol`、`--min-gap`、`--strict`。默认容差 0.05，默认不检查净距；容差必须为正，净距必须非负，二者都必须有限。
 
-## 开发
+| 退出码 | 含义 |
+| --- | --- |
+| 0 | 未触发所选退出条件；普通模式仍可能有警告 |
+| 1 | 有严重问题；启用 `--strict` 时，警告也触发此退出码 |
+| 2 | 参数错误或文件读取失败 |
 
-仓库根目录就是 MoonBit 模块根：
+坐标和阈值都使用图纸原始单位，显示 HEADER 的单位声明供确认，不自动转换成毫米。
+
+网页可打开 `web/index.html`，或访问在线版。文件在浏览器本地处理；可上传图纸、调整净距、查看报告和预览。仓库包含编译产物，修改库后需重建：
 
 ```bash
-moon test                              # 跑测试
-moon check --target all --deny-warn    # 全目标检查，要求零警告
+bash web/build.sh
+node web/smoke.cjs
 ```
 
-## 许可证
+## 算法与范围
 
-[Apache License 2.0](LICENSE)。
+NURBS 先按节点插入分解为有理 Bézier 段，再用控制点凸包判定细分；不再用单个中点代表整条曲线。负 bulge 保持多段线原始的起终点顺序。块放大时根据累计变换调整局部离散容差。
 
-第三方内容的声明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+推荐使用 `Geometry::flatten_checked()`、`spline_points_checked()` 获得曲线输入或资源上限的错误原因。`Flat::Empty` 仍表示没有可离散轮廓，调用方须单独核对覆盖范围；旧 `flatten()` / `spline_points()` 保留兼容回退，不能用其占位结果证明几何正确。
+
+以下限制需在集成时考虑：
+
+- 二进制 DXF、写回与编辑、完整引用审计、刀路生成、参数化草图求解尚未实现。
+- 几何以 XY 投影分析，不是三维 CAD 内核；非默认 OCS 未转换。
+- 闭合、自交、重复和净距检查按图层处理，不检查跨图层关系。
+- 净距比较同图层不同实体的离散线段，跳过容差内端点接触，不覆盖单实体内部窄颈或真实材料厚度。
+- 自交检查针对同一实体的非相邻线段；并非通用多实体相交或区域布尔检查。
+- UTF-8、CP1252 可解码；其他声明代码页降级并警告。HEADER 编码探测只读取文件开头 1024 字节。
+- 资源上限、浮点精度与离散误差会影响结果，尤其是阈值附近；详细说明见接口文档。
+
+## 流式统计
+
+`stats` 每次读取 256 KiB，主要保留当前块、未完成文本行、扫描警告和统计表。不构造全量图纸，不能在这个入口执行几何检查。
+
+**总内存并非对任何输入都为常数**：超长行、警告数量、不同段名及调用方保留的输出都可能使存储增长。`check` 和 `svg` 仍需读取完整文件。
+
+## 验证与开发
+
+```bash
+moon check --target all --deny-warn
+moon build
+moon test
+moon test --target js
+moon test --target native
+moon run conformance
+node cli/smoke.cjs
+bash web/build.sh
+node web/smoke.cjs
+```
+
+测试包含负 bulge 顺序、S 形样条、非均匀节点、有理权重、重节点和未钳制样条；用独立 de Boor 求值的密集采样对照新离散结果。另测试块放大后的世界坐标误差、无效参数、数值解析、检查覆盖及 CLI / 网页入口。
+
+47 个第三方文件用于读取和回归验证，不是完整 DXF 一致性测试套件。网页回归使用实际编译产物与最小 DOM，不验证浏览器布局。
+
+## 许可
+
+项目采用 [Apache-2.0](LICENSE)。第三方语料与参考资料的来源、版权和完整条款见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

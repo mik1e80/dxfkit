@@ -72,7 +72,13 @@ function runCheck(base64, name) {
 
   // 报告用 textContent：报告里可能带图纸原文（文字内容、图层名），
   // 那是不受信任的内容，拼进 HTML 等于开注入口子
-  const minGap = Number(document.getElementById("min-gap").value) || 0;
+  const rawGap = document.getElementById("min-gap").value;
+  const minGap = Number(rawGap);
+  if (rawGap.trim() === "" || !Number.isFinite(minGap) || minGap < 0) {
+    document.getElementById("report").textContent = "最小净距必须是非负有限数字；0 表示不检查净距。";
+    document.getElementById("preview").replaceChildren();
+    return;
+  }
   document.getElementById("report").textContent = check(base64, minGap);
 
   const svgText = svg(base64, 0.05);
@@ -88,6 +94,12 @@ function readFile(file) {
   const reader = new FileReader();
   reader.onload = () => {
     runCheck(bytesToBase64(new Uint8Array(reader.result)), file.name);
+  };
+  reader.onerror = () => {
+    currentBase64 = "";
+    currentName = "";
+    document.getElementById("report").textContent = "无法读取这个文件，请重新选择。";
+    document.getElementById("preview").replaceChildren();
   };
   reader.readAsArrayBuffer(file);
 }

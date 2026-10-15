@@ -25,8 +25,7 @@ pub(all) enum Encoding {
 ///|
 /// 从文件开头判断该用什么编码。
 ///
-/// 只需要看开头一段——HEADER 变量总在最前面。ezdxf 用的是前 1024 字节，
-/// 这里也照做。
+/// 仅探测前1024字节；声明不在这个范围时会使用回退编码。
 pub fn decide_encoding(data : Bytes) -> Encoding {
   let version = scan_header_string(data, "$ACADVER")
   match version {
@@ -57,15 +56,11 @@ fn codepage_from_header(data : Bytes) -> Encoding {
 ///|
 /// 代码页名（`ANSI_936`）→ 编码。
 fn parse_codepage_name(name : String) -> Encoding {
-  if name == "ANSI_1252" || name == "ANSI_1251" || name == "ANSI_1250" {
-    // 这几种在 DXF 里的用法和 CP1252 的差别只影响极少数西里尔/中欧字符，
-    // 而它们本来就属于我们不打算支持的少数字符集——按 CP1252 处理并报警告
+  if name == "ANSI_1252" {
     Cp1252
   } else if name.has_prefix("ANSI_") {
     let digits = name[5:].to_owned()
-    let n = @string.parse_double(digits) catch {
-      _ => return Cp1252
-    }
+    let n = @string.parse_double(digits) catch { _ => return Cp1252 }
     if n.is_nan() || n.is_inf() || n != n.round() {
       Cp1252
     } else {
@@ -221,10 +216,10 @@ fn decode_cp1252(data : Bytes) -> String {
 /// 映射成对应的控制字符。
 fn cp1252_high(b : Int) -> Char {
   let table : Array[Int] = [
-    0x20AC, 0x0081, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021, 0x02C6,
-    0x2030, 0x0160, 0x2039, 0x0152, 0x008D, 0x017D, 0x008F, 0x0090, 0x2018,
-    0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014, 0x02DC, 0x2122, 0x0161,
-    0x203A, 0x0153, 0x009D, 0x017E, 0x0178,
+    0x20AC, 0x0081, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021, 0x02C6, 0x2030,
+    0x0160, 0x2039, 0x0152, 0x008D, 0x017D, 0x008F, 0x0090, 0x2018, 0x2019, 0x201C,
+    0x201D, 0x2022, 0x2013, 0x2014, 0x02DC, 0x2122, 0x0161, 0x203A, 0x0153, 0x009D,
+    0x017E, 0x0178,
   ]
   let idx = b - 0x80
   if idx >= 0 && idx < table.length() {

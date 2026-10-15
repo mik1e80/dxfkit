@@ -3,19 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>dxfkit —— 这份图纸能上机床吗</title>
+    <title>dxfkit —— DXF 图纸读取与辅助检查</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header class="page-head">
       <h1>dxfkit</h1>
       <p>
-        把一张 DXF 图纸拖进来，看看<strong>它能不能上机床</strong>。
-        看图软件能告诉你图纸长什么样，但告诉不了你轮廓闭没闭合、
-        有没有同一段线画了两遍、材料最窄的地方有多窄——那些要从图纸的
-        几何本身算出来。这个页面就是干这件事的，判定逻辑是 MoonBit 写的
-        （<code>mik1e80/dxfkit</code>），<code>dist/web.js</code> 是
-        <code>moon build --target js</code> 的产物。
+        拖入 DXF，查看图纸预览，并检查开放轮廓、重复线段、交叉和指定净距。
+        报告只覆盖已支持的二维几何；加工前仍需确认单位、材料、刀具和工艺。
       </p>
     </header>
 

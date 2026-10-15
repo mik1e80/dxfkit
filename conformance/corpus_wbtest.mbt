@@ -56,7 +56,9 @@ test "每个文件都以 EOF 结尾" {
     }
     let last = tags[tags.length() - 1]
     if !(last.code == 0 && last.value.as_string() == "EOF") {
-      problems.push("\{path}：最后一个是 \{last.to_display()}，不是 EOF")
+      problems.push(
+        "\{path}：最后一个是 \{last.to_display()}，不是 EOF",
+      )
     }
   }
   if problems.length() > 0 {
@@ -191,28 +193,31 @@ test "语料几何离散：曲线都能摊平" {
       }
     }
   }
-  // 2026-10-11 实测的锚点（tol=0.01）：椭圆与样条接进离散之后的数字
+  // 2026-10-15：改用控制凸包细分，负bulge保持原始端点。
+  // 算法误差另由独立deBoor密集采样验证；点数仅用于记录语料变化。
   assert_eq(curves, 3559)
-  assert_eq(total_points, 21430)
+  assert_eq(total_points, 21644)
   if problems.length() > 0 {
     fail("有曲线离散异常：" + join_problems(problems))
   }
 }
 
 ///|
-test "语料块展开：全部解开，零警告" {
-  // 2026-10-11 实测：47 个文件的 INSERT 全部展开成 6210 条世界坐标
-  // 几何，**一条警告都没有**——语料里没有一个解不开的块引用
-  //（缺块、循环都没有）。以后这条挂了，多半是展开逻辑动了
+test "语料块展开：记录未支持的阵列实例" {
+  // 47个文件仍提取6210条几何；multi_insert中的未展开行列现在明确报告。
   let mut total = 0
   let mut warns = 0
   for path in corpus_files() {
     let exp = @dxfkit.build_drawing(scan_corpus_file(path)).expand(0.05)
     total = total + exp.placed.length()
     warns = warns + exp.warnings.length()
+    for warning in exp.warnings {
+      assert_true(warning.contains("INSERT 阵列"))
+      assert_true(path.contains("multi_insert_with_attribs"))
+    }
   }
   assert_eq(total, 6210)
-  assert_eq(warns, 0)
+  assert_eq(warns, 1)
 }
 
 // ── 流式扫描 ────────────────────────────────────────────────────────────
@@ -277,26 +282,24 @@ test "流式扫描与整份扫描逐 tag 等价" {
 
 ///|
 test "语料加工检查：锚点" {
-  // 2026-10-11 实测。唯一一条致命是 circle_radius_le_0.dxf 里句柄 2E
-  // 的圆（半径 -1）——**那个文件就是为这个场景造的**，被精确逮到。
-  // 警告构成：退化几何 25、文字未转曲线 47、图层引用 8、轮廓闭合 24、
-  // 自相交与重复切割 18（语料是功能测试文件不是加工图纸：散落的
-  // 开口线、贴边的重复线段本来就多）；提示 1（有实体画在冻结图层上）
+  // 2026-10-15：仍有一个负半径严重问题。检查覆盖警告现在包含未支持实体、
+  // 无轮廓、OCS与INSERT阵列；不能沿用旧版只统计已检查几何的警告总数。
   let mut fatal = 0
   let mut warn = 0
   let mut info = 0
   // 净距不查（min_gap = 0）：语料单位不统一（米制、毫米制混着），
   // 净距阈值没有跨文件通用的值
   for path in corpus_files() {
-    let r = @dxfkit
-      .build_drawing(scan_corpus_file(path))
-      .check({ tol: 0.05, min_gap: 0.0 })
+    let r = @dxfkit.build_drawing(scan_corpus_file(path)).check({
+      tol: 0.05,
+      min_gap: 0.0,
+    })
     fatal = fatal + r.count(@dxfkit.Fatal)
     warn = warn + r.count(@dxfkit.Warn)
     info = info + r.count(@dxfkit.Info)
   }
   assert_eq(fatal, 1)
-  assert_eq(warn, 122)
+  assert_eq(warn, 170)
   assert_eq(info, 1)
 }
 
@@ -333,16 +336,8 @@ test "语料里未解码的实体类型都在预期清单里" {
   // XLINE 2、MULTILEADER 2、ACAD_TABLE 2、WIPEOUT 2、
   // POLYLINE 2（网格类，有意挡在 Unknown 外）、MESH 1、3DSOLID 1
   let expected : Array[String] = [
-    "3DSOLID",
-    "ACAD_TABLE",
-    "IMAGE",
-    "MESH",
-    "MULTILEADER",
-    "POLYLINE",
-    "RAY",
-    "VIEWPORT",
-    "WIPEOUT",
-    "XLINE",
+    "3DSOLID", "ACAD_TABLE", "IMAGE", "MESH", "MULTILEADER", "POLYLINE", "RAY", "VIEWPORT",
+    "WIPEOUT", "XLINE",
   ]
   let seen : Array[String] = []
   for path in corpus_files() {
@@ -382,7 +377,9 @@ test "语料里未解码的实体类型都在预期清单里" {
       }
     }
     if !present {
-      problems.push("清单里的 \{e} 不再未解码了——解码了？更新清单")
+      problems.push(
+        "清单里的 \{e} 不再未解码了——解码了？更新清单",
+      )
     }
   }
   if problems.length() > 0 {

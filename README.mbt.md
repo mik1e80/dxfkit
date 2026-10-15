@@ -1,117 +1,83 @@
-# dxfkit
+# dxfkit：接口与实现边界
 
-用 MoonBit 写的 DXF（CAD 图纸）工具链。回答一个问题：**这份图纸能不能上机床。**
+MoonBit 的 ASCII DXF 读取、二维几何处理与辅助检查库。安装、场景、CLI 和网页入口见 [README.md](README.md)。源码修订版本 0.1.1，本次修订尚未发布到 Mooncakes。
 
-> **项目状态**：开发中（2026-10 月）。解析器、图纸骨架、实体层、几何离散、
-> 加工前检查和 SVG 预览已落地。这份文档随功能落地逐步展开，
-> 不写还没做的东西。
+## 为什么选择这个范围
 
-## 为什么需要它
+DXF 图纸交换与脚本处理是已有需求，Python ezdxf 是成熟参照。dxfkit 的交付目标是可复用的 MoonBit 读取与几何接口，附带可验证的检查示例。它不保证图纸可加工，也不以“生态唯一”或功能数量作为正确性的证据。
 
-DXF 是 CAD 之间交换图纸的通用格式——机械制图、建筑设计、激光切割、CNC 加工、
-PCB 制板都在用。能打开图纸的软件很多，但**能把「这份图纸能不能加工」说清楚的很少**。
+## 读取与数据模型
 
-加工失败的原因往往不在机床，在图纸本身：轮廓没闭合、同一段线画了两遍、
-圆的半径是零或负数、文字没转成曲线、两条轮廓的净距小于材料能承受的。
-这些从预览图上看都不出来——图看着是好好的。
-
-## 能做什么
-
-```text
-解析    ASCII DXF（R10–R2018 多版本规则）、子类驱动的组码解释、未知 tag 保留
-        大文件可流式扫描（分块喂入，内存不随文件增长）
-实体    18 种：LINE / POINT / 圆 / 弧 / 椭圆 / 样条 / 两种多段线 /
-        文字四件（TEXT / MTEXT / ATTRIB / ATTDEF）/ INSERT 与块定义 /
-        SOLID / HATCH / DIMENSION（含扩展标注）；认不出的保留原记录
-几何    曲线折线化（bulge 圆弧、NURBS 样条，容差是弦高）、块引用的嵌套变换
-检查    加工前检查：轮廓闭合、自相交、重复切割、最小间隙、退化几何、文字未转曲线
-预览    SVG 渲染
-形态    库 + 命令行 + 网页
+```moonbit nocheck
+let scan = @dxfkit.scan_tags(bytes)
+let drawing = @dxfkit.build_drawing(scan)
+let entities = drawing.entities()
+let report = drawing.check({ tol: 0.05, min_gap: 0.5 })
+println(report.to_text())
+let svg = drawing.to_svg(0.05)
 ```
 
-还没做的：二进制 DXF、写回文件、引用完整性校验。
-逐文件的能力清单在下面的「已完成」。
+`TagScan` 返回 tag、诊断与编码；`Drawing` 保存段、记录、子类与警告。`Entities` 保存已解码实体及未解码记录。未知实体不自动丢弃，但本项目不提供写回或字节级无损往返承诺。
 
-## 已完成
+支持不同时期 ASCII DXF 的组码和子类写法。47 个回归文件包含 AC1006、AC1009 到 AC1032 的示例，这不表示支持这些版本的全部实体与语义。
 
-- `vec.mbt` —— `Vec2` / `Vec3` / `Aabb2` / `Aabb3`、角度归一化、容差比较
-- `tag.mbt` —— 组码 → 类型的区间表、各类谓词、坐标组码归组
-- `codepage.mbt` —— 编码判断（版本规则）、UTF-8 / CP1252 解码
-- `reader_ascii.mbt` —— ASCII 行对扫描：trim、三种换行、EOF 处理、坏行恢复
-- `stream.mbt` —— 流式扫描：分块喂入、边喂边出 tag，内存不随文件增长；
-  `scan_tags` 是它的整份封装（一处状态机、两个入口）
-- `structure.mbt` —— 段 → 记录 → 子类三级切分，坏结构尽力而为
-- `subclass.mbt` —— 老格式（R10/R12 没有 `100` 标记）按类型合成子类名
-- `header.mbt` —— HEADER 变量成对扫描、单位换算表、图纸范围
-- `tables.mbt` —— 图层（含开关/冻结/锁定）、线型、文字样式、块记录
-- `entity.mbt` —— 实体层：LINE / POINT / CIRCLE / ARC / ELLIPSE / SPLINE、
-  LWPOLYLINE / POLYLINE（含 bulge）、TEXT / MTEXT / ATTRIB、INSERT 与块定义、
-  SOLID / HATCH / DIMENSION；认不出的实体保留原记录进 `Unknown`
-- `flatten.mbt` —— 几何离散：bulge 圆弧（照 ezdxf 公式移植）、圆 / 弧、
-  椭圆、NURBS 样条（de Boor、含有理权重），自适应细分，容差是弦高
-- `expand.mbt` —— 块展开：INSERT 嵌套变换（仿射复合）、图层 0 继承、循环检测
-- `check.mbt` —— 加工前检查：退化几何、文字未转曲线、图层提醒、轮廓闭合、
-  自相交、重复切割、最小间隙（阈值由调用方给）；只报告不修改
-- `preview.mbt` —— SVG 预览：世界坐标折线 → 图（y 翻转、图层颜色、
-  关闭/冻结图层淡画、文字转义）
-- `cli/` —— 命令行：`check`（退出码 0/1/2）、`svg`、`stats`（流式统计）
-- `web/` —— 网页版：同一份库编译成 JS（iife），拖进 DXF 出预览和报告
-- `conformance/` —— 语料回归工具与测试
+数值异常保留文本并警告；整数使用整数解析，64位值不再经 Double 舍入。UTF-8 和 CP1252 可解码，其他声明代码页以 Latin-1 降级并警告；UTF-8 使用宽容解码。编码探测限于文件头 1024 字节。
 
-**实测**：47 个真实 DXF 文件、339,913 个 tag、**0 条警告、0 个读不了**
-（`moon run conformance`）。结构报告（`moon run conformance --info`）
-能打出每份文件的版本、段、图层、单位、范围。同一份语料上：实体层
-**5524 个实体、5404 个解码（98%）、0 条警告**；几何层
-**3559 条曲线摊成 21430 个点、块展开 6210 条几何**，两边零异常。
-加工检查在同一份语料上给出 **1 致命、122 警告、1 提示**——那条致命的
-就是语料里为负半径造的 `circle_radius_le_0.dxf`，被精确逮到。
+## 几何与离散
 
-## 实现上的几个决定
+`Geometry` 包含线、点、圆、弧、椭圆、样条、多段线、文字、块引用等。HATCH、DIMENSION 等部分类型只提取身份和元数据，不能据此认为它们的轮廓已参与检查。
 
-**容差是参数，不是常量。** 图纸的单位跨度极大——`acad_table_simple.dxf` 的
-`$INSUNITS` 是 6（米），而机加工图纸常常是毫米甚至微米。写死一个「1e-6 就算同一个点」，
-在公里级的图纸上会把本来分开的点焊在一起，在微米级的图纸上又会把同一个点当成两个。
-所以凡是判「相等 / 重合 / 闭合」的地方，容差一律由调用方传进来。
+- `Geometry::flatten_checked(tol)` 返回 `Result[Flat, String]`，是检查与展开使用的入口。
+- `spline_points_checked(degree, knots, control_points, weights, tol)` 支持连续、正权重 NURBS 的 XY 离散。
+- `arc_from_bulge()` 用逆时针形式描述点集；多段线连接时根据 bulge 符号选择遍历方向，并保留精确原始端点。
+- `Drawing::expand(tol)` 展开嵌套 INSERT，复合仿射变换并处理图层0继承；累计最大拉伸上界用于调整局部容差。
+- `Drawing::declared_unit_label()` 只显示单位声明，不转换坐标或阈值。
 
-**解析器永不 panic。** 产出「图纸 + 一串警告」。真实世界的 DXF 大量来自第三方导出器，
-损坏的文件比想象中多；「读了 90% 然后告诉你哪里坏了」比「抛异常」有用得多。
+样条通过 Boehm 节点插入分解为有理 Bézier 段，使用齐次 de Casteljau 细分。正权重下，曲线位于投影控制点的凸包中；用控制点到线段的距离判定细分，避免中点恰好落在弦上时漏掉曲线。椭圆由每段不超过90°的有理二次 Bézier 表示，复用同一离散过程。
 
-## 开发
+资源边界：样条次数不超过32，输入控制点不超过4096；递归深度16，输出最多65536点。圆弧最多4096段。checked入口达到上限且不能满足容差时返回错误，而不是宣称已满足目标。Double 运算仍有舍入误差；这些限制不构成任意数值尺度的严格精确算术保证。
 
-仓库根目录就是 MoonBit 模块根：
+旧 `flatten()`、`spline_points()` 和 `ellipse_points()` 为兼容保留占位 / 空结果回退，调用方如需判断完整性应使用 checked 入口。
 
-```bash
-moon test                              # 跑测试
-moon check --target all --deny-warn    # 全目标检查，要求零警告
-```
+## 检查的实际语义
 
-## 项目结构
+`Drawing::check(CheckOptions)` 返回 `Report`，每条 `Finding` 有检查项、严重程度和文字说明。
 
-- `vec.mbt` — 二维/三维向量、轴对齐包围盒、角度归一化
-- `tag.mbt` — 组码与值的类型、组码到类型的区间表、语义分类谓词
-- `codepage.mbt` — 文本编码的判断与解码
-- `reader_ascii.mbt` — ASCII DXF 的行对扫描
-- `stream.mbt` — 流式扫描（分块喂入）
-- `structure.mbt` — 段 / 记录 / 子类的三级切分
-- `subclass.mbt` — 老格式记录的子类名合成
-- `header.mbt` — HEADER 变量、单位、图纸范围
-- `tables.mbt` — TABLES 段：图层、线型、文字样式、块记录
-- `entity.mbt` — 实体层：几何翻译、块定义与引用、`Unknown` 兜底
-- `flatten.mbt` — 几何离散：曲线 → 折线点列（容差 = 弦高）
-- `expand.mbt` — 块展开：INSERT → 世界坐标几何
-- `check.mbt` — 加工前检查（能上机床吗）
-- `preview.mbt` — SVG 预览
-- `cli/` — 命令行入口（可执行）
-- `web/` — 网页版（JS 产物在 `web/dist/`，提交进仓库）
-- `conformance/` — 语料批量工具（可执行）与回归测试
-- `testdata/ezdxf/` — 47 个真实 DXF 文件（来自 ezdxf，MIT）
+| 检查 | 实际覆盖 |
+| --- | --- |
+| 退化几何 | 非正圆半径、空或单点轮廓、零长度线段 |
+| 闭合 | 同图层开放实体的端点串链与缝隙；不等于完整拓扑证明 |
+| 自相交 | 同一实体内非相邻折线段的真交叉 |
+| 重复路径 | 同图层线段的共线重叠，排除同实体相邻段 |
+| 最小净距 | 同图层不同实体的线段距离；跳过容差内的端点接触 |
+| 检查覆盖 | 未支持或只提取元数据的实体、无轮廓、非默认OCS、未展开阵列、解析与离散诊断 |
+| 文字与图层 | 未转换的文字、图层引用和关闭 / 冻结状态提示 |
 
-## 参考
+净距不是材料最窄厚度。它不覆盖单实体窄颈、跨图层关系，也不能代替刀具半径补偿或热 / 力学分析。曲线先离散后比较，阈值附近的结论需考虑两侧离散误差。
 
-设计上参考 [ezdxf](https://ezdxf.mozman.at/)（Python 的 DXF 库，MIT 许可）。
-**只参考 API 与设计，没有复制代码**——本项目是 MoonBit 实现，数据结构和 API 都不同。
-逐项对比见 [`COMPARISON.md`](COMPARISON.md)。
+关闭 / 冻结图层在部分几何检查中跳过，是本工具的筛选约定，不代表 CAM 一定按同样方式处理图层。
 
-## 许可证
+参数要求 `tol > 0`、`min_gap >= 0` 且有限。`min_gap = 0` 不检查净距。单位沿用图纸坐标，HEADER声明仅供使用者确认。
 
-Apache License 2.0，见 [LICENSE](LICENSE)。
+## 流式入口
+
+`TagStream::new()` / `feed(Bytes)` / `finish()` 共用 ASCII 扫描状态机。跨块保留编码探测前缀、未完成行及组码状态。扫描警告会积累；不同调用方保留的输出也影响总内存。
+
+CLI `stats` 分块读文件、统计 tag、段、版本、编码，不保存全量 tag 或实体。`scan_tags()` 则会保留所有 tag；`check` / `svg` 使用全量图纸，不能作为低内存几何检查入口。
+
+## 使用与验证
+
+- 核心库仅依赖 MoonBit core；CLI / conformance 使用 `moonbitlang/x` 和 `moonbitlang/async` 的文件接口。
+- 库支持 wasm / wasm-gc / JS / native；文件工具支持 wasm / native。
+- CLI `--strict` 将警告也作为失败，便于批处理门禁；普通模式的0退出码不代表检查完全或可加工。
+- 网页使用同一库编译产物，部署前重新构建并执行回归。
+
+验证命令见 [README.md](README.md#验证与开发)。几何正确性以明确反例、解析几何和独立de Boor密集采样验证；第三方文件读取成功、测试数量或汇总点数不能单独证明正确性。
+
+## 暂未实现
+
+二进制DXF、文件写回、通用编辑、完整引用审计、OCS变换、完整HATCH边界、关联标注重建、全部INSERT阵列、字体转轮廓、刀路生成和参数化草图约束求解。
+
+## 来源
+
+样条格式参考 [Autodesk SPLINE 文档](https://help.autodesk.com/cloudhelp/2026/ENU/AutoCAD-DXF/files/GUID-E1F884F8-AA90-4864-A215-3182D47A9C74.htm)；能力与公式参考 [ezdxf](https://ezdxf.readthedocs.io/en/stable/)；标准样条算法为节点插入、de Casteljau及de Boor。第三方版权、完整许可及已记录的参考关系见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

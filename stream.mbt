@@ -1,11 +1,11 @@
 // 流式扫描：分块喂字节，边喂边出 tag。
 //
 // 为什么要有这个：整份扫描（`scan_tags`）要把整个文件读进内存。
-// 大图纸几百 MB 甚至上 GB，内存扛不住——流式这边内存只和
-// 「一块 + 没消费完的碎行」有关，文件多大都一样。
+// 流式不保留完整文件，但会保留当前块、未完成行及扫描警告。
+// 超长行和大量警告仍可能使内存随输入增长。
 //
 // 正确性的地基是一个巧合：**编码判断只看文件前 1024 字节**
-//（`decide_encoding` 的设计——HEADER 变量总在最前面）。所以流式这边
+//（`decide_encoding` 的实现范围）。所以流式这边
 // 攒够前 1024 字节再定编码、再往外吐 tag，和整份扫描对同一个文件的
 // 判断必然一致。语料上逐 tag 对过账（`corpus_wbtest` 里那条等价性测试）。
 //
@@ -60,7 +60,7 @@ pub fn TagStream::feed(self : TagStream, chunk : Bytes) -> Array[Tag] {
     if self.buffer.length() < 1024 {
       return out
     }
-    self.enc = Some(decide_encoding(self.buffer))
+    self.choose_encoding()
   }
   self.consume_lines(out)
   out
@@ -81,7 +81,7 @@ pub fn TagStream::finish(self : TagStream) -> Array[Tag] {
   if self.enc is None {
     // 不足 1024 字节的小文件：用现有的全部判断——和整份扫描对
     // 短文件的行为一致（decide_encoding 自己会截到 1024）
-    self.enc = Some(decide_encoding(self.buffer))
+    self.choose_encoding()
   }
   self.consume_lines(out)
   match self.pending {
@@ -104,6 +104,17 @@ pub fn TagStream::warnings(self : TagStream) -> Array[String] {
 /// 文件编码；还没定（还没攒够 1024 字节）时是 `None`。
 pub fn TagStream::encoding(self : TagStream) -> Encoding? {
   self.enc
+}
+
+///|
+fn TagStream::choose_encoding(self : TagStream) -> Unit {
+  let enc = decide_encoding(self.buffer)
+  self.enc = Some(enc)
+  if enc.is_fallback() {
+    self.warn.push(
+      "未支持的\{enc.to_display()}按Latin-1降级解码；文字可能失真",
+    )
+  }
 }
 
 ///|
@@ -144,7 +155,15 @@ fn TagStream::consume_lines(self : TagStream, out : Array[Tag]) -> Unit {
             }
         }
       Some(code) => {
-        let value = parse_value(code, data, start, e, self.enc.unwrap())
+        let value = match parse_value(code, data, start, e, self.enc.unwrap()) {
+          Ok(value) => value
+          Err(msg) => {
+            self.warn.push(
+              "第\{self.line_no}行组码\{code}：\{msg}；保留原文，几何结果需复核",
+            )
+            Str(decode_text(slice_range(data, start, e), self.enc.unwrap()))
+          }
+        }
         out.push(Tag::new(code, value))
         self.pending = None
         // `0 / EOF` 是文件结束标志，后面的都不看

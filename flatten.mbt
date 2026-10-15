@@ -7,7 +7,7 @@
 //
 // 容差的含义统一是**弦高**：逼近用的弦和真实曲线之间允许的最大偏差
 // （圆弧段就是弧的中点到弦的距离）。弦高比「每段多少度」好——
-// 同一个容差在小圆上自动多分段、大圆上少分段，误差和尺寸无关。
+// 同一个容差在小圆上通常少分段、大圆上多分段。
 //
 // bulge（多段线顶点上的凸度）→ 圆弧的换算照 `ezdxf` 的 `math/bulge.py`
 // 移植（MIT，源头是 Lee Mac 的 Bulge to Arc 公式，已核对源码）。
@@ -37,7 +37,8 @@ pub(all) struct BulgeArc {
 pub fn arc_from_bulge(a : Vec2, b : Vec2, bulge : Double) -> BulgeArc {
   let chord_angle = b.sub(a).angle()
   let signed_r = a.distance(b) * (1.0 + bulge * bulge) / 4.0 / bulge
-  let center_angle = chord_angle + (1.5707963267948966 - @math.atan(bulge) * 2.0)
+  let center_angle = chord_angle +
+    (1.5707963267948966 - @math.atan(bulge) * 2.0)
   let center = Vec2::new(
     a.x + signed_r * @math.cos(center_angle),
     a.y + signed_r * @math.sin(center_angle),
@@ -113,7 +114,11 @@ pub fn arc_points(
   let mut i = 0
   while i <= n {
     points.push(
-      point_on_circle(center, r, start_angle + sweep * i.to_double() / n.to_double()),
+      point_on_circle(
+        center,
+        r,
+        start_angle + sweep * i.to_double() / n.to_double(),
+      ),
     )
     i = i + 1
   }
@@ -125,17 +130,26 @@ pub fn arc_points(
 ///
 /// **不重复首点**——闭合性用外层的 `closed` 标志表达，
 /// 和多段线顶点的表示一致。
-pub fn circle_points(center : Vec2, radius : Double, tol : Double) -> Array[Vec2] {
+pub fn circle_points(
+  center : Vec2,
+  radius : Double,
+  tol : Double,
+) -> Array[Vec2] {
   let r = radius.abs()
   if r == 0.0 {
     return [center]
   }
-  let n = arc_segments(r, 6.283185307179586, tol)
+  let count = arc_segments(r, 6.283185307179586, tol)
+  let n = if count < 3 { 3 } else { count }
   let points : Array[Vec2] = []
   let mut i = 0
   while i < n {
     points.push(
-      point_on_circle(center, r, 6.283185307179586 * i.to_double() / n.to_double()),
+      point_on_circle(
+        center,
+        r,
+        6.283185307179586 * i.to_double() / n.to_double(),
+      ),
     )
     i = i + 1
   }
@@ -194,21 +208,29 @@ fn append_segment_points(
     return
   }
   let arc = arc_from_bulge(pa, pb, a.bulge)
-  let pts = arc_points(arc.center, arc.radius, arc.start_angle, arc.end_angle, tol)
-  // pts[0] 是段的起点，跳过；收尾点按 include_end 定
+  let pts = arc_points(
+    arc.center,
+    arc.radius,
+    arc.start_angle,
+    arc.end_angle,
+    tol,
+  )
+  // arc_from_bulge 用逆时针表示点集；负 bulge 要反向遍历才是 A → B。
   let last = if include_end { pts.length() } else { pts.length() - 1 }
   let mut i = 1
   while i < last {
-    points.push(pts[i])
+    points.push(if a.bulge < 0.0 { pts[pts.length() - 1 - i] } else { pts[i] })
     i = i + 1
+  }
+  // 用原始端点消除三角函数舍入，保证下一段从同一个顶点连接。
+  if include_end {
+    points[points.length() - 1] = pb
   }
 }
 
 // ── 参数曲线：自适应细分 ────────────────────────────────────────────────
 //
-// 椭圆和样条没有像圆弧那样的简单分段公式（椭圆各处的曲率半径不一样、
-// 样条连节点都不等距），所以共用一套自适应细分：曲线中点到弦的距离
-// 不超过容差就收，超了就一分二。
+// 椭圆和样条通过有理Bézier段复用控制凸包细分，见spline.mbt。
 
 ///|
 /// 点到线段（不是直线）的距离。自适应细分的判据用得上。
@@ -226,31 +248,6 @@ fn dist_to_segment(p : Vec2, a : Vec2, b : Vec2) -> Double {
     t = 1.0
   }
   p.distance(a.add(ab.scale(t)))
-}
-
-///|
-/// 参数曲线的自适应细分。`out` 进来时应该已经含有 `t0` 处的点；
-/// 本函数只负责把后面的点补上。
-///
-/// 深度封顶 16 层——病态数据不该把内存炸了。
-fn sample_curve(
-  eval : (Double) -> Vec2,
-  t0 : Double,
-  t1 : Double,
-  p0 : Vec2,
-  p1 : Vec2,
-  tol : Double,
-  depth : Int,
-  out : Array[Vec2],
-) -> Unit {
-  let tm = 0.5 * (t0 + t1)
-  let pm = eval(tm)
-  if depth <= 0 || dist_to_segment(pm, p0, p1) <= tol {
-    out.push(p1)
-    return
-  }
-  sample_curve(eval, t0, tm, p0, pm, tol, depth - 1, out)
-  sample_curve(eval, tm, t1, pm, p1, tol, depth - 1, out)
 }
 
 // ── 椭圆 ────────────────────────────────────────────────────────────────
@@ -283,36 +280,12 @@ pub fn ellipse_points(
   end_param : Double,
   tol : Double,
 ) -> Array[Vec2] {
-  let c = center.xy()
-  let m = major.xy()
-  let n = Vec2::new(-m.y * ratio, m.x * ratio)
-  let eval = fn (p : Double) -> Vec2 {
-    Vec2::new(
-      c.x + m.x * @math.cos(p) + n.x * @math.sin(p),
-      c.y + m.y * @math.cos(p) + n.y * @math.sin(p),
-    )
+  match
+    ellipse_points_checked(center, major, ratio, start_param, end_param, tol) {
+    Ok(points) => points
+    Err(_) => []
   }
-  let span = ellipse_span(start_param, end_param)
-  let full = span >= 6.283185307179586 - 1.0e-12
-  let t0 = start_param
-  let t1 = start_param + span
-  let pts : Array[Vec2] = []
-  let first = eval(t0)
-  pts.push(first)
-  sample_curve(eval, t0, t1, first, eval(t1), tol, 16, pts)
-  if full {
-    // 整椭圆是闭合的——去掉重复的收尾点，和多段线一个约定
-    let out : Array[Vec2] = []
-    let mut i = 0
-    while i < pts.length() - 1 {
-      out.push(pts[i])
-      i = i + 1
-    }
-    return out
-  }
-  pts
 }
-
 // ── 样条（NURBS）──────────────────────────────────────────────────────
 
 ///|
@@ -322,83 +295,6 @@ fn weight_at(weights : Array[Double], i : Int) -> Double {
     weights[i]
   } else {
     1.0
-  }
-}
-
-///|
-/// NURBS 求值：参数 t 处的点（de Boor 算法，NURBS Book 的 A3.1）。
-///
-/// 有理样条走齐次坐标（w·x, w·y, w）算，最后除回去——权重全 1
-/// 就退化成普通 B 样条。
-///
-/// **数据不自洽时退化成第一个控制点**（控制点不够、节点数对不上）：
-/// 不猜形状，也不炸——校验层负责把这种记录报出来。
-fn nurbs_point(
-  degree : Int,
-  knots : Array[Double],
-  ctrl : Array[Vec2],
-  weights : Array[Double],
-  t : Double,
-) -> Vec2 {
-  let p = degree
-  let n_ctrl = ctrl.length()
-  if n_ctrl == 0 {
-    return Vec2::zero()
-  }
-  // 节点数必须正好是「控制点数 + 次数 + 1」，不然 de Boor 的下标会错位
-  if p < 1 || n_ctrl <= p || knots.length() != n_ctrl + p + 1 {
-    return ctrl[0]
-  }
-  let n = n_ctrl - 1
-  let mut u = t
-  if u < knots[p] {
-    u = knots[p]
-  }
-  if u > knots[n + 1] {
-    u = knots[n + 1]
-  }
-  // 找 u 落在哪个节点区间（线性扫——控制点几十上百个，够用）
-  let mut span = p
-  while span < n && u >= knots[span + 1] {
-    span = span + 1
-  }
-  // 齐次坐标：d = (w·x, w·y, w)
-  let dx : Array[Double] = []
-  let dy : Array[Double] = []
-  let dw : Array[Double] = []
-  let mut j = 0
-  while j <= p {
-    let i = span - p + j
-    let w = weight_at(weights, i)
-    dx.push(ctrl[i].x * w)
-    dy.push(ctrl[i].y * w)
-    dw.push(w)
-    j = j + 1
-  }
-  let mut r = 1
-  while r <= p {
-    let mut jj = p
-    while jj >= r {
-      let i = span - p + jj
-      let denom = knots[span + 1 + jj - r] - knots[i]
-      // 重节点会让分母为零——那一步的贡献就是取左端，跳过
-      let alpha = if denom == 0.0 {
-        0.0
-      } else {
-        (u - knots[i]) / denom
-      }
-      dx[jj] = (1.0 - alpha) * dx[jj - 1] + alpha * dx[jj]
-      dy[jj] = (1.0 - alpha) * dy[jj - 1] + alpha * dy[jj]
-      dw[jj] = (1.0 - alpha) * dw[jj - 1] + alpha * dw[jj]
-      jj = jj - 1
-    }
-    r = r + 1
-  }
-  let w = dw[p]
-  if w == 0.0 {
-    Vec2::new(dx[p], dy[p])
-  } else {
-    Vec2::new(dx[p] / w, dy[p] / w)
   }
 }
 
@@ -426,17 +322,11 @@ pub fn spline_points(
   if p < 1 || n_ctrl <= p || knots.length() != n_ctrl + p + 1 {
     return [ctrl[0]]
   }
-  let t0 = knots[p]
-  let t1 = knots[n_ctrl]
-  if t1 <= t0 {
-    return [ctrl[0]]
+  // 兼容旧入口的单点回退；需要错误原因时使用 checked 入口。
+  match spline_points_checked(degree, knots, control_points, weights, tol) {
+    Ok(points) => points
+    Err(_) => [ctrl[0]]
   }
-  let eval = fn (t : Double) -> Vec2 { nurbs_point(p, knots, ctrl, weights, t) }
-  let pts : Array[Vec2] = []
-  let first = eval(t0)
-  pts.push(first)
-  sample_curve(eval, t0, t1, first, eval(t1), tol, 16, pts)
-  pts
 }
 
 // ── 伞函数：几何 → 折线 ────────────────────────────────────────────────
@@ -472,7 +362,13 @@ pub fn Geometry::flatten(self : Geometry, tol : Double) -> Flat {
         Outline(points=circle_points(center.xy(), radius, tol), closed=true)
       } else {
         Outline(
-          points=arc_points(center.xy(), radius, start_angle, start_angle + sweep, tol),
+          points=arc_points(
+            center.xy(),
+            radius,
+            start_angle,
+            start_angle + sweep,
+            tol,
+          ),
           closed=false,
         )
       }
@@ -485,7 +381,7 @@ pub fn Geometry::flatten(self : Geometry, tol : Double) -> Flat {
       )
     }
     Polyline(vertices~, closed~) =>
-      Outline(points=polyline_points(vertices, closed, tol), closed=closed)
+      Outline(points=polyline_points(vertices, closed, tol), closed~)
     Spline(degree~, knots~, control_points~, weights~) =>
       Outline(
         points=spline_points(degree, knots, control_points, weights, tol),
@@ -499,7 +395,7 @@ pub fn Geometry::flatten(self : Geometry, tol : Double) -> Flat {
       }
       Outline(points=pts, closed=true)
     }
-    Text(at~, height~, value~, ..) => Label(at=at.xy(), height=height, value=value)
+    Text(at~, height~, value~, ..) => Label(at=at.xy(), height~, value~)
     Insert(..) | Dimension(..) | Hatch(..) | Unknown => Empty
   }
 }
