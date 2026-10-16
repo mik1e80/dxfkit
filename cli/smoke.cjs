@@ -25,5 +25,9 @@ run(['svg','examples/plate.dxf','--tol','bad'],2);
 run(['svg','examples/plate.dxf'],0,/<svg/);
 run(['stats','examples/plate.dxf'],0,/警告 0 条/);
 run(['check','testdata/ezdxf/Minimal_DXF_AC1009.dxf','--strict'],1,/没有可检查的二维轮廓/);
+const coverage = run(['check','examples/coverage-limits.dxf','--strict'],1,/未转换 OCS/);
+for (const kind of ['HATCH','DIMENSION','RAY']) {
+  assert.match(coverage,new RegExp(`${kind} 实体的轮廓未参与检查`));
+}
 assert(fs.readFileSync(path.join(root,'examples/curves.dxf'),'utf8').includes('SPLINE'));
 console.log('CLI回归通过：真实示例、警告门禁、参数、单位与流式入口。');

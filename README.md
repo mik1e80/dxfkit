@@ -4,6 +4,8 @@ MoonBit DXF 工具库：读取 ASCII DXF，将支持的二维曲线离散为折�
 
 [在线试用](https://mik1e80.github.io/dxfkit/) · [接口与边界](README.mbt.md) · [项目对比](COMPARISON.md) · [第三方声明](THIRD_PARTY_NOTICES.md)
 
+[兼容性案例](docs/compatibility-cases.md) · [修订后的申报材料](docs/submission.md)：区分文件读取、实体解码和几何检查，不承诺 R10–R2018 完整兼容。
+
 源码修订版本 **0.1.1**。本次修订尚未发布到 Mooncakes。
 
 ## 解决什么问题
