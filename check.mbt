@@ -62,11 +62,24 @@ pub fn Report::has_fatal(self : Report) -> Bool {
 }
 
 ///|
+/// 是否存在输入恢复、覆盖限制、未转轮廓文字或无效检查参数。
+/// 只描述本次所选检查的完整性，不表示完整 DXF 兼容或可加工性。
+/// 保留 Finding 原来的分类，避免调用方依赖解析文字来判断完整性。
+pub fn Report::has_incomplete_checks(self : Report) -> Bool {
+  self.findings.any(f =>
+    match f.check {
+      "解析" | "检查覆盖" | "文字未转曲线" | "参数" => true
+      _ => false
+    },
+  )
+}
+
+///|
 /// 一句话结论。**检查项有限，没问题不等于万事大吉**——措辞上
 /// 不替用户打包票。
 pub fn Report::verdict(self : Report) -> String {
   let fatal = self.count(Fatal)
-  if fatal > 0 {
+  let summary = if fatal > 0 {
     "本次检查发现 \{fatal} 个严重问题，请修正并复核图纸。"
   } else {
     let warn = self.count(Warn)
@@ -75,6 +88,11 @@ pub fn Report::verdict(self : Report) -> String {
     } else {
       "本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。"
     }
+  }
+  if self.has_incomplete_checks() {
+    "检查不完整：存在未解析、未转换或未能检查的内容。\{summary}"
+  } else {
+    summary
   }
 }
 
@@ -160,7 +178,8 @@ pub fn Drawing::check(self : Drawing, opt : CheckOptions) -> Report {
       _ => ()
     }
     match p.entity.geom {
-      Hatch(..) | Dimension(..) | Unknown => bump(unsupported, p.entity.kind())
+      Face(..) | Hatch(..) | Dimension(..) | Unknown =>
+        bump(unsupported, p.entity.kind())
       _ => ()
     }
     let record = p.entity.common.record

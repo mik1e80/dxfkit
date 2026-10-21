@@ -387,15 +387,8 @@ pub fn Geometry::flatten(self : Geometry, tol : Double) -> Flat {
         points=spline_points(degree, knots, control_points, weights, tol),
         closed=false,
       )
-    Face(corners~) => {
-      // 按文件顺序原样连线——SOLID 的角点是蝴蝶结顺序，自交是数据本身的
-      let pts : Array[Vec2] = []
-      for c in corners {
-        pts.push(c.xy())
-      }
-      Outline(points=pts, closed=true)
-    }
     Text(at~, height~, value~, ..) => Label(at=at.xy(), height~, value~)
-    Insert(..) | Dimension(..) | Hatch(..) | Unknown => Empty
+    // 面记录保留字段，但不把文件角点顺序当成已验证的加工轮廓。
+    Face(..) | Insert(..) | Dimension(..) | Hatch(..) | Unknown => Empty
   }
 }

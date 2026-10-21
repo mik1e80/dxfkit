@@ -27,7 +27,7 @@ pub(all) struct EntityCommon {
   /// 句柄（组码 5，DIMSTYLE 用 105）。没写时是空串
   handle : String
   /// 原始记录。已解码的字段从这取，**没解码的字段也在这**——
-  /// 将来写回文件时靠它原样保留
+  /// 供调用方核对未解码字段；不承诺文件写回或字节级无损往返
   record : Record
 }
 
@@ -47,7 +47,12 @@ pub(all) enum Geometry {
   ///
   /// 起止角可能大于一圈（370 度绕回 10 度的写法真实存在），
   /// 判跨度用 `arc_sweep` 归一。
-  Arc(center~ : Vec3, radius~ : Double, start_angle~ : Double, end_angle~ : Double)
+  Arc(
+    center~ : Vec3,
+    radius~ : Double,
+    start_angle~ : Double,
+    end_angle~ : Double
+  )
   /// 椭圆（弧）：圆心、长轴向量（圆心指向长轴端点）、短长轴比、起止参数（弧度）。
   ///
   /// 参数 p 对应的点是 `圆心 + 长轴·cos p + 短轴·sin p`，整椭圆是 0 到 2π。
@@ -221,13 +226,15 @@ pub fn Entity::is_decoded(self : Entity) -> Bool {
 /// `Unknown` 没有几何，返回 `None`。
 pub fn Geometry::bounds(self : Geometry) -> Aabb2? {
   match self {
-    Line(start~, end~) => Some(Aabb2::empty().expand(start.xy()).expand(end.xy()))
+    Line(start~, end~) =>
+      Some(Aabb2::empty().expand(start.xy()).expand(end.xy()))
     Point(at~) => Some(Aabb2::empty().expand(at.xy()))
     Circle(center~, radius~) => Some(circle_bounds(center.xy(), radius))
     Arc(center~, radius~, start_angle~, end_angle~) =>
       Some(arc_bounds(center.xy(), radius, start_angle, end_angle))
     // 弧段用整椭圆的盒——永远包含，只是偏大；精确的弧段盒留给离散层
-    Ellipse(center~, major~, ratio~, ..) => Some(ellipse_bounds(center, major, ratio))
+    Ellipse(center~, major~, ratio~, ..) =>
+      Some(ellipse_bounds(center, major, ratio))
     Polyline(vertices~, closed~) => Some(polyline_bounds(vertices, closed))
     // 文字按插入点记——真实占用范围要字体度量。加工检查里文字本身是
     // 「未转曲线」的警告项，不是切割几何
@@ -307,8 +314,8 @@ fn point_on_circle(c : Vec2, r : Double, angle : Double) -> Vec2 {
 fn circle_bounds(center : Vec2, radius : Double) -> Aabb2 {
   let r = radius.abs()
   Aabb2::empty()
-    .expand(Vec2::new(center.x - r, center.y - r))
-    .expand(Vec2::new(center.x + r, center.y + r))
+  .expand(Vec2::new(center.x - r, center.y - r))
+  .expand(Vec2::new(center.x + r, center.y + r))
 }
 
 ///|
@@ -375,8 +382,8 @@ fn ellipse_bounds(center : Vec3, major : Vec3, ratio : Double) -> Aabb2 {
   let half_y = (m.y * m.y + n.y * n.y).sqrt()
   let c = center.xy()
   Aabb2::empty()
-    .expand(Vec2::new(c.x - half_x, c.y - half_y))
-    .expand(Vec2::new(c.x + half_x, c.y + half_y))
+  .expand(Vec2::new(c.x - half_x, c.y - half_y))
+  .expand(Vec2::new(c.x + half_x, c.y + half_y))
 }
 
 ///|
@@ -427,7 +434,7 @@ fn polyline_bounds(vertices : Array[PolyVertex], closed : Bool) -> Aabb2 {
 pub fn parse_entities(section : Section) -> Entities {
   let warnings : Array[String] = []
   let entities = parse_records(section.records[:], warnings)
-  { entities, warnings }
+  { entities, warnings, }
 }
 
 ///|
@@ -436,7 +443,10 @@ pub fn parse_entities(section : Section) -> Entities {
 /// 「多记录实体」在这里消化：POLYLINE 吃掉后面的 VERTEX 直到 `SEQEND`；
 /// INSERT 后面跟着的 ATTRIB（块引用的属性值）**不吞**——它们作为独立
 /// 实体留在列表里（属性文字也可能没转曲线），只跳过收尾的 `SEQEND`。
-fn parse_records(records : ArrayView[Record], warnings : Array[String]) -> Array[Entity] {
+fn parse_records(
+  records : ArrayView[Record],
+  warnings : Array[String],
+) -> Array[Entity] {
   let entities : Array[Entity] = []
   let mut i = 0
   while i < records.length() {
@@ -447,12 +457,16 @@ fn parse_records(records : ArrayView[Record], warnings : Array[String]) -> Array
       while j < records.length() && records[j].kind == "VERTEX" {
         j = j + 1
       }
-      match parse_polyline_entity(record, records[i + 1 : j], warnings) {
+      match parse_polyline_entity(record, records[i + 1:j], warnings) {
         Some(e) => entities.push(e)
         None => ()
       }
       if j < records.length() && records[j].kind == "SEQEND" {
         j = j + 1
+      } else {
+        warnings.push(
+          "POLYLINE 缺少 SEQEND；已保留可读取记录，请复核输入完整性",
+        )
       }
       i = j
     } else if record.kind == "VERTEX" || record.kind == "SEQEND" {
@@ -488,14 +502,24 @@ fn subclass_tags(record : Record, name : String) -> Array[Tag] {
 ///
 /// 顶点在 `AcDbPolyline` 子类里**成组重复出现**：每个顶点一对 `10/20`，
 /// 可选的 `42`（凸度）跟在它的 `20` 后面。所以按顺序扫，不能用 `get`
-/// 取——`get` 只会拿到第一对。组码 90（顶点数）不可信，以扫描结果为准。
+/// 取——`get` 只会拿到第一对。组码 90 与实际顶点数不符时报告诊断。
+/// 损坏坐标保留原始记录，但不把剩余顶点拼成另一条轮廓。
 fn parse_lwpolyline(record : Record, warnings : Array[String]) -> Geometry? {
   let elevation = record.get_double(38, 0.0)
   let vertices : Array[PolyVertex] = []
   let mut pending_x : Double? = None
+  let mut damaged = false
   for t in subclass_tags(record, "AcDbPolyline") {
     match t.code {
-      10 => pending_x = Some(t.value.as_double())
+      10 => {
+        if pending_x is Some(_) {
+          warnings.push(
+            "LWPOLYLINE 顶点缺少 Y（20），未生成该实体的轮廓",
+          )
+          damaged = true
+        }
+        pending_x = Some(t.value.as_double())
+      }
       20 =>
         match pending_x {
           Some(x) => {
@@ -505,21 +529,45 @@ fn parse_lwpolyline(record : Record, warnings : Array[String]) -> Geometry? {
             })
             pending_x = None
           }
-          None => ()
+          None => {
+            warnings.push(
+              "LWPOLYLINE 顶点缺少 X（10），未生成该实体的轮廓",
+            )
+            damaged = true
+          }
         }
       42 =>
-        if vertices.length() > 0 {
+        if pending_x is Some(_) || vertices.length() == 0 {
+          warnings.push(
+            "LWPOLYLINE 顶点 bulge（42）没有完整坐标，未生成该实体的轮廓",
+          )
+          damaged = true
+        } else {
           vertices[vertices.length() - 1].bulge = t.value.as_double()
         }
       _ => ()
     }
   }
+  if pending_x is Some(_) {
+    warnings.push(
+      "LWPOLYLINE 最后一个顶点缺少 Y（20），未生成该实体的轮廓",
+    )
+    damaged = true
+  }
   if vertices.length() == 0 {
     warnings.push("LWPOLYLINE 解析不出顶点，已跳过")
     return None
   }
+  if record.get(90) is Some(_) && record.get_int(90, 0) != vertices.length() {
+    warnings.push(
+      "LWPOLYLINE 声明顶点数 \{record.get_int(90, 0)} 与完整坐标数 \{vertices.length()} 不一致；请复核输入",
+    )
+  }
+  if damaged {
+    return Some(Unknown)
+  }
   let closed = (record.get_int(70, 0) & 1) != 0
-  Some(Polyline(vertices=vertices, closed=closed))
+  Some(Polyline(vertices~, closed~))
 }
 
 ///|
@@ -542,12 +590,13 @@ fn mtext_value(record : Record) -> String {
 /// 节点（`40`）、权重（`41`）和控制点（`10/20/30`）都是**同一组码
 /// 重复出现**的，控制点还是三码一组的坐标——按顺序扫，缺 `30` 的
 /// 按 z=0 处理（和 `Record::point` 一个约定）。
-fn parse_spline(record : Record) -> Geometry {
+fn parse_spline(record : Record, warnings : Array[String]) -> Geometry {
   let knots : Array[Double] = []
   let weights : Array[Double] = []
   let control : Array[Vec3] = []
   let mut px : Double? = None
   let mut py : Double? = None
+  let mut damaged = false
   for t in subclass_tags(record, "AcDbSpline") {
     match t.code {
       40 => knots.push(t.value.as_double())
@@ -556,12 +605,22 @@ fn parse_spline(record : Record) -> Geometry {
         // 上一个点没等到 30 就被新点顶掉：按 z = 0 收掉
         match (px, py) {
           (Some(x), Some(y)) => control.push(Vec3::new(x, y, 0.0))
-          _ => ()
+          (None, None) => ()
+          _ => {
+            warnings.push("SPLINE 控制点缺少 X/Y 坐标；保留记录，未生成该实体的轮廓")
+            damaged = true
+          }
         }
         px = Some(t.value.as_double())
         py = None
       }
-      20 => py = Some(t.value.as_double())
+      20 => {
+        if px is None || py is Some(_) {
+          warnings.push("SPLINE 控制点缺少 X 或重复 Y；保留记录，未生成该实体的轮廓")
+          damaged = true
+        }
+        py = Some(t.value.as_double())
+      }
       30 =>
         match (px, py) {
           (Some(x), Some(y)) => {
@@ -569,26 +628,39 @@ fn parse_spline(record : Record) -> Geometry {
             px = None
             py = None
           }
-          _ => ()
+          _ => {
+            warnings.push("SPLINE 控制点的 Z 前没有完整 X/Y；未生成该实体的轮廓")
+            damaged = true
+            px = None
+            py = None
+          }
         }
       _ => ()
     }
   }
   match (px, py) {
     (Some(x), Some(y)) => control.push(Vec3::new(x, y, 0.0))
-    _ => ()
+    (None, None) => ()
+    _ => {
+      warnings.push("SPLINE 最后一个控制点缺少 X/Y；保留记录，未生成该实体的轮廓")
+      damaged = true
+    }
+  }
+  if record.get(73) is Some(_) && record.get_int(73, 0) != control.length() {
+    warnings.push("SPLINE 声明控制点数与完整坐标数不一致；请复核输入")
+  }
+  if record.get(72) is Some(_) && record.get_int(72, 0) != knots.length() {
+    warnings.push("SPLINE 声明节点数与实际节点数不一致；请复核输入")
+  }
+  if damaged {
+    return Unknown
   }
   // 权重要和控制点一一对应：非有理样条不写 41，缺的补 1——
   // 补完两边长度永远一致，求值层就不用再管有没有权重了
   while weights.length() < control.length() {
     weights.push(1.0)
   }
-  Spline(
-    degree=record.get_int(71, 3),
-    knots=knots,
-    control_points=control,
-    weights=weights,
-  )
+  Spline(degree=record.get_int(71, 3), knots~, control_points=control, weights~)
 }
 
 ///|
@@ -614,24 +686,41 @@ fn parse_polyline_entity(
 ) -> Entity? {
   let common = common_of(record)
   let flags = record.get_int(70, 0)
-  // 16 = 多边形网格、64 = 多面网格：它们的顶点记录另有含义（面还要
-  // 引用顶点编号），按普通多段线解析会得到一堆假线——**按 Unknown 保留**，
-  // 让检查环节知道有东西没被理解，而不是报一堆错的几何
-  if (flags & 16) != 0 || (flags & 64) != 0 {
-    return Some({ common, geom: Unknown })
+  // 仅接收普通二维折线。拟合、空间折线和网格不能按普通顶点连线。
+  // bit 1（闭合）和 bit 128（线型生成）不改变本项目的中心线表示。
+  if (flags & 126) != 0 {
+    warnings.push(
+      "POLYLINE 标志 \{flags} 超出普通二维折线范围；保留记录，轮廓未检查",
+    )
+    return Some({ common, geom: Unknown, })
   }
   let vertices : Array[PolyVertex] = []
-  for vr in vertex_records {
+  let mut damaged = false
+  for index, vr in vertex_records {
+    if vr.get_int(70, 0) != 0 {
+      warnings.push(
+        "POLYLINE 顶点 \{index + 1} 带拟合或空间标志；保留记录，轮廓未检查",
+      )
+      damaged = true
+    }
     match vr.point(0) {
-      Some(at) => vertices.push({ at, bulge: vr.get_double(42, 0.0) })
-      None => ()
+      Some(at) => vertices.push({ at, bulge: vr.get_double(42, 0.0), })
+      None => {
+        warnings.push(
+          "POLYLINE 顶点 \{index + 1} 缺少 X/Y 坐标；未生成该实体的轮廓",
+        )
+        damaged = true
+      }
     }
   }
   if vertices.length() == 0 {
     warnings.push("POLYLINE 解析不出顶点，已跳过")
     return None
   }
-  Some({ common, geom: Polyline(vertices=vertices, closed=(flags & 1) != 0) })
+  if damaged {
+    return Some({ common, geom: Unknown, })
+  }
+  Some({ common, geom: Polyline(vertices~, closed=(flags & 1) != 0), })
 }
 
 ///|
@@ -655,15 +744,17 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
   match kind {
     "LINE" =>
       match (record.point(0), record.point(1)) {
-        (Some(start), Some(end)) => Some({ common, geom: Line(start=start, end=end) })
+        (Some(start), Some(end)) => Some({ common, geom: Line(start~, end~), })
         _ => {
-          warnings.push("\{kind} 缺端点坐标（10/20 起，11/21 止），已跳过")
+          warnings.push(
+            "\{kind} 缺端点坐标（10/20 起，11/21 止），已跳过",
+          )
           None
         }
       }
     "POINT" =>
       match record.point(0) {
-        Some(at) => Some({ common, geom: Point(at=at) })
+        Some(at) => Some({ common, geom: Point(at~), })
         None => {
           warnings.push("\{kind} 缺坐标（10/20），已跳过")
           None
@@ -672,7 +763,7 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
     "CIRCLE" =>
       match (record.point(0), number_of(record, 40)) {
         (Some(center), Some(radius)) =>
-          Some({ common, geom: Circle(center=center, radius=radius) })
+          Some({ common, geom: Circle(center~, radius~), })
         (None, _) => {
           warnings.push("\{kind} 缺圆心坐标（10/20），已跳过")
           None
@@ -683,18 +774,19 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
         }
       }
     "ARC" =>
-      match (
-        record.point(0),
-        number_of(record, 40),
-        number_of(record, 50),
-        number_of(record, 51),
-      ) {
+      match
+        (
+          record.point(0),
+          number_of(record, 40),
+          number_of(record, 50),
+          number_of(record, 51),
+        ) {
         (Some(center), Some(radius), Some(a0), Some(a1)) =>
           Some({
             common,
             geom: Arc(
-              center=center,
-              radius=radius,
+              center~,
+              radius~,
               start_angle=to_radians(a0),
               end_angle=to_radians(a1),
             ),
@@ -714,7 +806,7 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
       }
     "ELLIPSE" =>
       match (record.point(0), record.point(1)) {
-        (Some(center), Some(major_end)) =>
+        (Some(center), Some(major)) =>
           match number_of(record, 40) {
             Some(ratio) => {
               // 41/42 省略时是整椭圆——语义明确，不报警
@@ -729,21 +821,26 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
               Some({
                 common,
                 geom: Ellipse(
-                  center=center,
-                  major=major_end.sub(center),
-                  ratio=ratio,
-                  start_param=start_param,
-                  end_param=end_param,
+                  center~,
+                  // 11/21/31 已经是相对于圆心的向量，不能再次减去圆心。
+                  major~,
+                  ratio~,
+                  start_param~,
+                  end_param~,
                 ),
               })
             }
             None => {
-              warnings.push("\{kind} 缺短长轴比（40），推不出形状，已跳过")
+              warnings.push(
+                "\{kind} 缺短长轴比（40），推不出形状，已跳过",
+              )
               None
             }
           }
         _ => {
-          warnings.push("\{kind} 缺圆心或长轴端点（10/20、11/21），已跳过")
+          warnings.push(
+            "\{kind} 缺圆心或长轴向量（10/20、11/21），已跳过",
+          )
           None
         }
       }
@@ -760,9 +857,9 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
               Some({
                 common,
                 geom: Text(
-                  at=at,
-                  height=height,
-                  value=value,
+                  at~,
+                  height~,
+                  value~,
                   rotation=to_radians(record.get_double(50, 0.0)),
                 ),
               })
@@ -779,7 +876,7 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
       }
     "LWPOLYLINE" =>
       match parse_lwpolyline(record, warnings) {
-        Some(geom) => Some({ common, geom })
+        Some(geom) => Some({ common, geom, })
         None => None
       }
     "INSERT" =>
@@ -793,8 +890,8 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
             Some({
               common,
               geom: Insert(
-                at=at,
-                block=block,
+                at~,
+                block~,
                 scale=Vec3::new(
                   record.get_double(41, 1.0),
                   record.get_double(42, 1.0),
@@ -818,21 +915,21 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
             Some(d) => corners.push(d)
             None => ()
           }
-          Some({ common, geom: Face(corners=corners) })
+          Some({ common, geom: Face(corners~), })
         }
         _ => {
           warnings.push("\{kind} 缺角点坐标（10/11/12），已跳过")
           None
         }
       }
-    "SPLINE" => Some({ common, geom: parse_spline(record) })
+    "SPLINE" => Some({ common, geom: parse_spline(record, warnings), })
     "HATCH" =>
       match record.point(0) {
         Some(at) =>
           Some({
             common,
             geom: Hatch(
-              at=at,
+              at~,
               solid=record.get_int(70, 0) != 0,
               pattern=record.get_string(2),
               paths=record.get_int(91, 0),
@@ -852,7 +949,7 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
           Some({
             common,
             geom: Dimension(
-              at=at,
+              at~,
               // R12 的标注没有匿名块，缺块名不算坏记录
               block=record.get_string(2),
               measurement=record.get_double(42, 0.0),
@@ -863,7 +960,7 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
           None
         }
       }
-    _ => Some({ common, geom: Unknown })
+    _ => Some({ common, geom: Unknown, })
   }
 }
 
@@ -875,7 +972,7 @@ pub fn Drawing::entities(self : Drawing) -> Entities {
     None => {
       let entities : Array[Entity] = []
       let warnings : Array[String] = []
-      { entities, warnings }
+      { entities, warnings, }
     }
   }
 }
@@ -906,19 +1003,21 @@ pub fn parse_blocks(section : Section) -> Blocks {
         Some(p) => p
         // 基点缺失按原点处理并记一条——块的内容至少要看得见
         None => {
-          warnings.push("块「\{name}」缺基点（10/20），按原点处理")
+          warnings.push(
+            "块「\{name}」缺基点（10/20），按原点处理",
+          )
           Vec3::zero()
         }
       }
-      let entities = parse_records(records[i + 1 : j], warnings)
-      blocks.push({ name, base, entities })
+      let entities = parse_records(records[i + 1:j], warnings)
+      blocks.push({ name, base, entities, })
     }
     if j < records.length() {
       j = j + 1
     }
     i = j
   }
-  { blocks, warnings }
+  { blocks, warnings, }
 }
 
 ///|
@@ -929,7 +1028,7 @@ pub fn Drawing::blocks(self : Drawing) -> Blocks {
     None => {
       let blocks : Array[Block] = []
       let warnings : Array[String] = []
-      { blocks, warnings }
+      { blocks, warnings, }
     }
   }
 }

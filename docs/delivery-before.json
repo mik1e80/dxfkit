@@ -1,0 +1,121 @@
+{
+  "suite": "dxfkit-frozen-delivery",
+  "bundle_sha256": "f0dec9507a5c991286380840e135cedb85ba4bf75091a71f6bcb1b0395273bbd",
+  "passed": 1,
+  "total": 6,
+  "cases": [
+    {
+      "id": "C1",
+      "file": "ellipse-offset.dxf",
+      "expected": {
+        "firstPoint": [
+          12,
+          20
+        ]
+      },
+      "actual": {
+        "firstPoint": [
+          2,
+          0
+        ]
+      },
+      "passed": false,
+      "failure": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n+   2,\n+   0\n-   12,\n-   20\n  ]\n"
+    },
+    {
+      "id": "C2",
+      "file": "svg-coordinate-range.dxf",
+      "expected": {
+        "points": [
+          [
+            -300000,
+            1e-9
+          ],
+          [
+            300010,
+            2e-9
+          ]
+        ]
+      },
+      "actual": {
+        "points": [
+          [
+            -214748.3647,
+            0
+          ],
+          [
+            214748.3647,
+            0
+          ]
+        ]
+      },
+      "passed": false,
+      "failure": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    [\n+     -214748.3647,\n+     0\n-     -300000,\n-     1e-9\n    ],\n    [\n+     214748.3647,\n+     0\n-     300010,\n-     2e-9\n    ]\n  ]\n"
+    },
+    {
+      "id": "C3",
+      "file": "lwpolyline-missing-y.dxf",
+      "expected": {
+        "outlines": 0,
+        "diagnostic": "LWPOLYLINE vertex missing Y"
+      },
+      "actual": {
+        "outlines": 1,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [轮廓闭合] 图层「」上有 1 处轮廓没闭合——最宽的缝 2（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。"
+      },
+      "passed": false,
+      "failure": "Expected values to be strictly equal:\n\n1 !== 0\n"
+    },
+    {
+      "id": "C4",
+      "file": "polyline-missing-y.dxf",
+      "expected": {
+        "outlines": 0,
+        "diagnostic": "POLYLINE vertex missing X/Y"
+      },
+      "actual": {
+        "outlines": 1,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [轮廓闭合] 图层「」上有 1 处轮廓没闭合——最宽的缝 2（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。"
+      },
+      "passed": false,
+      "failure": "Expected values to be strictly equal:\n\n1 !== 0\n"
+    },
+    {
+      "id": "C5",
+      "file": "face-metadata-only.dxf",
+      "expected": {
+        "outlines": 0,
+        "uncheckedKinds": [
+          "SOLID",
+          "TRACE",
+          "3DFACE"
+        ],
+        "selfIntersection": false
+      },
+      "actual": {
+        "outlines": 3,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [自相交] 图层「」有 2 条轮廓自相交，请确认是否符合设计\n[警告] [重复切割] 图层「」有 8 对线段重叠（共 16.47213595499958 长度，(0, 0) 附近），请确认是否存在重复路径\n致命 0 · 警告 2 · 提示 0\n本次检查发现 2 个警告，请复核图纸与加工条件。"
+      },
+      "passed": false,
+      "failure": "Expected values to be strictly equal:\n\n3 !== 0\n"
+    },
+    {
+      "id": "C6",
+      "file": "insert-unsupported-ocs.dxf",
+      "expected": {
+        "outlines": 0,
+        "diagnosticIdentity": [
+          "OCS",
+          "AB",
+          "CUT",
+          "PART"
+        ]
+      },
+      "actual": {
+        "outlines": 0,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [解析] INSERT（句柄 AB，图层 CUT，块 PART）带非默认挤出方向；未转换 OCS，已跳过该引用及其子实体\n[警告] [检查覆盖] 没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据\n致命 0 · 警告 2 · 提示 0\n本次检查发现 2 个警告，请复核图纸与加工条件。"
+      },
+      "passed": true
+    }
+  ]
+}

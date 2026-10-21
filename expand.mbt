@@ -149,6 +149,17 @@ fn expand_entity(
 ) -> Unit {
   match e.geom {
     Insert(at~, block~, scale~, rotation~) => {
+      // INSERT disappears during expansion, so its unsupported coordinate
+      // system must be diagnosed here, before only child records remain.
+      let record = e.common.record
+      if record.get_double(210, 0.0) != 0.0 ||
+        record.get_double(220, 0.0) != 0.0 ||
+        record.get_double(230, 1.0) != 1.0 {
+        ctx.warnings.push(
+          "INSERT（句柄 \{e.common.handle}，图层 \{e.layer()}，块 \{block}）带非默认挤出方向；未转换 OCS，已跳过该引用及其子实体",
+        )
+        return
+      }
       if e.common.record.get_double(70, 1.0) != 1.0 ||
         e.common.record.get_double(71, 1.0) != 1.0 {
         ctx.warnings.push(

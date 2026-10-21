@@ -162,17 +162,23 @@ test "没有 HEADER 段的最小文件：不该崩，也不能假装知道版本
 // ── 几何离散 ────────────────────────────────────────────────────────────
 
 ///|
-test "语料几何离散：曲线都能摊平" {
+test "语料几何离散：支持曲线有点列，面实体只保留字段" {
   // 容差 0.01（图纸单位）。文件单位不统一，这里只钉总数当锚点，
   // 以及「离散结果不空、点数至少 2」这个基本不变量
   let tol = 0.01
   let mut total_points = 0
   let mut curves = 0
+  let mut metadata_faces = 0
   let problems : Array[String] = []
   for path in corpus_files() {
     let es = @dxfkit.build_drawing(scan_corpus_file(path)).entities()
     for e in es.entities {
-      let pts = match e.geom.flatten(tol) {
+      let flat = e.geom.flatten(tol)
+      if e.geom is @dxfkit.Face(..) {
+        metadata_faces = metadata_faces + 1
+        assert_true(flat is @dxfkit.Empty)
+      }
+      let pts = match flat {
         @dxfkit.Outline(points~, ..) => points
         _ => []
       }
@@ -193,10 +199,12 @@ test "语料几何离散：曲线都能摊平" {
       }
     }
   }
-  // 2026-10-15：改用控制凸包细分，负bulge保持原始端点。
-  // 算法误差另由独立deBoor密集采样验证；点数仅用于记录语料变化。
-  assert_eq(curves, 3559)
-  assert_eq(total_points, 21644)
+  // 2026-10-21：47 个面实体退出轮廓范围（3559 - 47 = 3512）。
+  // 点数随正确的椭圆长轴和细分结果变化，不把总点数当作误差证明。
+  // 算法精度由解析几何及独立 de Boor 对照另行验证。
+  assert_eq(metadata_faces, 47)
+  assert_eq(curves, 3512)
+  assert_true(total_points > curves)
   if problems.length() > 0 {
     fail("有曲线离散异常：" + join_problems(problems))
   }
@@ -204,7 +212,7 @@ test "语料几何离散：曲线都能摊平" {
 
 ///|
 test "语料块展开：记录未支持的阵列实例" {
-  // 47个文件仍提取6210条几何；multi_insert中的未展开行列现在明确报告。
+  // 47个文件仍保留6210条展开记录；部分记录没有可检查的轮廓。
   let mut total = 0
   let mut warns = 0
   for path in corpus_files() {
@@ -212,12 +220,16 @@ test "语料块展开：记录未支持的阵列实例" {
     total = total + exp.placed.length()
     warns = warns + exp.warnings.length()
     for warning in exp.warnings {
-      assert_true(warning.contains("INSERT 阵列"))
-      assert_true(path.contains("multi_insert_with_attribs"))
+      if warning.contains("INSERT 阵列") {
+        assert_true(path.contains("multi_insert_with_attribs"))
+      } else {
+        assert_true(warning.contains("POLYLINE 标志"))
+        assert_true(warning.contains("普通二维折线"))
+      }
     }
   }
   assert_eq(total, 6210)
-  assert_eq(warns, 1)
+  assert_eq(warns, 3)
 }
 
 // ── 流式扫描 ────────────────────────────────────────────────────────────
@@ -282,8 +294,8 @@ test "流式扫描与整份扫描逐 tag 等价" {
 
 ///|
 test "语料加工检查：锚点" {
-  // 2026-10-15：仍有一个负半径严重问题。检查覆盖警告现在包含未支持实体、
-  // 无轮廓、OCS与INSERT阵列；不能沿用旧版只统计已检查几何的警告总数。
+  // 2026-10-21：面实体只报告覆盖限制，不再按文件角点顺序误报自交；
+  // 椭圆长轴修正，未支持 POLYLINE 标志显式报告。此处仅保留语料行为锚点。
   let mut fatal = 0
   let mut warn = 0
   let mut info = 0
@@ -299,7 +311,7 @@ test "语料加工检查：锚点" {
     info = info + r.count(@dxfkit.Info)
   }
   assert_eq(fatal, 1)
-  assert_eq(warn, 170)
+  assert_eq(warn, 149)
   assert_eq(info, 1)
 }
 
@@ -307,9 +319,8 @@ test "语料加工检查：锚点" {
 
 ///|
 test "语料整体：实体解析的锚点" {
-  // 47 个文件：5524 个实体、5404 个解码、**0 条警告**（2026-10-11 实测）。
-  // 警告是 0 不是巧合——ezdxf 的语料都用标准写法，缺必填字段的记录
-  // 一条都没有；以后这条挂了，要么语料变了，要么解析器动错了
+  // 实体身份与元数据保留不变。两条网格 POLYLINE 仍为 Unknown，
+  // 现在额外报告超出普通二维范围；没有警告不再被当作读取完成标准。
   let mut total = 0
   let mut decoded = 0
   let mut warns = 0
@@ -317,6 +328,10 @@ test "语料整体：实体解析的锚点" {
     let es = @dxfkit.build_drawing(scan_corpus_file(path)).entities()
     total = total + es.entities.length()
     warns = warns + es.warnings.length()
+    for warning in es.warnings {
+      assert_true(warning.contains("POLYLINE 标志"))
+      assert_true(warning.contains("普通二维折线"))
+    }
     for e in es.entities {
       if e.is_decoded() {
         decoded = decoded + 1
@@ -325,7 +340,7 @@ test "语料整体：实体解析的锚点" {
   }
   assert_eq(total, 5524)
   assert_eq(decoded, 5404)
-  assert_eq(warns, 0)
+  assert_eq(warns, 2)
 }
 
 ///|

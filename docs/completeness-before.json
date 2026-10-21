@@ -1,0 +1,156 @@
+{
+  "suite": "dxfkit-check-completeness",
+  "bundle_sha256": "9b1066694f665ab1ed86d86e4cf8128da71668399309ec50a188c05c6f2d1772",
+  "passed": 2,
+  "total": 10,
+  "cases": [
+    {
+      "id": "unsupported",
+      "expected": {
+        "incomplete": true,
+        "normalVisible": true
+      },
+      "actual": {
+        "incomplete": false,
+        "reasonPresent": true,
+        "normalVisible": true,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [检查覆盖] 1 个 RAY 实体的轮廓未参与检查；保留记录不表示已验证几何\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。"
+      },
+      "passed": false,
+      "failure": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "id": "unconverted-ocs",
+      "expected": {
+        "incomplete": true,
+        "normalVisible": true
+      },
+      "actual": {
+        "incomplete": false,
+        "reasonPresent": true,
+        "normalVisible": true,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [检查覆盖] 1 个 CIRCLE 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。"
+      },
+      "passed": false,
+      "failure": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "id": "lost-lwpolyline",
+      "expected": {
+        "incomplete": true,
+        "normalVisible": true
+      },
+      "actual": {
+        "incomplete": false,
+        "reasonPresent": true,
+        "normalVisible": true,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [解析] LWPOLYLINE 顶点缺少 Y（20），未生成该实体的轮廓\n[警告] [解析] LWPOLYLINE 声明顶点数 3 与完整坐标数 2 不一致；请复核输入\n[警告] [检查覆盖] 1 个 LWPOLYLINE 实体的轮廓未参与检查；保留记录不表示已验证几何\n致命 0 · 警告 3 · 提示 0\n本次检查发现 3 个警告，请复核图纸与加工条件。"
+      },
+      "passed": false,
+      "failure": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "id": "lost-polyline",
+      "expected": {
+        "incomplete": true,
+        "normalVisible": true
+      },
+      "actual": {
+        "incomplete": false,
+        "reasonPresent": true,
+        "normalVisible": true,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [解析] POLYLINE 顶点 2 缺少 X/Y 坐标；未生成该实体的轮廓\n[警告] [检查覆盖] 1 个 POLYLINE 实体的轮廓未参与检查；保留记录不表示已验证几何\n致命 0 · 警告 2 · 提示 0\n本次检查发现 2 个警告，请复核图纸与加工条件。"
+      },
+      "passed": false,
+      "failure": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "id": "failed-discretization",
+      "expected": {
+        "incomplete": true,
+        "normalVisible": true
+      },
+      "actual": {
+        "incomplete": false,
+        "reasonPresent": true,
+        "normalVisible": true,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [解析] 实体 SPLINE（句柄 ）未能离散：样条次数、控制点数或节点数无效（次数上限32，控制点上限4096）\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。"
+      },
+      "passed": false,
+      "failure": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "id": "lost-spline-control",
+      "expected": {
+        "incomplete": true,
+        "normalVisible": true
+      },
+      "actual": {
+        "incomplete": false,
+        "reasonPresent": false,
+        "normalVisible": true,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [轮廓闭合] 图层「」上有 1 处轮廓没闭合——最宽的缝 2（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。"
+      },
+      "passed": false,
+      "failure": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "id": "insert-ocs",
+      "expected": {
+        "incomplete": true,
+        "normalVisible": true
+      },
+      "actual": {
+        "incomplete": false,
+        "reasonPresent": true,
+        "normalVisible": true,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [解析] INSERT（句柄 AB，图层 CUT，块 PART）带非默认挤出方向；未转换 OCS，已跳过该引用及其子实体\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。"
+      },
+      "passed": false,
+      "failure": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "id": "resource-limit",
+      "expected": {
+        "incomplete": true,
+        "normalVisible": true
+      },
+      "actual": {
+        "incomplete": false,
+        "reasonPresent": true,
+        "normalVisible": true,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [解析] 实体 CIRCLE（句柄 ）未能离散：圆离散需要超过4096段，或半径非有限；未满足指定容差\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。"
+      },
+      "passed": false,
+      "failure": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "id": "supported-only",
+      "expected": {
+        "incomplete": false,
+        "normalVisible": true
+      },
+      "actual": {
+        "incomplete": false,
+        "reasonPresent": true,
+        "normalVisible": true,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n（没有发现）\n致命 0 · 警告 0 · 提示 0\n本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。"
+      },
+      "passed": true
+    },
+    {
+      "id": "geometric-warning-only",
+      "expected": {
+        "incomplete": false,
+        "normalVisible": true
+      },
+      "actual": {
+        "incomplete": false,
+        "reasonPresent": true,
+        "normalVisible": true,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [轮廓闭合] 图层「」上有 1 处轮廓没闭合——最宽的缝 2（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。"
+      },
+      "passed": true
+    }
+  ]
+}

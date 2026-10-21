@@ -1,0 +1,5409 @@
+{
+  "schema": "dxfkit-third-party-corpus-v1",
+  "provenance": {
+    "repository": "mozman/ezdxf",
+    "directory": "examples_dxf",
+    "license": "MIT",
+    "local_import_commit": "6f5d18250170d52921e9cc35cee583c045355ab5",
+    "upstream_commit": null,
+    "note": "首次收录未记录上游提交；master 来源链接可能变动，本地 SHA-256 标识实际被测字节，不代表已校验当前上游一致"
+  },
+  "parameters": {
+    "target": "wasm",
+    "flatten_invariant_tol": 0.01,
+    "expansion_and_check_tol": 0.05,
+    "min_gap": 0
+  },
+  "tests": [
+    {
+      "id": "R1",
+      "name": "语料里每个文件都能扫出 tag",
+      "scope": "all",
+      "meaning": "扫描产生 tag"
+    },
+    {
+      "id": "R2",
+      "name": "每个文件都以 EOF 结尾",
+      "scope": "all",
+      "meaning": "扫描结果以 EOF 结束"
+    },
+    {
+      "id": "R3",
+      "name": "扫出来的组码都是合理的非负数",
+      "scope": "all",
+      "meaning": "组码在 0–1071"
+    },
+    {
+      "id": "R4",
+      "name": "流式扫描与整份扫描逐 tag 等价",
+      "scope": "all",
+      "meaning": "4096/8191 字节分块与全量逐 tag 相同"
+    },
+    {
+      "id": "E1",
+      "name": "语料整体：实体解析的锚点",
+      "scope": "all",
+      "meaning": "汇总实体/解码数量及诊断锚点，不是逐字段真值"
+    },
+    {
+      "id": "E2",
+      "name": "语料里未解码的实体类型都在预期清单里",
+      "scope": "all",
+      "meaning": "未解码类型集合"
+    },
+    {
+      "id": "G0",
+      "name": "语料几何离散：支持曲线有点列，面实体只保留字段",
+      "scope": "all",
+      "meaning": "点列不变量、汇总数量和面实体降级；不是几何误差验证"
+    },
+    {
+      "id": "G1",
+      "name": "语料块展开：记录未支持的阵列实例",
+      "scope": "all",
+      "meaning": "展开记录总量和受限输入诊断；不是变换坐标真值"
+    },
+    {
+      "id": "C0",
+      "name": "语料加工检查：锚点",
+      "scope": "all",
+      "meaning": "报告汇总严重程度锚点，不是逐文件判定真值"
+    },
+    {
+      "id": "A1",
+      "name": "circle_radius_le_0：3016 行 → 1508 个 tag",
+      "scope": [
+        "circle_radius_le_0.dxf"
+      ],
+      "meaning": "扫描数量及无扫描警告"
+    },
+    {
+      "id": "A2",
+      "name": "Minimal_DXF_AC1009：35 字节的最小文件",
+      "scope": [
+        "Minimal_DXF_AC1009.dxf"
+      ],
+      "meaning": "四个 tag 的值与顺序"
+    },
+    {
+      "id": "A3",
+      "name": "带 HEADER 的 Minimal 文件能读出正确的版本号",
+      "scope": [
+        "Minimal_DXF_AC1006.dxf",
+        "Minimal_DXF_AC1021.dxf"
+      ],
+      "meaning": "HEADER 版本字段"
+    },
+    {
+      "id": "A4",
+      "name": "没有 HEADER 段的最小文件：不该崩，也不能假装知道版本",
+      "scope": [
+        "Minimal_DXF_AC1009.dxf"
+      ],
+      "meaning": "版本缺失与 CP1252 回退"
+    },
+    {
+      "id": "A5",
+      "name": "circle.dxf 声明的是 CP1252 但实际是 UTF-8",
+      "scope": [
+        "circle_radius_le_0.dxf"
+      ],
+      "meaning": "扫描编码选择 UTF-8"
+    },
+    {
+      "id": "CLI1",
+      "name": "空外部最小文件 strict 门禁",
+      "scope": [
+        "Minimal_DXF_AC1009.dxf"
+      ],
+      "source": "cli/smoke.cjs",
+      "meaning": "实际退出 1，报告无可检查轮廓"
+    }
+  ],
+  "source_sha256_lf": {
+    "check.mbt": "7589509fc80f3041fe0858e4b09353ea3d134f15c15808021109ba80060ba372",
+    "cli/smoke.cjs": "915a89fa127f3fdc95332b1e158869d58e7f3c337a92a2005038a7c11777812d",
+    "codepage.mbt": "3c66e54221a8abe2816dbb36ea2efc8d282feb19fe1d8f7e53d74055451f85c4",
+    "conformance/audit.mbt": "e97df4682c26c0b917406b82282722e14ae9b9a764c222fbc62322997b6384b9",
+    "conformance/corpus.mbt": "9d3acc0ceb4682094c4eae715f616ffe269c38dc55d96ab30e3f740e1c457912",
+    "conformance/corpus_wbtest.mbt": "3cf6490dc4ab5165295f8f4bd7fb39d40ef15798b56d430e1e75020ad5724462",
+    "conformance/main.mbt": "bbc3342d6e2c8d0f0ced8a398b283e56b0b9a6c0933605997de47663f7677d7a",
+    "entity.mbt": "6b805960d9b6b8c5de5e62f33092208c453bf76de98b01f9c49d96776426e1b8",
+    "expand.mbt": "123de418f668678eecf9dcb5fe72eb157bd03e8321ad3055e7de212d44b60eb9",
+    "flatten.mbt": "36a6774d14565262f7da01bdb878ca1c9345f2e6f24893fbb7174167e6164f4f",
+    "flatten_checked.mbt": "52ce4dc42ef64a9c24a0bb1d38045172b4d7c101c14a458ed1b4bf2b8d208019",
+    "header.mbt": "8c114a6e3e0d4a1241696203709d420c29a953bb2d62d99d39e69cefe6fd1739",
+    "moon.mod": "6c16316855f68a8a553ef2aeda877d0b6f5b4ef148a30704b7e8f8dadf9c53f1",
+    "preview.mbt": "24e7ab7d83724ca62616cf50ac96544707cfd583f3b23272a62f3092f7965b85",
+    "reader_ascii.mbt": "2754022e3998fea280fb730e23511a5ef21c8f79a53ba3e71db97f21e744d5ca",
+    "spline.mbt": "a70866a665ea49e98c3a0a8afb3f4454a1a702c1d41120bcc3539dc3d92faee5",
+    "stream.mbt": "428002cc9279c2fc02c0f008f22ffc23520798cf11fc64f2af935eb7980b111b",
+    "structure.mbt": "ac34bb30adf9bd3b553255f1701f386db1a27d6bb2fa0f2bed1f27a1df2b9a8d",
+    "subclass.mbt": "3dfd8df787489a8bb2986722b24709bcdda047ce4c8b33acbbcb39fb28d4cfbf",
+    "tables.mbt": "cc657fd2d802ba6b71e80ad4f36eff68a82c87b2dec4694ee412592096088f54",
+    "tag.mbt": "8fad78558bdb9f254fe00a43c3a94a2122cbc9b43c14d571952b361bfc293ab1",
+    "vec.mbt": "c703d4b972214a6277a5676b848fab9c1202a11ae75355404c098f304a206db4"
+  },
+  "summary": {
+    "files": 47,
+    "read_success": 47,
+    "observed_entities": 5524,
+    "decoded_entities": 5404,
+    "independently_verified_geometry_files": 0,
+    "incomplete_reports": 46,
+    "conformance_tests": {
+      "total": 14,
+      "passed": 14
+    },
+    "cli_empty_input_exit": 1
+  },
+  "cases": [
+    {
+      "file": "3dface.dxf",
+      "bytes": 133398,
+      "sha256": "c9447d342e267052354bede75028a934da35bd2bb1a96c1c084bdf7e5f0abc2a",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/3dface.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/3dface.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 71,
+        "decoded": 71,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 3DFACE/MTEXT/TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "3dface.dxf",
+        "read_ok": true,
+        "version": "AC1032",
+        "encoding": "UTF-8",
+        "tags": 7941,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "3DFACE",
+            "total": 44,
+            "decoded": 44
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 5,
+            "decoded": 5
+          },
+          {
+            "kind": "MTEXT",
+            "total": 16,
+            "decoded": 16
+          },
+          {
+            "kind": "TEXT",
+            "total": 6,
+            "decoded": 6
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "3DFACE",
+            "total": 44,
+            "decoded": 44
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 5,
+            "decoded": 5
+          },
+          {
+            "kind": "MTEXT",
+            "total": 16,
+            "decoded": 16
+          },
+          {
+            "kind": "TEXT",
+            "total": 6,
+            "decoded": 6
+          }
+        ],
+        "expanded_outlines": 5,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "44 个 3DFACE 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 22 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「0」有 6 对线段重叠（共 10255.13667388088 长度，(2805.224722851854, 1352.895137322161) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "Minimal_DXF_AC1006.dxf",
+      "bytes": 805,
+      "sha256": "93c8197ca313b3224647c4b7c88ce857ab55e2e8c0258cc0298c40c847882ebc",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/Minimal_DXF_AC1006.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/Minimal_DXF_AC1006.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 3,
+        "decoded": 3,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0",
+        "A3"
+      ],
+      "limitations": [
+        "仅字段/元数据 3DFACE",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "Minimal_DXF_AC1006.dxf",
+        "read_ok": true,
+        "version": "AC1006",
+        "encoding": "CP1252（西欧）",
+        "tags": 100,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "3DFACE",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "LINE",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "3DFACE",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "LINE",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "expanded_outlines": 1,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "2 个 3DFACE 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「1」上有 1 处轮廓没闭合——最宽的缝 1（(0, -0.5) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "Minimal_DXF_AC1009.dxf",
+      "bytes": 35,
+      "sha256": "7286a35c85164d0165b6e0e2bd8093c25f818cdc31b9abd34a46646924fcccc3",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/Minimal_DXF_AC1009.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/Minimal_DXF_AC1009.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "not-applicable",
+        "observed": 0,
+        "decoded": 0,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0",
+        "A2",
+        "A4",
+        "CLI1"
+      ],
+      "limitations": [
+        "无顶层实体，解码不适用",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "Minimal_DXF_AC1009.dxf",
+        "read_ok": true,
+        "version": "",
+        "encoding": "CP1252（西欧）",
+        "tags": 4,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [],
+        "entity_warnings": [],
+        "expanded_kinds": [],
+        "expanded_outlines": 0,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "Minimal_DXF_AC1021.dxf",
+      "bytes": 3041,
+      "sha256": "6866a50766e178f19356607ee3d3fe619f9f46cfcd2d7d5969f1077eb675464d",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/Minimal_DXF_AC1021.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/Minimal_DXF_AC1021.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "not-applicable",
+        "observed": 0,
+        "decoded": 0,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0",
+        "A3"
+      ],
+      "limitations": [
+        "无顶层实体，解码不适用",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "Minimal_DXF_AC1021.dxf",
+        "read_ok": true,
+        "version": "AC1021",
+        "encoding": "UTF-8",
+        "tags": 350,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [],
+        "entity_warnings": [],
+        "expanded_kinds": [],
+        "expanded_outlines": 0,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "VP4.dxf",
+      "bytes": 76778,
+      "sha256": "aa535057afadab4ed0fc8cadb4b624d272c90603c7e03f44df1e6a6d1a15acc0",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/VP4.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/VP4.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "partial",
+        "observed": 27,
+        "decoded": 22,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "未解码 VIEWPORT",
+        "仅字段/元数据 TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "VP4.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 6665,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "LINE",
+            "total": 16,
+            "decoded": 16
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "TEXT",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 5,
+            "decoded": 0
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "LINE",
+            "total": 16,
+            "decoded": 16
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "TEXT",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 5,
+            "decoded": 0
+          }
+        ],
+        "expanded_outlines": 18,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "5 个 VIEWPORT 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 4 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 2 处轮廓没闭合——最宽的缝 59.91487800493762（(294, 374) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "acad_table_simple.dxf",
+      "bytes": 92040,
+      "sha256": "2fc8d0e9517b36dd13db95740b37bc2f534005f16abc222faab036c3407d9e8d",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/acad_table_simple.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/acad_table_simple.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "partial",
+        "observed": 1,
+        "decoded": 0,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "未解码 ACAD_TABLE",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "acad_table_simple.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 7307,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "ACAD_TABLE",
+            "total": 1,
+            "decoded": 0
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "ACAD_TABLE",
+            "total": 1,
+            "decoded": 0
+          }
+        ],
+        "expanded_outlines": 0,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "1 个 ACAD_TABLE 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "acad_table_with_blk_ref.dxf",
+      "bytes": 156603,
+      "sha256": "7c42eac2e0c21b386273294b7937845ddda3da58f85c30fe130db229570f8015",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/acad_table_with_blk_ref.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/acad_table_with_blk_ref.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "partial",
+        "observed": 1,
+        "decoded": 0,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "未解码 ACAD_TABLE",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "acad_table_with_blk_ref.dxf",
+        "read_ok": true,
+        "version": "AC1032",
+        "encoding": "UTF-8",
+        "tags": 11451,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "ACAD_TABLE",
+            "total": 1,
+            "decoded": 0
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "ACAD_TABLE",
+            "total": 1,
+            "decoded": 0
+          }
+        ],
+        "expanded_outlines": 0,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "1 个 ACAD_TABLE 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "caret_encoding.dxf",
+      "bytes": 21825,
+      "sha256": "c1e3ec3d1a46d40aebb325d23a0d1ffefe5df64ed1336609e883e0517391faf0",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/caret_encoding.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/caret_encoding.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 61,
+        "decoded": 61,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 MTEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "caret_encoding.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 2220,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "MTEXT",
+            "total": 61,
+            "decoded": 61
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "MTEXT",
+            "total": 61,
+            "decoded": 61
+          }
+        ],
+        "expanded_outlines": 0,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 61 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "circle_radius_le_0.dxf",
+      "bytes": 14979,
+      "sha256": "e15de0694bd251da052a1ee38eda8d096deab37eed921a44542da8dbe0bff8ac",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/circle_radius_le_0.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/circle_radius_le_0.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 2,
+        "decoded": 2,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0",
+        "A1",
+        "A5"
+      ],
+      "limitations": [
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "circle_radius_le_0.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 1508,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 2,
+            "decoded": 2
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 2,
+            "decoded": 2
+          }
+        ],
+        "expanded_outlines": 2,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "退化几何",
+            "severity": "警告",
+            "message": "图层「0」句柄 2D 的圆半径是 0——退化成一个点"
+          },
+          {
+            "category": "退化几何",
+            "severity": "致命",
+            "message": "图层「0」句柄 2E 的圆半径是负数（-1），需要修正几何定义"
+          }
+        ],
+        "incomplete": false,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "clockwise_arcs_hatch.dxf",
+      "bytes": 19257,
+      "sha256": "70425c817f79364d6084ea390ecff4652d6e17d2e80d7c6eadbdc64268676672",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/clockwise_arcs_hatch.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/clockwise_arcs_hatch.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 1,
+        "decoded": 1,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 HATCH",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "clockwise_arcs_hatch.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 1760,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "HATCH",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "HATCH",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "expanded_outlines": 0,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "1 个 HATCH 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据"
+          },
+          {
+            "category": "图层",
+            "severity": "警告",
+            "message": "图层「HATCH」不在图层表里，但有 1 条实体引用它"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "colors.dxf",
+      "bytes": 151817,
+      "sha256": "70c12f1e3fd291c4ab02df7628624956fce315263c0ebcb18734d0b6e5b9974a",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/colors.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/colors.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 28,
+        "decoded": 28,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 MTEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "colors.dxf",
+        "read_ok": true,
+        "version": "AC1032",
+        "encoding": "UTF-8",
+        "tags": 7737,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 6,
+            "decoded": 6
+          },
+          {
+            "kind": "INSERT",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "MTEXT",
+            "total": 14,
+            "decoded": 14
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 18,
+            "decoded": 18
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 20,
+            "decoded": 20
+          },
+          {
+            "kind": "MTEXT",
+            "total": 30,
+            "decoded": 30
+          }
+        ],
+        "expanded_outlines": 38,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「BLUE」上有 15 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「RED」上有 15 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "columns_R2007.dxf",
+      "bytes": 195808,
+      "sha256": "31d4d411982821a3db75854f90108e15f867ecdd619d526fb3c9bd761b92095c",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/columns_R2007.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/columns_R2007.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 69,
+        "decoded": 69,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 MTEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "columns_R2007.dxf",
+        "read_ok": true,
+        "version": "AC1021",
+        "encoding": "UTF-8",
+        "tags": 12479,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "LWPOLYLINE",
+            "total": 30,
+            "decoded": 30
+          },
+          {
+            "kind": "MTEXT",
+            "total": 39,
+            "decoded": 39
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "LWPOLYLINE",
+            "total": 30,
+            "decoded": 30
+          },
+          {
+            "kind": "MTEXT",
+            "total": 39,
+            "decoded": 39
+          }
+        ],
+        "expanded_outlines": 30,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 39 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「0」有 1 对线段重叠（共 3.464018631226992 长度，(108.68080298653, 216.211407869553) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "columns_R2018.dxf",
+      "bytes": 93392,
+      "sha256": "0110c42731224a851baca4fd93209a40ebcd19b18d98e75201715d3cd3baa649",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/columns_R2018.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/columns_R2018.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 52,
+        "decoded": 52,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 MTEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "columns_R2018.dxf",
+        "read_ok": true,
+        "version": "AC1032",
+        "encoding": "UTF-8",
+        "tags": 7666,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "LWPOLYLINE",
+            "total": 30,
+            "decoded": 30
+          },
+          {
+            "kind": "MTEXT",
+            "total": 22,
+            "decoded": 22
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "LWPOLYLINE",
+            "total": 30,
+            "decoded": 30
+          },
+          {
+            "kind": "MTEXT",
+            "total": 22,
+            "decoded": 22
+          }
+        ],
+        "expanded_outlines": 30,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 22 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「0」有 1 对线段重叠（共 3.464018631227276 长度，(108.6808029865302, 216.2114078695529) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "dimension_in_block.dxf",
+      "bytes": 88082,
+      "sha256": "923cc1d0d86bf6738139dbec26b66e299fbfa2c16a49ed206ad06cf719c6e6f2",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/dimension_in_block.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/dimension_in_block.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 4,
+        "decoded": 4,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 DIMENSION",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "dimension_in_block.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 6561,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "DIMENSION",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "INSERT",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "LINE",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "DIMENSION",
+            "total": 3,
+            "decoded": 3
+          },
+          {
+            "kind": "LINE",
+            "total": 3,
+            "decoded": 3
+          }
+        ],
+        "expanded_outlines": 3,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "3 个 DIMENSION 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 3 处轮廓没闭合——最宽的缝 10.000000000000002（(20, 20) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "dimension_in_nested_blocks.dxf",
+      "bytes": 91234,
+      "sha256": "03b50bf9a29513147d2b66f6ec1a4377494ced38437082c979639dfa42d613ea",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/dimension_in_nested_blocks.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/dimension_in_nested_blocks.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 4,
+        "decoded": 4,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 DIMENSION/TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "dimension_in_nested_blocks.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 6858,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "INSERT",
+            "total": 4,
+            "decoded": 4
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "DIMENSION",
+            "total": 6,
+            "decoded": 6
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 14,
+            "decoded": 14
+          },
+          {
+            "kind": "TEXT",
+            "total": 14,
+            "decoded": 14
+          }
+        ],
+        "expanded_outlines": 14,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "6 个 DIMENSION 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 14 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「0」有 20 对线段重叠（共 280 长度，(30, 30) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "hatch_issues.dxf",
+      "bytes": 73197,
+      "sha256": "16ff6d4b687124d6ea681529260a4273858b87d9d5dd02eaec5d55d36dff30fb",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/hatch_issues.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/hatch_issues.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 12,
+        "decoded": 12,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 HATCH",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "hatch_issues.dxf",
+        "read_ok": true,
+        "version": "AC1032",
+        "encoding": "UTF-8",
+        "tags": 6323,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 8,
+            "decoded": 8
+          },
+          {
+            "kind": "HATCH",
+            "total": 4,
+            "decoded": 4
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 8,
+            "decoded": 8
+          },
+          {
+            "kind": "HATCH",
+            "total": 4,
+            "decoded": 4
+          }
+        ],
+        "expanded_outlines": 8,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "4 个 HATCH 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "hatch_text_box_in_fill.dxf",
+      "bytes": 71517,
+      "sha256": "aa10576b3ae48f574c728b862575dae13bdd5acd7da0fdcff813a8d2d59b1f03",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/hatch_text_box_in_fill.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/hatch_text_box_in_fill.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 4,
+        "decoded": 4,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 HATCH/MTEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "hatch_text_box_in_fill.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 6149,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "HATCH",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "MTEXT",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "HATCH",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "MTEXT",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "expanded_outlines": 2,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "1 个 HATCH 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 1 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "hatch_text_box_in_hole.dxf",
+      "bytes": 71517,
+      "sha256": "aff29a10fa952a198572ed524b1c67528d5279d04f7fd34e58d778d2fd393eb3",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/hatch_text_box_in_hole.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/hatch_text_box_in_hole.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 4,
+        "decoded": 4,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 HATCH/MTEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "hatch_text_box_in_hole.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 6149,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "HATCH",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "MTEXT",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "HATCH",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "MTEXT",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "expanded_outlines": 2,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "1 个 HATCH 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 1 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "hatch_text_box_overlapping_fill_and_hole.dxf",
+      "bytes": 71531,
+      "sha256": "387c0cd9a2a1f7259706b3d28f91e8c91e39f8a5be7284b0fb4472f5aaa484a9",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/hatch_text_box_overlapping_fill_and_hole.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/hatch_text_box_overlapping_fill_and_hole.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 4,
+        "decoded": 4,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 HATCH/MTEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "hatch_text_box_overlapping_fill_and_hole.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 6151,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "HATCH",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "MTEXT",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "HATCH",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "MTEXT",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "expanded_outlines": 2,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "1 个 HATCH 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 1 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "hatches_1.dxf",
+      "bytes": 130334,
+      "sha256": "2dc2930b4f7d5fb16698437e4f6972986e580a81b2b5d36a780b4311f85fb326",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/hatches_1.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/hatches_1.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 32,
+        "decoded": 32,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 HATCH",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "hatches_1.dxf",
+        "read_ok": true,
+        "version": "AC1032",
+        "encoding": "UTF-8",
+        "tags": 7876,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "ARC",
+            "total": 6,
+            "decoded": 6
+          },
+          {
+            "kind": "HATCH",
+            "total": 10,
+            "decoded": 10
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 16,
+            "decoded": 16
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "ARC",
+            "total": 6,
+            "decoded": 6
+          },
+          {
+            "kind": "HATCH",
+            "total": 10,
+            "decoded": 10
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 16,
+            "decoded": 16
+          }
+        ],
+        "expanded_outlines": 22,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "10 个 HATCH 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "hatches_2.dxf",
+      "bytes": 208793,
+      "sha256": "a50f02abbbafb0fedef5140e3f99691012bcffa192ecb298470fe8c5b2b9aad6",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/hatches_2.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/hatches_2.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 11,
+        "decoded": 11,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 HATCH/MTEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "hatches_2.dxf",
+        "read_ok": true,
+        "version": "AC1032",
+        "encoding": "UTF-8",
+        "tags": 11098,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "ARC",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "ELLIPSE",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "HATCH",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "MTEXT",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "SPLINE",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "ARC",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "ELLIPSE",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "HATCH",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "MTEXT",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "SPLINE",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "expanded_outlines": 7,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "2 个 HATCH 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 2 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "images.dxf",
+      "bytes": 215924,
+      "sha256": "31c8ee077bb16cc3c2b2bcbe5cbe6687038f932acbbbfeeddca2a934ab0db65b",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/images.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/images.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "partial",
+        "observed": 233,
+        "decoded": 174,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "未解码 IMAGE",
+        "仅字段/元数据 MTEXT/TEXT",
+        "外部图像未加载",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "images.dxf",
+        "read_ok": true,
+        "version": "AC1015",
+        "encoding": "CP1252（西欧）",
+        "tags": 9394,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 28,
+            "decoded": 28
+          },
+          {
+            "kind": "IMAGE",
+            "total": 59,
+            "decoded": 0
+          },
+          {
+            "kind": "INSERT",
+            "total": 5,
+            "decoded": 5
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 40,
+            "decoded": 40
+          },
+          {
+            "kind": "MTEXT",
+            "total": 8,
+            "decoded": 8
+          },
+          {
+            "kind": "TEXT",
+            "total": 93,
+            "decoded": 93
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 28,
+            "decoded": 28
+          },
+          {
+            "kind": "IMAGE",
+            "total": 64,
+            "decoded": 0
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 42,
+            "decoded": 42
+          },
+          {
+            "kind": "MTEXT",
+            "total": 8,
+            "decoded": 8
+          },
+          {
+            "kind": "TEXT",
+            "total": 93,
+            "decoded": 93
+          }
+        ],
+        "expanded_outlines": 70,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "64 个 IMAGE 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「title」上有 101 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「image」上有 5 处轮廓没闭合——最宽的缝 22（(260.6018688536401, 155.6230893456938) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「title」上有 2 处轮廓没闭合——最宽的缝 12.935785791207532（(246.6399429980052, 224.1789867013776) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "insert_bricscad_level_1.dxf",
+      "bytes": 91914,
+      "sha256": "c2597f95c007852db2ba82dedd9558f9318981115dda82fccfc0267ca60e5a56",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/insert_bricscad_level_1.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/insert_bricscad_level_1.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 24,
+        "decoded": 24,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "insert_bricscad_level_1.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 6830,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "INSERT",
+            "total": 6,
+            "decoded": 6
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 6,
+            "decoded": 6
+          },
+          {
+            "kind": "TEXT",
+            "total": 12,
+            "decoded": 12
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "LINE",
+            "total": 324,
+            "decoded": 324
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 6,
+            "decoded": 6
+          },
+          {
+            "kind": "TEXT",
+            "total": 120,
+            "decoded": 120
+          }
+        ],
+        "expanded_outlines": 330,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 120 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 216 处轮廓没闭合——最宽的缝 0.8733226086985774（(2.773328916434, 8.361085190823001) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "mtext_columns_R2000.dxf",
+      "bytes": 20896,
+      "sha256": "6981bc669929bd1e626ffb4846f05dc37b7444160abda796d753496630adee5b",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/mtext_columns_R2000.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/mtext_columns_R2000.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 9,
+        "decoded": 9,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 MTEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "mtext_columns_R2000.dxf",
+        "read_ok": true,
+        "version": "AC1015",
+        "encoding": "CP1252（西欧）",
+        "tags": 1597,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "MTEXT",
+            "total": 9,
+            "decoded": 9
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "MTEXT",
+            "total": 9,
+            "decoded": 9
+          }
+        ],
+        "expanded_outlines": 0,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「STATIC」上有 3 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「DYNAMIC」上有 6 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "图层",
+            "severity": "警告",
+            "message": "图层「STATIC」不在图层表里，但有 3 条实体引用它"
+          },
+          {
+            "category": "图层",
+            "severity": "警告",
+            "message": "图层「DYNAMIC」不在图层表里，但有 6 条实体引用它"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "mtext_columns_R2007.dxf",
+      "bytes": 22331,
+      "sha256": "f0a04b0072986e6623eb9caf2562ef3064ef88ba1f9015724f856fd6937ab2e9",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/mtext_columns_R2007.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/mtext_columns_R2007.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 9,
+        "decoded": 9,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 MTEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "mtext_columns_R2007.dxf",
+        "read_ok": true,
+        "version": "AC1021",
+        "encoding": "UTF-8",
+        "tags": 1731,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "MTEXT",
+            "total": 9,
+            "decoded": 9
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "MTEXT",
+            "total": 9,
+            "decoded": 9
+          }
+        ],
+        "expanded_outlines": 0,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「STATIC」上有 3 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「DYNAMIC」上有 6 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "图层",
+            "severity": "警告",
+            "message": "图层「STATIC」不在图层表里，但有 3 条实体引用它"
+          },
+          {
+            "category": "图层",
+            "severity": "警告",
+            "message": "图层「DYNAMIC」不在图层表里，但有 6 条实体引用它"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "mtext_columns_R2018.dxf",
+      "bytes": 20695,
+      "sha256": "51ab94490167ff11a2c154d94e626ac309b36d64ee994915aac53fd89efde60f",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/mtext_columns_R2018.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/mtext_columns_R2018.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 3,
+        "decoded": 3,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 MTEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "mtext_columns_R2018.dxf",
+        "read_ok": true,
+        "version": "AC1032",
+        "encoding": "UTF-8",
+        "tags": 1613,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "MTEXT",
+            "total": 3,
+            "decoded": 3
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "MTEXT",
+            "total": 3,
+            "decoded": 3
+          }
+        ],
+        "expanded_outlines": 0,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「STATIC」上有 1 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「DYNAMIC」上有 2 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "图层",
+            "severity": "警告",
+            "message": "图层「STATIC」不在图层表里，但有 1 条实体引用它"
+          },
+          {
+            "category": "图层",
+            "severity": "警告",
+            "message": "图层「DYNAMIC」不在图层表里，但有 2 条实体引用它"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "mtext_complex_inline_codes.dxf",
+      "bytes": 166396,
+      "sha256": "fb09a7af8882787553149a675c6d15b45bab8ff4a49f58200460832eab3de401",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/mtext_complex_inline_codes.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/mtext_complex_inline_codes.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 12,
+        "decoded": 12,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 MTEXT",
+        "非默认 OCS 未转换",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "mtext_complex_inline_codes.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 7355,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "LINE",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "MTEXT",
+            "total": 8,
+            "decoded": 8
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "LINE",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "MTEXT",
+            "total": 8,
+            "decoded": 8
+          }
+        ],
+        "expanded_outlines": 4,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "4 个 MTEXT 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 8 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 4 处轮廓没闭合——最宽的缝 563.4546159141511（(133.911096696716, 25.433691854621) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "multi_insert_with_attribs.dxf",
+      "bytes": 17346,
+      "sha256": "14951dbef1c750fefc0a452e0bd4fb5b281dc092820d5b6da31b3855dddb4411",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/multi_insert_with_attribs.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/multi_insert_with_attribs.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 4,
+        "decoded": 4,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 ATTDEF/ATTRIB",
+        "阵列其余实例未展开",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "multi_insert_with_attribs.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 1732,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "ATTRIB",
+            "total": 3,
+            "decoded": 3
+          },
+          {
+            "kind": "INSERT",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "ATTDEF",
+            "total": 3,
+            "decoded": 3
+          },
+          {
+            "kind": "ATTRIB",
+            "total": 3,
+            "decoded": 3
+          },
+          {
+            "kind": "CIRCLE",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "POLYLINE",
+            "total": 1,
+            "decoded": 1
+          }
+        ],
+        "expanded_outlines": 2,
+        "expansion_warnings": [
+          "INSERT 阵列暂只展开首个实例，其他行列未检查：FLAG"
+        ],
+        "findings": [
+          {
+            "category": "解析",
+            "severity": "警告",
+            "message": "INSERT 阵列暂只展开首个实例，其他行列未检查：FLAG"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「FLAGS」上有 3 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 3 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「FLAGS」上有 1 处轮廓没闭合——最宽的缝 3.0000000000000004（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "text.dxf",
+      "bytes": 232364,
+      "sha256": "303f8a23596ad94e084f6bdf2b60350a7ae32795c77c63f67945c83ae6f5d64c",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/text.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "partial",
+        "observed": 228,
+        "decoded": 226,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "未解码 VIEWPORT",
+        "仅字段/元数据 ATTDEF/ATTRIB/MTEXT/TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "text.dxf",
+        "read_ok": true,
+        "version": "AC1032",
+        "encoding": "UTF-8",
+        "tags": 12055,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "ATTDEF",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "ATTRIB",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "INSERT",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "LINE",
+            "total": 47,
+            "decoded": 47
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 78,
+            "decoded": 78
+          },
+          {
+            "kind": "MTEXT",
+            "total": 30,
+            "decoded": 30
+          },
+          {
+            "kind": "TEXT",
+            "total": 62,
+            "decoded": 62
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 2,
+            "decoded": 0
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "ATTDEF",
+            "total": 8,
+            "decoded": 8
+          },
+          {
+            "kind": "ATTRIB",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "LINE",
+            "total": 47,
+            "decoded": 47
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 78,
+            "decoded": 78
+          },
+          {
+            "kind": "MTEXT",
+            "total": 30,
+            "decoded": 30
+          },
+          {
+            "kind": "TEXT",
+            "total": 62,
+            "decoded": 62
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 2,
+            "decoded": 0
+          }
+        ],
+        "expanded_outlines": 125,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "2 个 VIEWPORT 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 104 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 34 处轮廓没闭合——最宽的缝 278.9942115705942（(2235.516038779858, 2573.826227947068) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「0」有 5 对线段重叠（共 1353.9419272171049 长度，(2256.267150985223, 1531.381712967221) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "text_alignments.dxf",
+      "bytes": 21536,
+      "sha256": "cacf3083c17c8d3836c23c6356edcb6f70db2949ed61875c2572911719a61353",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/text_alignments.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_alignments.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 58,
+        "decoded": 58,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "text_alignments.dxf",
+        "read_ok": true,
+        "version": "AC1018",
+        "encoding": "CP1252（西欧）",
+        "tags": 2181,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 32,
+            "decoded": 32
+          },
+          {
+            "kind": "LINE",
+            "total": 10,
+            "decoded": 10
+          },
+          {
+            "kind": "TEXT",
+            "total": 16,
+            "decoded": 16
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 32,
+            "decoded": 32
+          },
+          {
+            "kind": "LINE",
+            "total": 10,
+            "decoded": 10
+          },
+          {
+            "kind": "TEXT",
+            "total": 16,
+            "decoded": 16
+          }
+        ],
+        "expanded_outlines": 42,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 16 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "图层",
+            "severity": "警告",
+            "message": "图层「INSERT_POINTS」不在图层表里，但有 32 条实体引用它"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 5 处轮廓没闭合——最宽的缝 20.615528128088304（(15, 15) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「INSERT_POINTS」有 45 对线段重叠（共 5.845671475544953 长度，(-0.050000000000000044, -0.08660254037844385) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "text_fonts.dxf",
+      "bytes": 301744,
+      "sha256": "c69dbb759042ebdb3e23047e61f4053cfcd48d210ca846490d3c3ffc64d56ea1",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/text_fonts.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_fonts.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 1344,
+        "decoded": 1344,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "text_fonts.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 23462,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 704,
+            "decoded": 704
+          },
+          {
+            "kind": "LINE",
+            "total": 256,
+            "decoded": 256
+          },
+          {
+            "kind": "TEXT",
+            "total": 384,
+            "decoded": 384
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 704,
+            "decoded": 704
+          },
+          {
+            "kind": "LINE",
+            "total": 256,
+            "decoded": 256
+          },
+          {
+            "kind": "TEXT",
+            "total": 384,
+            "decoded": 384
+          }
+        ],
+        "expanded_outlines": 960,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 384 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 152 处轮廓没闭合——最宽的缝 12.574514944866003（(49.88511669811, -7.859924430634) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「INSERT_POINTS」有 1008 对线段重叠（共 130.9430410522094 长度，(-0.050000000000000044, -14.840548354231444) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "text_in_viewports.dxf",
+      "bytes": 78620,
+      "sha256": "51dc85fbbcc04c4c3c103d92b99524bde9ef7272a9f818ad321a683cd6877d10",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/text_in_viewports.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_in_viewports.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "partial",
+        "observed": 25,
+        "decoded": 18,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "未解码 VIEWPORT",
+        "仅字段/元数据 TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "text_in_viewports.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 6734,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "ELLIPSE",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 3,
+            "decoded": 3
+          },
+          {
+            "kind": "TEXT",
+            "total": 14,
+            "decoded": 14
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 7,
+            "decoded": 0
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "ELLIPSE",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 3,
+            "decoded": 3
+          },
+          {
+            "kind": "TEXT",
+            "total": 14,
+            "decoded": 14
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 7,
+            "decoded": 0
+          }
+        ],
+        "expanded_outlines": 4,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "7 个 VIEWPORT 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 14 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "text_mirror_shx_font.dxf",
+      "bytes": 187554,
+      "sha256": "5bed117ca6271aefb54e23203cee730c8205064ae2e8fae7afe2aed0d0946602",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/text_mirror_shx_font.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_mirror_shx_font.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 672,
+        "decoded": 672,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "text_mirror_shx_font.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 14489,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 352,
+            "decoded": 352
+          },
+          {
+            "kind": "LINE",
+            "total": 128,
+            "decoded": 128
+          },
+          {
+            "kind": "TEXT",
+            "total": 192,
+            "decoded": 192
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 352,
+            "decoded": 352
+          },
+          {
+            "kind": "LINE",
+            "total": 128,
+            "decoded": 128
+          },
+          {
+            "kind": "TEXT",
+            "total": 192,
+            "decoded": 192
+          }
+        ],
+        "expanded_outlines": 480,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 192 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 76 处轮廓没闭合——最宽的缝 12.574514944865（(0, -7.859924430634) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「INSERT_POINTS」有 504 对线段重叠（共 65.47152052610392 长度，(-0.050000000000000044, -8.958270613584443) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "text_mirror_true_type_font.dxf",
+      "bytes": 187545,
+      "sha256": "8aabce617aa44b71dfc9d6ecdd2af5cfb5168ad2542e154c271b1fc4b347ad00",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/text_mirror_true_type_font.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_mirror_true_type_font.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 672,
+        "decoded": 672,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "text_mirror_true_type_font.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 14492,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 352,
+            "decoded": 352
+          },
+          {
+            "kind": "LINE",
+            "total": 128,
+            "decoded": 128
+          },
+          {
+            "kind": "TEXT",
+            "total": 192,
+            "decoded": 192
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 352,
+            "decoded": 352
+          },
+          {
+            "kind": "LINE",
+            "total": 128,
+            "decoded": 128
+          },
+          {
+            "kind": "TEXT",
+            "total": 192,
+            "decoded": 192
+          }
+        ],
+        "expanded_outlines": 480,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 192 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 76 处轮廓没闭合——最宽的缝 12.574514944865（(0, -7.859924430634) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「INSERT_POINTS」有 504 对线段重叠（共 65.47152052610392 长度，(-0.050000000000000044, -8.958270613584443) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "text_negative_extrusion.dxf",
+      "bytes": 228688,
+      "sha256": "6c183742a7c226e3196ba03b50eb8c32ab6a0dfbf12256d349ce2fc4b078b310",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/text_negative_extrusion.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_negative_extrusion.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "partial",
+        "observed": 228,
+        "decoded": 226,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "未解码 VIEWPORT",
+        "仅字段/元数据 ATTDEF/ATTRIB/MTEXT/TEXT",
+        "非默认 OCS 未转换",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "text_negative_extrusion.dxf",
+        "read_ok": true,
+        "version": "AC1032",
+        "encoding": "UTF-8",
+        "tags": 12427,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "ATTDEF",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "ATTRIB",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "INSERT",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "LINE",
+            "total": 47,
+            "decoded": 47
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 78,
+            "decoded": 78
+          },
+          {
+            "kind": "MTEXT",
+            "total": 30,
+            "decoded": 30
+          },
+          {
+            "kind": "TEXT",
+            "total": 62,
+            "decoded": 62
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 2,
+            "decoded": 0
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "ATTDEF",
+            "total": 8,
+            "decoded": 8
+          },
+          {
+            "kind": "ATTRIB",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "LINE",
+            "total": 47,
+            "decoded": 47
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 78,
+            "decoded": 78
+          },
+          {
+            "kind": "MTEXT",
+            "total": 30,
+            "decoded": 30
+          },
+          {
+            "kind": "TEXT",
+            "total": 62,
+            "decoded": 62
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 2,
+            "decoded": 0
+          }
+        ],
+        "expanded_outlines": 125,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "30 个 MTEXT 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "62 个 TEXT 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "4 个 ATTRIB 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "2 个 VIEWPORT 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 104 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 34 处轮廓没闭合——最宽的缝 278.99421157059356（(2358.009446766735, 2849.055389432297) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「0」有 4 对线段重叠（共 80.26595106765194 长度，(2256.267150985223, 1493.034566831073) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "text_oblique_rotate.dxf",
+      "bytes": 127953,
+      "sha256": "abbbb19a0bda300d1d56d9c845ca0dabb59eb737eb19f6dc6995e17e7f213862",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/text_oblique_rotate.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_oblique_rotate.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 317,
+        "decoded": 317,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "text_oblique_rotate.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 9716,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 168,
+            "decoded": 168
+          },
+          {
+            "kind": "LINE",
+            "total": 56,
+            "decoded": 56
+          },
+          {
+            "kind": "TEXT",
+            "total": 93,
+            "decoded": 93
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 168,
+            "decoded": 168
+          },
+          {
+            "kind": "LINE",
+            "total": 56,
+            "decoded": 56
+          },
+          {
+            "kind": "TEXT",
+            "total": 93,
+            "decoded": 93
+          }
+        ],
+        "expanded_outlines": 224,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 93 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 30 处轮廓没闭合——最宽的缝 12.574514944865001（(15.227068402413, -7.859924430634) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「INSERT_POINTS」有 240 对线段重叠（共 31.176914536239778 长度，(-0.050000000000000044, -9.958270613584443) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "text_stacked_shx_font.dxf",
+      "bytes": 151383,
+      "sha256": "40fe35296b70b0314825637bb79e73f5b1ab24b7ff1a13e44b6d06f0e6bb5413",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/text_stacked_shx_font.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_stacked_shx_font.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 439,
+        "decoded": 439,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "text_stacked_shx_font.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 11493,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 224,
+            "decoded": 224
+          },
+          {
+            "kind": "LINE",
+            "total": 84,
+            "decoded": 84
+          },
+          {
+            "kind": "TEXT",
+            "total": 131,
+            "decoded": 131
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 224,
+            "decoded": 224
+          },
+          {
+            "kind": "LINE",
+            "total": 84,
+            "decoded": 84
+          },
+          {
+            "kind": "TEXT",
+            "total": 131,
+            "decoded": 131
+          }
+        ],
+        "expanded_outlines": 308,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 131 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 49 处轮廓没闭合——最宽的缝 10.000000000000002（(15.117254360147, 49.184665112929) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「INSERT_POINTS」有 294 对线段重叠（共 38.19172030689412 长度，(-0.04999999999999998, 47.79407868466744) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "text_stacked_true_type_font.dxf",
+      "bytes": 151448,
+      "sha256": "27ac1654952c6c0eeb669e786b1f43c0808df1e3ac103375e7a62362240f0bdb",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/text_stacked_true_type_font.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_stacked_true_type_font.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 439,
+        "decoded": 439,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "text_stacked_true_type_font.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 11496,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 224,
+            "decoded": 224
+          },
+          {
+            "kind": "LINE",
+            "total": 84,
+            "decoded": 84
+          },
+          {
+            "kind": "TEXT",
+            "total": 131,
+            "decoded": 131
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 224,
+            "decoded": 224
+          },
+          {
+            "kind": "LINE",
+            "total": 84,
+            "decoded": 84
+          },
+          {
+            "kind": "TEXT",
+            "total": 131,
+            "decoded": 131
+          }
+        ],
+        "expanded_outlines": 308,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 131 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 49 处轮廓没闭合——最宽的缝 10.000000000000002（(15.117254360147, 49.184665112929) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「INSERT_POINTS」有 294 对线段重叠（共 38.19172030689412 长度，(-0.04999999999999998, 47.79407868466744) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "transform_hatch_pattern.dxf",
+      "bytes": 78804,
+      "sha256": "e302137e76a4178a9c81276c5c902222207940f0fbece31d9efcb9b331d16e35",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/transform_hatch_pattern.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/transform_hatch_pattern.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 24,
+        "decoded": 24,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 HATCH/MTEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "transform_hatch_pattern.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 6826,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "HATCH",
+            "total": 13,
+            "decoded": 13
+          },
+          {
+            "kind": "INSERT",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 6,
+            "decoded": 6
+          },
+          {
+            "kind": "MTEXT",
+            "total": 3,
+            "decoded": 3
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "HATCH",
+            "total": 19,
+            "decoded": 19
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 12,
+            "decoded": 12
+          },
+          {
+            "kind": "MTEXT",
+            "total": 3,
+            "decoded": 3
+          }
+        ],
+        "expanded_outlines": 12,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "19 个 HATCH 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 3 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "uncommon.dxf",
+      "bytes": 343110,
+      "sha256": "5efdd671e3b6d8c45bd0688b1d6479d523f2290f0b390f1584348bf46e34c965",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/uncommon.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/uncommon.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "partial",
+        "observed": 85,
+        "decoded": 72,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "未解码 3DSOLID/MESH/MULTILEADER/POLYLINE/RAY/VIEWPORT/XLINE",
+        "仅字段/元数据 ATTDEF/ATTRIB/DIMENSION/MTEXT/SOLID",
+        "非普通二维 POLYLINE 未生成轮廓",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "uncommon.dxf",
+        "read_ok": true,
+        "version": "AC1032",
+        "encoding": "UTF-8",
+        "tags": 16108,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "3DSOLID",
+            "total": 1,
+            "decoded": 0
+          },
+          {
+            "kind": "ARC",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "ARC_DIMENSION",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "ATTRIB",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "CIRCLE",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "DIMENSION",
+            "total": 13,
+            "decoded": 13
+          },
+          {
+            "kind": "INSERT",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "LARGE_RADIAL_DIMENSION",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "LINE",
+            "total": 19,
+            "decoded": 19
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 6,
+            "decoded": 6
+          },
+          {
+            "kind": "MESH",
+            "total": 1,
+            "decoded": 0
+          },
+          {
+            "kind": "MTEXT",
+            "total": 19,
+            "decoded": 19
+          },
+          {
+            "kind": "MULTILEADER",
+            "total": 2,
+            "decoded": 0
+          },
+          {
+            "kind": "POINT",
+            "total": 6,
+            "decoded": 6
+          },
+          {
+            "kind": "POLYLINE",
+            "total": 2,
+            "decoded": 0
+          },
+          {
+            "kind": "RAY",
+            "total": 3,
+            "decoded": 0
+          },
+          {
+            "kind": "SOLID",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "SPLINE",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 2,
+            "decoded": 0
+          },
+          {
+            "kind": "XLINE",
+            "total": 2,
+            "decoded": 0
+          }
+        ],
+        "entity_warnings": [
+          "POLYLINE 标志 64 超出普通二维折线范围；保留记录，轮廓未检查",
+          "POLYLINE 标志 64 超出普通二维折线范围；保留记录，轮廓未检查"
+        ],
+        "expanded_kinds": [
+          {
+            "kind": "3DSOLID",
+            "total": 1,
+            "decoded": 0
+          },
+          {
+            "kind": "ARC",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "ARC_DIMENSION",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "ATTDEF",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "ATTRIB",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "CIRCLE",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "DIMENSION",
+            "total": 13,
+            "decoded": 13
+          },
+          {
+            "kind": "LARGE_RADIAL_DIMENSION",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "LINE",
+            "total": 19,
+            "decoded": 19
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 7,
+            "decoded": 7
+          },
+          {
+            "kind": "MESH",
+            "total": 1,
+            "decoded": 0
+          },
+          {
+            "kind": "MTEXT",
+            "total": 19,
+            "decoded": 19
+          },
+          {
+            "kind": "MULTILEADER",
+            "total": 2,
+            "decoded": 0
+          },
+          {
+            "kind": "POINT",
+            "total": 6,
+            "decoded": 6
+          },
+          {
+            "kind": "POLYLINE",
+            "total": 2,
+            "decoded": 0
+          },
+          {
+            "kind": "RAY",
+            "total": 3,
+            "decoded": 0
+          },
+          {
+            "kind": "SOLID",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "SPLINE",
+            "total": 1,
+            "decoded": 1
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 2,
+            "decoded": 0
+          },
+          {
+            "kind": "XLINE",
+            "total": 2,
+            "decoded": 0
+          }
+        ],
+        "expanded_outlines": 29,
+        "expansion_warnings": [
+          "POLYLINE 标志 64 超出普通二维折线范围；保留记录，轮廓未检查",
+          "POLYLINE 标志 64 超出普通二维折线范围；保留记录，轮廓未检查"
+        ],
+        "findings": [
+          {
+            "category": "解析",
+            "severity": "警告",
+            "message": "POLYLINE 标志 64 超出普通二维折线范围；保留记录，轮廓未检查"
+          },
+          {
+            "category": "解析",
+            "severity": "警告",
+            "message": "POLYLINE 标志 64 超出普通二维折线范围；保留记录，轮廓未检查"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "13 个 DIMENSION 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "2 个 LARGE_RADIAL_DIMENSION 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "1 个 ARC_DIMENSION 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "2 个 MULTILEADER 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "3 个 RAY 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "1 个 MESH 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "2 个 POLYLINE 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "1 个 SOLID 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "2 个 XLINE 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "1 个 3DSOLID 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "2 个 VIEWPORT 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 21 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 12 处轮廓没闭合——最宽的缝 69.99999999999997（(21.88948373460441, 50.30990140386869) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「0」有 2 对线段重叠（共 19.9999989485271 长度，(21.88948373460441, 60.30990140386869) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "valid_lineweights.dxf",
+      "bytes": 21383,
+      "sha256": "d94201194185d1511416abe43c3bc679ba8c7bf99a8dd43cd96c4ce46c38fc61",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/valid_lineweights.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/valid_lineweights.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 50,
+        "decoded": 50,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "valid_lineweights.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 2188,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "LINE",
+            "total": 25,
+            "decoded": 25
+          },
+          {
+            "kind": "TEXT",
+            "total": 25,
+            "decoded": 25
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "LINE",
+            "total": 25,
+            "decoded": 25
+          },
+          {
+            "kind": "TEXT",
+            "total": 25,
+            "decoded": 25
+          }
+        ],
+        "expanded_outlines": 25,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 25 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 25 处轮廓没闭合——最宽的缝 10（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "viewport_frozen_layers.dxf",
+      "bytes": 73504,
+      "sha256": "c04a78677627e94c0056b2c01f641770439668932bd2288392ae9ec654a5e222",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/viewport_frozen_layers.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/viewport_frozen_layers.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "partial",
+        "observed": 11,
+        "decoded": 7,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "未解码 VIEWPORT",
+        "仅字段/元数据 TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "viewport_frozen_layers.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 6312,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "TEXT",
+            "total": 7,
+            "decoded": 7
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 4,
+            "decoded": 0
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "TEXT",
+            "total": 7,
+            "decoded": 7
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 4,
+            "decoded": 0
+          }
+        ],
+        "expanded_outlines": 0,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "4 个 VIEWPORT 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「Layer3」上有 1 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「Layer2」上有 1 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「Layer1」上有 1 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 4 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "图层",
+            "severity": "提示",
+            "message": "图层「Layer3」是冻结的，上面有 1 条实体——不会被切（确认是有意的）"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "viewports.dxf",
+      "bytes": 90501,
+      "sha256": "f890b657108b04b4787e17b1d6e1e9044485be239246bd2af965b720447c5f7d",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/viewports.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/viewports.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "partial",
+        "observed": 36,
+        "decoded": 19,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "未解码 IMAGE/VIEWPORT",
+        "仅字段/元数据 MTEXT/TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "viewports.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 7536,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "IMAGE",
+            "total": 5,
+            "decoded": 0
+          },
+          {
+            "kind": "LINE",
+            "total": 7,
+            "decoded": 7
+          },
+          {
+            "kind": "MTEXT",
+            "total": 5,
+            "decoded": 5
+          },
+          {
+            "kind": "TEXT",
+            "total": 7,
+            "decoded": 7
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 12,
+            "decoded": 0
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "IMAGE",
+            "total": 5,
+            "decoded": 0
+          },
+          {
+            "kind": "LINE",
+            "total": 7,
+            "decoded": 7
+          },
+          {
+            "kind": "MTEXT",
+            "total": 5,
+            "decoded": 5
+          },
+          {
+            "kind": "TEXT",
+            "total": 7,
+            "decoded": 7
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 12,
+            "decoded": 0
+          }
+        ],
+        "expanded_outlines": 7,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "5 个 IMAGE 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "12 个 VIEWPORT 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 12 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 7 处轮廓没闭合——最宽的缝 43.952622993284（(10.601230578427, 46.870064543221) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "visibility.dxf",
+      "bytes": 121512,
+      "sha256": "b67896731e038949e6c11f21a90ea8d345009226f8ec82f24c22d11565be8275",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/visibility.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/visibility.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "all-observed-entities",
+        "observed": 6,
+        "decoded": 6,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "仅字段/元数据 MTEXT/TEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "visibility.dxf",
+        "read_ok": true,
+        "version": "AC1032",
+        "encoding": "UTF-8",
+        "tags": 6702,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "INSERT",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "MTEXT",
+            "total": 4,
+            "decoded": 4
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "MTEXT",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "TEXT",
+            "total": 4,
+            "decoded": 4
+          }
+        ],
+        "expanded_outlines": 0,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 1 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「Layer1」上有 2 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「Layer2」上有 1 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「text-layer」上有 4 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "wipeout_door.dxf",
+      "bytes": 180063,
+      "sha256": "26794284e4e52db626b889fbbaf847fabb3c6ac85603096af244d7b6d95448bb",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/wipeout_door.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/wipeout_door.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "partial",
+        "observed": 149,
+        "decoded": 148,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "未解码 WIPEOUT",
+        "仅字段/元数据 MTEXT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "wipeout_door.dxf",
+        "read_ok": true,
+        "version": "AC1032",
+        "encoding": "UTF-8",
+        "tags": 11093,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "ARC",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "CIRCLE",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "INSERT",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "LINE",
+            "total": 136,
+            "decoded": 136
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "MTEXT",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "WIPEOUT",
+            "total": 1,
+            "decoded": 0
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "ARC",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "CIRCLE",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "LINE",
+            "total": 268,
+            "decoded": 268
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 2,
+            "decoded": 2
+          },
+          {
+            "kind": "MTEXT",
+            "total": 4,
+            "decoded": 4
+          },
+          {
+            "kind": "WIPEOUT",
+            "total": 3,
+            "decoded": 0
+          }
+        ],
+        "expanded_outlines": 278,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "3 个 WIPEOUT 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 4 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 12 处轮廓没闭合——最宽的缝 1302.538372062844（(11640.574161057171, 4647.837055305696) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「0」有 98 对线段重叠（共 1759.9999999693737 长度，(9474.436935155873, 6650.0178801395905) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "wipeout_random.dxf",
+      "bytes": 20459,
+      "sha256": "672a9bcdf4d2f7caa5229e3b89f38dd741fb97237616b8027623833e2c9f2f21",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/wipeout_random.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/wipeout_random.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "partial",
+        "observed": 31,
+        "decoded": 30,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "未解码 WIPEOUT",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "wipeout_random.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 1921,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "LINE",
+            "total": 30,
+            "decoded": 30
+          },
+          {
+            "kind": "WIPEOUT",
+            "total": 1,
+            "decoded": 0
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "LINE",
+            "total": 30,
+            "decoded": 30
+          },
+          {
+            "kind": "WIPEOUT",
+            "total": 1,
+            "decoded": 0
+          }
+        ],
+        "expanded_outlines": 30,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "1 个 WIPEOUT 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 30 处轮廓没闭合——最宽的缝 91.78784615392344（(89.51244268658999, 43.37644926903097) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    },
+    {
+      "file": "xclip.dxf",
+      "bytes": 94031,
+      "sha256": "cc1e5ffd5c88bd4b11f74324dc397a45f337471267a6458d5b8a2a213e6f7551",
+      "source": {
+        "repository": "mozman/ezdxf",
+        "upstream_path": "examples_dxf/xclip.dxf",
+        "upstream_commit": null,
+        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/xclip.dxf"
+      },
+      "reading": {
+        "status": "success",
+        "meaning": "字节读取及扫描不变量成立；不表示完整标准读取"
+      },
+      "decoding": {
+        "status": "partial",
+        "observed": 25,
+        "decoded": 18,
+        "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
+      },
+      "geometry": {
+        "status": "not-independently-verified",
+        "verified_entities": 0,
+        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+      },
+      "participating_tests": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "E1",
+        "E2",
+        "G0",
+        "G1",
+        "C0"
+      ],
+      "limitations": [
+        "未解码 VIEWPORT",
+        "仅字段/元数据 MTEXT",
+        "未加载外部参照/未验证裁剪",
+        "缺少逐图纸独立几何真值"
+      ],
+      "observed": {
+        "file": "xclip.dxf",
+        "read_ok": true,
+        "version": "AC1027",
+        "encoding": "UTF-8",
+        "tags": 8077,
+        "eof_ok": true,
+        "codes_ok": true,
+        "scan_warnings": [],
+        "structure_warnings": [],
+        "entity_kinds": [
+          {
+            "kind": "INSERT",
+            "total": 9,
+            "decoded": 9
+          },
+          {
+            "kind": "MTEXT",
+            "total": 9,
+            "decoded": 9
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 7,
+            "decoded": 0
+          }
+        ],
+        "entity_warnings": [],
+        "expanded_kinds": [
+          {
+            "kind": "CIRCLE",
+            "total": 9,
+            "decoded": 9
+          },
+          {
+            "kind": "LINE",
+            "total": 18,
+            "decoded": 18
+          },
+          {
+            "kind": "LWPOLYLINE",
+            "total": 9,
+            "decoded": 9
+          },
+          {
+            "kind": "MTEXT",
+            "total": 9,
+            "decoded": 9
+          },
+          {
+            "kind": "VIEWPORT",
+            "total": 7,
+            "decoded": 0
+          }
+        ],
+        "expanded_outlines": 36,
+        "expansion_warnings": [],
+        "findings": [
+          {
+            "category": "检查覆盖",
+            "severity": "警告",
+            "message": "7 个 VIEWPORT 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          },
+          {
+            "category": "文字未转曲线",
+            "severity": "警告",
+            "message": "图层「0」上有 9 处文字没转成曲线——机床不认字符串，这些位置不会被切"
+          },
+          {
+            "category": "轮廓闭合",
+            "severity": "警告",
+            "message": "图层「0」上有 18 处轮廓没闭合——最宽的缝 7.0000000000000036（(25.744047593269, 9.997335817090999) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          },
+          {
+            "category": "重复切割",
+            "severity": "警告",
+            "message": "图层「0」有 10 对线段重叠（共 11.010709203255674 长度，(5, 12) 附近），请确认是否存在重复路径"
+          }
+        ],
+        "incomplete": true,
+        "geometry_verified": false
+      }
+    }
+  ]
+}

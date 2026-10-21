@@ -12,6 +12,8 @@
 **来源**：[mozman/ezdxf](https://github.com/mozman/ezdxf) 的 `examples_dxf/` 目录。
 收录的是原文件，未做任何修改。
 
+本轮保留现有语料字节，逐文件来源路径、大小、SHA-256 及实际验证层次见[第三方图纸案例表](docs/corpus-validation.md)。本仓库首次收录提交为 6f5d18250170d52921e9cc35cee583c045355ab5；未记录上游提交号，来源 master 链接不构成当前上游字节一致性证明。
+
 **用途**：真实文件回归测试。自己造的测试数据干净规整，测不出真实世界的问题——
 前导空白、三种换行、老版本的格式差异、退化的几何、第三方导出器的怪写法，
 这些都只有真实文件才覆盖得到。
@@ -81,5 +83,10 @@ ezdxf 的版权与完整 MIT 条款已在上一节保留，随项目分发。
 
 | 依赖 | 用途 | 用在哪 | 许可证 |
 | --- | --- | --- | --- |
-| `moonbitlang/x` | 读文件（`fs`）；命令行退出码（`sys`） | **只有 `conformance/` 和 `cli/` 两个子包**，库本体和网页版都不碰 | Apache-2.0 |
+| `moonbitlang/x` | 读文件（`fs`）；命令行退出码（`sys`） | `conformance/`、`cli/` 及独立 `examples/consumer/` 工程；库本体和网页版不使用 | Apache-2.0 |
 | `moonbitlang/async` | 分块读文件（`fs` 的 `read_at`，`moonbitlang/x/fs` 只能一次读完） | **只有 `cli/` 子包**（`stats` 命令） | Apache-2.0 |
+
+
+## 浏览器分发补充
+
+网页包含 MoonBit core 编译代码；完整上游许可及附带声明保存在 web/licenses/moonbit-core.LICENSE 和 web/licenses/moonbit-core.NOTICE，构建时随站点复制，保留其中第三方来源及免责声明。网页界面和示例模型由本项目编写。

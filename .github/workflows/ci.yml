@@ -56,10 +56,27 @@ jobs:
       - name: Native后端测试
         run: moon test --target native
 
+      - name: 几何与检查器错误检出能力
+        run: node scripts/verify-test-sensitivity.cjs
+
       - name: CLI实际示例回归
         run: node cli/smoke.cjs
+
+      - name: 第三方图纸分层验证记录
+        run: node scripts/verify-corpus-records.cjs
 
       - name: 网页构建与报告回归
         run: |
           bash web/build.sh
           node web/smoke.cjs
+
+      - name: 六类最小交付用例
+        run: node scripts/verify-delivery.cjs
+
+      - name: 混合输入检查完整性
+        run: node scripts/verify-completeness.cjs
+
+      - name: 独立 MoonBit 工程调用（Wasm 与 Native）
+        run: |
+          node scripts/verify-consumer.cjs
+          node scripts/verify-consumer.cjs --target native

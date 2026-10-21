@@ -650,73 +650,73 @@
   const _M0FPC28internal7strconv10int__pow10 = [1n, 10n, 100n, 1000n, 10000n, 100000n, 1000000n, 10000000n, 100000000n, 1000000000n, 10000000000n, 100000000000n, 1000000000000n, 10000000000000n, 100000000000000n, 1000000000000000n];
   const _M0FPC28internal7strconv5table = [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1e+012, 1e+013, 1e+014, 1e+015, 1e+016, 1e+017, 1e+018, 1e+019, 1e+020, 1e+021, 1e+022, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   const _M0FPC28internal7strconv12checked__mulN6constrS1163 = 0n;
-  const _M0FP27mik1e806dxfkit12parse__layerN3subS995 = "AcDbLayerTableRecord";
-  const _M0FP27mik1e806dxfkit21parse__codepage__nameN7_2abindS1396 = "ANSI_";
-  const _M0MP27mik1e806dxfkit4Vec24zeroN6recordS2584 = new _M0TP27mik1e806dxfkit4Vec2(0, 0);
-  const _M0MP27mik1e806dxfkit4Vec34zeroN6recordS2585 = new _M0TP27mik1e806dxfkit4Vec3(0, 0, 0);
-  const _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS2586 = new _M0TP27mik1e806dxfkit4Vec2(1e+308, 1e+308);
-  const _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS2587 = new _M0TP27mik1e806dxfkit4Vec2(-1e+308, -1e+308);
-  const _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS2588 = new _M0TP27mik1e806dxfkit5Aabb2(_M0MP27mik1e806dxfkit5Aabb25emptyN6recordS2586, _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS2587);
-  const _M0MP27mik1e806dxfkit6Affine8identityN6recordS2676 = new _M0TP27mik1e806dxfkit6Affine(1, 0, 0, 1, 0, 0);
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2653 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("离散容差必须是正的有限数字");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2654 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条次数、控制点数或节点数无效（次数上限32，控制点上限4096）");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2655 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条权重数必须为零或等于控制点数");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2656 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条节点必须有限且不递减");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2657 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条没有非空参数域");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2658 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条需要有限坐标与正的有限权重");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2659 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("节点重复次数超过次数加一");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2660 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("内部重节点使样条断裂，不能连接为单条折线");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2661 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条离散超过深度或点数上限，或遇到数值溢出；未满足指定容差");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2662 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条没有可离散的节点区间");
-  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2665 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆需要有限参数、正轴比和正容差");
-  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2666 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆长轴的 XY 投影长度为零");
-  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2667 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆参数跨度超出一周");
-  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2668 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆离散超过65536点上限");
-  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2669 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("离散容差必须是正的有限数字");
-  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2670 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("圆离散需要超过4096段，或半径非有限；未满足指定容差");
-  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2671 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("圆弧参数必须有限");
-  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2672 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("圆弧离散超过4096段上限；未满足指定容差");
-  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2673 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("多段线 bulge 必须有限");
-  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2674 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("多段线圆弧超出数值或4096段上限；未满足指定容差");
-  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2675 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("离散结果含非有限坐标或字高");
-  const _M0MP27mik1e806dxfkit7Drawing5checkN6recordS2697 = new _M0TP27mik1e806dxfkit7Finding("参数", 2, "容差必须是正的有限数字，最小净距必须是非负有限数字");
-  const _M0MP27mik1e806dxfkit7Drawing5checkN6recordS2698 = new _M0TP27mik1e806dxfkit7Finding("检查覆盖", 1, "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据");
+  const _M0FP27mik1e806dxfkit12parse__layerN3subS996 = "AcDbLayerTableRecord";
+  const _M0FP27mik1e806dxfkit21parse__codepage__nameN7_2abindS1397 = "ANSI_";
+  const _M0MP27mik1e806dxfkit4Vec24zeroN6recordS2626 = new _M0TP27mik1e806dxfkit4Vec2(0, 0);
+  const _M0MP27mik1e806dxfkit4Vec34zeroN6recordS2627 = new _M0TP27mik1e806dxfkit4Vec3(0, 0, 0);
+  const _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS2628 = new _M0TP27mik1e806dxfkit4Vec2(1e+308, 1e+308);
+  const _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS2629 = new _M0TP27mik1e806dxfkit4Vec2(-1e+308, -1e+308);
+  const _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS2630 = new _M0TP27mik1e806dxfkit5Aabb2(_M0MP27mik1e806dxfkit5Aabb25emptyN6recordS2628, _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS2629);
+  const _M0MP27mik1e806dxfkit6Affine8identityN6recordS2718 = new _M0TP27mik1e806dxfkit6Affine(1, 0, 0, 1, 0, 0);
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2695 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("离散容差必须是正的有限数字");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2696 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条次数、控制点数或节点数无效（次数上限32，控制点上限4096）");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2697 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条权重数必须为零或等于控制点数");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2698 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条节点必须有限且不递减");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2699 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条没有非空参数域");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2700 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条需要有限坐标与正的有限权重");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2701 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("节点重复次数超过次数加一");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2702 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("内部重节点使样条断裂，不能连接为单条折线");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2703 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条离散超过深度或点数上限，或遇到数值溢出；未满足指定容差");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2704 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条没有可离散的节点区间");
+  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2707 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆需要有限参数、正轴比和正容差");
+  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2708 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆长轴的 XY 投影长度为零");
+  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2709 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆参数跨度超出一周");
+  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2710 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆离散超过65536点上限");
+  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2711 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("离散容差必须是正的有限数字");
+  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2712 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("圆离散需要超过4096段，或半径非有限；未满足指定容差");
+  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2713 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("圆弧参数必须有限");
+  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2714 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("圆弧离散超过4096段上限；未满足指定容差");
+  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2715 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("多段线 bulge 必须有限");
+  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2716 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("多段线圆弧超出数值或4096段上限；未满足指定容差");
+  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2717 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("离散结果含非有限坐标或字高");
+  const _M0MP27mik1e806dxfkit7Drawing5checkN6recordS2739 = new _M0TP27mik1e806dxfkit7Finding("参数", 2, "容差必须是正的有限数字，最小净距必须是非负有限数字");
+  const _M0MP27mik1e806dxfkit7Drawing5checkN6recordS2740 = new _M0TP27mik1e806dxfkit7Finding("检查覆盖", 1, "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据");
   const _M0FPC28internal7strconv17check__underscoreN25_2atransition__table__222S230 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 5, 5, 5, 5, 5, 0, 1, 2, 5];
   const _M0FPC28internal7strconv15parse__inf__nanN25_2atransition__table__304S312 = [14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 3, 4, 14, 14, 14, 14, 14, 14, 14, 7, 14, 14, 14, 14, 5, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 6, 14, 14, 14, 0, 14, 14, 14, 14, 14, 14, 14, 14, 14, 8, 14, 14, 14, 14, 14, 1, 14, 14, 9, 14, 14, 14, 14, 14, 14, 14, 14, 10, 14, 14, 14, 14, 14, 14, 11, 14, 14, 14, 14, 14, 14, 14, 14, 14, 12, 14, 14, 14, 14, 14, 14, 14, 14, 13, 14, 1, 14, 14, 14, 14, 14, 14, 14];
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2592 = { _0: 60, _1: 79 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2593 = { _0: 170, _1: 179 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2594 = { _0: 270, _1: 289 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2595 = { _0: 370, _1: 389 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2596 = { _0: 400, _1: 409 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2597 = { _0: 1060, _1: 1070 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2598 = { _0: 90, _1: 99 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2599 = { _0: 420, _1: 429 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2600 = { _0: 440, _1: 459 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2601 = { _0: 1071, _1: 1071 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2602 = { _0: 160, _1: 169 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2603 = { _0: 10, _1: 59 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2604 = { _0: 110, _1: 149 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2605 = { _0: 210, _1: 239 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2606 = { _0: 460, _1: 469 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2607 = { _0: 1010, _1: 1059 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2608 = { _0: 290, _1: 299 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2609 = { _0: 310, _1: 319 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2610 = { _0: 1004, _1: 1004 };
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2643 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效整数或超出32位范围");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2644 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("数值超出16位范围");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2645 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效浮点数");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2646 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("数值必须有限");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2647 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效64位整数");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2648 = new _M0DTP27mik1e806dxfkit8TagValue4Bool(false);
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2649 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(_M0FP27mik1e806dxfkit12parse__valueN6constrS2648);
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2650 = new _M0DTP27mik1e806dxfkit8TagValue4Bool(true);
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2651 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(_M0FP27mik1e806dxfkit12parse__valueN6constrS2650);
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2652 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("布尔数值必须为0或1");
-  const _M0FP27mik1e806dxfkit15group__sectionsN6constrS2642 = "HEADER";
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2634 = { _0: 60, _1: 79 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2635 = { _0: 170, _1: 179 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2636 = { _0: 270, _1: 289 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2637 = { _0: 370, _1: 389 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2638 = { _0: 400, _1: 409 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2639 = { _0: 1060, _1: 1070 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2640 = { _0: 90, _1: 99 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2641 = { _0: 420, _1: 429 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2642 = { _0: 440, _1: 459 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2643 = { _0: 1071, _1: 1071 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2644 = { _0: 160, _1: 169 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2645 = { _0: 10, _1: 59 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2646 = { _0: 110, _1: 149 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2647 = { _0: 210, _1: 239 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2648 = { _0: 460, _1: 469 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2649 = { _0: 1010, _1: 1059 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2650 = { _0: 290, _1: 299 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2651 = { _0: 310, _1: 319 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS2652 = { _0: 1004, _1: 1004 };
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2685 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效整数或超出32位范围");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2686 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("数值超出16位范围");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2687 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效浮点数");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2688 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("数值必须有限");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2689 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效64位整数");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2690 = new _M0DTP27mik1e806dxfkit8TagValue4Bool(false);
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2691 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(_M0FP27mik1e806dxfkit12parse__valueN6constrS2690);
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2692 = new _M0DTP27mik1e806dxfkit8TagValue4Bool(true);
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2693 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(_M0FP27mik1e806dxfkit12parse__valueN6constrS2692);
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS2694 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("布尔数值必须为0或1");
+  const _M0FP27mik1e806dxfkit15group__sectionsN6constrS2684 = "HEADER";
   const _M0FP37mik1e806dxfkit3web6decodeN6constrS37 = new _M0DTPC16result6ResultGzsE3Err("没有收到文件内容");
   const _M0FP37mik1e806dxfkit3web6decodeN6constrS38 = new _M0DTPC16result6ResultGzsE3Err("文件内容解码失败，可能上传时出错了");
-  const _M0FP27mik1e806dxfkit12layer__stateN5tupleS2663 = { _0: "#808080", _1: "" };
-  const _M0FP27mik1e806dxfkit12layer__stateN5tupleS2664 = { _0: "#808080", _1: "" };
+  const _M0FP27mik1e806dxfkit12layer__stateN5tupleS2705 = { _0: "#808080", _1: "" };
+  const _M0FP27mik1e806dxfkit12layer__stateN5tupleS2706 = { _0: "#808080", _1: "" };
   function _M0MPC15array10FixedArray12unsafe__blitGRPB17UnsafeMaybeUninitGyEE(dst, dst_offset, src, src_offset, len) {
     if (dst === src && dst_offset < src_offset) {
       let _tmp = 0;
@@ -4022,14 +4022,11 @@
   function _M0MP27mik1e806dxfkit4Vec32xy(self) {
     return new _M0TP27mik1e806dxfkit4Vec2(self.x, self.y);
   }
-  function _M0MP27mik1e806dxfkit4Vec33sub(self, other) {
-    return new _M0TP27mik1e806dxfkit4Vec3(self.x - other.x, self.y - other.y, self.z - other.z);
-  }
   function _M0MP27mik1e806dxfkit5Aabb26expand(self, p) {
     return new _M0TP27mik1e806dxfkit5Aabb2(new _M0TP27mik1e806dxfkit4Vec2(_M0MPC16double6Double3min(self.min.x, p.x), _M0MPC16double6Double3min(self.min.y, p.y)), new _M0TP27mik1e806dxfkit4Vec2(_M0MPC16double6Double3max(self.max.x, p.x), _M0MPC16double6Double3max(self.max.y, p.y)));
   }
   function _M0MP27mik1e806dxfkit5Aabb24size(self) {
-    return self.min.x > self.max.x || self.min.y > self.max.y ? _M0MP27mik1e806dxfkit4Vec24zeroN6recordS2584 : _M0MP27mik1e806dxfkit4Vec23sub(self.max, self.min);
+    return self.min.x > self.max.x || self.min.y > self.max.y ? _M0MP27mik1e806dxfkit4Vec24zeroN6recordS2626 : _M0MP27mik1e806dxfkit4Vec23sub(self.max, self.min);
   }
   function _M0FP27mik1e806dxfkit16normalize__angle(rad) {
     let a = _M0IPC16double6DoublePB3Mod3mod(rad, 6.2831853071795862);
@@ -4140,7 +4137,7 @@
     return false;
   }
   function _M0FP27mik1e806dxfkit10code__type(code) {
-    return _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS2592, _M0FP27mik1e806dxfkit10code__typeN5tupleS2593, _M0FP27mik1e806dxfkit10code__typeN5tupleS2594, _M0FP27mik1e806dxfkit10code__typeN5tupleS2595, _M0FP27mik1e806dxfkit10code__typeN5tupleS2596, _M0FP27mik1e806dxfkit10code__typeN5tupleS2597]) ? 1 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS2598, _M0FP27mik1e806dxfkit10code__typeN5tupleS2599, _M0FP27mik1e806dxfkit10code__typeN5tupleS2600, _M0FP27mik1e806dxfkit10code__typeN5tupleS2601]) ? 2 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS2602]) ? 3 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS2603, _M0FP27mik1e806dxfkit10code__typeN5tupleS2604, _M0FP27mik1e806dxfkit10code__typeN5tupleS2605, _M0FP27mik1e806dxfkit10code__typeN5tupleS2606, _M0FP27mik1e806dxfkit10code__typeN5tupleS2607]) ? 4 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS2608]) ? 5 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS2609, _M0FP27mik1e806dxfkit10code__typeN5tupleS2610]) ? 6 : 0;
+    return _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS2634, _M0FP27mik1e806dxfkit10code__typeN5tupleS2635, _M0FP27mik1e806dxfkit10code__typeN5tupleS2636, _M0FP27mik1e806dxfkit10code__typeN5tupleS2637, _M0FP27mik1e806dxfkit10code__typeN5tupleS2638, _M0FP27mik1e806dxfkit10code__typeN5tupleS2639]) ? 1 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS2640, _M0FP27mik1e806dxfkit10code__typeN5tupleS2641, _M0FP27mik1e806dxfkit10code__typeN5tupleS2642, _M0FP27mik1e806dxfkit10code__typeN5tupleS2643]) ? 2 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS2644]) ? 3 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS2645, _M0FP27mik1e806dxfkit10code__typeN5tupleS2646, _M0FP27mik1e806dxfkit10code__typeN5tupleS2647, _M0FP27mik1e806dxfkit10code__typeN5tupleS2648, _M0FP27mik1e806dxfkit10code__typeN5tupleS2649]) ? 4 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS2650]) ? 5 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS2651, _M0FP27mik1e806dxfkit10code__typeN5tupleS2652]) ? 6 : 0;
   }
   function _M0MP27mik1e806dxfkit6Record7get__in(self, subclass, code) {
     const _bind = self.subclasses;
@@ -4245,7 +4242,7 @@
     }
   }
   function _M0FP27mik1e806dxfkit12parse__layer(record) {
-    const _bind = _M0MP27mik1e806dxfkit6Record7get__in(record, _M0FP27mik1e806dxfkit12parse__layerN3subS995, 70);
+    const _bind = _M0MP27mik1e806dxfkit6Record7get__in(record, _M0FP27mik1e806dxfkit12parse__layerN3subS996, 70);
     let flags;
     if (_bind === undefined) {
       flags = 0;
@@ -4255,7 +4252,7 @@
       flags = _M0MP27mik1e806dxfkit8TagValue7as__int(_t.value);
     }
     const _tmp = _M0MP27mik1e806dxfkit6Record11get__string(record, 2);
-    const _bind$2 = _M0MP27mik1e806dxfkit6Record7get__in(record, _M0FP27mik1e806dxfkit12parse__layerN3subS995, 62);
+    const _bind$2 = _M0MP27mik1e806dxfkit6Record7get__in(record, _M0FP27mik1e806dxfkit12parse__layerN3subS996, 62);
     let _tmp$2;
     if (_bind$2 === undefined) {
       _tmp$2 = 7;
@@ -4265,7 +4262,7 @@
       _tmp$2 = _M0MP27mik1e806dxfkit8TagValue7as__int(_t.value);
     }
     const _tmp$3 = _tmp$2;
-    const _bind$3 = _M0MP27mik1e806dxfkit6Record7get__in(record, _M0FP27mik1e806dxfkit12parse__layerN3subS995, 6);
+    const _bind$3 = _M0MP27mik1e806dxfkit6Record7get__in(record, _M0FP27mik1e806dxfkit12parse__layerN3subS996, 6);
     let _tmp$4;
     if (_bind$3 === undefined) {
       _tmp$4 = "CONTINUOUS";
@@ -4429,7 +4426,7 @@
           }
           current = _M0MP27mik1e806dxfkit6Record11get__string(record, 2);
           current_records = [];
-          if (_M0IPC16option6OptionPB2Eq5equalGsE(current, _M0FP27mik1e806dxfkit15group__sectionsN6constrS2642)) {
+          if (_M0IPC16option6OptionPB2Eq5equalGsE(current, _M0FP27mik1e806dxfkit15group__sectionsN6constrS2684)) {
             _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(current_records, record);
           }
         } else {
@@ -4618,7 +4615,7 @@
     if (name === "ANSI_1252") {
       return _M0DTP27mik1e806dxfkit8Encoding6Cp1252__;
     } else {
-      if (_M0MPC16string6String11has__prefix(name, new _M0TPC16string10StringView(_M0FP27mik1e806dxfkit21parse__codepage__nameN7_2abindS1396, 0, _M0FP27mik1e806dxfkit21parse__codepage__nameN7_2abindS1396.length))) {
+      if (_M0MPC16string6String11has__prefix(name, new _M0TPC16string10StringView(_M0FP27mik1e806dxfkit21parse__codepage__nameN7_2abindS1397, 0, _M0FP27mik1e806dxfkit21parse__codepage__nameN7_2abindS1397.length))) {
         const digits = _M0MPC16string10StringView9to__owned(_M0MPC16string6String21clamped__view_2einner(name, 5, undefined));
         let n;
         let _try_err;
@@ -5114,10 +5111,10 @@
                 }
                 break _L$4;
               }
-              return _M0FP27mik1e806dxfkit12parse__valueN6constrS2645;
+              return _M0FP27mik1e806dxfkit12parse__valueN6constrS2687;
             }
             if (!_M0FP27mik1e806dxfkit14finite__number(value)) {
-              return _M0FP27mik1e806dxfkit12parse__valueN6constrS2646;
+              return _M0FP27mik1e806dxfkit12parse__valueN6constrS2688;
             }
             return new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(new _M0DTP27mik1e806dxfkit8TagValue3F64(value));
           }
@@ -5143,12 +5140,12 @@
                 }
                 break _L$5;
               }
-              return _M0FP27mik1e806dxfkit12parse__valueN6constrS2647;
+              return _M0FP27mik1e806dxfkit12parse__valueN6constrS2689;
             }
             return new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(new _M0DTP27mik1e806dxfkit8TagValue3I64(value$2));
           }
           case 5: {
-            return text === "0" ? _M0FP27mik1e806dxfkit12parse__valueN6constrS2649 : text === "1" ? _M0FP27mik1e806dxfkit12parse__valueN6constrS2651 : _M0FP27mik1e806dxfkit12parse__valueN6constrS2652;
+            return text === "0" ? _M0FP27mik1e806dxfkit12parse__valueN6constrS2691 : text === "1" ? _M0FP27mik1e806dxfkit12parse__valueN6constrS2693 : _M0FP27mik1e806dxfkit12parse__valueN6constrS2694;
           }
           case 0: {
             break _L$2;
@@ -5173,7 +5170,7 @@
           }
           break _L$4;
         }
-        return _M0FP27mik1e806dxfkit12parse__valueN6constrS2643;
+        return _M0FP27mik1e806dxfkit12parse__valueN6constrS2685;
       }
       if (kind === 1) {
         _L$5: {
@@ -5187,7 +5184,7 @@
             }
             break _L$5;
           }
-          return _M0FP27mik1e806dxfkit12parse__valueN6constrS2644;
+          return _M0FP27mik1e806dxfkit12parse__valueN6constrS2686;
         }
       }
       let _tmp;
@@ -5571,20 +5568,20 @@
   function _M0FP27mik1e806dxfkit23spline__points__checked(degree, knots, control_points, weights, tol) {
     const count = control_points.length;
     if (!_M0FP27mik1e806dxfkit19positive__tolerance(tol)) {
-      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2653;
+      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2695;
     }
     if (degree < 1 || (degree > 32 || (count <= degree || (count > 4096 || knots.length !== ((count + degree | 0) + 1 | 0))))) {
-      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2654;
+      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2696;
     }
     if (weights.length !== 0 && weights.length !== count) {
-      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2655;
+      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2697;
     }
     let _tmp = 0;
     while (true) {
       const i = _tmp;
       if (i < knots.length) {
         if (!_M0FP27mik1e806dxfkit14finite__number(_M0MPC15array5Array2atGdE(knots, i)) || i > 0 && _M0MPC15array5Array2atGdE(knots, i) < _M0MPC15array5Array2atGdE(knots, i - 1 | 0)) {
-          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2656;
+          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2698;
         }
         _tmp = i + 1 | 0;
         continue;
@@ -5595,7 +5592,7 @@
     const start = _M0MPC15array5Array2atGdE(knots, degree);
     const end = _M0MPC15array5Array2atGdE(knots, count);
     if (end <= start) {
-      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2657;
+      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2699;
     }
     let ctrl = [];
     let _tmp$2 = 0;
@@ -5605,7 +5602,7 @@
         const p = _M0MPC15array5Array2atGRP27mik1e806dxfkit3TagE(control_points, i);
         const w = _M0FP27mik1e806dxfkit10weight__at(weights, i);
         if (!_M0FP27mik1e806dxfkit14finite__number(p.x) || (!_M0FP27mik1e806dxfkit14finite__number(p.y) || (!_M0FP27mik1e806dxfkit14finite__number(p.z) || (!_M0FP27mik1e806dxfkit14finite__number(w) || (w <= 0 || (!_M0FP27mik1e806dxfkit14finite__number(p.x * w) || !_M0FP27mik1e806dxfkit14finite__number(p.y * w))))))) {
-          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2658;
+          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2700;
         }
         _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(ctrl, _M0MP27mik1e806dxfkit4Vec33new(p.x * w, p.y * w, w));
         _tmp$2 = i + 1 | 0;
@@ -5655,10 +5652,10 @@
           }
         }
         if (multiplicity > (degree + 1 | 0)) {
-          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2659;
+          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2701;
         }
         if (u > start && (u < end && multiplicity > degree)) {
-          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2660;
+          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2702;
         }
         while (true) {
           if (multiplicity < degree) {
@@ -5704,7 +5701,7 @@
             _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(out, _M0FP27mik1e806dxfkit10project__h(_M0MPC15array5Array2atGRP27mik1e806dxfkit3TagE(segment, 0)));
           }
           if (!_M0FP27mik1e806dxfkit14sample__bezier(segment, tol, 16, out)) {
-            return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2661;
+            return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2703;
           }
           break _L;
         }
@@ -5714,7 +5711,7 @@
         break;
       }
     }
-    return out.length === 0 ? _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2662 : new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE2Ok(out);
+    return out.length === 0 ? _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2704 : new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE2Ok(out);
   }
   function _M0FP27mik1e806dxfkit10scan__tags(data) {
     const stream = _M0MP27mik1e806dxfkit9TagStream3new();
@@ -5733,24 +5730,7 @@
     return new _M0TP27mik1e806dxfkit7TagScan(tags, _tmp, _tmp$2);
   }
   function _M0FP27mik1e806dxfkit3fmt(v) {
-    const scaled = v >= 0 ? _M0MPC16double6Double7to__int(v * 10000 + 0.5) : -_M0MPC16double6Double7to__int(-v * 10000 + 0.5) | 0;
-    const neg = scaled < 0;
-    const a = neg ? -scaled | 0 : scaled;
-    let frac_s = _M0MPC13int3Int18to__string_2einner(a % 10000 | 0, 10);
-    while (true) {
-      if (frac_s.length < 4) {
-        frac_s = `0${frac_s}`;
-        continue;
-      } else {
-        break;
-      }
-    }
-    const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(1);
-    _M0MPB13StringBuilder13write__objectGiE(_string_builder, a / 10000 | 0);
-    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, ".");
-    _M0MPB13StringBuilder13write__objectGsE(_string_builder, frac_s);
-    const body = _string_builder.val;
-    return neg ? `-${body}` : body;
+    return String(v);
   }
   function _M0FP27mik1e806dxfkit11fmt__points(points) {
     const sb = _M0MPB13StringBuilder21StringBuilder_2einner(0);
@@ -5807,13 +5787,13 @@
   }
   function _M0FP27mik1e806dxfkit12layer__state(tables, layer) {
     if (tables === undefined) {
-      return _M0FP27mik1e806dxfkit12layer__stateN5tupleS2664;
+      return _M0FP27mik1e806dxfkit12layer__stateN5tupleS2706;
     } else {
       const _Some = tables;
       const _t = _Some;
       const _bind = _M0MP27mik1e806dxfkit6Tables5layer(_t, layer);
       if (_bind === undefined) {
-        return _M0FP27mik1e806dxfkit12layer__stateN5tupleS2663;
+        return _M0FP27mik1e806dxfkit12layer__stateN5tupleS2705;
       } else {
         const _Some$2 = _bind;
         const _l = _Some$2;
@@ -6020,17 +6000,17 @@
   }
   function _M0FP27mik1e806dxfkit24ellipse__points__checked(center, major, ratio, start_param, end_param, tol) {
     if (!_M0FP27mik1e806dxfkit19positive__tolerance(tol) || (!_M0FP27mik1e806dxfkit14finite__number(start_param) || (!_M0FP27mik1e806dxfkit14finite__number(end_param) || (!_M0FP27mik1e806dxfkit14finite__number(ratio) || ratio <= 0)))) {
-      return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2665;
+      return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2707;
     }
     const c = _M0MP27mik1e806dxfkit4Vec32xy(center);
     const m = _M0MP27mik1e806dxfkit4Vec32xy(major);
     const n = _M0MP27mik1e806dxfkit4Vec23new(-m.y * ratio, m.x * ratio);
     if (Math.sqrt(m.x * m.x + m.y * m.y) === 0) {
-      return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2666;
+      return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2708;
     }
     const span = _M0FP27mik1e806dxfkit13ellipse__span(start_param, end_param);
     if (!_M0FP27mik1e806dxfkit14finite__number(span) || span > 6.2831853071805863) {
-      return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2667;
+      return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2709;
     }
     let segments = _M0MPC16double6Double7to__int(span / 1.5707963267948966);
     if ((segments + 0) * 1.5707963267948966 < span) {
@@ -6073,7 +6053,7 @@
           }
         }
         if (out.length > 65536) {
-          return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2668;
+          return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS2710;
         }
         _tmp = i + 1 | 0;
         continue;
@@ -6304,31 +6284,15 @@
           const _weights = _Spline._3;
           return new _M0DTP27mik1e806dxfkit4Flat7Outline(_M0FP27mik1e806dxfkit14spline__points(_degree, _knots, _control_points, _weights, tol), false);
         }
-        case 8: {
-          const _Face = self;
-          const _corners = _Face._0;
-          const pts = [];
-          const _bind = _corners.length;
-          let _tmp = 0;
-          while (true) {
-            const _ = _tmp;
-            if (_ < _bind) {
-              const c = _corners[_];
-              _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(pts, _M0MP27mik1e806dxfkit4Vec32xy(c));
-              _tmp = _ + 1 | 0;
-              continue;
-            } else {
-              break;
-            }
-          }
-          return new _M0DTP27mik1e806dxfkit4Flat7Outline(pts, true);
-        }
         case 6: {
           const _Text = self;
           const _at$2 = _Text._0;
           const _height = _Text._1;
           const _value = _Text._2;
           return new _M0DTP27mik1e806dxfkit4Flat5Label(_M0MP27mik1e806dxfkit4Vec32xy(_at$2), _height, _value);
+        }
+        case 8: {
+          break _L;
         }
         case 7: {
           break _L;
@@ -6348,14 +6312,14 @@
   }
   function _M0MP27mik1e806dxfkit8Geometry16flatten__checked(self, tol) {
     if (!_M0FP27mik1e806dxfkit19positive__tolerance(tol)) {
-      return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2669;
+      return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2711;
     }
     switch (self.$tag) {
       case 2: {
         const _Circle = self;
         const _radius = _Circle._1;
         if (!_M0FP27mik1e806dxfkit14finite__number(_radius) || _M0FP27mik1e806dxfkit18arc__cap__exceeded(_radius, 6.2831853071795862, tol)) {
-          return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2670;
+          return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2712;
         }
         break;
       }
@@ -6365,10 +6329,10 @@
         const _start_angle = _Arc._2;
         const _end_angle = _Arc._3;
         if (!_M0FP27mik1e806dxfkit14finite__number(_radius$2) || (!_M0FP27mik1e806dxfkit14finite__number(_start_angle) || !_M0FP27mik1e806dxfkit14finite__number(_end_angle))) {
-          return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2671;
+          return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2713;
         }
         if (_M0FP27mik1e806dxfkit18arc__cap__exceeded(_radius$2, _M0FP27mik1e806dxfkit10arc__sweep(_start_angle, _end_angle), tol)) {
-          return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2672;
+          return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2714;
         }
         break;
       }
@@ -6384,12 +6348,12 @@
             const a = _M0MPC15array5Array2atGRP27mik1e806dxfkit3TagE(_vertices, i);
             const b = _M0MPC15array5Array2atGRP27mik1e806dxfkit3TagE(_vertices, (i + 1 | 0) % _vertices.length | 0);
             if (!_M0FP27mik1e806dxfkit14finite__number(a.bulge)) {
-              return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2673;
+              return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2715;
             }
             if (a.bulge !== 0 && _M0MP27mik1e806dxfkit4Vec28distance(_M0MP27mik1e806dxfkit4Vec32xy(a.at), _M0MP27mik1e806dxfkit4Vec32xy(b.at)) > 0) {
               const arc = _M0FP27mik1e806dxfkit16arc__from__bulge(_M0MP27mik1e806dxfkit4Vec32xy(a.at), _M0MP27mik1e806dxfkit4Vec32xy(b.at), a.bulge);
               if (!_M0FP27mik1e806dxfkit14finite__number(arc.radius) || _M0FP27mik1e806dxfkit18arc__cap__exceeded(arc.radius, _M0FP27mik1e806dxfkit11angle__span(arc.start_angle, arc.end_angle), tol)) {
-                return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2674;
+                return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2716;
               }
             }
             _tmp = i + 1 | 0;
@@ -6445,7 +6409,7 @@
       }
     }
     if (!_M0FP27mik1e806dxfkit16flat__is__finite(flat)) {
-      return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2675;
+      return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS2717;
     }
     return new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE2Ok(flat);
   }
@@ -6457,6 +6421,20 @@
       const _block = _Insert._1;
       const _scale = _Insert._2;
       const _rotation = _Insert._3;
+      const record = e.common.record;
+      if (_M0MP27mik1e806dxfkit6Record11get__double(record, 210, 0) !== 0 || (_M0MP27mik1e806dxfkit6Record11get__double(record, 220, 0) !== 0 || _M0MP27mik1e806dxfkit6Record11get__double(record, 230, 1) !== 1)) {
+        const _tmp = ctx.warnings;
+        const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(112);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "INSERT（句柄 ");
+        _M0MPB13StringBuilder13write__objectGsE(_string_builder, e.common.handle);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "，图层 ");
+        _M0MPB13StringBuilder13write__objectGsE(_string_builder, e.common.layer);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "，块 ");
+        _M0MPB13StringBuilder13write__objectGsE(_string_builder, _block);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "）带非默认挤出方向；未转换 OCS，已跳过该引用及其子实体");
+        _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(_tmp, _string_builder.val);
+        return undefined;
+      }
       if (_M0MP27mik1e806dxfkit6Record11get__double(e.common.record, 70, 1) !== 1 || _M0MP27mik1e806dxfkit6Record11get__double(e.common.record, 71, 1) !== 1) {
         const _tmp = ctx.warnings;
         const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(64);
@@ -6673,6 +6651,7 @@
     const elevation = _M0MP27mik1e806dxfkit6Record11get__double(record, 38, 0);
     const vertices = [];
     let pending_x = _M0DTPC16option6OptionGdE4None__;
+    let damaged = false;
     const _bind = _M0FP27mik1e806dxfkit14subclass__tags(record, "AcDbPolyline");
     const _bind$2 = _bind.length;
     let _tmp = 0;
@@ -6683,22 +6662,44 @@
         const _bind$3 = t.code;
         switch (_bind$3) {
           case 10: {
+            const _bind$4 = pending_x;
+            if (_bind$4.$tag === 1) {
+              _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, "LWPOLYLINE 顶点缺少 Y（20），未生成该实体的轮廓");
+              damaged = true;
+            }
             pending_x = new _M0DTPC16option6OptionGdE4Some(_M0MP27mik1e806dxfkit8TagValue10as__double(t.value));
             break;
           }
           case 20: {
-            const _bind$4 = pending_x;
-            if (_bind$4.$tag === 1) {
-              const _Some = _bind$4;
+            const _bind$5 = pending_x;
+            if (_bind$5.$tag === 1) {
+              const _Some = _bind$5;
               const _x = _Some._0;
               _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(vertices, new _M0TP27mik1e806dxfkit10PolyVertex(_M0MP27mik1e806dxfkit4Vec33new(_x, _M0MP27mik1e806dxfkit8TagValue10as__double(t.value), elevation), 0));
               pending_x = _M0DTPC16option6OptionGdE4None__;
+            } else {
+              _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, "LWPOLYLINE 顶点缺少 X（10），未生成该实体的轮廓");
+              damaged = true;
             }
             break;
           }
           case 42: {
-            if (vertices.length > 0) {
-              _M0MPC15array5Array2atGRP27mik1e806dxfkit3TagE(vertices, vertices.length - 1 | 0).bulge = _M0MP27mik1e806dxfkit8TagValue10as__double(t.value);
+            _L: {
+              _L$2: {
+                const _bind$6 = pending_x;
+                if (_bind$6.$tag === 1) {
+                  break _L$2;
+                } else {
+                  if (vertices.length === 0) {
+                    break _L$2;
+                  } else {
+                    _M0MPC15array5Array2atGRP27mik1e806dxfkit3TagE(vertices, vertices.length - 1 | 0).bulge = _M0MP27mik1e806dxfkit8TagValue10as__double(t.value);
+                  }
+                }
+                break _L;
+              }
+              _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, "LWPOLYLINE 顶点 bulge（42）没有完整坐标，未生成该实体的轮廓");
+              damaged = true;
             }
             break;
           }
@@ -6709,19 +6710,41 @@
         break;
       }
     }
+    const _bind$3 = pending_x;
+    if (_bind$3.$tag === 1) {
+      _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, "LWPOLYLINE 最后一个顶点缺少 Y（20），未生成该实体的轮廓");
+      damaged = true;
+    }
     if (vertices.length === 0) {
       _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, "LWPOLYLINE 解析不出顶点，已跳过");
       return undefined;
     }
+    const _bind$4 = _M0MP27mik1e806dxfkit6Record3get(record, 90);
+    if (_bind$4 === undefined) {
+    } else {
+      if (_M0MP27mik1e806dxfkit6Record8get__int(record, 90, 0) !== vertices.length) {
+        const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(75);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "LWPOLYLINE 声明顶点数 ");
+        _M0MPB13StringBuilder13write__objectGiE(_string_builder, _M0MP27mik1e806dxfkit6Record8get__int(record, 90, 0));
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 与完整坐标数 ");
+        _M0MPB13StringBuilder13write__objectGiE(_string_builder, vertices.length);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 不一致；请复核输入");
+        _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, _string_builder.val);
+      }
+    }
+    if (damaged) {
+      return _M0DTP27mik1e806dxfkit8Geometry7Unknown__;
+    }
     const closed = (_M0MP27mik1e806dxfkit6Record8get__int(record, 70, 0) & 1) !== 0;
     return new _M0DTP27mik1e806dxfkit8Geometry8Polyline(vertices, closed);
   }
-  function _M0FP27mik1e806dxfkit13parse__spline(record) {
+  function _M0FP27mik1e806dxfkit13parse__spline(record, warnings) {
     const knots = [];
     const weights = [];
     const control = [];
     let px = _M0DTPC16option6OptionGdE4None__;
     let py = _M0DTPC16option6OptionGdE4None__;
+    let damaged = false;
     const _bind = _M0FP27mik1e806dxfkit14subclass__tags(record, "AcDbSpline");
     const _bind$2 = _bind.length;
     let _tmp = 0;
@@ -6740,38 +6763,81 @@
             break;
           }
           case 10: {
-            const _bind$4 = px;
-            const _bind$5 = py;
-            if (_bind$4.$tag === 1) {
-              const _Some = _bind$4;
-              const _x = _Some._0;
-              if (_bind$5.$tag === 1) {
-                const _Some$2 = _bind$5;
-                const _y = _Some$2._0;
-                _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(control, _M0MP27mik1e806dxfkit4Vec33new(_x, _y, 0));
+            _L: {
+              _L$2: {
+                const _bind$4 = px;
+                const _bind$5 = py;
+                if (_bind$4.$tag === 1) {
+                  const _Some = _bind$4;
+                  const _x = _Some._0;
+                  if (_bind$5.$tag === 1) {
+                    const _Some$2 = _bind$5;
+                    const _y = _Some$2._0;
+                    _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(control, _M0MP27mik1e806dxfkit4Vec33new(_x, _y, 0));
+                  } else {
+                    break _L$2;
+                  }
+                } else {
+                  if (_bind$5.$tag === 0) {
+                  } else {
+                    break _L$2;
+                  }
+                }
+                break _L;
               }
+              _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, "SPLINE 控制点缺少 X/Y 坐标；保留记录，未生成该实体的轮廓");
+              damaged = true;
             }
             px = new _M0DTPC16option6OptionGdE4Some(_M0MP27mik1e806dxfkit8TagValue10as__double(t.value));
             py = _M0DTPC16option6OptionGdE4None__;
             break;
           }
           case 20: {
+            _L$2: {
+              _L$3: {
+                const _bind$4 = px;
+                if (_bind$4.$tag === 0) {
+                  break _L$3;
+                } else {
+                  const _bind$5 = py;
+                  if (_bind$5.$tag === 1) {
+                    break _L$3;
+                  }
+                }
+                break _L$2;
+              }
+              _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, "SPLINE 控制点缺少 X 或重复 Y；保留记录，未生成该实体的轮廓");
+              damaged = true;
+            }
             py = new _M0DTPC16option6OptionGdE4Some(_M0MP27mik1e806dxfkit8TagValue10as__double(t.value));
             break;
           }
           case 30: {
-            const _bind$6 = px;
-            const _bind$7 = py;
-            if (_bind$6.$tag === 1) {
-              const _Some = _bind$6;
-              const _x = _Some._0;
-              if (_bind$7.$tag === 1) {
-                const _Some$2 = _bind$7;
-                const _y = _Some$2._0;
-                _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(control, _M0MP27mik1e806dxfkit4Vec33new(_x, _y, _M0MP27mik1e806dxfkit8TagValue10as__double(t.value)));
-                px = _M0DTPC16option6OptionGdE4None__;
-                py = _M0DTPC16option6OptionGdE4None__;
+            _L$3: {
+              _L$4: {
+                const _bind$4 = px;
+                const _bind$5 = py;
+                if (_bind$4.$tag === 1) {
+                  const _Some = _bind$4;
+                  const _x = _Some._0;
+                  if (_bind$5.$tag === 1) {
+                    const _Some$2 = _bind$5;
+                    const _y = _Some$2._0;
+                    _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(control, _M0MP27mik1e806dxfkit4Vec33new(_x, _y, _M0MP27mik1e806dxfkit8TagValue10as__double(t.value)));
+                    px = _M0DTPC16option6OptionGdE4None__;
+                    py = _M0DTPC16option6OptionGdE4None__;
+                  } else {
+                    break _L$4;
+                  }
+                } else {
+                  break _L$4;
+                }
+                break _L$3;
               }
+              _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, "SPLINE 控制点的 Z 前没有完整 X/Y；未生成该实体的轮廓");
+              damaged = true;
+              px = _M0DTPC16option6OptionGdE4None__;
+              py = _M0DTPC16option6OptionGdE4None__;
             }
             break;
           }
@@ -6782,16 +6848,47 @@
         break;
       }
     }
-    const _bind$3 = px;
-    const _bind$4 = py;
-    if (_bind$3.$tag === 1) {
-      const _Some = _bind$3;
-      const _x = _Some._0;
-      if (_bind$4.$tag === 1) {
-        const _Some$2 = _bind$4;
-        const _y = _Some$2._0;
-        _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(control, _M0MP27mik1e806dxfkit4Vec33new(_x, _y, 0));
+    _L: {
+      _L$2: {
+        const _bind$3 = px;
+        const _bind$4 = py;
+        if (_bind$3.$tag === 1) {
+          const _Some = _bind$3;
+          const _x = _Some._0;
+          if (_bind$4.$tag === 1) {
+            const _Some$2 = _bind$4;
+            const _y = _Some$2._0;
+            _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(control, _M0MP27mik1e806dxfkit4Vec33new(_x, _y, 0));
+          } else {
+            break _L$2;
+          }
+        } else {
+          if (_bind$4.$tag === 0) {
+          } else {
+            break _L$2;
+          }
+        }
+        break _L;
       }
+      _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, "SPLINE 最后一个控制点缺少 X/Y；保留记录，未生成该实体的轮廓");
+      damaged = true;
+    }
+    const _bind$3 = _M0MP27mik1e806dxfkit6Record3get(record, 73);
+    if (_bind$3 === undefined) {
+    } else {
+      if (_M0MP27mik1e806dxfkit6Record8get__int(record, 73, 0) !== control.length) {
+        _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, "SPLINE 声明控制点数与完整坐标数不一致；请复核输入");
+      }
+    }
+    const _bind$4 = _M0MP27mik1e806dxfkit6Record3get(record, 72);
+    if (_bind$4 === undefined) {
+    } else {
+      if (_M0MP27mik1e806dxfkit6Record8get__int(record, 72, 0) !== knots.length) {
+        _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, "SPLINE 声明节点数与实际节点数不一致；请复核输入");
+      }
+    }
+    if (damaged) {
+      return _M0DTP27mik1e806dxfkit8Geometry7Unknown__;
     }
     while (true) {
       if (weights.length < control.length) {
@@ -6954,7 +7051,7 @@
                     break _L$6;
                   } else {
                     const _Some$2 = _bind$5;
-                    const _major_end = _Some$2;
+                    const _major = _Some$2;
                     const _bind$6 = _M0FP27mik1e806dxfkit10number__of(record, 40);
                     if (_bind$6.$tag === 1) {
                       const _Some$3 = _bind$6;
@@ -6975,7 +7072,7 @@
                       } else {
                         end_param = 6.2831853071795862;
                       }
-                      return new _M0TP27mik1e806dxfkit6Entity(common, new _M0DTP27mik1e806dxfkit8Geometry7Ellipse(_center, _M0MP27mik1e806dxfkit4Vec33sub(_major_end, _center), _ratio, start_param, end_param));
+                      return new _M0TP27mik1e806dxfkit6Entity(common, new _M0DTP27mik1e806dxfkit8Geometry7Ellipse(_center, _major, _ratio, start_param, end_param));
                     } else {
                       const _string_builder$3 = _M0MPB13StringBuilder21StringBuilder_2einner(54);
                       _M0MPB13StringBuilder13write__objectGsE(_string_builder$3, kind);
@@ -6988,7 +7085,7 @@
               }
               const _string_builder$3 = _M0MPB13StringBuilder21StringBuilder_2einner(56);
               _M0MPB13StringBuilder13write__objectGsE(_string_builder$3, kind);
-              _M0IPB13StringBuilderPB6Logger13write__string(_string_builder$3, " 缺圆心或长轴端点（10/20、11/21），已跳过");
+              _M0IPB13StringBuilderPB6Logger13write__string(_string_builder$3, " 缺圆心或长轴向量（10/20、11/21），已跳过");
               _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, _string_builder$3.val);
               return undefined;
             }
@@ -7042,7 +7139,7 @@
               break _L$2;
             }
             case "SPLINE": {
-              return new _M0TP27mik1e806dxfkit6Entity(common, _M0FP27mik1e806dxfkit13parse__spline(record));
+              return new _M0TP27mik1e806dxfkit6Entity(common, _M0FP27mik1e806dxfkit13parse__spline(record, warnings));
             }
             case "HATCH": {
               const _bind$6 = _M0MP27mik1e806dxfkit6Record5point(record, 0);
@@ -7152,24 +7249,44 @@
   function _M0FP27mik1e806dxfkit23parse__polyline__entity(record, vertex_records, warnings) {
     const common = _M0FP27mik1e806dxfkit10common__of(record);
     const flags = _M0MP27mik1e806dxfkit6Record8get__int(record, 70, 0);
-    if ((flags & 16) !== 0 || (flags & 64) !== 0) {
+    if ((flags & 126) !== 0) {
+      const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(80);
+      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "POLYLINE 标志 ");
+      _M0MPB13StringBuilder13write__objectGiE(_string_builder, flags);
+      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 超出普通二维折线范围；保留记录，轮廓未检查");
+      _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, _string_builder.val);
       return new _M0TP27mik1e806dxfkit6Entity(common, _M0DTP27mik1e806dxfkit8Geometry7Unknown__);
     }
     const vertices = [];
+    let damaged = false;
     const _bind = vertex_records.end - vertex_records.start | 0;
     let _tmp = 0;
     while (true) {
-      const _ = _tmp;
-      if (_ < _bind) {
-        const vr = vertex_records.buf[vertex_records.start + _ | 0];
+      const index = _tmp;
+      if (index < _bind) {
+        const vr = vertex_records.buf[vertex_records.start + index | 0];
+        if (_M0MP27mik1e806dxfkit6Record8get__int(vr, 70, 0) !== 0) {
+          const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(74);
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "POLYLINE 顶点 ");
+          _M0MPB13StringBuilder13write__objectGiE(_string_builder, index + 1 | 0);
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 带拟合或空间标志；保留记录，轮廓未检查");
+          _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, _string_builder.val);
+          damaged = true;
+        }
         const _bind$2 = _M0MP27mik1e806dxfkit6Record5point(vr, 0);
         if (_bind$2 === undefined) {
+          const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(64);
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "POLYLINE 顶点 ");
+          _M0MPB13StringBuilder13write__objectGiE(_string_builder, index + 1 | 0);
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 缺少 X/Y 坐标；未生成该实体的轮廓");
+          _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, _string_builder.val);
+          damaged = true;
         } else {
           const _Some = _bind$2;
           const _at = _Some;
           _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(vertices, new _M0TP27mik1e806dxfkit10PolyVertex(_at, _M0MP27mik1e806dxfkit6Record11get__double(vr, 42, 0)));
         }
-        _tmp = _ + 1 | 0;
+        _tmp = index + 1 | 0;
         continue;
       } else {
         break;
@@ -7178,6 +7295,9 @@
     if (vertices.length === 0) {
       _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, "POLYLINE 解析不出顶点，已跳过");
       return undefined;
+    }
+    if (damaged) {
+      return new _M0TP27mik1e806dxfkit6Entity(common, _M0DTP27mik1e806dxfkit8Geometry7Unknown__);
     }
     return new _M0TP27mik1e806dxfkit6Entity(common, new _M0DTP27mik1e806dxfkit8Geometry8Polyline(vertices, (flags & 1) !== 0));
   }
@@ -7230,6 +7350,8 @@
           }
           if (_tmp) {
             j = j + 1 | 0;
+          } else {
+            _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, "POLYLINE 缺少 SEQEND；已保留可读取记录，请复核输入完整性");
           }
           i = j;
         } else {
@@ -7296,7 +7418,7 @@
             _M0MPB13StringBuilder13write__objectGsE(_string_builder, name);
             _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "」缺基点（10/20），按原点处理");
             _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(warnings, _string_builder.val);
-            base = _M0MP27mik1e806dxfkit4Vec34zeroN6recordS2585;
+            base = _M0MP27mik1e806dxfkit4Vec34zeroN6recordS2627;
           } else {
             const _Some = _bind;
             base = _Some;
@@ -7366,7 +7488,7 @@
       const _ = _tmp;
       if (_ < _bind$5) {
         const e = _bind$4[_];
-        _M0FP27mik1e806dxfkit14expand__entity(e, ctx, _M0MP27mik1e806dxfkit6Affine8identityN6recordS2676, "", [], placed);
+        _M0FP27mik1e806dxfkit14expand__entity(e, ctx, _M0MP27mik1e806dxfkit6Affine8identityN6recordS2718, "", [], placed);
         _tmp = _ + 1 | 0;
         continue;
       } else {
@@ -7377,7 +7499,7 @@
   }
   function _M0MP27mik1e806dxfkit7Drawing7to__svg(self, tol) {
     const exp = _M0MP27mik1e806dxfkit7Drawing6expand(self, tol);
-    let box = _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS2588;
+    let box = _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS2630;
     const _bind = exp.placed;
     const _bind$2 = _bind.length;
     let _tmp = 0;
@@ -7772,14 +7894,57 @@
     }
     return n;
   }
+  function _M0MP27mik1e806dxfkit6Report23has__incomplete__checks(self) {
+    const _p = self.findings;
+    const _p$2 = _p.length;
+    let _tmp = 0;
+    while (true) {
+      const _p$3 = _tmp;
+      if (_p$3 < _p$2) {
+        const _p$4 = _p[_p$3];
+        const _p$5 = _p$4.check;
+        let _tmp$2;
+        switch (_p$5) {
+          case "解析": {
+            _tmp$2 = true;
+            break;
+          }
+          case "检查覆盖": {
+            _tmp$2 = true;
+            break;
+          }
+          case "文字未转曲线": {
+            _tmp$2 = true;
+            break;
+          }
+          case "参数": {
+            _tmp$2 = true;
+            break;
+          }
+          default: {
+            _tmp$2 = false;
+          }
+        }
+        if (_tmp$2) {
+          return true;
+        }
+        _tmp = _p$3 + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return false;
+  }
   function _M0MP27mik1e806dxfkit6Report7verdict(self) {
     const fatal = _M0MP27mik1e806dxfkit6Report5count(self, 2);
+    let summary;
     if (fatal > 0) {
       const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(65);
       _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "本次检查发现 ");
       _M0MPB13StringBuilder13write__objectGiE(_string_builder, fatal);
       _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 个严重问题，请修正并复核图纸。");
-      return _string_builder.val;
+      summary = _string_builder.val;
     } else {
       const warn = _M0MP27mik1e806dxfkit6Report5count(self, 1);
       if (warn > 0) {
@@ -7787,10 +7952,18 @@
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "本次检查发现 ");
         _M0MPB13StringBuilder13write__objectGiE(_string_builder, warn);
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 个警告，请复核图纸与加工条件。");
-        return _string_builder.val;
+        summary = _string_builder.val;
       } else {
-        return "本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。";
+        summary = "本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。";
       }
+    }
+    if (_M0MP27mik1e806dxfkit6Report23has__incomplete__checks(self)) {
+      const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(72);
+      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "检查不完整：存在未解析、未转换或未能检查的内容。");
+      _M0MPB13StringBuilder13write__objectGsE(_string_builder, summary);
+      return _string_builder.val;
+    } else {
+      return summary;
     }
   }
   function _M0FP27mik1e806dxfkit15severity__label(sev) {
@@ -7894,7 +8067,7 @@
     }
     let open = 0;
     let worst = 0;
-    let at = _M0MP27mik1e806dxfkit4Vec24zeroN6recordS2584;
+    let at = _M0MP27mik1e806dxfkit4Vec24zeroN6recordS2626;
     let i = 0;
     while (true) {
       if (i < edges.length) {
@@ -8236,7 +8409,7 @@
           const self_crossed = [];
           let dup_pairs = 0;
           let dup_len = 0;
-          let dup_at = _M0MP27mik1e806dxfkit4Vec24zeroN6recordS2584;
+          let dup_at = _M0MP27mik1e806dxfkit4Vec24zeroN6recordS2626;
           let dup_has = false;
           let i = 0;
           while (true) {
@@ -8626,7 +8799,7 @@
           _M0MPC15array5Array8sort__byGRP27mik1e806dxfkit6CutSegE(segs, (s1, s2) => s1.min_x < s2.min_x ? -1 : s1.min_x > s2.min_x ? 1 : 0);
           const near = [];
           let worst = opt.min_gap;
-          let at = _M0MP27mik1e806dxfkit4Vec24zeroN6recordS2584;
+          let at = _M0MP27mik1e806dxfkit4Vec24zeroN6recordS2626;
           let i = 0;
           while (true) {
             if (i < segs.length) {
@@ -8749,7 +8922,7 @@
     const tol = opt.tol;
     const findings = [];
     if (!_M0FP27mik1e806dxfkit19positive__tolerance(tol) || (!_M0FP27mik1e806dxfkit14finite__number(opt.min_gap) || opt.min_gap < 0)) {
-      return new _M0TP27mik1e806dxfkit6Report([_M0MP27mik1e806dxfkit7Drawing5checkN6recordS2697]);
+      return new _M0TP27mik1e806dxfkit6Report([_M0MP27mik1e806dxfkit7Drawing5checkN6recordS2739]);
     }
     const exp = _M0MP27mik1e806dxfkit7Drawing6expand(self, tol);
     const _bind = exp.warnings;
@@ -8788,6 +8961,9 @@
           _L$2: {
             const _bind$6 = p.entity.geom;
             switch (_bind$6.$tag) {
+              case 8: {
+                break _L$2;
+              }
               case 11: {
                 break _L$2;
               }
@@ -8851,7 +9027,7 @@
       }
     }
     if (outlines === 0) {
-      _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(findings, _M0MP27mik1e806dxfkit7Drawing5checkN6recordS2698);
+      _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(findings, _M0MP27mik1e806dxfkit7Drawing5checkN6recordS2740);
     }
     const _bind$7 = exp.placed;
     const _bind$8 = _bind$7.length;

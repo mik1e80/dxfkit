@@ -2,6 +2,7 @@
 //
 //     moon run conformance                  # 每个文件的 tag 数、警告数、编码
 //     moon run conformance --info           # 结构报告：版本、段、图层、块
+//     moon run conformance -- --audit       # 逐文件分层观察，JSON Lines；不宣称几何已验证
 //     moon run conformance --svg 文件.dxf    # 画成 SVG 打到 stdout
 //     moon run conformance 某文件.dxf        # 只跑一个（默认是 tag 报告）
 //
@@ -13,12 +14,15 @@ fn main {
   let args = @env.args()
   let mut info_mode = false
   let mut svg_mode = false
+  let mut audit_mode = false
   let mut targets : Array[String] = []
   for i = 1; i < args.length(); i = i + 1 {
     if args[i] == "--info" {
       info_mode = true
     } else if args[i] == "--svg" {
       svg_mode = true
+    } else if args[i] == "--audit" {
+      audit_mode = true
     } else {
       targets.push(args[i])
     }
@@ -35,7 +39,9 @@ fn main {
       }
     }
   }
-  if info_mode {
+  if audit_mode {
+    report_corpus_audit(targets)
+  } else if info_mode {
     report_info(targets)
   } else {
     report_tags(targets)

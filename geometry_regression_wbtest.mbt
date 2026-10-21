@@ -23,7 +23,18 @@ test "S形样条不能退化成直线" {
     [],
     0.01,
   )
-  assert_true(points.length() > 2)
+  // Bernstein polynomial of this exact cubic, independent of the evaluator.
+  accuracy_sample_error(
+    points,
+    false,
+    t => {
+      Vec2::new(
+        3.0 * t * t - 2.0 * t * t * t,
+        3.0 * t * (1.0 - t) * (1.0 - 2.0 * t),
+      )
+    },
+    0.01,
+  )
 }
 
 ///|

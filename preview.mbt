@@ -25,11 +25,10 @@ pub fn Drawing::to_svg(self : Drawing, tol : Double) -> String {
   let mut box = Aabb2::empty()
   for p in exp.placed {
     match p.flat {
-      Outline(points~, ..) => {
+      Outline(points~, ..) =>
         for pt in points {
           box = box.expand(pt)
         }
-      }
       Dot(at~) => box = box.expand(at)
       Label(at~, ..) => box = box.expand(at)
       Empty => ()
@@ -62,7 +61,7 @@ pub fn Drawing::to_svg(self : Drawing, tol : Double) -> String {
   for p in exp.placed {
     let (color, dim) = layer_state(tables, p.layer)
     match p.flat {
-      Outline(points~, closed~) => {
+      Outline(points~, closed~) =>
         if points.length() >= 2 {
           let pts = fmt_points(points)
           let tag = if closed { "polygon" } else { "polyline" }
@@ -70,18 +69,16 @@ pub fn Drawing::to_svg(self : Drawing, tol : Double) -> String {
             "<\{tag} points=\"\{pts}\" fill=\"none\" stroke=\"\{color}\" stroke-width=\"\{fmt(stroke)}\"\{dim}/>\n",
           )
         }
-      }
       Dot(at~) =>
         sb.write_string(
           "<circle cx=\"\{fmt(at.x)}\" cy=\"\{fmt(at.y)}\" r=\"\{fmt(stroke * 2.0)}\" fill=\"\{color}\"\{dim}/>\n",
         )
-      Label(at~, height~, value~) => {
+      Label(at~, height~, value~) =>
         if value != "" && height > 0.0 {
           sb.write_string(
             "<text x=\"0\" y=\"0\" transform=\"translate(\{fmt(at.x)} \{fmt(at.y)}) scale(1 -1)\" font-size=\"\{fmt(height)}\" fill=\"\{color}\"\{dim}>\{xml_escape(value)}</text>\n",
           )
         }
-      }
       Empty => ()
     }
   }
@@ -147,27 +144,10 @@ fn xml_escape(s : String) -> String {
 }
 
 ///|
-/// 定点 4 位小数的坐标。`Double::to_string` 会把
-/// 566.376539972648 原样打进 SVG，文件白白胖一圈；4 位对任何
-/// 单位的图纸都够显示（微米级图纸的 0.0001 微米也没人看得见）。
+/// 使用有限 Double 的往返数字表示。先乘 10000 再转 Int 会在较大坐标
+/// 上溢出；固定四位小数也会把微小轮廓压成一点。SVG 接受科学计数法。
 fn fmt(v : Double) -> String {
-  let scaled = if v >= 0.0 {
-    (v * 10000.0 + 0.5).to_int()
-  } else {
-    -((-v * 10000.0 + 0.5).to_int())
-  }
-  let neg = scaled < 0
-  let a = if neg { -scaled } else { scaled }
-  let mut frac_s = (a % 10000).to_string()
-  while frac_s.length() < 4 {
-    frac_s = "0" + frac_s
-  }
-  let body = "\{a / 10000}.\{frac_s}"
-  if neg {
-    "-" + body
-  } else {
-    body
-  }
+  v.to_string()
 }
 
 ///|

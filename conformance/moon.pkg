@@ -2,6 +2,7 @@ import {
   "mik1e80/dxfkit",
   "moonbitlang/x/fs",
   "moonbitlang/core/env",
+  "moonbitlang/core/json",
 }
 
 // 这个包干两件事：**批量跑语料**（可执行）和**回归测试**。

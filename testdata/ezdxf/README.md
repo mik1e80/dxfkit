@@ -1,7 +1,9 @@
 # DXF 测试语料
 
 这 47 个 `.dxf` 文件取自 [mozman/ezdxf](https://github.com/mozman/ezdxf) 的
-`examples_dxf/` 目录，**原样收录未做修改**。
+`examples_dxf/` 目录，首次收录说明为原样引入。本轮保留现有全部 DXF 字节，逐文件 SHA-256 见[验证记录](../../docs/corpus-validation.json)。
+
+本仓库首次收录提交为 `6f5d18250170d52921e9cc35cee583c045355ab5`；当时未记录上游提交号。当前 master 路径仅用于来源引用，不作为与上游逐字节一致的证明。
 
 **许可证**：MIT（Copyright © 2020, Manfred Moitzi）。完整文本见仓库根目录的
 [`THIRD_PARTY_NOTICES.md`](../../THIRD_PARTY_NOTICES.md)。
@@ -25,6 +27,8 @@
 moon run conformance                 # 全部跑一遍，出报告
 moon run conformance 某文件.dxf       # 只跑一个
 moon test                            # 回归测试（遍历式，新增文件自动进测试）
+moon run conformance -- --audit       # 读取/解码/覆盖诊断，JSON Lines
+node scripts/verify-corpus-records.cjs # 重放实际测试并核对逐文件记录
 ```
 
 ## 几个文件专门是干什么的
@@ -42,7 +46,13 @@ moon test                            # 回归测试（遍历式，新增文件�
 | `viewport_frozen_layers.dxf` | 视口与冻结图层 |
 | `uncommon.dxf` | 少见的记录类型 |
 
-## 当前状态
+## 分层验证记录
+
+完整[逐文件案例表](../../docs/corpus-validation.md)区分读取成功、实体字段输出、几何独立验证及未覆盖部分，列出每张图纸实际参与的测试。JSON 保留来源、文件哈希、编码、实体类型、展开诊断和完整检查发现。
+
+47 张图纸均读取成功；顶层实体输出 5524，其中 5404 个有解码字段，但不等于所有字段和几何均被验证。46 份检查报告为“检查不完整”。**当前没有逐图纸的独立几何真值：0/47。** 原有离散、展开及检查汇总锚点不应写成“几何兼容通过”。
+
+## 扫描层历史锚点
 
 `moon run conformance` 的输出：
 

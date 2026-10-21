@@ -1,0 +1,100 @@
+{
+  "suite": "dxfkit-external-consumer",
+  "target": "native",
+  "example_sha256": "f23b8cb8dbf321493d0768db1525caf4ea0aa96d327abf43822caa093fbe1d31",
+  "copied_files": [
+    "README.md",
+    "fixtures",
+    "main.mbt",
+    "moon.mod",
+    "moon.pkg",
+    "moon.work"
+  ],
+  "library_source": "local moon.work member",
+  "passed": 7,
+  "total": 7,
+  "cases": [
+    {
+      "id": "external-module-check",
+      "expectedStatus": 0,
+      "actualStatus": 0,
+      "expectedPatterns": [],
+      "output": "Using cached moonbitlang/x@0.5.5\nUsing cached moonbitlang/async@0.22.1\nFinished. moon: ran 35 tasks, now up to date\n",
+      "passed": true
+    },
+    {
+      "id": "read-extract-discretize-check",
+      "expectedStatus": 0,
+      "actualStatus": 0,
+      "expectedPatterns": [
+        "/ENTITIES=1/",
+        "/CIRCLE center=10,20 radius=2/",
+        "/LOCAL_OUTLINE vertices=32 closed=true/",
+        "/LOCAL_FIRST=12,20/",
+        "/WORLD_OUTLINES=1/",
+        "/INCOMPLETE=false/",
+        "/致命 0.*警告 0/"
+      ],
+      "output": "UNIT=未声明\r\nENTITIES=1\r\nENTITY kind=CIRCLE handle=C1 layer=\r\nCIRCLE center=10,20 radius=2\r\nLOCAL_OUTLINE vertices=32 closed=true\r\nLOCAL_FIRST=12,20\r\nWORLD_OUTLINES=1\r\nINCOMPLETE=false\r\n（没有发现）\r\n致命 0 · 警告 0 · 提示 0\r\n本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。\r\n",
+      "passed": true
+    },
+    {
+      "id": "partial-input-default",
+      "expectedStatus": 0,
+      "actualStatus": 0,
+      "expectedPatterns": [
+        "/ENTITIES=2/",
+        "/WORLD_OUTLINES=1/",
+        "/INCOMPLETE=true/",
+        "/检查不完整/",
+        "/RAY.*轮廓未参与检查/"
+      ],
+      "output": "UNIT=未声明\r\nENTITIES=2\r\nENTITY kind=CIRCLE handle=C1 layer=\r\nCIRCLE center=10,20 radius=2\r\nLOCAL_OUTLINE vertices=32 closed=true\r\nLOCAL_FIRST=12,20\r\nENTITY kind=RAY handle=R1 layer=\r\nWORLD_OUTLINES=1\r\nINCOMPLETE=true\r\n[警告] [检查覆盖] 1 个 RAY 实体的轮廓未参与检查；保留记录不表示已验证几何\r\n致命 0 · 警告 1 · 提示 0\r\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 1 个警告，请复核图纸与加工条件。\r\n",
+      "passed": true
+    },
+    {
+      "id": "partial-input-strict",
+      "expectedStatus": 1,
+      "actualStatus": 1,
+      "expectedPatterns": [
+        "/WORLD_OUTLINES=1/",
+        "/INCOMPLETE=true/",
+        "/检查不完整/"
+      ],
+      "output": "UNIT=未声明\r\nENTITIES=2\r\nENTITY kind=CIRCLE handle=C1 layer=\r\nCIRCLE center=10,20 radius=2\r\nLOCAL_OUTLINE vertices=32 closed=true\r\nLOCAL_FIRST=12,20\r\nENTITY kind=RAY handle=R1 layer=\r\nWORLD_OUTLINES=1\r\nINCOMPLETE=true\r\n[警告] [检查覆盖] 1 个 RAY 实体的轮廓未参与检查；保留记录不表示已验证几何\r\n致命 0 · 警告 1 · 提示 0\r\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 1 个警告，请复核图纸与加工条件。\r\n",
+      "passed": true
+    },
+    {
+      "id": "checked-discretization-error",
+      "expectedStatus": 1,
+      "actualStatus": 1,
+      "expectedPatterns": [
+        "/DISCRETIZATION_ERROR:.*4096/",
+        "/INCOMPLETE=true/",
+        "/检查不完整/"
+      ],
+      "output": "UNIT=未声明\r\nENTITIES=1\r\nENTITY kind=CIRCLE handle= layer=\r\nCIRCLE center=0,0 radius=10000000000\r\nDISCRETIZATION_ERROR: 圆离散需要超过4096段，或半径非有限；未满足指定容差\r\nWORLD_OUTLINES=0\r\nEXPANSION_DIAGNOSTIC: 实体 CIRCLE（句柄 ）未能离散：圆离散需要超过4096段，或半径非有限；未满足指定容差\r\nINCOMPLETE=true\r\n[警告] [解析] 实体 CIRCLE（句柄 ）未能离散：圆离散需要超过4096段，或半径非有限；未满足指定容差\r\n[警告] [检查覆盖] 没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据\r\n致命 0 · 警告 2 · 提示 0\r\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 2 个警告，请复核图纸与加工条件。\r\n",
+      "passed": true
+    },
+    {
+      "id": "read-error",
+      "expectedStatus": 2,
+      "actualStatus": 2,
+      "expectedPatterns": [
+        "/READ_ERROR/"
+      ],
+      "output": "READ_ERROR: No such file or directory\r\n",
+      "passed": true
+    },
+    {
+      "id": "argument-error",
+      "expectedStatus": 2,
+      "actualStatus": 2,
+      "expectedPatterns": [
+        "/Usage:/"
+      ],
+      "output": "Usage: moon run . -- <file.dxf> [--strict]\r\n",
+      "passed": true
+    }
+  ]
+}

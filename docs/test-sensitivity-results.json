@@ -1,0 +1,96 @@
+{
+  "suite": "dxfkit-test-sensitivity",
+  "target": "wasm-gc",
+  "test_sha256": {
+    "geometry_accuracy_wbtest.mbt": "851a7a716960b82f34e26cd90a6c2da51c3ed871636594946135caaca4a918ec",
+    "checker_accuracy_wbtest.mbt": "cfd0b15b5cbd0dba6988ba02774b955466207ab76ca7f4dbe3d874c1843e8999"
+  },
+  "passed": 7,
+  "total": 7,
+  "cases": [
+    {
+      "id": "unmodified-baseline",
+      "expected": "17 tests must pass",
+      "status": 0,
+      "executed": {
+        "total": 17,
+        "passed": 17,
+        "failed": 0
+      },
+      "passed": true,
+      "output": "Total tests: 17, passed: 17, failed: 0.\nUsing cached moonbitlang/async@0.22.1\nUsing cached moonbitlang/x@0.5.5\n"
+    },
+    {
+      "id": "shift-all-outlines",
+      "expected": "compiled tests must fail",
+      "status": 2,
+      "executed": {
+        "total": 9,
+        "passed": 0,
+        "failed": 9
+      },
+      "passed": true,
+      "output": "[mik1e80/dxfkit] test geometry_accuracy_wbtest.mbt:104 (\"accuracy LINE decoded XYZ, XY endpoints, length and bounds\") failed: geometry_accuracy_wbtest.mbt:10:3-13:4@mik1e80/dxfkit FAILED: expected -3 ± 1e-9, actual -2.75\n[mik1e80/dxfkit] test geometry_accuracy_wbtest.mbt:124 (\"accuracy CIRCLE translated radius, diameter and sagitta\") failed: geometry_accuracy_wbtest.mbt:10:3-13:4@mik1e80/dxfkit FAILED: expected 3 ± 1e-10, actual 3.25\n[mik1e80/dxfkit] test geometry_accuracy_wbtest.mbt:138 (\"accuracy ARC crossing zero degrees has correct endpoints and quadrant bounds\") failed: geometry_accuracy_wbtest.mbt:10:3-13:4@mik1e80/dxfkit FAILED: expected 4 ± 1e-10, actual 4.130677910464576\n[mik1e80/dxfkit] test geometry_accuracy_wbtest.mbt:162 (\"accuracy ELLIPSE rotated axes, exact bounds and analytic curve error\") failed: geometry_accuracy_wbtest.mbt:10:3-13:4@mik1e80/dxfkit FAILED: expected 13 ± 1e-9, actual 13.25\n[mik1e80/dxfkit] test geometry_accuracy_wbtest.mbt:196 (\"accuracy LWPOLYLINE negative bulge preserves side, joins and dimensions\") failed: geometry_accuracy_wbtest.mbt:10:3-13:4@mik1e80/dxfkit FAILED: expected 2 ± 1e-9, actual 2.25\n[mik1e80/dxfkit] test geometry_accuracy_wbtest.mbt:224 (\"accuracy POLYLINE ordinary 2D rectangle has exact vertices area and perimeter\") failed: geometry_accuracy_wbtest.mbt:10:3-13:4@mik1e80/dxfkit FAILED: expected -2 ± 1e-9, actual -1.75\n[mik1e80/dxfkit] test geometry_accuracy_wbtest.mbt:251 (\"accuracy rational SPLINE quarter circle matches analytic radius and sampled arc\") failed: geometry_accuracy_wbtest.mbt:10:3-13:4@mik1e80/dxfkit FAILED: expected 7 ± 1e-9, actual 7.25\n[mik1e80/dxfkit] test geometry_accuracy_wbtest.mbt:278 (\"accuracy cubic SPLINE S curve matches independent Bernstein polynomial\") failed: geometry_accuracy_wbtest.mbt:10:3-13:4@mik1e80/dxfkit FAILED: expected 0 ± 1e-9, actual 0.25\n[mik1e80/dxfkit] test geometry_accuracy_wbtest.mbt:310 (\"accuracy INSERT base point scale rotation and world tolerance compose\") failed: geometry_accuracy_wbtest.mbt:10:3-13:4@mik1e80/dxfkit FAILED: expected 10 ± 1e-9, actual 10.75\nTotal tests: 9, passed: 0, failed: 9.\n"
+    },
+    {
+      "id": "replace-spline-with-chord",
+      "expected": "compiled tests must fail",
+      "status": 2,
+      "executed": {
+        "total": 9,
+        "passed": 7,
+        "failed": 2
+      },
+      "passed": true,
+      "output": "[mik1e80/dxfkit] test geometry_accuracy_wbtest.mbt:251 (\"accuracy rational SPLINE quarter circle matches analytic radius and sampled arc\") failed: geometry_accuracy_wbtest.mbt:10:3-13:4@mik1e80/dxfkit FAILED: expected 0 ± 0.002000001, actual 0.5857864376269054\n[mik1e80/dxfkit] test geometry_accuracy_wbtest.mbt:278 (\"accuracy cubic SPLINE S curve matches independent Bernstein polynomial\") failed: geometry_accuracy_wbtest.mbt:10:3-13:4@mik1e80/dxfkit FAILED: expected 0 ± 0.002000001, actual 0.2886750816833228\nTotal tests: 9, passed: 7, failed: 2.\n"
+    },
+    {
+      "id": "mirror-negative-bulge",
+      "expected": "compiled tests must fail",
+      "status": 2,
+      "executed": {
+        "total": 9,
+        "passed": 8,
+        "failed": 1
+      },
+      "passed": true,
+      "output": "[mik1e80/dxfkit] test geometry_accuracy_wbtest.mbt:196 (\"accuracy LWPOLYLINE negative bulge preserves side, joins and dimensions\") failed: geometry_accuracy_wbtest.mbt:10:3-13:4@mik1e80/dxfkit FAILED: expected 5 ± 1e-9, actual 3.0000000000000004\nTotal tests: 9, passed: 8, failed: 1.\n"
+    },
+    {
+      "id": "disable-clearance-check",
+      "expected": "compiled tests must fail",
+      "status": 2,
+      "executed": {
+        "total": 8,
+        "passed": 6,
+        "failed": 2
+      },
+      "passed": true,
+      "output": "[mik1e80/dxfkit] test checker_accuracy_wbtest.mbt:177 (\"checker accuracy clearance below equal above threshold and disabled mode\") failed: checker_accuracy_wbtest.mbt:50:3-57:4@mik1e80/dxfkit FAILED: missing 最小间隙/警告/0.5: （没有发现）\n致命 0 · 警告 0 · 提示 0\n本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。\n[mik1e80/dxfkit] test checker_accuracy_wbtest.mbt:205 (\"checker accuracy clearance ignores connected endpoints but catches interior crossing\") failed: checker_accuracy_wbtest.mbt:50:3-57:4@mik1e80/dxfkit FAILED: missing 最小间隙/警告/最小距离 0: [警告] [轮廓闭合] 图层「CUT」上有 2 处轮廓没闭合——最宽的缝 4（(-2, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。\nTotal tests: 8, passed: 6, failed: 2.\n"
+    },
+    {
+      "id": "warn-on-normal-contours",
+      "expected": "compiled tests must fail",
+      "status": 2,
+      "executed": {
+        "total": 8,
+        "passed": 1,
+        "failed": 7
+      },
+      "passed": true,
+      "output": "[mik1e80/dxfkit] test checker_accuracy_wbtest.mbt:83 (\"checker accuracy radius has located fatal and warning, positive circle is clean\") failed: checker_accuracy_wbtest.mbt:62:3-65:4@mik1e80/dxfkit FAILED: unexpected 自相交: [警告] [自相交] injected false positive\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。\n[mik1e80/dxfkit] test checker_accuracy_wbtest.mbt:104 (\"checker accuracy closure at below and above endpoint tolerance\") failed: checker_accuracy_wbtest.mbt:62:3-65:4@mik1e80/dxfkit FAILED: unexpected 自相交: [警告] [自相交] injected false positive\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。\n[mik1e80/dxfkit] test checker_accuracy_wbtest.mbt:123 (\"checker accuracy bow tie versus normal rectangle, translation preserves decision\") failed: checker_accuracy_wbtest.mbt:62:3-65:4@mik1e80/dxfkit FAILED: unexpected 自相交: [警告] [自相交] injected false positive\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。\n[mik1e80/dxfkit] test checker_accuracy_wbtest.mbt:144 (\"checker accuracy overlap measures full reverse and partial lengths, endpoint touch is clean\") failed: checker_accuracy_wbtest.mbt:62:3-65:4@mik1e80/dxfkit FAILED: unexpected 自相交: [警告] [轮廓闭合] 图层「CUT」上有 1 处轮廓没闭合——最宽的缝 8（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断\n[警告] [自相交] injected false positive\n致命 0 · 警告 2 · 提示 0\n本次检查发现 2 个警告，请复核图纸与加工条件。\n[mik1e80/dxfkit] test checker_accuracy_wbtest.mbt:177 (\"checker accuracy clearance below equal above threshold and disabled mode\") failed: checker_accuracy_wbtest.mbt:62:3-65:4@mik1e80/dxfkit FAILED: unexpected 自相交: [警告] [自相交] injected false positive\n[警告] [最小间隙] 图层「CUT」有 1 对实体轮廓距离低于阈值——折线最小距离 0.5（(-5, -5) 附近）；请结合单位、离散容差与工艺复核\n致命 0 · 警告 2 · 提示 0\n本次检查发现 2 个警告，请复核图纸与加工条件。\n[mik1e80/dxfkit] test checker_accuracy_wbtest.mbt:205 (\"checker accuracy clearance ignores connected endpoints but catches interior crossing\") failed: checker_accuracy_wbtest.mbt:62:3-65:4@mik1e80/dxfkit FAILED: unexpected 自相交: [警告] [轮廓闭合] 图层「CUT」上有 2 处轮廓没闭合——最宽的缝 4（(-2, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断\n[警告] [自相交] injected false positive\n[警告] [最小间隙] 图层「CUT」有 1 对实体轮廓距离低于阈值——折线最小距离 0（(-2, 0) 附近）；请结合单位、离散容差与工艺复核\n致命 0 · 警告 3 · 提示 0\n本次检查发现 3 个警告，请复核图纸与加工条件。\n[mik1e80/dxfkit] test checker_accuracy_wbtest.mbt:244 (\"checker accuracy zero length segment located by handle, normal corners not degenerate\") failed: checker_accuracy_wbtest.mbt:62:3-65:4@mik1e80/dxfkit FAILED: unexpected 自相交: [警告] [自相交] injected false positive\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。\nTotal tests: 8, passed: 1, failed: 7.\n"
+    },
+    {
+      "id": "inclusive-clearance-threshold",
+      "expected": "compiled tests must fail",
+      "status": 2,
+      "executed": {
+        "total": 8,
+        "passed": 7,
+        "failed": 1
+      },
+      "passed": true,
+      "output": "[mik1e80/dxfkit] test checker_accuracy_wbtest.mbt:177 (\"checker accuracy clearance below equal above threshold and disabled mode\") failed: checker_accuracy_wbtest.mbt:62:3-65:4@mik1e80/dxfkit FAILED: unexpected 最小间隙: [警告] [最小间隙] 图层「CUT」有 1 对实体轮廓距离低于阈值——折线最小距离 1（(0, 0) 附近）；请结合单位、离散容差与工艺复核\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。\nTotal tests: 8, passed: 7, failed: 1.\n"
+    }
+  ]
+}

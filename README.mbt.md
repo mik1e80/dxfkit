@@ -2,6 +2,8 @@
 
 MoonBit 的 ASCII DXF 读取、二维几何处理与辅助检查库。安装、场景、CLI 和网页入口见 [README.md](README.md)。源码修订版本 0.1.1，本次修订尚未发布到 Mooncakes。
 
+本次范围固定为七类核心轮廓实体和普通 INSERT；逐字段输入、输出、限制与案例见[交付范围](docs/delivery-scope.md)，已识别问题的复现和断言见[六类修复验证](docs/delivery-verification.md)。
+
 ## 为什么选择这个范围
 
 DXF 图纸交换与脚本处理是已有需求，Python ezdxf 是成熟参照。dxfkit 的交付目标是可复用的 MoonBit 读取与几何接口，附带可验证的检查示例。它不保证图纸可加工，也不以“生态唯一”或功能数量作为正确性的证据。
@@ -25,7 +27,9 @@ let svg = drawing.to_svg(0.05)
 
 ## 几何与离散
 
-`Geometry` 包含线、点、圆、弧、椭圆、样条、多段线、文字、块引用等。HATCH、DIMENSION 等部分类型只提取身份和元数据，不能据此认为它们的轮廓已参与检查。
+核心轮廓为 LINE、CIRCLE、ARC、ELLIPSE、LWPOLYLINE、普通二维 POLYLINE、受限 SPLINE。POINT 和文字用于位置或简化预览；HATCH、DIMENSION、SOLID、TRACE、3DFACE 等保留已有字段，不能据此认为它们的轮廓已参与检查。
+
+ELLIPSE 的 11/21/31 是相对圆心长轴向量。普通 POLYLINE 不接受拟合、空间和网格语义；损坏顶点保留记录并拒绝整条轮廓，避免拼接出新形状。Face 的 flatten / checked 结果为 Empty，检查报告明确未覆盖；这与旧版直接连角点的行为不同。
 
 - `Geometry::flatten_checked(tol)` 返回 `Result[Flat, String]`，是检查与展开使用的入口。
 - `spline_points_checked(degree, knots, control_points, weights, tol)` 支持连续、正权重 NURBS 的 XY 离散。
@@ -42,6 +46,8 @@ let svg = drawing.to_svg(0.05)
 ## 检查的实际语义
 
 `Drawing::check(CheckOptions)` 返回 `Report`，每条 `Finding` 有检查项、严重程度和文字说明。
+
+`Report::has_incomplete_checks()` 统一判断解析恢复、覆盖限制、文字未转轮廓或非法检查参数。报告结论明确标为“检查不完整”，即使同一文件中存在正常轮廓也保留这些原因；CLI `--strict` 因此失败。具体混合输入和自动断言见[完整性约定](docs/check-completeness.md)。普通的开放轮廓几何告警不自动等于检查覆盖缺失。
 
 | 检查 | 实际覆盖 |
 | --- | --- |
@@ -71,13 +77,22 @@ CLI `stats` 分块读文件、统计 tag、段、版本、编码，不保存全�
 - 库支持 wasm / wasm-gc / JS / native；文件工具支持 wasm / native。
 - CLI `--strict` 将警告也作为失败，便于批处理门禁；普通模式的0退出码不代表检查完全或可加工。
 - 网页使用同一库编译产物，部署前重新构建并执行回归。
+- SVG 数值使用 Double 往返表示，可含科学计数法；调用方不要依赖固定四位小数。
+- `examples/library` 是同模块调用包；[`examples/consumer`](examples/consumer/README.md) 是独立模块工程，用公开 API 读取文件、提取实体、checked 离散和检查，已在仓库外以 Wasm、Native 验证。
 
 验证命令见 [README.md](README.md#验证与开发)。几何正确性以明确反例、解析几何和独立de Boor密集采样验证；第三方文件读取成功、测试数量或汇总点数不能单独证明正确性。
 
+逐实体坐标/尺寸/包围盒/误差和检查器正反例见[验收矩阵](docs/test-accuracy.md)。故障注入只作用于临时副本，验证新测试能检出六类错误，不以“能够编译运行”替代判定正确。
+
+外部语料另按文件记录[读取、实体字段解码和几何验证证据](docs/corpus-validation.md)。现有 47 张文件均没有逐图纸独立几何真值；产生点列或能执行检查仍只记为已运行不变量回归。
+
 ## 暂未实现
 
-二进制DXF、文件写回、通用编辑、完整引用审计、OCS变换、完整HATCH边界、关联标注重建、全部INSERT阵列、字体转轮廓、刀路生成和参数化草图约束求解。
+二进制DXF、文件写回、通用编辑、完整引用审计、OCS变换、完整HATCH边界、关联标注重建、面实体轮廓检查、全部INSERT阵列、字体转轮廓、刀路生成和参数化草图约束求解。
 
 ## 来源
 
 样条格式参考 [Autodesk SPLINE 文档](https://help.autodesk.com/cloudhelp/2026/ENU/AutoCAD-DXF/files/GUID-E1F884F8-AA90-4864-A215-3182D47A9C74.htm)；能力与公式参考 [ezdxf](https://ezdxf.readthedocs.io/en/stable/)；标准样条算法为节点插入、de Casteljau及de Boor。第三方版权、完整许可及已记录的参考关系见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+
+
+非默认 OCS 的 INSERT 在块展开入口报告并跳过整个引用；子实体不会作为正确的 XY 轮廓参与检查或预览。其他实体的非默认 OCS 仍按原有检查覆盖警告处理，未新增通用 OCS 转换。

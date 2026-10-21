@@ -40,6 +40,8 @@ jobs:
         run: |
           bash web/build.sh
           node web/smoke.cjs
+          node scripts/verify-delivery.cjs
+          node scripts/verify-completeness.cjs
 
       - name: 准备站点文件
         run: |
@@ -48,6 +50,8 @@ jobs:
           cp web/style.css   _site/
           cp web/app.js      _site/
           cp web/dist/web.js _site/dist/
+          cp LICENSE THIRD_PARTY_NOTICES.md _site/
+          cp -R web/licenses _site/licenses
 
       - uses: actions/configure-pages@v6
 

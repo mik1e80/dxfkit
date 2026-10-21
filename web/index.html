@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>dxfkit —— DXF 图纸读取与辅助检查</title>
+    <title>dxfkit —— ASCII DXF 二维轮廓读取与辅助检查</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header class="page-head">
       <h1>dxfkit</h1>
       <p>
-        拖入 DXF，查看图纸预览，并检查开放轮廓、重复线段、交叉和指定净距。
+        拖入 ASCII DXF，查看二维轮廓，并检查开放边界、重叠、单实体自交和指定净距。
         报告只覆盖已支持的二维几何；加工前仍需确认单位、材料、刀具和工艺。
       </p>
     </header>
@@ -26,7 +26,9 @@
             <p class="dropzone-big">把 DXF 文件拖到这里</p>
             <p>
               或者<button type="button" class="link" id="pick">选一个文件</button>，
-              也可以<button type="button" class="link" id="sample">用内置样例试一下</button>
+              或试用：<button type="button" class="link" id="sample-normal">正常轮廓</button>、
+              <button type="button" class="link" id="sample">问题图纸</button>、
+              <button type="button" class="link" id="sample-coverage">未覆盖内容</button>
             </p>
             <p class="dropzone-small">全程在浏览器里完成，文件不会上传到任何地方</p>
           </div>
@@ -50,5 +52,5 @@
 
     <script src="dist/web.js"></script>
     <script src="app.js"></script>
-  </body>
+  <footer style="padding:16px;text-align:center"><a href="licenses/moonbit-core.NOTICE">MoonBit core 与第三方声明</a> · <a href="LICENSE">项目许可</a> · <a href="THIRD_PARTY_NOTICES.md">来源说明</a></footer></body>
 </html>

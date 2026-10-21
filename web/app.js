@@ -60,6 +60,24 @@ const SAMPLE_LINES = [
 ];
 const SAMPLE_TEXT = SAMPLE_LINES.join("\n") + "\n";
 
+const NORMAL_SAMPLE_TEXT = [
+  "0", "SECTION", "2", "HEADER", "9", "$INSUNITS", "70", "4", "0", "ENDSEC",
+  "0", "SECTION", "2", "ENTITIES",
+  "0", "LWPOLYLINE", "90", "4", "70", "1",
+  "10", "0", "20", "0", "10", "40", "20", "0",
+  "10", "40", "20", "20", "10", "0", "20", "20",
+  "0", "ENDSEC", "0", "EOF", "",
+].join("\n");
+
+// 一个可检查的圆和一个只保留字段的 SOLID：预览局部几何，报告未覆盖部分。
+const COVERAGE_SAMPLE_TEXT = [
+  "0", "SECTION", "2", "ENTITIES",
+  "0", "CIRCLE", "10", "0", "20", "0", "40", "5",
+  "0", "SOLID", "10", "10", "20", "0", "11", "12", "21", "0",
+  "12", "10", "22", "2", "13", "12", "23", "2",
+  "0", "ENDSEC", "0", "EOF", "",
+].join("\n");
+
 // ── 跑一次检查 ──────────────────────────────────────────────────────────
 
 let currentBase64 = "";
@@ -119,6 +137,14 @@ document.getElementById("sample").addEventListener("click", () => {
   runCheck(textToBase64(SAMPLE_TEXT), "内置样例.dxf");
 });
 
+document.getElementById("sample-normal").addEventListener("click", () => {
+  runCheck(textToBase64(NORMAL_SAMPLE_TEXT), "正常轮廓.dxf");
+});
+
+document.getElementById("sample-coverage").addEventListener("click", () => {
+  runCheck(textToBase64(COVERAGE_SAMPLE_TEXT), "未覆盖内容.dxf");
+});
+
 // 改了净距阈值就拿同一张图重跑
 document.getElementById("min-gap").addEventListener("change", () => {
   if (currentBase64) runCheck(currentBase64, currentName);
@@ -142,6 +168,10 @@ document.body.addEventListener("drop", (event) => {
 
 // `index.html?sample=1` 直接跑内置样例——分享给别人的链接、
 // 无头浏览器自检都用它
-if (location.search.includes("sample")) {
+if (location.search.includes("sample=normal")) {
+  runCheck(textToBase64(NORMAL_SAMPLE_TEXT), "正常轮廓.dxf");
+} else if (location.search.includes("sample=coverage")) {
+  runCheck(textToBase64(COVERAGE_SAMPLE_TEXT), "未覆盖内容.dxf");
+} else if (location.search.includes("sample")) {
   runCheck(textToBase64(SAMPLE_TEXT), "内置样例.dxf");
 }

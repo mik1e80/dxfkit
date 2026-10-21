@@ -1,5 +1,5 @@
 // 白盒测试：SVG 预览。结构级测试——不断言整串输出（改一点格式
-// 就会全挂），断言的是关键构件：标签、翻转、颜色、转义、定点格式。
+// 就会全挂），断言的是关键构件：标签、翻转、颜色、转义、坐标。
 //
 // `drawing_of` / `drawing_utf8` 定义在 `structure_wbtest.mbt`。
 
@@ -16,9 +16,7 @@ test "直线上图：骨架、Y 翻转、polyline" {
   // 内容整体翻转（CAD 的 y 向上、SVG 的 y 向下）
   assert_true(svg.contains("scale(1,-1)"))
   assert_true(svg.contains("<polyline"))
-  // 坐标走定点 4 位
-  assert_true(svg.contains("0.0000,0.0000"))
-  assert_true(svg.contains("10.0000,0.0000"))
+  assert_true(svg.contains("points=\"0,0 10,0\""))
 }
 
 ///|
