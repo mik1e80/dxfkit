@@ -236,6 +236,113 @@ test "ELLIPSE 全椭圆的包围盒" {
 }
 
 ///|
+fn entity_ellipse_at(x : Double, y : Double) -> Drawing {
+  drawing_utf8(
+    "0\nSECTION\n2\nENTITIES\n0\nELLIPSE\n" +
+    "10\n\{x}\n20\n\{y}\n30\n0\n11\n10\n21\n0\n31\n0\n40\n0.5\n" +
+    "41\n0\n42\n6.283185307179586\n0\nENDSEC\n0\nEOF\n",
+  )
+}
+
+///|
+test "ELLIPSE non-origin equal center and major vector retains exact bounds" {
+  let d = entity_ellipse_at(10.0, 0.0)
+  assert_eq(d.warnings.length(), 0)
+  let decoded = d.entities()
+  assert_eq(decoded.warnings.length(), 0)
+  assert_eq(decoded.entities.length(), 1)
+  let e = decoded.entities[0]
+  match e.geom {
+    Ellipse(center~, major~, ratio~, start_param~, end_param~) => {
+      assert_eq(center.x, 10.0)
+      assert_eq(center.y, 0.0)
+      assert_eq(center.z, 0.0)
+      assert_eq(major.x, 10.0)
+      assert_eq(major.y, 0.0)
+      assert_eq(major.z, 0.0)
+      assert_eq(ratio, 0.5)
+      assert_eq(start_param, 0.0)
+      assert_eq(end_param, 6.283185307179586)
+    }
+    _ => fail("expected ELLIPSE")
+  }
+  let box = e.bounds().unwrap()
+  assert_eq(box.min.x, 0.0)
+  assert_eq(box.max.x, 20.0)
+  assert_eq(box.min.y, -5.0)
+  assert_eq(box.max.y, 5.0)
+  assert_eq(box.size().x, 20.0)
+  assert_eq(box.size().y, 10.0)
+  match e.geom.flatten_checked(0.01) {
+    Ok(Outline(points~, closed~)) => {
+      assert_true(closed)
+      assert_true(points.length() > 2)
+      assert_eq(points[0].x, 20.0)
+      assert_eq(points[0].y, 0.0)
+      for p in points {
+        let u = (p.x - 10.0) / 10.0
+        let v = p.y / 5.0
+        assert_true((u * u + v * v - 1.0).abs() < 1.0e-10)
+      }
+    }
+    _ => fail("expected complete ellipse outline")
+  }
+}
+
+///|
+test "ELLIPSE translating center preserves major vector dimensions and every outline point" {
+  let origin = entity_ellipse_at(0.0, 0.0).entities().entities[0]
+  let (reference, reference_closed) = match origin.geom.flatten_checked(0.01) {
+    Ok(Outline(points~, closed~)) => (points, closed)
+    _ => fail("expected reference ellipse outline")
+  }
+  assert_true(reference_closed)
+  for
+    offset in [
+      Vec2::new(10.0, 0.0),
+      Vec2::new(-35.0, 17.0),
+      Vec2::new(1000.0, -2000.0),
+    ] {
+    let d = entity_ellipse_at(offset.x, offset.y)
+    assert_eq(d.warnings.length(), 0)
+    let decoded = d.entities()
+    assert_eq(decoded.warnings.length(), 0)
+    assert_eq(decoded.entities.length(), 1)
+    let e = decoded.entities[0]
+    match e.geom {
+      Ellipse(major~, ratio~, ..) => {
+        assert_eq(major.x, 10.0)
+        assert_eq(major.y, 0.0)
+        assert_eq(major.z, 0.0)
+        assert_eq(ratio, 0.5)
+      }
+      _ => fail("expected translated ELLIPSE")
+    }
+    let box = e.bounds().unwrap()
+    assert_eq(box.min.x, offset.x - 10.0)
+    assert_eq(box.max.x, offset.x + 10.0)
+    assert_eq(box.min.y, offset.y - 5.0)
+    assert_eq(box.max.y, offset.y + 5.0)
+    assert_eq(box.size().x, 20.0)
+    assert_eq(box.size().y, 10.0)
+    match e.geom.flatten_checked(0.01) {
+      Ok(Outline(points~, closed~)) => {
+        assert_eq(closed, reference_closed)
+        assert_eq(points.length(), reference.length())
+        for i = 0; i < points.length(); i = i + 1 {
+          assert_true((points[i].x - offset.x - reference[i].x).abs() < 1.0e-9)
+          assert_true((points[i].y - offset.y - reference[i].y).abs() < 1.0e-9)
+          let u = (points[i].x - offset.x) / 10.0
+          let v = (points[i].y - offset.y) / 5.0
+          assert_true((u * u + v * v - 1.0).abs() < 1.0e-10)
+        }
+      }
+      _ => fail("expected translated ellipse outline")
+    }
+  }
+}
+
+///|
 test "ELLIPSE 省略起止参数时是整椭圆" {
   // 41/42 缺省的语义明确（整个椭圆），不报警
   let d = drawing_utf8(

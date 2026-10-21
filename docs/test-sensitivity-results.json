@@ -3,10 +3,11 @@
   "target": "wasm-gc",
   "test_sha256": {
     "geometry_accuracy_wbtest.mbt": "851a7a716960b82f34e26cd90a6c2da51c3ed871636594946135caaca4a918ec",
-    "checker_accuracy_wbtest.mbt": "cfd0b15b5cbd0dba6988ba02774b955466207ab76ca7f4dbe3d874c1843e8999"
+    "checker_accuracy_wbtest.mbt": "cfd0b15b5cbd0dba6988ba02774b955466207ab76ca7f4dbe3d874c1843e8999",
+    "entity_wbtest.mbt": "50478eeda20716df4930a741281eb59c433e4b26750cc41c96dcd431b467d6ed"
   },
-  "passed": 7,
-  "total": 7,
+  "passed": 8,
+  "total": 8,
   "cases": [
     {
       "id": "unmodified-baseline",
@@ -18,7 +19,19 @@
         "failed": 0
       },
       "passed": true,
-      "output": "Total tests: 17, passed: 17, failed: 0.\nUsing cached moonbitlang/async@0.22.1\nUsing cached moonbitlang/x@0.5.5\n"
+      "output": "Total tests: 17, passed: 17, failed: 0.\nUsing cached moonbitlang/x@0.5.5\nUsing cached moonbitlang/async@0.22.1\n"
+    },
+    {
+      "id": "ellipse-major-subtract-center",
+      "expected": "compiled tests must fail",
+      "status": 2,
+      "executed": {
+        "total": 57,
+        "passed": 55,
+        "failed": 2
+      },
+      "passed": true,
+      "output": "[mik1e80/dxfkit] test entity_wbtest.mbt:248 (\"ELLIPSE non-origin equal center and major vector retains exact bounds\") failed: entity_wbtest.mbt:260:7-260:31@mik1e80/dxfkit FAILED: `0 != 10`\ndiff:\n-0 +10\n[mik1e80/dxfkit] test entity_wbtest.mbt:293 (\"ELLIPSE translating center preserves major vector dimensions and every outline point\") failed: entity_wbtest.mbt:314:9-314:33@mik1e80/dxfkit FAILED: `0 != 10`\ndiff:\n-0 +10\nTotal tests: 57, passed: 55, failed: 2.\n"
     },
     {
       "id": "shift-all-outlines",

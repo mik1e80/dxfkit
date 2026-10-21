@@ -1,6 +1,6 @@
 # 从指定提交复现交付版本
 
-交付版本使用固定标签 `delivery-0.1.1-20261022`。标签所指提交是本次库、CLI、测试、网页构建、申报说明与生态对比的共同源码；不以可变的 main 或在线页面当前内容替代提交身份。模块版本仍为 0.1.1，未发布 Mooncakes。此前的 `delivery-0.1.1-20261021` 保留原提交，不移动或覆盖。
+交付版本使用固定标签 `delivery-0.1.1-20261022-ellipse`。标签所指提交是本次库、CLI、测试、网页构建、申报说明与生态对比的共同源码；不以可变的 main 或在线页面当前内容替代提交身份。模块版本仍为 0.1.1，未发布 Mooncakes。此前的 `delivery-0.1.1-20261021` 和 `delivery-0.1.1-20261022` 保留原提交，不移动或覆盖。
 
 ## 固定工具与依赖
 
@@ -40,7 +40,7 @@ $env:PATH = "$HOME/.moon/bin;" + $env:PATH
 以下命令在 PowerShell、Bash 均可执行。使用尚不存在的目录：
 
 ```sh
-git clone --branch delivery-0.1.1-20261022 --depth 1 https://github.com/mik1e80/dxfkit.git dxfkit-delivery
+git clone --branch delivery-0.1.1-20261022-ellipse --depth 1 https://github.com/mik1e80/dxfkit.git dxfkit-delivery
 cd dxfkit-delivery
 git rev-parse HEAD
 node scripts/environment.cjs
