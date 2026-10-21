@@ -18,13 +18,15 @@ MoonBit ASCII DXF 读取与二维轮廓辅助检查库：在声明字段范围�
 
 源码修订版本 **0.1.1**。本次修订尚未发布到 Mooncakes。
 
-交付固定标签：`delivery-0.1.1-20261021`。[干净环境复现步骤](docs/reproducibility.md)固定工具链和依赖；运行 `node scripts/verify-reproduction.cjs --fresh` 验证测试、CLI、网页和申报材料对应同一提交。
+交付固定标签：`delivery-0.1.1-20261022`。[干净环境复现步骤](docs/reproducibility.md)固定工具链和依赖；运行 `node scripts/verify-reproduction.cjs --fresh` 验证测试、CLI、网页和申报材料对应同一提交。
 
 ## 解决什么问题
 
 面向已有 DXF 图纸的读取、预览与加工前辅助检查。例如，激光切割前复核轮廓是否开放、是否有重复线段，以及同图层不同实体的轮廓距离是否低于指定值。
 
 项目以 DXF 的既有格式和几何算法为基础，参考 Python [ezdxf](https://ezdxf.readthedocs.io/en/stable/) 的能力组织。库可被其他 MoonBit 程序调用，CLI 可用于批量处理，网页可在本地浏览器处理文件。
+
+在 MoonBit 生态中，已有 STEP、二维几何、G-code 和位图轮廓项目。本库的组合价值是 DXF 数据模型、普通块展开、带来源的轮廓提取与检查完整性诊断；通用几何能力存在交集。[生态对比表](COMPARISON.md)按 2026-10-22 核对的六个真实项目列明版本、固定文档、交集与边界，不据此宣称生态唯一；跨库适配尚未实现。
 
 **检查结果不是可加工证明。** 材料、刀具、切缝、进给、机床和 CAM 策略不在本工具的验证范围内。
 

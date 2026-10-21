@@ -13,7 +13,14 @@ for(const [file,digest] of Object.entries(manifest.sha256))
   assert.equal(createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex'),digest,`Asset changed: ${file}`);
 const files={'web/index.html':'index.html','web/style.css':'style.css','web/app.js':'app.js',
   'web/dist/web.js':'dist/web.js','web/dist/release.json':'dist/release.json',
-  'docs/submission.md':'docs/submission.md','LICENSE':'LICENSE','THIRD_PARTY_NOTICES.md':'THIRD_PARTY_NOTICES.md'};
+  'docs/submission.md':'docs/submission.md','COMPARISON.md':'COMPARISON.md',
+  'docs/ecosystem-sources.json':'docs/ecosystem-sources.json',
+  'LICENSE':'LICENSE','THIRD_PARTY_NOTICES.md':'THIRD_PARTY_NOTICES.md'};
+// Keep the comparison's supporting documentation and consumer guide reachable.
+for(const file of fs.readdirSync(path.join(root,'docs')))
+  if(/\.(md|json)$/.test(file)&&fs.statSync(path.join(root,'docs',file)).isFile())
+    files[`docs/${file}`]=`docs/${file}`;
+files['examples/consumer/README.md']='examples/consumer/README.md';
 for(const file of fs.readdirSync(path.join(root,'web/licenses'))) files[`web/licenses/${file}`]=`licenses/${file}`;
 for(const [from,to] of Object.entries(files)) {
   const target=path.join(root,'_site',to);

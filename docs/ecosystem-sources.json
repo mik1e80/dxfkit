@@ -1,0 +1,148 @@
+{
+  "checked_on": "2026-10-22",
+  "timezone": "Asia/Shanghai",
+  "scope": "Six publicly registered adjacent MoonBit modules; not an exhaustive ecosystem census or an interoperability certification",
+  "registry": {
+    "url": "https://mooncakes.io/git/index",
+    "snapshot_commit": "8e723fa3236d4145bb3dcbf02cf5ade258cbd3d8",
+    "snapshot_acquired_on": "2026-10-22",
+    "refresh_on_check_date": "success on retry via moon update",
+    "index_files_scanned": 3201,
+    "discovery_fields": [
+      "name",
+      "description",
+      "keywords"
+    ],
+    "discovery_regex": "dxf|cad|geometry|gcode|contour|step|vector.trace",
+    "selection": "Representative CAD, 2D geometry, G-code, bitmap contour, and manufacturing inspection modules; substring matches include false positives and require manual selection",
+    "version_claim": "Observed versions in this snapshot, cross-checked against pinned GitHub moon.mod; not a promise of latest versions"
+  },
+  "projects": [
+    {
+      "module": "cjcjwe/gcode-toolkit",
+      "version": "0.3.1",
+      "checked_on": "2026-10-22",
+      "repository": "https://github.com/cjcjwe/moonbit-gcode-toolkit",
+      "repository_commit": "89c6b7c9dd7c3b7de7566cb917cdc86a5fa5d516",
+      "commit_date": "2026-08-24T13:48:29Z",
+      "evidence": [
+        {
+          "kind": "module_configuration",
+          "url": "https://github.com/cjcjwe/moonbit-gcode-toolkit/blob/89c6b7c9dd7c3b7de7566cb917cdc86a5fa5d516/moon.mod",
+          "git_blob_sha": "648bd8b9424e951e57d6be99fbe75cd9c6ca1038"
+        },
+        {
+          "kind": "project_documentation",
+          "url": "https://github.com/cjcjwe/moonbit-gcode-toolkit/blob/89c6b7c9dd7c3b7de7566cb917cdc86a5fa5d516/README.mbt.md",
+          "git_blob_sha": "2d3bf4767117c898ebb50fa14fb8a48de72b8bae"
+        }
+      ],
+      "assessment": "module configuration and documented capabilities reviewed; third-party tests and integration not executed"
+    },
+    {
+      "module": "zgfzgf899/moonbit-vector-trace-plan",
+      "version": "0.2.2",
+      "checked_on": "2026-10-22",
+      "repository": "https://github.com/zgfzgf899/moonbit-vector-trace-plan",
+      "repository_commit": "f1cb9c7e813971ad1f51c29dfbbfe758b6f436bb",
+      "commit_date": "2026-08-24T12:24:30Z",
+      "evidence": [
+        {
+          "kind": "module_configuration",
+          "url": "https://github.com/zgfzgf899/moonbit-vector-trace-plan/blob/f1cb9c7e813971ad1f51c29dfbbfe758b6f436bb/moon.mod",
+          "git_blob_sha": "34cba7e4546e5bdc106c75284203c8bc47c15108"
+        },
+        {
+          "kind": "project_documentation",
+          "url": "https://github.com/zgfzgf899/moonbit-vector-trace-plan/blob/f1cb9c7e813971ad1f51c29dfbbfe758b6f436bb/README.md",
+          "git_blob_sha": "07423140705ab77afdb670a9e2ebc8067d286484"
+        }
+      ],
+      "assessment": "module configuration and documented capabilities reviewed; third-party tests and integration not executed"
+    },
+    {
+      "module": "totto2727/geo",
+      "version": "0.1.3",
+      "checked_on": "2026-10-22",
+      "repository": "https://github.com/totto2727-org/geo",
+      "repository_commit": "bc35dd29f37d3a052cd67310d5a2cb62fd3118ab",
+      "commit_date": "2026-08-23T08:13:23Z",
+      "evidence": [
+        {
+          "kind": "module_configuration",
+          "url": "https://github.com/totto2727-org/geo/blob/bc35dd29f37d3a052cd67310d5a2cb62fd3118ab/moon.mod",
+          "git_blob_sha": "fe77226cbe17d89c7666c363f4b1dc986907fb7c"
+        },
+        {
+          "kind": "project_documentation",
+          "url": "https://github.com/totto2727-org/geo/blob/bc35dd29f37d3a052cd67310d5a2cb62fd3118ab/README.mbt.md",
+          "git_blob_sha": "c4afc2238a350f6088984476fb6351c64af569a7"
+        }
+      ],
+      "assessment": "module configuration and documented capabilities reviewed; third-party tests and integration not executed"
+    },
+    {
+      "module": "gmlewis/step",
+      "version": "0.1.22",
+      "checked_on": "2026-10-22",
+      "repository": "https://github.com/gmlewis/moonbit-step",
+      "repository_commit": "3d77e2bed4bef957f7019af754bf8d2a5e772cea",
+      "commit_date": "2026-10-19T14:02:26Z",
+      "evidence": [
+        {
+          "kind": "module_configuration",
+          "url": "https://github.com/gmlewis/moonbit-step/blob/3d77e2bed4bef957f7019af754bf8d2a5e772cea/moon.mod",
+          "git_blob_sha": "8b88968e7d0b2b0552b6a1c88dbde8b0c01d57f8"
+        },
+        {
+          "kind": "project_documentation",
+          "url": "https://github.com/gmlewis/moonbit-step/blob/3d77e2bed4bef957f7019af754bf8d2a5e772cea/README.md",
+          "git_blob_sha": "e034c14f0c07904e0dcdaaddd47e6a1e422f7879"
+        }
+      ],
+      "assessment": "module configuration and documented capabilities reviewed; third-party tests and integration not executed"
+    },
+    {
+      "module": "cn-xjr/moongeokit",
+      "version": "0.3.0",
+      "checked_on": "2026-10-22",
+      "repository": "https://github.com/cn-xjr/moongeokit",
+      "repository_commit": "0300c9cd7600c255011ddae96c9f7d929679e18a",
+      "commit_date": "2026-07-17T00:16:15Z",
+      "evidence": [
+        {
+          "kind": "module_configuration",
+          "url": "https://github.com/cn-xjr/moongeokit/blob/0300c9cd7600c255011ddae96c9f7d929679e18a/moon.mod",
+          "git_blob_sha": "3da108c704003b336a68e8a8c54a8d4e794a4dc4"
+        },
+        {
+          "kind": "project_documentation",
+          "url": "https://github.com/cn-xjr/moongeokit/blob/0300c9cd7600c255011ddae96c9f7d929679e18a/README.mbt.md",
+          "git_blob_sha": "a8d817d65ec3a42702d0d9a81b8a0b8ea25cb927"
+        }
+      ],
+      "assessment": "module configuration and documented capabilities reviewed; third-party tests and integration not executed"
+    },
+    {
+      "module": "Mgk789a/moonbit-gerberkit",
+      "version": "0.2.4",
+      "checked_on": "2026-10-22",
+      "repository": "https://github.com/Mgk789a/moonbit-gerberkit",
+      "repository_commit": "80e332f79d2d826fca00e40f3fd8cd0593b95b2f",
+      "commit_date": "2026-08-24T13:18:34Z",
+      "evidence": [
+        {
+          "kind": "module_configuration",
+          "url": "https://github.com/Mgk789a/moonbit-gerberkit/blob/80e332f79d2d826fca00e40f3fd8cd0593b95b2f/moon.mod",
+          "git_blob_sha": "aee2cbc026b9121b9485806989b7f1643dee1651"
+        },
+        {
+          "kind": "project_documentation",
+          "url": "https://github.com/Mgk789a/moonbit-gerberkit/blob/80e332f79d2d826fca00e40f3fd8cd0593b95b2f/README.mbt.md",
+          "git_blob_sha": "7091a33578c4ede4041490d2bfb5b7b12823cc47"
+        }
+      ],
+      "assessment": "module configuration and documented capabilities reviewed; third-party tests and integration not executed"
+    }
+  ]
+}

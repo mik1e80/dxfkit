@@ -6,7 +6,7 @@
 - 项目方向：工业软件 / 开发者工具
 - GitHub：<https://github.com/mik1e80/dxfkit>
 - 在线演示：<https://mik1e80.github.io/dxfkit/>
-- 提交版本：固定标签 `delivery-0.1.1-20261021`，以该标签的提交 SHA 为准；[干净环境复现与版本核对](reproducibility.md)。网页 release.json 和 verification.json 记录实际源码提交及本文件哈希，CI 通过后才部署同一产物。
+- 提交版本：固定标签 `delivery-0.1.1-20261022`，以该标签的提交 SHA 为准；[干净环境复现与版本核对](reproducibility.md)。网页 release.json 和 verification.json 记录实际源码提交及本文件、生态对比和来源记录的哈希，CI 通过后才部署同一产物。
 - 是否为整体移植：否；参考资料、公式移植和外部语料见下文。
 - 参赛者及联系方式：报名表保留原信息，不在公开仓库展示。
 
@@ -76,13 +76,20 @@ HATCH、DIMENSION、SOLID、TRACE、3DFACE、未知实体的轮廓未参与检�
 
 ## 差异性与对比
 
-| 比较方向 | 本项目交付与边界 |
-| --- | --- |
-| 成熟 Python DXF 框架 ezdxf | 提供 MoonBit 可调用接口，附检查流程及 CLI / 网页；格式、编辑及实体范围更小，不宣称替代 ezdxf |
-| 通用二维几何库 | 增加 DXF 段、图层、实体、块引用及诊断语义；部分几何能力存在交集 |
-| G-code 工具 | 输入为 CAD 图纸，在 CAM 前辅助检查；不生成刀路或证明加工安全 |
+**核对日期：2026-10-22。** [生态对比表](../COMPARISON.md)逐项列出六个真实 MoonBit 项目的核对版本、固定源码文档、能力交集和差别；[来源记录](ecosystem-sources.json)保存提交与文档 blob SHA。本轮核对公开配置和文档，未运行相邻项目的测试、性能比较或跨库集成，不据此作生态穷尽性结论。
 
-不使用“生态唯一”“加工能力独占”或未验证的性能结论。相邻项目链接及核对时间见 `COMPARISON.md`。
+| MoonBit 项目（核对版本） | 能力交集 | dxfkit 的范围与差别 |
+| --- | --- | --- |
+| [gmlewis/step 0.1.22](https://github.com/gmlewis/moonbit-step/blob/3d77e2bed4bef957f7019af754bf8d2a5e772cea/README.md) | CAD 数据模型、读取、变换与诊断 | 本库面向 ASCII DXF 及 XY 轮廓，不提供对方的 STEP 序列化和三维建模 |
+| [cn-xjr/moongeokit 0.3.0](https://github.com/cn-xjr/moongeokit/blob/0300c9cd7600c255011ddae96c9f7d929679e18a/README.mbt.md) | 距离、相交、包围盒与二维点列 | 本库增加 DXF 图层 / 句柄、块展开及覆盖诊断，不提供通用网格索引 |
+| [totto2727/geo 0.1.3](https://github.com/totto2727-org/geo/blob/bc35dd29f37d3a052cd67310d5a2cb62fd3118ab/README.mbt.md) | 二维测量、变换与拓扑处理 | 本库聚焦 DXF 语义到轮廓，不提供对方整套地理算法、鲁棒谓词和布尔接口 |
+| [cjcjwe/gcode-toolkit 0.3.1](https://github.com/cjcjwe/moonbit-gcode-toolkit/blob/89c6b7c9dd7c3b7de7566cb917cdc86a5fa5d516/README.mbt.md) | 工业文本解析、结构化诊断及批处理 | 本库处理 CAM 前的图纸轮廓，不生成 G-code，不检查控制器指令 |
+| [zgfzgf899/moonbit-vector-trace-plan 0.2.2](https://github.com/zgfzgf899/moonbit-vector-trace-plan/blob/f1cb9c7e813971ad1f51c29dfbbfe758b6f436bb/README.md) | 轮廓、曲线近似、几何和 SVG 输出 | 对方从像素描摹路径并规划绘制，本库从 DXF 实体 / 图层 / 块提取轮廓，不提供位图追踪或机器计划 |
+| [Mgk789a/moonbit-gerberkit 0.2.4](https://github.com/Mgk789a/moonbit-gerberkit/blob/80e332f79d2d826fca00e40f3fd8cd0593b95b2f/README.mbt.md) | 制造数据模型、闭合、重复几何、净距与报告 | 对方处理 PCB Gerber / Excellon；本库处理 DXF 实体与块。不提供 PCB 孔环宽、电气连通或制造配置检查 |
+
+组合价值落实为 `scan_tags` / `build_drawing` 的数据模型、`Drawing::expand()` 的带来源世界坐标轮廓、`Geometry::flatten_checked()` 的显式离散结果，以及 `Drawing::check()` / `Report::has_incomplete_checks()` 的完整性诊断。调用方可保留来源并决定如何处理未检查内容；[独立消费工程](../examples/consumer/README.md)已验证这些公共接口的直接调用。
+
+将点列转交其他几何或路径库仍需坐标、单位、闭合约定和容差适配，目前没有跨库适配器或完整 CAM 流程。不使用“生态唯一”“加工能力独占”、已有生产采用或未经验证的性能领先结论；ezdxf 是成熟 Python 参考，不是生态差异性的主要对照，也不宣称全面替代它。
 
 ## 预期场景
 

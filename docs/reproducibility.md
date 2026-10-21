@@ -1,6 +1,6 @@
 # 从指定提交复现交付版本
 
-交付版本使用固定标签 `delivery-0.1.1-20261021`。标签所指提交是本次库、CLI、测试、网页构建和申报说明的共同源码；不以可变的 main 或在线页面当前内容替代提交身份。模块版本仍为 0.1.1，未发布 Mooncakes。
+交付版本使用固定标签 `delivery-0.1.1-20261022`。标签所指提交是本次库、CLI、测试、网页构建、申报说明与生态对比的共同源码；不以可变的 main 或在线页面当前内容替代提交身份。模块版本仍为 0.1.1，未发布 Mooncakes。此前的 `delivery-0.1.1-20261021` 保留原提交，不移动或覆盖。
 
 ## 固定工具与依赖
 
@@ -40,7 +40,7 @@ $env:PATH = "$HOME/.moon/bin;" + $env:PATH
 以下命令在 PowerShell、Bash 均可执行。使用尚不存在的目录：
 
 ```sh
-git clone --branch delivery-0.1.1-20261021 --depth 1 https://github.com/mik1e80/dxfkit.git dxfkit-delivery
+git clone --branch delivery-0.1.1-20261022 --depth 1 https://github.com/mik1e80/dxfkit.git dxfkit-delivery
 cd dxfkit-delivery
 git rev-parse HEAD
 node scripts/environment.cjs
@@ -54,8 +54,8 @@ node scripts/verify-reproduction.cjs --fresh
 成功后的输出：
 
 - `_build/reproduction.json`：实际提交、工具版本、依赖及各步退出码。
-- `web/dist/release.json`：同一提交、模块版本、工具链、网页资产和 `docs/submission.md` 的 SHA-256。
-- `_site/`：已验证的站点，含 `dist/release.json`、`verification.json` 和该提交的申报说明副本。
+- `web/dist/release.json`：同一提交、模块版本、工具链、网页资产、`docs/submission.md`、`COMPARISON.md` 和 `docs/ecosystem-sources.json` 的 SHA-256。
+- `_site/`：已验证的站点，含 `dist/release.json`、`verification.json` 和该提交的申报说明、生态对比与来源记录副本。
 
 已有依赖的目录可不加 `--fresh` 重跑。开发时允许未提交改动须显式加 `--allow-dirty`；这类报告会记录 `source_dirty:true`，不能当作干净交付结果。
 
@@ -77,7 +77,7 @@ node web/smoke.cjs
 
 同一个 [CI 工作流](../.github/workflows/ci.yml) 先执行完整复现，再上传这一轮的 `_site/`。Pages 部署任务通过 `needs: ci` 等待成功，使用同一工作流已上传的站点，不再独立检出或重编译。验证失败时，部署不会执行。
 
-在线站点的 `dist/release.json`、`verification.json` 中的提交必须等于固定标签解析出的 SHA；release.json 中的申报说明哈希也必须等于该提交的 `docs/submission.md`。提交、模块版本、资产哈希和完整验证结果因此能关联起来；打包脚本会拒绝混用另一提交的结果。
+在线站点的 `dist/release.json`、`verification.json` 中的提交必须等于本次交付固定标签解析出的 SHA；release.json 中的申报说明、生态对比和来源记录哈希也必须等于该提交中的对应文件。提交、模块版本、资产哈希和完整验证结果因此能关联起来；打包脚本会拒绝混用另一提交的结果。标签保留历史版本，在线站点会随后续 main 的成功部署更新，核对历史交付应使用该标签和对应 CI 记录。
 
 之前提交 `175d96a` 的[CI](https://github.com/mik1e80/dxfkit/actions/runs/39614185702) 在语料快照比较失败，而独立 Pages 已部署。干净克隆定位到 `images.dxf`、`text.dxf`、`text_negative_extrusion.dxf` 的本地 CRLF 副本与提交中的 LF 字节不一致。本修订从指定提交重建其大小和哈希记录，未改动 47 个已提交 DXF 的内容；本地旧 CRLF 副本另行保留为备份。比较仍严格检查全部数值、结构、分类和哈希，只增加差异字段定位，不放宽判定。
 
