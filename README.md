@@ -18,6 +18,8 @@ MoonBit ASCII DXF 读取与二维轮廓辅助检查库：在声明字段范围�
 
 源码修订版本 **0.1.1**。本次修订尚未发布到 Mooncakes。
 
+交付固定标签：`delivery-0.1.1-20261021`。[干净环境复现步骤](docs/reproducibility.md)固定工具链和依赖；运行 `node scripts/verify-reproduction.cjs --fresh` 验证测试、CLI、网页和申报材料对应同一提交。
+
 ## 解决什么问题
 
 面向已有 DXF 图纸的读取、预览与加工前辅助检查。例如，激光切割前复核轮廓是否开放、是否有重复线段，以及同图层不同实体的轮廓距离是否低于指定值。
@@ -75,7 +77,7 @@ moon run examples/library --target js
 网页可打开 `web/index.html`，或访问在线版。文件在浏览器本地处理；可上传图纸、调整净距、查看报告和预览，并选择正常、问题、未覆盖三类内置示例。仓库包含编译产物，修改库后需重建：
 
 ```bash
-bash web/build.sh
+node scripts/build-web.cjs
 node web/smoke.cjs
 node scripts/verify-delivery.cjs
 node scripts/verify-completeness.cjs
@@ -115,7 +117,7 @@ moon test --target js
 moon test --target native
 moon run conformance
 node cli/smoke.cjs
-bash web/build.sh
+node scripts/build-web.cjs
 node web/smoke.cjs
 node scripts/verify-delivery.cjs
 node scripts/verify-completeness.cjs

@@ -1,82 +1,59 @@
 name: 检查、构建、测试
 
-# 每次推到 main、以及每个 PR 都跑一遍。
-#
-# 检查库、CLI与网页；pages.yml从同一提交重建网页后再部署。
-#
-# 三件事分开跑而不是串成一条命令，是为了在 Actions 页面上能一眼看出是哪一步挂了。
-
 on:
   push:
     branches: [main]
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   ci:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24.19.0'
 
-      - name: 装 MoonBit 工具链
+      - name: 安装固定版本 MoonBit（不复用依赖缓存）
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- '0.10.14+7d59c7ec9'
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
-      - name: 打印版本
-        run: |
-          moon version --all
-          # 验收要求 moonc 不低于 0.10.14。这里不写死版本，但把版本打进日志，
-          # 万一以后工具链降级了能从日志看出来
-          moonc -v
+      - name: 从干净检出复现所有入口
+        run: node scripts/verify-reproduction.cjs --fresh
 
-      # 依赖装到 .mooncakes/，缓存起来省得每次重新下
-      - name: 缓存依赖
-        uses: actions/cache@v4
+      - name: 保存该提交的验证记录
+        uses: actions/upload-artifact@v6
         with:
-          path: ~/.moon/registry
-          key: moon-registry-${{ hashFiles('moon.mod') }}
-          restore-keys: moon-registry-
+          name: verification-${{ github.sha }}
+          path: |
+            _build/reproduction.json
+            web/dist/release.json
 
-      - name: 解析依赖
-        run: moon update
+      - name: 上传已通过验证的同一站点产物
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
 
-      - name: 检查（全目标，零警告才算过）
-        run: moon check --target all --deny-warn
-
-      - name: 构建
-        run: moon build
-
-      - name: 测试
-        run: moon test
-
-      - name: JS后端测试
-        run: moon test --target js
-
-      - name: Native后端测试
-        run: moon test --target native
-
-      - name: 几何与检查器错误检出能力
-        run: node scripts/verify-test-sensitivity.cjs
-
-      - name: CLI实际示例回归
-        run: node cli/smoke.cjs
-
-      - name: 第三方图纸分层验证记录
-        run: node scripts/verify-corpus-records.cjs
-
-      - name: 网页构建与报告回归
-        run: |
-          bash web/build.sh
-          node web/smoke.cjs
-
-      - name: 六类最小交付用例
-        run: node scripts/verify-delivery.cjs
-
-      - name: 混合输入检查完整性
-        run: node scripts/verify-completeness.cjs
-
-      - name: 独立 MoonBit 工程调用（Wasm 与 Native）
-        run: |
-          node scripts/verify-consumer.cjs
-          node scripts/verify-consumer.cjs --target native
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: ci
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v6
+      - id: deployment
+        uses: actions/deploy-pages@v5

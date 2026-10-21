@@ -2166,8 +2166,8 @@
     },
     {
       "file": "images.dxf",
-      "bytes": 215924,
-      "sha256": "31c8ee077bb16cc3c2b2bcbe5cbe6687038f932acbbbfeeddca2a934ab0db65b",
+      "bytes": 197136,
+      "sha256": "e8d0e3b7ad3145d0c708cd2541610b206b45da9f6679e01b24f9c9b3280eca0a",
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/images.dxf",
@@ -2918,8 +2918,8 @@
     },
     {
       "file": "text.dxf",
-      "bytes": 232364,
-      "sha256": "303f8a23596ad94e084f6bdf2b60350a7ae32795c77c63f67945c83ae6f5d64c",
+      "bytes": 208254,
+      "sha256": "7dda6175c1dff17a9ba8ea13d54caacb339bb4ab4380be83bd35fd48344a77ef",
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/text.dxf",
@@ -3628,8 +3628,8 @@
     },
     {
       "file": "text_negative_extrusion.dxf",
-      "bytes": 228688,
-      "sha256": "6c183742a7c226e3196ba03b50eb8c32ab6a0dfbf12256d349ce2fc4b078b310",
+      "bytes": 203834,
+      "sha256": "50395e4963a9a3465a18033306ed08932813e7818e6d9a1c87f95bb6411c80e8",
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/text_negative_extrusion.dxf",

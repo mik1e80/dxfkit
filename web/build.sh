@@ -10,9 +10,4 @@ set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$root"
 
-moon build --target js --release
-
-mkdir -p web/dist
-cp _build/js/release/build/web/web.js web/dist/web.js
-
-echo "已生成 web/dist/web.js（$(wc -c < web/dist/web.js) 字节）"
+node scripts/build-web.cjs "$@"

@@ -1,0 +1,11 @@
+{
+  "module": "mik1e80/dxfkit",
+  "version": "0.1.1",
+  "submission_ref": "delivery-0.1.1-20261021",
+  "moon_release": "0.10.14+7d59c7ec9",
+  "moon_version": "0.1.20260920",
+  "moonc_version": "v0.10.14+7d59c7ec9",
+  "node_minimum_major": 22,
+  "ci_node_version": "24.19.0",
+  "dependencies": {"moonbitlang/async":"0.22.1", "moonbitlang/x":"0.5.5"}
+}

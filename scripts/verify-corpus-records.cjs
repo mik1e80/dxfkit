@@ -4,6 +4,14 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 const { spawnSync } = require('node:child_process');
 const { createHash } = require('node:crypto');
+function differences(expected,actual,location='$',out=[]) {
+  if(Object.is(expected,actual)) return out;
+  if(expected&&actual&&typeof expected==='object'&&typeof actual==='object'&&Array.isArray(expected)===Array.isArray(actual)) {
+    for(const key of [...new Set([...Object.keys(expected),...Object.keys(actual)])].sort())
+      differences(expected[key],actual[key],`${location}.${key}`,out);
+  } else out.push({path:location,expected,actual});
+  return out;
+}
 const root = path.resolve(__dirname, '..');
 const write = process.argv.includes('--write');
 const hash = data => createHash('sha256').update(data).digest('hex');
@@ -136,6 +144,9 @@ const outputs = {'docs/corpus-validation.json':JSON.stringify(report,null,2)+'\n
   'docs/corpus-validation.md':lines.join('\n')};
 for(const [file,text] of Object.entries(outputs)) {
   if(write) fs.writeFileSync(path.join(root,file),text);
-  else assert(read(file).toString().replaceAll('\r\n','\n')===text,`${file} is stale; review and run --write`);
+  else if(file.endsWith('.json')) {
+    const changed=differences(JSON.parse(read(file)),JSON.parse(text));
+    assert.equal(changed.length,0,`${file} differs: ${JSON.stringify(changed.slice(0,8))}`);
+  } else assert(read(file).toString().replaceAll('\r\n','\n')===text,`${file} is stale; review and run --write`);
 }
 console.log(`47 corpus records ${write?'updated':'verified'}; 14 tests passed; geometry independently verified: 0/47`);

@@ -6,6 +6,7 @@
 - 项目方向：工业软件 / 开发者工具
 - GitHub：<https://github.com/mik1e80/dxfkit>
 - 在线演示：<https://mik1e80.github.io/dxfkit/>
+- 提交版本：固定标签 `delivery-0.1.1-20261021`，以该标签的提交 SHA 为准；[干净环境复现与版本核对](reproducibility.md)。网页 release.json 和 verification.json 记录实际源码提交及本文件哈希，CI 通过后才部署同一产物。
 - 是否为整体移植：否；参考资料、公式移植和外部语料见下文。
 - 参赛者及联系方式：报名表保留原信息，不在公开仓库展示。
 
