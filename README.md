@@ -4,7 +4,7 @@
 
 [在线试用](https://mik1e80.github.io/dxfkit/) · [接口文档](README.mbt.md) · [一页项目申报 PDF](output/pdf/dxfkit-submission-one-page.pdf)
 
-[r2 最终收敛记录](docs/r2-submission-20261022.md)补齐 SPLINE 缺次数诊断，统一代码、申报书、PDF、模型与 ezdxf 对照。普通 main push 默认针对性验证；本次固定 r2 提交须手动通过 `validation=full` 的完整 CI 和同提交部署后创建新标签。旧标签保持原提交。
+固定申报版本为 [`submission-0.1.1-20261022-r2`](https://github.com/mik1e80/dxfkit/tree/submission-0.1.1-20261022-r2)（`94509f3`），已经完成 `validation=full` 的[完整 CI #26 及同提交 Pages 部署](https://github.com/mik1e80/dxfkit/actions/runs/39761104538)，标签已创建。[r2 收敛记录](docs/r2-submission-20261022.md)说明该版的 SPLINE 修复与交付材料。当前 main 另含后续文档整理及[三份实际 CAD 导出验证](examples/cad-exports/README.md)；这些补充仅作本地定向验证，不追加入固定 r2 标签，也不改变已部署的 r2 版本。
 
 ## 能做什么
 
@@ -186,4 +186,4 @@ node scripts/verify-corpus-records.cjs
 
 main 后续补充[两种实际 CAD 软件的三份导出验证](examples/cad-exports/README.md)：FreeCAD / OpenSCAD 原生模型、原始 DXF、版本设置、哈希、测试数据和报告随仓库保存，3/3 本地定向验证通过；这些软件内自建样本不称为第三方生产图纸。
 
-固定 r2 标签保留其已验证内容；main 上后续 CHANGELOG 与路线图整理属于文档更新，不移动 r2 标签。
+固定 r2 标签及其完整验证记录保持不变；main 后续的文档整理和 CAD 导出补充分别记录验收范围，不移动 r2 标签。
