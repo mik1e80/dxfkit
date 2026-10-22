@@ -781,7 +781,7 @@ test "SOLID 少第四个角点保留三点恢复并报告检查不完整" {
     _ => fail("不是填充面")
   }
   assert_true(d.entities().warnings.any(w => w.contains("缺第四角点")))
-  assert_true(d.check({ tol: 0.01, min_gap: 0.0 }).has_incomplete_checks())
+  assert_true(d.check({ tol: 0.01, min_gap: 0.0, }).has_incomplete_checks())
 }
 
 ///|

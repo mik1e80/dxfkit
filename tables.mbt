@@ -70,6 +70,8 @@ pub fn Layer::is_enabled_for_checks(self : Layer) -> Bool {
 
 ///|
 /// 兼容旧接口；仅表示本工具检查筛选规则，不表示能否加工。
+/// 文档弃用：新代码使用 `Layer::is_enabled_for_checks()`；本版保留同义行为。
+/// 未添加编译器 deprecated 属性，以免兼容调用在 --deny-warn 下成为错误。
 pub fn Layer::is_machinable(self : Layer) -> Bool {
   self.is_enabled_for_checks()
 }
@@ -123,7 +125,7 @@ pub fn parse_tables(section : Section) -> Tables {
       }
     }
   }
-  { layers, linetypes, text_styles, block_records }
+  { layers, linetypes, text_styles, block_records, }
 }
 
 ///|

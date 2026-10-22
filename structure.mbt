@@ -120,7 +120,11 @@ pub fn Record::get_string(self : Record, code : Int) -> String {
 ///
 /// 默认值由调用方给而不是固定 0.0：坐标缺省成 0 是合理的，
 /// 但半径缺省成 0 就变成了「一个退化的圆」，性质完全不同。
-pub fn Record::get_double(self : Record, code : Int, default : Double) -> Double {
+pub fn Record::get_double(
+  self : Record,
+  code : Int,
+  default : Double,
+) -> Double {
   match self.get(code) {
     Some(t) => t.value.as_double()
     None => default
@@ -193,7 +197,7 @@ pub fn build_drawing(scan : TagScan) -> Drawing {
     Some(v) => v
     None => ""
   }
-  { version, sections, warnings }
+  { version, sections, warnings, }
 }
 
 ///|
@@ -218,10 +222,10 @@ fn split_records(tags : Array[Tag]) -> Array[Record] {
         Some(k) => {
           let finished = subs.copy()
           match sub_name {
-            Some(n) => finished.push({ name: n, tags: sub_tags })
+            Some(n) => finished.push({ name: n, tags: sub_tags, })
             None => ()
           }
-          out.push({ kind: k, common, subclasses: finished })
+          out.push({ kind: k, common, subclasses: finished, })
         }
         None => ()
       }
@@ -234,7 +238,7 @@ fn split_records(tags : Array[Tag]) -> Array[Record] {
     } else if tag.is_subclass_marker() {
       // 换子类：先把当前这个收掉
       match sub_name {
-        Some(n) => subs.push({ name: n, tags: sub_tags })
+        Some(n) => subs.push({ name: n, tags: sub_tags, })
         None => ()
       }
       sub_name = Some(tag.value.as_string())
@@ -251,10 +255,10 @@ fn split_records(tags : Array[Tag]) -> Array[Record] {
     Some(k) => {
       let finished = subs.copy()
       match sub_name {
-        Some(n) => finished.push({ name: n, tags: sub_tags })
+        Some(n) => finished.push({ name: n, tags: sub_tags, })
         None => ()
       }
-      out.push({ kind: k, common, subclasses: finished })
+      out.push({ kind: k, common, subclasses: finished, })
     }
     None => ()
   }
@@ -279,8 +283,10 @@ fn group_sections(
       // 上一个段没关就又开了新的——尽力而为：把上一个收掉
       match current {
         Some(name) => {
-          warnings.push("段「\{name}」没有 ENDSEC 就结束了（后面又开了新段）")
-          sections.push({ name, records: current_records })
+          warnings.push(
+            "段「\{name}」没有 ENDSEC 就结束了（后面又开了新段）",
+          )
+          sections.push({ name, records: current_records, })
         }
         None => ()
       }
@@ -293,11 +299,12 @@ fn group_sections(
     } else if record.kind == "ENDSEC" {
       match current {
         Some(name) => {
-          sections.push({ name, records: current_records })
+          sections.push({ name, records: current_records, })
           current = None
           current_records = []
         }
-        None => warnings.push("出现了没有对应 SECTION 的 ENDSEC，已忽略")
+        None =>
+          warnings.push("出现了没有对应 SECTION 的 ENDSEC，已忽略")
       }
     } else {
       current_records.push(record)
@@ -305,8 +312,10 @@ fn group_sections(
   }
   match current {
     Some(name) => {
-      warnings.push("文件在段「\{name}」中间就结束了，没有 ENDSEC")
-      sections.push({ name, records: current_records })
+      warnings.push(
+        "文件在段「\{name}」中间就结束了，没有 ENDSEC",
+      )
+      sections.push({ name, records: current_records, })
     }
     None => ()
   }

@@ -116,7 +116,7 @@ pub(all) struct Tag {
 
 ///|
 pub fn Tag::new(code : Int, value : TagValue) -> Tag {
-  { code, value }
+  { code, value, }
 }
 
 ///|
@@ -156,13 +156,26 @@ pub fn Tag::to_display(self : Tag) -> String {
 /// 这不只是兜底：DXF 里「名字」类的字段散落在各个区间之外，
 /// 而字符串是唯一能安全容纳未知内容的类型。
 pub fn code_type(code : Int) -> TagType {
-  if in_ranges(code, [(60, 79), (170, 179), (270, 289), (370, 389), (400, 409), (1060, 1070)]) {
+  if in_ranges(code, [
+      (60, 79),
+      (170, 179),
+      (270, 289),
+      (370, 389),
+      (400, 409),
+      (1060, 1070),
+    ]) {
     I16
   } else if in_ranges(code, [(90, 99), (420, 429), (440, 459), (1071, 1071)]) {
     I32
   } else if in_ranges(code, [(160, 169)]) {
     I64
-  } else if in_ranges(code, [(10, 59), (110, 149), (210, 239), (460, 469), (1010, 1059)]) {
+  } else if in_ranges(code, [
+      (10, 59),
+      (110, 149),
+      (210, 239),
+      (460, 469),
+      (1010, 1059),
+    ]) {
     F64
   } else if in_ranges(code, [(290, 299)]) {
     Bool

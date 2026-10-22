@@ -13,12 +13,18 @@
 pub fn analyze(file_base64 : String, min_gap : Double, tol : Double) -> String {
   let data = match decode(file_base64) {
     Ok(data) => data
-    Err(msg) => return ({"report": "读不了：" + msg, "svg": "", "error": msg, "unit": ""} : Json).stringify()
+    Err(msg) =>
+      return (
+        { "report": "读不了：" + msg, "svg": "", "error": msg, "unit": "" } :
+        Json).stringify()
   }
   let drawing = @dxfkit.build_drawing(@dxfkit.scan_tags(data))
-  let result = drawing.analyze({tol, min_gap})
-  let report = "单位声明：\{result.unit}；坐标及阈值使用图纸原始单位，请先确认。\n" + result.report.to_text()
-  ({"report": report, "svg": result.svg, "error": "", "unit": result.unit} : Json).stringify()
+  let result = drawing.analyze({ tol, min_gap, })
+  let report = "单位声明：\{result.unit}；坐标及阈值使用图纸原始单位，请先确认。\n" +
+    result.report.to_text()
+  (
+    { "report": report, "svg": result.svg, "error": "", "unit": result.unit } :
+    Json).stringify()
 }
 
 ///|

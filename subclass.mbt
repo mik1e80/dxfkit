@@ -132,9 +132,26 @@ pub fn Record::effective_classes(self : Record) -> Array[String] {
 /// 这个记录类型是不是「实体」（会画出来的东西），而不是表记录之类的结构。
 fn is_entity_kind(kind : String) -> Bool {
   match kind {
-    "LINE" | "CIRCLE" | "ARC" | "ELLIPSE" | "POINT" | "SPLINE" | "TEXT" | "MTEXT" |
-    "INSERT" | "ATTRIB" | "ATTDEF" | "LWPOLYLINE" | "POLYLINE" | "VERTEX" |
-    "SEQEND" | "HATCH" | "SOLID" | "TRACE" | "3DFACE" | "DIMENSION" => true
+    "LINE"
+    | "CIRCLE"
+    | "ARC"
+    | "ELLIPSE"
+    | "POINT"
+    | "SPLINE"
+    | "TEXT"
+    | "MTEXT"
+    | "INSERT"
+    | "ATTRIB"
+    | "ATTDEF"
+    | "LWPOLYLINE"
+    | "POLYLINE"
+    | "VERTEX"
+    | "SEQEND"
+    | "HATCH"
+    | "SOLID"
+    | "TRACE"
+    | "3DFACE"
+    | "DIMENSION" => true
     _ => false
   }
 }

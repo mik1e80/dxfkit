@@ -66,12 +66,12 @@ pub fn Report::has_fatal(self : Report) -> Bool {
 /// 只描述本次所选检查的完整性，不表示完整 DXF 兼容或可加工性。
 /// 保留 Finding 原来的分类，避免调用方依赖解析文字来判断完整性。
 pub fn Report::has_incomplete_checks(self : Report) -> Bool {
-  self.findings.any(f =>
+  self.findings.any(f => {
     match f.check {
       "解析" | "检查覆盖" | "文字未转曲线" | "参数" => true
       _ => false
-    },
-  )
+    }
+  })
 }
 
 ///|
@@ -145,23 +145,35 @@ pub fn Report::to_text(self : Report) -> String {
 ///
 /// `tol` 既是离散容差、也是判定尺度（重合、闭合都拿它比）。
 pub fn Drawing::check(self : Drawing, opt : CheckOptions) -> Report {
-  if !positive_tolerance(opt.tol) || !finite_number(opt.min_gap) || opt.min_gap < 0.0 {
-    return self.check_expansion(opt, {placed: [], warnings: []})
+  if !positive_tolerance(opt.tol) ||
+    !finite_number(opt.min_gap) ||
+    opt.min_gap < 0.0 {
+    return self.check_expansion(opt, { placed: [], warnings: [], })
   }
   self.check_expansion(opt, self.expand(opt.tol))
 }
 
 ///|
 /// 按显式图纸预算检查；预算截断原因进入检查不完整报告。
-pub fn Drawing::check_with_limits(self : Drawing, opt : CheckOptions, limits : ExpandLimits) -> Report {
-  if !positive_tolerance(opt.tol) || !finite_number(opt.min_gap) || opt.min_gap < 0.0 {
-    return self.check_expansion(opt, {placed: [], warnings: []})
+pub fn Drawing::check_with_limits(
+  self : Drawing,
+  opt : CheckOptions,
+  limits : ExpandLimits,
+) -> Report {
+  if !positive_tolerance(opt.tol) ||
+    !finite_number(opt.min_gap) ||
+    opt.min_gap < 0.0 {
+    return self.check_expansion(opt, { placed: [], warnings: [], })
   }
   self.check_expansion(opt, self.expand_with_limits(opt.tol, limits))
 }
 
 ///|
-fn Drawing::check_expansion(self : Drawing, opt : CheckOptions, exp : Expansion) -> Report {
+fn Drawing::check_expansion(
+  self : Drawing,
+  opt : CheckOptions,
+  exp : Expansion,
+) -> Report {
   let tol = opt.tol
   let findings : Array[Finding] = []
   if !positive_tolerance(tol) ||
@@ -194,13 +206,12 @@ fn Drawing::check_expansion(self : Drawing, opt : CheckOptions, exp : Expansion)
       _ => ()
     }
     match p.entity.geom {
-      Face(..) => {
-        if !((p.entity.kind() == "SOLID" || p.entity.kind() == "TRACE") && p.flat is Outline(..)) {
+      Face(..) =>
+        if !((p.entity.kind() == "SOLID" || p.entity.kind() == "TRACE") &&
+          p.flat is Outline(..)) {
           bump(unsupported, p.entity.kind())
         }
-      }
-      Hatch(..) | Dimension(..) | Unknown =>
-        bump(unsupported, p.entity.kind())
+      Hatch(..) | Dimension(..) | Unknown => bump(unsupported, p.entity.kind())
       _ => ()
     }
     let record = p.entity.common.record

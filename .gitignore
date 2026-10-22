@@ -4,6 +4,10 @@ _build/
 _coverage/
 _site/
 web/dist/release.json
+# moon info emits snapshots for command/example packages too; only the core library
+# interface is versioned and reviewed as the supported package API.
+**/pkg.generated.mbti
+!/pkg.generated.mbti
 
 # 测试覆盖率文件
 moonbit-coverage-*.txt

@@ -16,5 +16,7 @@ import {
 // 把读文件关在这个包里，库本体的「三端都能跑」才是真的。
 //
 // `-all+wasm+native`：`fs` 只有这两个后端有实现，js 上编不过。
+
 supported_targets = "-all+wasm+native"
+
 pkgtype(kind: "executable")

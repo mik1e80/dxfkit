@@ -223,7 +223,12 @@ test "语料块展开：记录未支持的阵列实例" {
       if warning.contains("INSERT 阵列") {
         assert_true(path.contains("multi_insert_with_attribs"))
       } else if warning.contains("仅检查中心线") {
-        assert_true(path.has_suffix("text.dxf") || path.has_suffix("text_negative_extrusion.dxf") || path.has_suffix("viewports.dxf") || path.has_suffix("VP4.dxf"))
+        assert_true(
+          path.has_suffix("text.dxf") ||
+          path.has_suffix("text_negative_extrusion.dxf") ||
+          path.has_suffix("viewports.dxf") ||
+          path.has_suffix("VP4.dxf"),
+        )
       } else {
         assert_true(warning.contains("POLYLINE 标志"))
         assert_true(warning.contains("普通二维折线"))
@@ -305,15 +310,14 @@ test "语料加工检查：锚点" {
   // 净距阈值没有跨文件通用的值
   for path in corpus_files() {
     let drawing = @dxfkit.build_drawing(scan_corpus_file(path))
-    let r = drawing.check({
-      tol: 0.05,
-      min_gap: 0.0,
-    })
+    let r = drawing.check({ tol: 0.05, min_gap: 0.0, })
     fatal = fatal + r.count(@dxfkit.Fatal)
     warn = warn + r.count(@dxfkit.Warn)
     info = info + r.count(@dxfkit.Info)
     if path.contains("uncommon.dxf") {
-      let solids = drawing.expand(0.05).placed.filter(p => p.entity.kind() == "SOLID")
+      let solids = drawing.expand(0.05).placed.filter(p => {
+        p.entity.kind() == "SOLID"
+      })
       assert_eq(solids.length(), 1)
       assert_eq(solids[0].entity.handle(), "59B")
       match solids[0].flat {
@@ -332,7 +336,9 @@ test "语料加工检查：锚点" {
         }
         _ => fail("59B SOLID must produce the documented triangle")
       }
-      assert_false(r.to_text().contains("个 SOLID 实体的轮廓未参与检查"))
+      assert_false(
+        r.to_text().contains("个 SOLID 实体的轮廓未参与检查"),
+      )
     }
   }
   assert_eq(fatal, 1)

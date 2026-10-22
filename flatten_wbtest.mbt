@@ -20,7 +20,8 @@ test "bulge 转圆弧：四分之一圆" {
   assert_true((arc.radius - 0.7071067811865476).abs() < 1.0e-9)
   // 逆时针弧跨 90°
   assert_true(
-    (angle_span(arc.start_angle, arc.end_angle) - 1.5707963267948966).abs() < 1.0e-9,
+    (angle_span(arc.start_angle, arc.end_angle) - 1.5707963267948966).abs() <
+    1.0e-9,
   )
 }
 
@@ -32,7 +33,13 @@ test "bulge 1 是半圆，从弦下方过" {
   assert_true((arc.center.x - 0.5).abs() < 1.0e-9)
   assert_true(arc.center.y.abs() < 1.0e-9)
   assert_true((arc.radius - 0.5).abs() < 1.0e-9)
-  let pts = arc_points(arc.center, arc.radius, arc.start_angle, arc.end_angle, 0.01)
+  let pts = arc_points(
+    arc.center,
+    arc.radius,
+    arc.start_angle,
+    arc.end_angle,
+    0.01,
+  )
   let mut min_y = 0.0
   let mut max_y = 0.0
   for p in pts {
@@ -54,7 +61,13 @@ test "负 bulge 镜像到弦的另一侧" {
   // 圆心镜像到 (0.5, -0.5)；依然被描述成逆时针弧（起止角对调过）
   assert_true((arc.center.x - 0.5).abs() < 1.0e-9)
   assert_true((arc.center.y + 0.5).abs() < 1.0e-9)
-  let pts = arc_points(arc.center, arc.radius, arc.start_angle, arc.end_angle, 0.001)
+  let pts = arc_points(
+    arc.center,
+    arc.radius,
+    arc.start_angle,
+    arc.end_angle,
+    0.001,
+  )
   let mut max_y = -1.0
   for p in pts {
     max_y = max_y.max(p.y)
@@ -108,9 +121,9 @@ test "退化半径：圆和弧只给圆心一个点" {
 test "多段线离散：闭合不重复首点" {
   // 3-4-5 直角三角形，bulge 全 0
   let verts : Array[PolyVertex] = [
-    { at: Vec3::new(0.0, 0.0, 0.0), bulge: 0.0 },
-    { at: Vec3::new(3.0, 0.0, 0.0), bulge: 0.0 },
-    { at: Vec3::new(3.0, 4.0, 0.0), bulge: 0.0 },
+    { at: Vec3::new(0.0, 0.0, 0.0), bulge: 0.0, },
+    { at: Vec3::new(3.0, 0.0, 0.0), bulge: 0.0, },
+    { at: Vec3::new(3.0, 4.0, 0.0), bulge: 0.0, },
   ]
   let pts = polyline_points(verts, true, 0.01)
   assert_eq(pts.length(), 3)
@@ -124,8 +137,8 @@ test "多段线离散：闭合不重复首点" {
 ///|
 test "多段线离散：bulge 段换成弧点" {
   let verts : Array[PolyVertex] = [
-    { at: Vec3::new(0.0, 0.0, 0.0), bulge: 1.0 },
-    { at: Vec3::new(1.0, 0.0, 0.0), bulge: 0.0 },
+    { at: Vec3::new(0.0, 0.0, 0.0), bulge: 1.0, },
+    { at: Vec3::new(1.0, 0.0, 0.0), bulge: 0.0, },
   ]
   let pts = polyline_points(verts, false, 0.01)
   // 首点是顶点本身，精确；末点是算出来的（sin(2π) ≈ 1e-16，不精确为 0）
@@ -144,8 +157,8 @@ test "多段线离散：bulge 段换成弧点" {
 test "零长弦上的 bulge 当直线" {
   // 两个重合的顶点 + bulge：没有几何意义，不出点也不炸
   let verts : Array[PolyVertex] = [
-    { at: Vec3::new(2.0, 2.0, 0.0), bulge: 1.0 },
-    { at: Vec3::new(2.0, 2.0, 0.0), bulge: 0.0 },
+    { at: Vec3::new(2.0, 2.0, 0.0), bulge: 1.0, },
+    { at: Vec3::new(2.0, 2.0, 0.0), bulge: 0.0, },
   ]
   let pts = polyline_points(verts, false, 0.01)
   assert_eq(pts.length(), 1)
@@ -174,7 +187,7 @@ test "椭圆离散：点都在椭圆上，极值对得上" {
     lo_y = lo_y.min(p.y)
     hi_y = hi_y.max(p.y)
     // 点在椭圆上：(x/2)² + y² = 1
-    assert_true(((p.x / 2.0) * (p.x / 2.0) + p.y * p.y - 1.0).abs() < 1.0e-9)
+    assert_true((p.x / 2.0 * (p.x / 2.0) + p.y * p.y - 1.0).abs() < 1.0e-9)
   }
   // 细分的半分割会把 0° / 90° / 180° / 270° 四个参数点都采到
   assert_true((lo_x + 2.0).abs() < 1.0e-9 && (hi_x - 2.0).abs() < 1.0e-9)
@@ -281,7 +294,12 @@ test "flatten：圆出闭合轮廓、直线出两点" {
 ///|
 test "flatten：文字出 Label，块引用进 Empty" {
   // 文字没有折线形状，但有位置和原文——预览要靠 Label 画它
-  let text = Text(at=Vec3::new(1.0, 2.0, 0.0), height=2.5, value="基准", rotation=0.0)
+  let text = Text(
+    at=Vec3::new(1.0, 2.0, 0.0),
+    height=2.5,
+    value="基准",
+    rotation=0.0,
+  )
   match text.flatten(0.1) {
     Label(at~, height~, value~) => {
       assert_true(at.x == 1.0 && at.y == 2.0)

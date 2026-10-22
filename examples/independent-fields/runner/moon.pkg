@@ -5,4 +5,5 @@ import {
 }
 
 supported_targets = "-all+wasm+native"
+
 pkgtype(kind: "executable")

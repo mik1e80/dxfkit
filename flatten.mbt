@@ -396,7 +396,10 @@ pub fn Geometry::flatten(self : Geometry, tol : Double) -> Flat {
 ///|
 /// 保留实体身份的离散入口。SOLID/TRACE 与 3DFACE 的存储顺序不同，
 /// 不改写原始 Face 角点，也不把仅有 Geometry 的 Face 统一重排。
-pub fn Entity::flatten_checked(self : Entity, tol : Double) -> Result[Flat, String] {
+pub fn Entity::flatten_checked(
+  self : Entity,
+  tol : Double,
+) -> Result[Flat, String] {
   if !positive_tolerance(tol) {
     return Err("离散容差必须是正的有限数字")
   }

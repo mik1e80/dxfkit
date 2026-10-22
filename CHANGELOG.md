@@ -2,6 +2,7 @@
 
 ## 未发布 — r2 后的补充
 
+- 统一固定工具链下的 MoonBit 格式，新增 `moon fmt --check` / `moon info --frozen` 维护门禁及核心公开 API 快照，接入 targeted/full 并提供独立轻量 CI；公开签名与格式化前一致。`is_machinable()` 明确文档弃用与兼容行为，见[API 核对](docs/public-api-review.md)。不发布包、不移动 r2 标签。
 - 新增[两种 CAD 软件的三份实际导出](examples/cad-exports/README.md)：FreeCAD 1.1.3 四孔板与偏移椭圆、OpenSCAD 2021.01 矩形，保存原生源文件、原始 DXF、软件/设置/哈希、OCC 测量、API/CLI/SVG 输出及逐项断言，3/3 本地定向通过；未改库算法。保留并记录椭圆结束参数截断与 OpenSCAD 单位未声明的真实导出差异，未运行全量测试或移动 r2 标签。
 - 文档整理提交补齐以下 r2 交付记录，新增[路线图](docs/roadmap.md)和 README 导航；该文档提交未修改库行为、PDF、验证数据或模块版本。
 - 固定申报版本仍为 `submission-0.1.1-20261022-r2`（`94509f3`）；这些后续文档不追加入已存在的标签，不把文档提交声称为新的完整验证版本。

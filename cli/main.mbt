@@ -111,7 +111,10 @@ fn run_check(args : ArrayView[String]) -> Unit {
   let report = drawing.check({ tol, min_gap, })
   println(report.to_text())
   if report.has_fatal() ||
-    (strict && (report.has_incomplete_checks() || report.count(@dxfkit.Warn) > 0)) {
+    (
+      strict &&
+      (report.has_incomplete_checks() || report.count(@dxfkit.Warn) > 0)
+    ) {
     @sys.exit(1)
   } else {
     @sys.exit(0)

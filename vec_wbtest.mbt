@@ -142,18 +142,20 @@ test "并进多个点后包围盒包住全部" {
 ///|
 test "盒子相交判断：相离、相接、包含" {
   let a = Aabb2::empty().expand(Vec2::new(0.0, 0.0)).expand(Vec2::new(2.0, 2.0))
-  let far = Aabb2::empty().expand(Vec2::new(5.0, 5.0)).expand(Vec2::new(6.0, 6.0))
+  let far = Aabb2::empty()
+    .expand(Vec2::new(5.0, 5.0))
+    .expand(Vec2::new(6.0, 6.0))
   // 相离
   assert_false(a.intersects(far, 0.0))
   // 边界相接（容差为零时恰好碰上算相交）
-  let touch = Aabb2::empty().expand(Vec2::new(2.0, 0.0)).expand(
-    Vec2::new(3.0, 1.0),
-  )
+  let touch = Aabb2::empty()
+    .expand(Vec2::new(2.0, 0.0))
+    .expand(Vec2::new(3.0, 1.0))
   assert_true(a.intersects(touch, 0.0))
   // 包含
-  let inner = Aabb2::empty().expand(Vec2::new(0.5, 0.5)).expand(
-    Vec2::new(1.0, 1.0),
-  )
+  let inner = Aabb2::empty()
+    .expand(Vec2::new(0.5, 0.5))
+    .expand(Vec2::new(1.0, 1.0))
   assert_true(a.intersects(inner, 0.0))
   // 空盒和谁都不相交
   assert_false(Aabb2::empty().intersects(a, 1.0))
@@ -223,11 +225,12 @@ test "投影到平面：丢掉 z" {
 ///|
 test "三维包围盒" {
   let mut b = Aabb3::empty()
-  for p in [
-    Vec3::new(1.0, 1.0, 1.0),
-    Vec3::new(-1.0, 2.0, 0.0),
-    Vec3::new(0.0, 0.0, 5.0),
-  ] {
+  for
+    p in [
+      Vec3::new(1.0, 1.0, 1.0),
+      Vec3::new(-1.0, 2.0, 0.0),
+      Vec3::new(0.0, 0.0, 5.0),
+    ] {
     b = b.expand(p)
   }
   assert_false(b.is_empty())

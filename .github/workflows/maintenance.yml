@@ -1,0 +1,37 @@
+name: 格式与公开接口检查
+
+on:
+  push:
+    branches: [main]
+    paths: ['**/*.mbt', '**/moon.pkg', 'pkg.generated.mbti', '.gitignore', '.gitattributes', 'scripts/verify-maintenance.cjs', '.github/workflows/maintenance.yml']
+  pull_request:
+    paths: ['**/*.mbt', '**/moon.pkg', 'pkg.generated.mbti', '.gitignore', '.gitattributes', 'scripts/verify-maintenance.cjs', '.github/workflows/maintenance.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  maintenance:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24.19.0'
+      - name: 安装固定 MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- '0.10.14+7d59c7ec9'
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: 获取依赖并检查格式和 API 快照
+        run: |
+          moon update
+          node scripts/verify-maintenance.cjs
+      - name: 保存轻量验证记录
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: maintenance-${{ github.sha }}
+          path: |
+            _build/maintenance.json
+            pkg.generated.mbti

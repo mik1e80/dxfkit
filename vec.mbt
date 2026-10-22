@@ -22,28 +22,28 @@ pub(all) struct Vec2 {
 
 ///|
 pub fn Vec2::new(x : Double, y : Double) -> Vec2 {
-  { x, y }
+  { x, y, }
 }
 
 ///|
 pub fn Vec2::zero() -> Vec2 {
-  { x: 0.0, y: 0.0 }
+  { x: 0.0, y: 0.0, }
 }
 
 ///|
 /// `self - other`。
 pub fn Vec2::sub(self : Vec2, other : Vec2) -> Vec2 {
-  { x: self.x - other.x, y: self.y - other.y }
+  { x: self.x - other.x, y: self.y - other.y, }
 }
 
 ///|
 pub fn Vec2::add(self : Vec2, other : Vec2) -> Vec2 {
-  { x: self.x + other.x, y: self.y + other.y }
+  { x: self.x + other.x, y: self.y + other.y, }
 }
 
 ///|
 pub fn Vec2::scale(self : Vec2, k : Double) -> Vec2 {
-  { x: self.x * k, y: self.y * k }
+  { x: self.x * k, y: self.y * k, }
 }
 
 ///|
@@ -76,7 +76,7 @@ pub fn Vec2::normalize(self : Vec2) -> Vec2 {
   if len == 0.0 {
     self
   } else {
-    { x: self.x / len, y: self.y / len }
+    { x: self.x / len, y: self.y / len, }
   }
 }
 
@@ -91,7 +91,7 @@ pub fn Vec2::distance(self : Vec2, other : Vec2) -> Double {
 pub fn Vec2::rotate(self : Vec2, rad : Double) -> Vec2 {
   let c = @math.cos(rad)
   let s = @math.sin(rad)
-  { x: self.x * c - self.y * s, y: self.x * s + self.y * c }
+  { x: self.x * c - self.y * s, y: self.x * s + self.y * c, }
 }
 
 ///|
@@ -105,7 +105,7 @@ pub fn Vec2::angle(self : Vec2) -> Double {
 ///
 /// 算「点在直线的哪一侧」和「线段往哪边偏移」时用。
 pub fn Vec2::perp(self : Vec2) -> Vec2 {
-  { x: -self.y, y: self.x }
+  { x: -self.y, y: self.x, }
 }
 
 ///|
@@ -129,23 +129,23 @@ pub(all) struct Vec3 {
 
 ///|
 pub fn Vec3::new(x : Double, y : Double, z : Double) -> Vec3 {
-  { x, y, z }
+  { x, y, z, }
 }
 
 ///|
 pub fn Vec3::zero() -> Vec3 {
-  { x: 0.0, y: 0.0, z: 0.0 }
+  { x: 0.0, y: 0.0, z: 0.0, }
 }
 
 ///|
 /// 丢掉 z，投影到平面上。加工检查是二维的，用这个把三维点降下来。
 pub fn Vec3::xy(self : Vec3) -> Vec2 {
-  { x: self.x, y: self.y }
+  { x: self.x, y: self.y, }
 }
 
 ///|
 pub fn Vec3::sub(self : Vec3, other : Vec3) -> Vec3 {
-  { x: self.x - other.x, y: self.y - other.y, z: self.z - other.z }
+  { x: self.x - other.x, y: self.y - other.y, z: self.z - other.z, }
 }
 
 ///|
@@ -174,7 +174,7 @@ pub fn Vec3::normalize(self : Vec3) -> Vec3 {
   if len == 0.0 {
     self
   } else {
-    { x: self.x / len, y: self.y / len, z: self.z / len }
+    { x: self.x / len, y: self.y / len, z: self.z / len, }
   }
 }
 
@@ -200,18 +200,15 @@ pub(all) struct Aabb2 {
 ///|
 /// 空盒：min 是正无穷、max 是负无穷。往里并第一个点就会得到正确的盒子。
 pub fn Aabb2::empty() -> Aabb2 {
-  {
-    min: { x: 1.0e308, y: 1.0e308 },
-    max: { x: -1.0e308, y: -1.0e308 },
-  }
+  { min: { x: 1.0e308, y: 1.0e308, }, max: { x: -1.0e308, y: -1.0e308, }, }
 }
 
 ///|
 /// 并进一个点。
 pub fn Aabb2::expand(self : Aabb2, p : Vec2) -> Aabb2 {
   {
-    min: { x: self.min.x.min(p.x), y: self.min.y.min(p.y) },
-    max: { x: self.max.x.max(p.x), y: self.max.y.max(p.y) },
+    min: { x: self.min.x.min(p.x), y: self.min.y.min(p.y), },
+    max: { x: self.max.x.max(p.x), y: self.max.y.max(p.y), },
   }
 }
 
@@ -219,8 +216,8 @@ pub fn Aabb2::expand(self : Aabb2, p : Vec2) -> Aabb2 {
 /// 并进另一个盒子。
 pub fn Aabb2::union(self : Aabb2, other : Aabb2) -> Aabb2 {
   {
-    min: { x: self.min.x.min(other.min.x), y: self.min.y.min(other.min.y) },
-    max: { x: self.max.x.max(other.max.x), y: self.max.y.max(other.max.y) },
+    min: { x: self.min.x.min(other.min.x), y: self.min.y.min(other.min.y), },
+    max: { x: self.max.x.max(other.max.x), y: self.max.y.max(other.max.y), },
   }
 }
 
@@ -284,8 +281,8 @@ pub(all) struct Aabb3 {
 ///|
 pub fn Aabb3::empty() -> Aabb3 {
   {
-    min: { x: 1.0e308, y: 1.0e308, z: 1.0e308 },
-    max: { x: -1.0e308, y: -1.0e308, z: -1.0e308 },
+    min: { x: 1.0e308, y: 1.0e308, z: 1.0e308, },
+    max: { x: -1.0e308, y: -1.0e308, z: -1.0e308, },
   }
 }
 

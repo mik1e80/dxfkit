@@ -26,7 +26,9 @@ fn drawing_of(text : String) -> Drawing {
 /// 否则文件里会有两个 HEADER 段，`section("HEADER")` 只拿得到第一个。
 /// 那种情况用 `drawing_of` 写完整的一段。
 fn drawing_utf8(text : String) -> Drawing {
-  drawing_of("0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1027\n0\nENDSEC\n" + text)
+  drawing_of(
+    "0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1027\n0\nENDSEC\n" + text,
+  )
 }
 
 // ── 记录与子类 ──────────────────────────────────────────────────────────

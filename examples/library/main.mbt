@@ -27,6 +27,8 @@ test "consumer package uses only the public drawing and geometry API" {
   }
   assert_eq(drawing.check({ tol: 0.01, min_gap: 0.0, }).count(@dxfkit.Fatal), 0)
   assert_eq(drawing.check({ tol: 0.01, min_gap: 0.0, }).count(@dxfkit.Warn), 0)
-  assert_false(drawing.check({ tol: 0.01, min_gap: 0.0, }).has_incomplete_checks())
+  assert_false(
+    drawing.check({ tol: 0.01, min_gap: 0.0, }).has_incomplete_checks(),
+  )
   assert_true(drawing.to_svg(0.01).contains("<polygon"))
 }

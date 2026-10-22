@@ -12,12 +12,7 @@ import {
 options(
   link: {
     "js": {
-      "exports": [
-        "analyze",
-        "check",
-        "svg",
-        "svg_error",
-      ],
+      "exports": [ "analyze", "check", "svg", "svg_error" ],
       "format": "iife",
     },
   },

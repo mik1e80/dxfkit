@@ -54,7 +54,9 @@ fn main {
 ///     moon run conformance --svg 某文件.dxf > 预览.svg
 fn report_svg(targets : Array[String]) -> Unit {
   if targets.length() == 0 {
-    println("--svg 后面要给一个文件：moon run conformance --svg 某文件.dxf")
+    println(
+      "--svg 后面要给一个文件：moon run conformance --svg 某文件.dxf",
+    )
     return
   }
   // 预览的离散容差取 0.05——和语料锚点一个口径，肉眼够用
@@ -77,8 +79,12 @@ fn report_tags(targets : Array[String]) -> Unit {
   let mut total_warnings = 0
   let mut failed = 0
 
-  println("文件                                      tag 数   警告  编码")
-  println("──────────────────────────────────────────────────────────────────")
+  println(
+    "文件                                      tag 数   警告  编码",
+  )
+  println(
+    "──────────────────────────────────────────────────────────────────",
+  )
   for path in targets {
     let scan = scan_corpus_file(path) catch {
       err => {
@@ -94,7 +100,9 @@ fn report_tags(targets : Array[String]) -> Unit {
     total_tags = total_tags + scan.tags.length()
     total_warnings = total_warnings + scan.warnings.length()
   }
-  println("──────────────────────────────────────────────────────────────────")
+  println(
+    "──────────────────────────────────────────────────────────────────",
+  )
   println(
     "\{targets.length()} 个文件，共 \{total_tags} 个 tag，" +
     "\{total_warnings} 条警告，\{failed} 个读不了",
@@ -115,7 +123,9 @@ fn report_info(targets : Array[String]) -> Unit {
     }
     let drawing = @dxfkit.build_drawing(scan)
     println("═══ \{short_name(path)} ═══")
-    println("  版本      \{if drawing.version == "" { "（没有 HEADER 段）" } else { drawing.version }}")
+    println(
+      "  版本      \{if drawing.version == "" { "（没有 HEADER 段）" } else { drawing.version }}",
+    )
 
     // 段的记录数
     let sb = StringBuilder()
@@ -145,7 +155,9 @@ fn report_info(targets : Array[String]) -> Unit {
           if l.locked {
             marks.write_string(" 锁定")
           }
-          println("    \{pad(l.name, 24)} 颜色 \{pad_int(l.color_index(), 3)}\{marks}")
+          println(
+            "    \{pad(l.name, 24)} 颜色 \{pad_int(l.color_index(), 3)}\{marks}",
+          )
         }
         println("  线型      \{tables.linetypes.length()} 个")
         println("  块记录    \{tables.block_records.length()} 个")
@@ -158,14 +170,14 @@ fn report_info(targets : Array[String]) -> Unit {
       Some(h) => {
         let header = @dxfkit.parse_header(h)
         let units = header.insunits()
-        println(
-          "  单位      \{units}（\{@dxfkit.unit_name(units)}）",
-        )
+        println("  单位      \{units}（\{@dxfkit.unit_name(units)}）")
         match (header.extmin(), header.extmax()) {
           (Some(lo), Some(hi)) =>
             println("  范围      (\{lo.x}, \{lo.y}) 到 (\{hi.x}, \{hi.y})")
-          (Some(lo), None) => println("  范围      左下 (\{lo.x}, \{lo.y})，没有 $EXTMAX")
-          (None, Some(hi)) => println("  范围      右上 (\{hi.x}, \{hi.y})，没有 $EXTMIN")
+          (Some(lo), None) =>
+            println("  范围      左下 (\{lo.x}, \{lo.y})，没有 $EXTMAX")
+          (None, Some(hi)) =>
+            println("  范围      右上 (\{hi.x}, \{hi.y})，没有 $EXTMIN")
           (None, None) => ()
         }
       }

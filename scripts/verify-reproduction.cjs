@@ -21,6 +21,7 @@ function execute(command,args) {
 const dirtyArgs=allowDirty?['--allow-dirty']:[];
 try {
   execute('moon',['update']);
+  execute('node',['scripts/verify-maintenance.cjs']);
   execute('moon',['check','--target','all','--deny-warn']);
   const tree=JSON.parse(run('moon',['tree','--json']));
   assert.equal(tree.modules[tree.root].name,profile.module);

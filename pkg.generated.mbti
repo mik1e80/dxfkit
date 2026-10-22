@@ -1,0 +1,380 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mik1e80/dxfkit"
+
+// Values
+pub fn angle_span(Double, Double) -> Double
+
+pub fn arc_from_bulge(Vec2, Vec2, Double) -> BulgeArc
+
+pub fn arc_points(Vec2, Double, Double, Double, Double) -> Array[Vec2]
+
+pub fn build_drawing(TagScan) -> Drawing
+
+pub fn circle_points(Vec2, Double, Double) -> Array[Vec2]
+
+pub fn code_type(Int) -> TagType
+
+pub fn decide_encoding(Bytes) -> Encoding
+
+pub fn decode_text(Bytes, Encoding) -> String
+
+pub fn ellipse_points(Vec3, Vec3, Double, Double, Double, Double) -> Array[Vec2]
+
+pub fn find_header_var(Array[Section], String) -> String?
+
+pub fn is_binary_code(Int) -> Bool
+
+pub fn is_handle_code(Int) -> Bool
+
+pub fn is_point_code(Int) -> Bool
+
+pub fn is_pointer_code(Int) -> Bool
+
+pub fn is_xdata_code(Int) -> Bool
+
+pub fn normalize_angle(Double) -> Double
+
+pub fn parse_blocks(Section) -> Blocks
+
+pub fn parse_entities(Section) -> Entities
+
+pub fn parse_header(Section) -> Header
+
+pub fn parse_tables(Section) -> Tables
+
+pub fn point_code_parts(Int) -> (Int, Int)?
+
+pub fn polyline_points(Array[PolyVertex], Bool, Double) -> Array[Vec2]
+
+pub fn scan_tags(Bytes) -> TagScan
+
+pub fn severity_label(Severity) -> String
+
+pub fn spline_points(Int, Array[Double], Array[Vec3], Array[Double], Double) -> Array[Vec2]
+
+pub fn spline_points_checked(Int, Array[Double], Array[Vec3], Array[Double], Double) -> Result[Array[Vec2], String]
+
+pub fn unit_name(Int) -> String
+
+pub fn unit_to_mm(Int) -> Double?
+
+// Errors
+
+// Types and methods
+pub(all) struct Aabb2 {
+  min : Vec2
+  max : Vec2
+}
+pub fn Aabb2::center(Self) -> Vec2
+pub fn Aabb2::contains(Self, Vec2, Double) -> Bool
+pub fn Aabb2::empty() -> Self
+pub fn Aabb2::expand(Self, Vec2) -> Self
+pub fn Aabb2::intersects(Self, Self, Double) -> Bool
+pub fn Aabb2::is_empty(Self) -> Bool
+pub fn Aabb2::size(Self) -> Vec2
+pub fn Aabb2::union(Self, Self) -> Self
+
+pub(all) struct Aabb3 {
+  min : Vec3
+  max : Vec3
+}
+pub fn Aabb3::empty() -> Self
+pub fn Aabb3::expand(Self, Vec3) -> Self
+pub fn Aabb3::is_empty(Self) -> Bool
+pub fn Aabb3::size(Self) -> Vec3
+
+pub(all) struct Block {
+  name : String
+  base : Vec3
+  entities : Array[Entity]
+}
+
+pub(all) struct Blocks {
+  blocks : Array[Block]
+  warnings : Array[String]
+}
+
+pub(all) struct BulgeArc {
+  center : Vec2
+  radius : Double
+  start_angle : Double
+  end_angle : Double
+}
+
+pub(all) struct CheckOptions {
+  tol : Double
+  min_gap : Double
+}
+
+pub(all) struct Drawing {
+  version : String
+  sections : Array[Section]
+  warnings : Array[String]
+}
+pub fn Drawing::analyze(Self, CheckOptions) -> DrawingAnalysis
+pub fn Drawing::blocks(Self) -> Blocks
+pub fn Drawing::check(Self, CheckOptions) -> Report
+pub fn Drawing::check_with_limits(Self, CheckOptions, ExpandLimits) -> Report
+pub fn Drawing::declared_unit_label(Self) -> String
+pub fn Drawing::entities(Self) -> Entities
+pub fn Drawing::expand(Self, Double) -> Expansion
+pub fn Drawing::expand_with_limits(Self, Double, ExpandLimits) -> Expansion
+pub fn Drawing::section(Self, String) -> Section?
+pub fn Drawing::to_svg(Self, Double) -> String
+
+pub(all) struct DrawingAnalysis {
+  report : Report
+  svg : String
+  unit : String
+}
+
+pub(all) enum Encoding {
+  Utf8
+  Cp1252
+  Other(Int)
+}
+pub fn Encoding::is_fallback(Self) -> Bool
+pub fn Encoding::to_display(Self) -> String
+
+pub(all) struct Entities {
+  entities : Array[Entity]
+  warnings : Array[String]
+}
+
+pub(all) struct Entity {
+  common : EntityCommon
+  geom : Geometry
+}
+pub fn Entity::bounds(Self) -> Aabb2?
+pub fn Entity::flatten_checked(Self, Double) -> Result[Flat, String]
+pub fn Entity::handle(Self) -> String
+pub fn Entity::is_decoded(Self) -> Bool
+pub fn Entity::kind(Self) -> String
+pub fn Entity::layer(Self) -> String
+
+pub(all) struct EntityCommon {
+  kind : String
+  layer : String
+  handle : String
+  record : Record
+}
+
+pub(all) struct ExpandLimits {
+  max_placed : Int
+  max_points : Int
+  max_visits : Int
+}
+
+pub(all) struct Expansion {
+  placed : Array[Placed]
+  warnings : Array[String]
+}
+
+pub(all) struct Finding {
+  check : String
+  severity : Severity
+  message : String
+}
+
+pub(all) enum Flat {
+  Outline(points~ : Array[Vec2], closed~ : Bool)
+  Dot(at~ : Vec2)
+  Label(at~ : Vec2, height~ : Double, value~ : String)
+  Empty
+}
+
+pub(all) enum Geometry {
+  Line(start~ : Vec3, end~ : Vec3)
+  Point(at~ : Vec3)
+  Circle(center~ : Vec3, radius~ : Double)
+  Arc(center~ : Vec3, radius~ : Double, start_angle~ : Double, end_angle~ : Double)
+  Ellipse(center~ : Vec3, major~ : Vec3, ratio~ : Double, start_param~ : Double, end_param~ : Double)
+  Polyline(vertices~ : Array[PolyVertex], closed~ : Bool)
+  Text(at~ : Vec3, height~ : Double, value~ : String, rotation~ : Double)
+  Insert(at~ : Vec3, block~ : String, scale~ : Vec3, rotation~ : Double)
+  Face(corners~ : Array[Vec3])
+  Dimension(at~ : Vec3, block~ : String, measurement~ : Double)
+  Spline(degree~ : Int, knots~ : Array[Double], control_points~ : Array[Vec3], weights~ : Array[Double])
+  Hatch(at~ : Vec3, solid~ : Bool, pattern~ : String, paths~ : Int)
+  Unknown
+}
+pub fn Geometry::bounds(Self) -> Aabb2?
+pub fn Geometry::flatten(Self, Double) -> Flat
+pub fn Geometry::flatten_checked(Self, Double) -> Result[Flat, String]
+
+pub(all) struct Header {
+  vars : Array[HeaderVar]
+}
+pub fn Header::extmax(Self) -> Vec3?
+pub fn Header::extmin(Self) -> Vec3?
+pub fn Header::get(Self, String) -> HeaderVar?
+pub fn Header::get_int(Self, String, Int) -> Int
+pub fn Header::get_point(Self, String) -> Vec3?
+pub fn Header::get_string(Self, String) -> String
+pub fn Header::insunits(Self) -> Int
+
+pub(all) struct HeaderVar {
+  name : String
+  values : Array[Tag]
+}
+
+pub(all) struct Layer {
+  name : String
+  color : Int
+  linetype : String
+  frozen : Bool
+  locked : Bool
+  lineweight : Int
+}
+pub fn Layer::color_index(Self) -> Int
+pub fn Layer::is_enabled_for_checks(Self) -> Bool
+pub fn Layer::is_machinable(Self) -> Bool
+pub fn Layer::is_off(Self) -> Bool
+
+pub(all) struct Placed {
+  entity : Entity
+  layer : String
+  flat : Flat
+}
+
+pub(all) struct PolyVertex {
+  at : Vec3
+  mut bulge : Double
+}
+
+pub(all) struct Record {
+  kind : String
+  common : Array[Tag]
+  subclasses : Array[Subclass]
+}
+pub fn Record::all_of(Self, Int) -> Array[Tag]
+pub fn Record::count_code(Self, Int) -> Int
+pub fn Record::effective_classes(Self) -> Array[String]
+pub fn Record::get(Self, Int) -> Tag?
+pub fn Record::get_double(Self, Int, Double) -> Double
+pub fn Record::get_in(Self, String, Int) -> Tag?
+pub fn Record::get_int(Self, Int, Int) -> Int
+pub fn Record::get_string(Self, Int) -> String
+pub fn Record::has_subclass(Self, String) -> Bool
+pub fn Record::is_legacy(Self) -> Bool
+pub fn Record::point(Self, Int) -> Vec3?
+pub fn Record::subclass_names(Self) -> Array[String]
+
+pub(all) struct Report {
+  findings : Array[Finding]
+}
+pub fn Report::count(Self, Severity) -> Int
+pub fn Report::has_fatal(Self) -> Bool
+pub fn Report::has_incomplete_checks(Self) -> Bool
+pub fn Report::to_text(Self) -> String
+pub fn Report::verdict(Self) -> String
+
+pub(all) struct Section {
+  name : String
+  records : Array[Record]
+}
+
+pub(all) enum Severity {
+  Info
+  Warn
+  Fatal
+}
+
+pub(all) struct Subclass {
+  name : String
+  tags : Array[Tag]
+}
+
+pub(all) struct Tables {
+  layers : Array[Layer]
+  linetypes : Array[String]
+  text_styles : Array[String]
+  block_records : Array[String]
+}
+pub fn Tables::layer(Self, String) -> Layer?
+
+pub(all) struct Tag {
+  code : Int
+  value : TagValue
+}
+pub fn Tag::is_record_start(Self) -> Bool
+pub fn Tag::is_subclass_marker(Self) -> Bool
+pub fn Tag::new(Int, TagValue) -> Self
+pub fn Tag::to_display(Self) -> String
+
+pub(all) struct TagScan {
+  tags : Array[Tag]
+  warnings : Array[String]
+  encoding : Encoding
+}
+
+pub(all) struct TagStream {
+  // private fields
+}
+pub fn TagStream::encoding(Self) -> Encoding?
+pub fn TagStream::feed(Self, Bytes) -> Array[Tag]
+pub fn TagStream::finish(Self) -> Array[Tag]
+pub fn TagStream::new() -> Self
+pub fn TagStream::warnings(Self) -> Array[String]
+
+pub(all) enum TagType {
+  Str
+  I16
+  I32
+  I64
+  F64
+  Bool
+  Bin
+}
+
+pub(all) enum TagValue {
+  Str(String)
+  I16(Int)
+  I32(Int)
+  I64(Int64)
+  F64(Double)
+  Bool(Bool)
+  Bin(Bytes)
+}
+pub fn TagValue::as_bool(Self) -> Bool
+pub fn TagValue::as_double(Self) -> Double
+pub fn TagValue::as_int(Self) -> Int
+pub fn TagValue::as_string(Self) -> String
+
+pub(all) struct Vec2 {
+  x : Double
+  y : Double
+}
+pub fn Vec2::add(Self, Self) -> Self
+pub fn Vec2::angle(Self) -> Double
+pub fn Vec2::approx_eq(Self, Self, Double) -> Bool
+pub fn Vec2::cross(Self, Self) -> Double
+pub fn Vec2::distance(Self, Self) -> Double
+pub fn Vec2::dot(Self, Self) -> Double
+pub fn Vec2::length(Self) -> Double
+pub fn Vec2::new(Double, Double) -> Self
+pub fn Vec2::normalize(Self) -> Self
+pub fn Vec2::perp(Self) -> Self
+pub fn Vec2::rotate(Self, Double) -> Self
+pub fn Vec2::scale(Self, Double) -> Self
+pub fn Vec2::sub(Self, Self) -> Self
+pub fn Vec2::zero() -> Self
+
+pub(all) struct Vec3 {
+  x : Double
+  y : Double
+  z : Double
+}
+pub fn Vec3::cross(Self, Self) -> Self
+pub fn Vec3::dot(Self, Self) -> Double
+pub fn Vec3::is_zero(Self, Double) -> Bool
+pub fn Vec3::length(Self) -> Double
+pub fn Vec3::new(Double, Double, Double) -> Self
+pub fn Vec3::normalize(Self) -> Self
+pub fn Vec3::sub(Self, Self) -> Self
+pub fn Vec3::xy(Self) -> Vec2
+pub fn Vec3::zero() -> Self
+
+// Type aliases
+
+// Traits

@@ -24,8 +24,7 @@ test "平移：块内容搬到插入点，图层 0 继承引用的图层" {
   // 块内一条线画在 0 层；引用放在「轮廓」层——
   // 展开后线的生效图层是「轮廓」（DXF 的图层继承规则）
   let d = drawing_with_insert(
-    "0\nLINE\n8\n0\n10\n0.0\n20\n0.0\n30\n0.0\n11\n1.0\n21\n0.0\n31\n0.0\n",
-    "8\n轮廓\n10\n10.0\n20\n20.0\n30\n0.0\n",
+    "0\nLINE\n8\n0\n10\n0.0\n20\n0.0\n30\n0.0\n11\n1.0\n21\n0.0\n31\n0.0\n", "8\n轮廓\n10\n10.0\n20\n20.0\n30\n0.0\n",
   )
   let exp = d.expand(0.01)
   assert_eq(exp.warnings.length(), 0)
@@ -69,15 +68,18 @@ test "基点偏移被扣掉" {
 ///|
 test "旋转 90°" {
   let d = drawing_with_insert(
-    "0\nLINE\n10\n1.0\n20\n0.0\n30\n0.0\n11\n2.0\n21\n0.0\n31\n0.0\n",
-    "10\n0.0\n20\n0.0\n30\n0.0\n50\n90\n",
+    "0\nLINE\n10\n1.0\n20\n0.0\n30\n0.0\n11\n2.0\n21\n0.0\n31\n0.0\n", "10\n0.0\n20\n0.0\n30\n0.0\n50\n90\n",
   )
   let exp = d.expand(0.01)
   match exp.placed[0].flat {
     Outline(points~, ..) => {
       // (1,0)→(0,1)、(2,0)→(0,2)
-      assert_true(points[0].x.abs() < 1.0e-9 && (points[0].y - 1.0).abs() < 1.0e-9)
-      assert_true(points[1].x.abs() < 1.0e-9 && (points[1].y - 2.0).abs() < 1.0e-9)
+      assert_true(
+        points[0].x.abs() < 1.0e-9 && (points[0].y - 1.0).abs() < 1.0e-9,
+      )
+      assert_true(
+        points[1].x.abs() < 1.0e-9 && (points[1].y - 2.0).abs() < 1.0e-9,
+      )
     }
     _ => fail("展开结果不是轮廓")
   }
@@ -86,8 +88,7 @@ test "旋转 90°" {
 ///|
 test "非均匀缩放把圆摊成椭圆（先离散再变换的好处）" {
   let d = drawing_with_insert(
-    "0\nCIRCLE\n10\n0.0\n20\n0.0\n30\n0.0\n40\n1.0\n",
-    "10\n0.0\n20\n0.0\n30\n0.0\n41\n2.0\n42\n1.0\n",
+    "0\nCIRCLE\n10\n0.0\n20\n0.0\n30\n0.0\n40\n1.0\n", "10\n0.0\n20\n0.0\n30\n0.0\n41\n2.0\n42\n1.0\n",
   )
   let exp = d.expand(0.001)
   match exp.placed[0].flat {

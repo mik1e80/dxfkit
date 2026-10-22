@@ -16,5 +16,7 @@ import {
 // `-all+wasm+native`：fs / sys / async 只有这两个后端有实现。
 // `stats` 的分块读走 moonbitlang/async/fs（x/fs 只能一次读完），
 // 所以入口是 `async fn main`。
+
 supported_targets = "-all+wasm+native"
+
 pkgtype(kind: "executable")

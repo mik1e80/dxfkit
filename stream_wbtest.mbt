@@ -12,11 +12,7 @@ fn streamed_tags(data : Bytes, chunk : Int) -> Array[Tag] {
   let tags : Array[Tag] = []
   let mut i = 0
   while i < data.length() {
-    let stop = if i + chunk > data.length() {
-      data.length()
-    } else {
-      i + chunk
-    }
+    let stop = if i + chunk > data.length() { data.length() } else { i + chunk }
     let part : Array[Byte] = []
     let mut j = i
     while j < stop {
@@ -39,7 +35,9 @@ fn assert_same_tags(actual : Array[Tag], expected : Array[Tag]) -> Unit raise {
   let mut i = 0
   while i < actual.length() {
     if actual[i].code != expected[i].code {
-      fail("第 \{i} 条 tag 组码不一致：\{actual[i].code} vs \{expected[i].code}")
+      fail(
+        "第 \{i} 条 tag 组码不一致：\{actual[i].code} vs \{expected[i].code}",
+      )
     }
     if actual[i].to_display() != expected[i].to_display() {
       fail(

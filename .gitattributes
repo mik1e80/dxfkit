@@ -7,6 +7,7 @@ testdata/** -text
 
 # 源码和文档统一用 LF
 *.mbt text eol=lf
+*.mbti text eol=lf
 *.md text eol=lf
 *.pkg text eol=lf
 *.mod text eol=lf

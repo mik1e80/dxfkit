@@ -595,13 +595,17 @@ fn parse_spline(record : Record, warnings : Array[String]) -> Geometry {
   let degree = match record.get(71) {
     Some(tag) => tag.value.as_int()
     None => {
-      warnings.push("SPLINE 缺少次数（71）；无法确定曲线定义，保留记录，轮廓未检查")
+      warnings.push(
+        "SPLINE 缺少次数（71）；无法确定曲线定义，保留记录，轮廓未检查",
+      )
       return Unknown
     }
   }
   let flags = record.get_int(70, 0)
   if (flags & 3) != 0 {
-    warnings.push("SPLINE 使用闭合或周期语义，本版本尚未重建该语义；保留记录，轮廓未检查")
+    warnings.push(
+      "SPLINE 使用闭合或周期语义，本版本尚未重建该语义；保留记录，轮廓未检查",
+    )
     return Unknown
   }
   let knots : Array[Double] = []
@@ -620,7 +624,9 @@ fn parse_spline(record : Record, warnings : Array[String]) -> Geometry {
           (Some(x), Some(y)) => control.push(Vec3::new(x, y, 0.0))
           (None, None) => ()
           _ => {
-            warnings.push("SPLINE 控制点缺少 X/Y 坐标；保留记录，未生成该实体的轮廓")
+            warnings.push(
+              "SPLINE 控制点缺少 X/Y 坐标；保留记录，未生成该实体的轮廓",
+            )
             damaged = true
           }
         }
@@ -629,7 +635,9 @@ fn parse_spline(record : Record, warnings : Array[String]) -> Geometry {
       }
       20 => {
         if px is None || py is Some(_) {
-          warnings.push("SPLINE 控制点缺少 X 或重复 Y；保留记录，未生成该实体的轮廓")
+          warnings.push(
+            "SPLINE 控制点缺少 X 或重复 Y；保留记录，未生成该实体的轮廓",
+          )
           damaged = true
         }
         py = Some(t.value.as_double())
@@ -642,7 +650,9 @@ fn parse_spline(record : Record, warnings : Array[String]) -> Geometry {
             py = None
           }
           _ => {
-            warnings.push("SPLINE 控制点的 Z 前没有完整 X/Y；未生成该实体的轮廓")
+            warnings.push(
+              "SPLINE 控制点的 Z 前没有完整 X/Y；未生成该实体的轮廓",
+            )
             damaged = true
             px = None
             py = None
@@ -655,24 +665,34 @@ fn parse_spline(record : Record, warnings : Array[String]) -> Geometry {
     (Some(x), Some(y)) => control.push(Vec3::new(x, y, 0.0))
     (None, None) => ()
     _ => {
-      warnings.push("SPLINE 最后一个控制点缺少 X/Y；保留记录，未生成该实体的轮廓")
+      warnings.push(
+        "SPLINE 最后一个控制点缺少 X/Y；保留记录，未生成该实体的轮廓",
+      )
       damaged = true
     }
   }
   if record.get(73) is Some(_) && record.get_int(73, 0) != control.length() {
-    warnings.push("SPLINE 声明控制点数与完整坐标数不一致；请复核输入")
+    warnings.push(
+      "SPLINE 声明控制点数与完整坐标数不一致；请复核输入",
+    )
   }
   if record.get(72) is Some(_) && record.get_int(72, 0) != knots.length() {
-    warnings.push("SPLINE 声明节点数与实际节点数不一致；请复核输入")
+    warnings.push(
+      "SPLINE 声明节点数与实际节点数不一致；请复核输入",
+    )
   }
   if damaged {
     return Unknown
   }
   // 只有完全省略权重时使用全 1；部分或多余权重不能静默改写曲线。
   if weights.length() == 0 {
-    for _ in control { weights.push(1.0) }
+    for _ in control {
+      weights.push(1.0)
+    }
   } else if weights.length() != control.length() {
-    warnings.push("SPLINE 权重数量与控制点数量不一致；保留记录，未生成该实体轮廓")
+    warnings.push(
+      "SPLINE 权重数量与控制点数量不一致；保留记录，未生成该实体轮廓",
+    )
     return Unknown
   }
   Spline(degree~, knots~, control_points=control, weights~)
@@ -704,12 +724,16 @@ fn parse_polyline_entity(
   for vr in vertex_records {
     for code in [40, 41] {
       for tag in vr.all_of(code) {
-        if tag.value.as_double() != 0.0 { vertex_width = true }
+        if tag.value.as_double() != 0.0 {
+          vertex_width = true
+        }
       }
     }
   }
   if vertex_width {
-    warnings.push("POLYLINE 顶点含非零宽度；本工具仅检查中心线，区域/厚度未验证")
+    warnings.push(
+      "POLYLINE 顶点含非零宽度；本工具仅检查中心线，区域/厚度未验证",
+    )
   }
   let common = common_of(record)
   let flags = record.get_int(70, 0)
@@ -941,12 +965,19 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
           match record.point(3) {
             Some(d) => corners.push(d)
             None => {
-              if record.count_code(13) + record.count_code(23) + record.count_code(33) > 0 {
-                warnings.push("\{kind} 第四角点坐标不完整，已跳过；不能当作三角形")
+              if record.count_code(13) +
+                record.count_code(23) +
+                record.count_code(33) >
+                0 {
+                warnings.push(
+                  "\{kind} 第四角点坐标不完整，已跳过；不能当作三角形",
+                )
                 return None
               }
               if kind == "SOLID" || kind == "TRACE" {
-                warnings.push("\{kind} 缺第四角点，按三个已有角点恢复；检查不完整")
+                warnings.push(
+                  "\{kind} 缺第四角点，按三个已有角点恢复；检查不完整",
+                )
               }
             }
           }
@@ -1027,12 +1058,16 @@ pub fn parse_blocks(section : Section) -> Blocks {
     }
     let head = records[i]
     let mut j = i + 1
-    while j < records.length() && records[j].kind != "ENDBLK" && records[j].kind != "BLOCK" {
+    while j < records.length() &&
+          records[j].kind != "ENDBLK" &&
+          records[j].kind != "BLOCK" {
       j = j + 1
     }
     let name = head.get_string(2)
     if j >= records.length() || records[j].kind != "ENDBLK" {
-      warnings.push("块「\{name}」缺少 ENDBLK；按下一 BLOCK 或 BLOCKS 段末尾恢复，检查不完整")
+      warnings.push(
+        "块「\{name}」缺少 ENDBLK；按下一 BLOCK 或 BLOCKS 段末尾恢复，检查不完整",
+      )
     }
     if name == "" {
       warnings.push("BLOCK 没有名字，已跳过")
@@ -1059,11 +1094,17 @@ pub fn parse_blocks(section : Section) -> Blocks {
 }
 
 ///|
-fn warn_polyline_extent(record : Record, codes : Array[Int], warnings : Array[String]) -> Unit {
+fn warn_polyline_extent(
+  record : Record,
+  codes : Array[Int],
+  warnings : Array[String],
+) -> Unit {
   for code in codes {
     for tag in record.all_of(code) {
       if tag.value.as_double() != 0.0 {
-        warnings.push("\{record.kind} 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证")
+        warnings.push(
+          "\{record.kind} 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证",
+        )
         return
       }
     }

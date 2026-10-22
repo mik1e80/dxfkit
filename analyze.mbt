@@ -8,9 +8,19 @@ pub(all) struct DrawingAnalysis {
 
 ///|
 pub fn Drawing::analyze(self : Drawing, opt : CheckOptions) -> DrawingAnalysis {
-  if !positive_tolerance(opt.tol) || !finite_number(opt.min_gap) || opt.min_gap < 0.0 {
-    return {report: self.check(opt), svg: "", unit: self.declared_unit_label()}
+  if !positive_tolerance(opt.tol) ||
+    !finite_number(opt.min_gap) ||
+    opt.min_gap < 0.0 {
+    return {
+      report: self.check(opt),
+      svg: "",
+      unit: self.declared_unit_label(),
+    }
   }
   let expansion = self.expand(opt.tol)
-  {report: self.check_expansion(opt, expansion), svg: self.svg_from_expansion(expansion), unit: self.declared_unit_label()}
+  {
+    report: self.check_expansion(opt, expansion),
+    svg: self.svg_from_expansion(expansion),
+    unit: self.declared_unit_label(),
+  }
 }

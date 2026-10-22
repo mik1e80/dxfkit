@@ -89,9 +89,7 @@ fn accuracy_sample_error(
   for i = 0; i <= 2048; i = i + 1 {
     let expected = reference(i.to_double() / 2048.0)
     samples.push(expected)
-    max_error = max_error.max(
-      accuracy_distance(expected, points, closed),
-    )
+    max_error = max_error.max(accuracy_distance(expected, points, closed))
   }
   accuracy_near(max_error, 0.0, tol + 1.0e-9)
   // A close reference-to-output distance alone can miss extraneous excursions.

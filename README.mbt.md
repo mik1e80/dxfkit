@@ -77,7 +77,9 @@ CLI `stats` 分块读文件、统计 tag、段、版本、编码，不保存全�
 
 ## 使用与验证
 
-`Layer::is_enabled_for_checks()` 只表示本工具默认筛选规则，旧 `is_machinable()` 保留为同义兼容接口，不判断能否加工。`Drawing::expand_with_limits(tol, ExpandLimits)` 和 `check_with_limits` 支持图纸预算；默认展开上限为 10000 条放置记录、200000 点、100000 次访问，截断会标为不完整。`Drawing::analyze(options)` 使用同一 Expansion 生成 Report/SVG/单位；网页新增 `analyze` JSON 入口，旧 check/svg/svg_error 继续兼容。
+`Layer::is_enabled_for_checks()` 只表示本工具默认筛选规则，旧 `is_machinable()` 文档弃用，保留为同义兼容接口，不判断能否加工；新代码使用前者，本版不添加会让旧调用在 `--deny-warn` 下失败的编译器弃用属性。`Drawing::expand_with_limits(tol, ExpandLimits)` 和 `check_with_limits` 支持图纸预算；默认展开上限为 10000 条放置记录、200000 点、100000 次访问，截断会标为不完整。`Drawing::analyze(options)` 使用同一 Expansion 生成 Report/SVG/单位；网页新增 `analyze` JSON 入口，旧 check/svg/svg_error 继续兼容。
+
+完整公开签名见自动生成的 [pkg.generated.mbti](pkg.generated.mbti)；发布前运行 `node scripts/verify-maintenance.cjs`，核对格式及快照是否漂移。[公开 API 审阅](docs/public-api-review.md)说明兼容接口和 checked/unchecked 边界。
 
 - 核心库仅依赖 MoonBit core；CLI / conformance 使用 `moonbitlang/x` 和 `moonbitlang/async` 的文件接口。
 - 库支持 wasm / wasm-gc / JS / native；文件工具支持 wasm / native。
