@@ -1,6 +1,6 @@
 # dxfkit 项目申报书（修订稿）
 
-[一页申报 PDF](../output/pdf/dxfkit-submission-one-page.pdf) · [验证材料导航](verification-guide.md)。一页版为本次 GitHub 文档修订，已验证技术交付标签仍保留原提交。
+[一页申报 PDF](../output/pdf/dxfkit-submission-one-page.pdf) · [验证材料导航](verification-guide.md)。本页、PDF、代码与十类模型统一收录于最终申报标签 `submission-0.1.1-20261022`，以同提交 CI 和发布记录核对。
 
 ## 基本信息
 
@@ -8,7 +8,7 @@
 - 项目方向：工业软件 / 开发者工具
 - GitHub：<https://github.com/mik1e80/dxfkit>
 - 在线演示：<https://mik1e80.github.io/dxfkit/>
-- 提交版本：固定标签 `delivery-0.1.1-20261022-evidence`，以该标签的提交 SHA 为准；[干净环境复现与版本核对](reproducibility.md)。网页 release.json 和 verification.json 记录实际源码提交及本文件、生态对比和来源记录的哈希，CI 通过后才部署同一产物。
+- 提交版本：固定标签 `submission-0.1.1-20261022`，以该标签的提交 SHA 为准；[干净环境复现与版本核对](reproducibility.md)。网页 release.json 和 verification.json 记录实际源码提交及本文件、生态对比和来源记录的哈希，CI 通过后才部署同一产物。
 - 是否为整体移植：否；参考资料、公式移植和外部语料见下文。
 - 参赛者及联系方式：报名表保留原信息，不在公开仓库展示。
 
@@ -51,6 +51,8 @@ HATCH、DIMENSION、3DFACE、未知实体的轮廓未参与检查。SOLID/TRACE 
 净距不等于材料壁厚，不覆盖单实体窄颈或跨图层关系。关闭 / 冻结图层的筛选是工具约定，不代表 CAM 一定如此处理。材料、刀具、切缝和加工策略需要另行确认。
 
 ## 可复现案例与完成标准
+
+新增[十类模型](../examples/model-validation/README.md)，将 DXF、独立设计尺寸、公开接口原始数据、实际报告、SVG、解析 CSV 与总结集中放在 examples/model-validation。10/10 模型与预期一致；bulge 未进行 CAD 软件目视确认，样条参考为独立 Bernstein 采样，未进行外部 CAD 导出对照。
 
 本轮新增[材料索引](resubmission-evidence.md)、[实体分层矩阵](entity-capabilities.md)、[独立解析对照及实际误差](independent-validation.md)和[退回意见响应表](review-response.md)。10 个真实 CLI 案例保存报告、SVG、完整命令、输入哈希、预期和实际结果；`node scripts/verify-submission-evidence.cjs` 在 CI 中逐项复核，不自动更新快照。
 

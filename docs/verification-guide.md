@@ -11,20 +11,18 @@
 
 ## 本轮材料修订如何验证
 
-2026-10-22 本次仅整理 GitHub 文档、About 信息和一页 PDF，不改 MoonBit 算法、测试输入及已有验证结果。默认只做与改动相关的轻量检查：
+当前最终申报标签为 `submission-0.1.1-20261022`，统一包含代码、README、一页 PDF、模型测试与证据。2026-10-22 的历史文档提交 848617a 使用 [skip ci]，当时 Pages 留在 679f81a；这是历史状态，本轮最终完整 CI 及同提交 Pages 通过后才创建最终标签，旧标签不移动。
+
+日常默认按改动运行必要的轻量验证；本次十类模型和两句报告措辞先做针对性检查，最终收敛阶段按明确要求运行一次完整 CI。
 
 ```sh
 node scripts/verify-submission-docs.cjs
+node examples/model-validation/generate-models.cjs
+node examples/model-validation/verify.cjs
 ```
 
-PDF 生成时另用 pypdf 检查实际页数与文字，并渲染为 PNG 人工检查中文、间距和裁切。生成源在 [`build-submission-pdf.py`](../scripts/build-submission-pdf.py)，需要 reportlab 和可嵌入的中文 TrueType 字体：
+[十类模型目录](../examples/model-validation/README.md)包含输入、真值、实际数据、报告、SVG 和总结。[一页申报 PDF](../output/pdf/dxfkit-submission-one-page.pdf)与[完整申报书](submission.md)使用同一最终标签，提交 SHA 从标签和 CI/Pages 记录解析。旧机器记录中的采集时源码/编译产物哈希保留其历史含义，不冒充最终执行 SHA；最终实际执行身份见 verification.json 和模型验证记录。
 
-```sh
-python scripts/build-submission-pdf.py --font /path/to/cjk-font.ttf --bold-font /path/to/cjk-bold-font.ttf
-```
+PDF 生成源为 [build-submission-pdf.py](../scripts/build-submission-pdf.py)，依赖 reportlab 和可嵌入的中文 TrueType 字体；更新后检查页数、文本并渲染查看。未核实截图中的 OSC2026 规则，不将“一页 PDF 必交”写成已核实的官方要求。
 
-[一页申报 PDF](../output/pdf/dxfkit-submission-one-page.pdf)面向快速审阅；[完整申报书](submission.md)保留详细字段、证据和限制。未核实截图中的 OSC2026 规则，因此不将“一页 PDF 必交”描述成已经核实的官方要求。
-
-本轮同步使用 `[skip ci]` 的文档提交，避免自动触发原工作流的全量测试；不修改 CI 配置。既有已验证技术交付仍是 `delivery-0.1.1-20261022-evidence` / `679f81a`，Pages 保留其已验证部署。本轮新增 PDF 和文档通过 GitHub 查看；不将它们冒充为旧标签中的材料或旧 Pages 部署产物。
-
-后续验证按改动选取：文档检查链接/材料；几何修改运行对应测试文件及必要的受影响入口；优先一个相关后端，不默认跑四个后端或故障注入全套。完整复现命令保留作历史交付和明确需要时的验收入口。
+后续仍按改动选取相关测试与必要后端，不默认运行全量。完整复现命令保留作明确需要时的最终验收入口。

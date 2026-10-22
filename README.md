@@ -48,6 +48,10 @@ moon run cli svg examples/plate.dxf > plate.svg
 
 HATCH 边界、DIMENSION 关联几何、3DFACE、未知实体、非默认 OCS 和 INSERT 阵列的其余实例未完整检查。SOLID/TRACE 仅在默认 OCS、零厚度、所有角点同 Z 时生成二维边界；原始 Face 角点不重排。其余输入报告覆盖限制，解码身份不代表几何已完整检查。[追加审查验收](docs/review-cases.md)列出输入、预期、修复前后与真实入口断言。
 
+## 十类模型与测试数据
+
+[模型、DXF 与测试说明](examples/model-validation/README.md) · [10/10 结果总结](examples/model-validation/SUMMARY.md) · [设计真值](examples/model-validation/expected.json) · [实际数据](examples/model-validation/results.json)。包含独立解析参考；如未进行外部 CAD 确认，记录会明确标明。
+
 ## 实际使用示例
 
 ```bash
@@ -161,11 +165,11 @@ node scripts/verify-corpus-records.cjs
 
 [再次申报的证据索引](docs/resubmission-evidence.md) · [实体分层矩阵](docs/entity-capabilities.md) · [独立对照及实际误差](docs/independent-validation.md) · [退回意见响应表](docs/review-response.md)。10 个真实 CLI 案例保存输入、报告、SVG 和断言，运行 `node scripts/verify-submission-evidence.cjs` 复核。
 
-交付固定标签：`delivery-0.1.1-20261022-evidence`。[干净环境复现步骤](docs/reproducibility.md)固定工具链和依赖；运行 `node scripts/verify-reproduction.cjs --fresh` 验证测试、CLI、网页和申报材料对应同一提交。
+交付固定标签：`submission-0.1.1-20261022`。[干净环境复现步骤](docs/reproducibility.md)固定工具链和依赖；运行 `node scripts/verify-reproduction.cjs --fresh` 验证测试、CLI、网页和申报材料对应同一提交。
 
 [验证材料导航与名称约定](docs/verification-guide.md)统一使用“历史最小反例 / 补充几何审查 / 正确性与故障检出 / 真实入口证据”四个名称，具体数量留在对应记录中。
 
-本次一页 PDF 和导航属于后续文档修订；上面的固定标签与已验证 Pages 仍指向技术交付版本。
+代码、README、一页 PDF、十类模型及证据统一收录于上述最终申报标签；旧标签保留其历史提交。
 
 ## 许可
 

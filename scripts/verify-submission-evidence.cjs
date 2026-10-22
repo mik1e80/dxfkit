@@ -108,7 +108,7 @@ for(const c of cases){
   console.log('PASS evidence '+c.id);
 }
 const record={schema:1,checked_on:'2026-10-22',scope:'Self-authored targeted cases; not independent truth for the 47 third-party drawings',
-  production_source_commit:'1a8185925e2c038039e6f57f32c69421e833d437',
+  historical_geometry_baseline_commit:'1a8185925e2c038039e6f57f32c69421e833d437',
   oracle:{kind:'independent Node analytic formulas; no production geometry helpers or ezdxf runtime',script:'scripts/verify-submission-evidence.cjs',script_sha256_lf:hash(lf(fs.readFileSync(__filename,'utf8'))),numeric_display_significant_digits:12},
   pinned_profile:JSON.parse(fs.readFileSync(path.join(root,'reproduction.json'),'utf8')),passed:results.length,total:cases.length,cases:results};
 artifact('results.json',JSON.stringify(record,null,2)+'\n');

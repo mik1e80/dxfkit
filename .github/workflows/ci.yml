@@ -32,7 +32,12 @@ jobs:
           name: verification-${{ github.sha }}
           path: |
             _build/reproduction.json
+            _build/model-validation.json
+            _build/submission-evidence.json
             web/dist/release.json
+            output/pdf/dxfkit-submission-one-page.pdf
+            examples/model-validation/results.json
+            examples/model-validation/SUMMARY.md
 
       - name: 上传已通过验证的同一站点产物
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'

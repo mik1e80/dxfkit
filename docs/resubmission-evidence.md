@@ -1,12 +1,14 @@
 # 再次申报的验证材料索引
 
-[一页申报 PDF](../output/pdf/dxfkit-submission-one-page.pdf) · [验证材料导航](verification-guide.md)。一页版为本次 GitHub 文档修订，已验证技术交付标签仍保留原提交。
+[一页申报 PDF](../output/pdf/dxfkit-submission-one-page.pdf) · [验证材料导航](verification-guide.md)。本页、PDF、代码与十类模型统一收录于最终申报标签 `submission-0.1.1-20261022`，以同提交 CI 和发布记录核对。
 
-本次以“MoonBit ASCII DXF 二维轮廓读取与辅助检查库”为交付终点，固定源码标签 `delivery-0.1.1-20261022-evidence`。这是项目自行整理的技术验收材料，不是主办方公布的新门槛，也不表示报名已经重新提交或审核通过。
+本次以“MoonBit ASCII DXF 二维轮廓读取与辅助检查库”为交付终点，固定源码标签 `submission-0.1.1-20261022`。这是项目自行整理的技术验收材料，不是主办方公布的新门槛，也不表示报名已经重新提交或审核通过。
 
 保留现有 47 个第三方文件及来源、逐层回归记录；本轮只补针对性输入和证据，不增加第三方数量。六类最小问题及追加审查的修复前后记录继续保留。当前材料可以支持收敛后的能力陈述，不能支持完整 R10–R2018 标准读取、完整 OCS 或可加工性承诺。
 
 ## 评审可从哪里核对
+
+最终新增的[十类模型及测试数据](../examples/model-validation/README.md)与[模型总结](../examples/model-validation/SUMMARY.md)保存在 examples 下；与下面已有 10 个 CLI 场景分开登记，存在能力覆盖交集，不把两组相加当作独立功能数量。
 
 | 材料 | 证据位置 | 能确认的结论 |
 | --- | --- | --- |
@@ -44,7 +46,7 @@ node scripts/verify-reproduction.cjs
 
 首个脚本逐项检查诊断、退出码、正常几何与独立解析误差，并比较实际报告/SVG/结果和保存的快照；任何差异失败。只有人工核对原因后才用 `--write` 更新保存值，不能直接修改总数。自动验证不调用 `--write`。原始报告和 SVG 按 LF 保存；度量 JSON 使用 12 位有效数字用于展示，计算断言仍用未舍入值。
 
-静态结果的 `production_source_commit` 固定到本轮未改动生产算法的基线 `1a8185925e2c038039e6f57f32c69421e833d437`，不是伪称它就是新增材料的最终提交。当前实跑的 HEAD、dirty 状态、平台和工具版本在 `_build/submission-evidence.json`，部署时复制为站点根目录 `submission-evidence-verification.json`；网页 `release.json` 与 `verification.json` 绑定实际发布提交及材料和输入哈希。完整流程只有通过后才打包部署，包括本页、响应表、矩阵、独立对照、案例输入和保存的所有报告/SVG/JSON。
+静态结果的 `historical_geometry_baseline_commit` 标识原几何验收基线 `1a8185925e2c038039e6f57f32c69421e833d437`，不是当前提交 SHA。本轮另改报告措辞，当前结果由实际 CI 重跑核对。当前实跑的 HEAD、dirty 状态、平台和工具版本在 `_build/submission-evidence.json`，部署时复制为站点根目录 `submission-evidence-verification.json`；网页 `release.json` 与 `verification.json` 绑定实际发布提交及材料和输入哈希。完整流程只有通过后才打包部署，包括本页、响应表、矩阵、独立对照、案例输入和保存的所有报告/SVG/JSON。
 
 ## 尚未覆盖及提交前状态
 

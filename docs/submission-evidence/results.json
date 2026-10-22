@@ -2,17 +2,17 @@
   "schema": 1,
   "checked_on": "2026-10-22",
   "scope": "Self-authored targeted cases; not independent truth for the 47 third-party drawings",
-  "production_source_commit": "1a8185925e2c038039e6f57f32c69421e833d437",
+  "historical_geometry_baseline_commit": "1a8185925e2c038039e6f57f32c69421e833d437",
   "oracle": {
     "kind": "independent Node analytic formulas; no production geometry helpers or ezdxf runtime",
     "script": "scripts/verify-submission-evidence.cjs",
-    "script_sha256_lf": "6e3665a9cf6208226ec60df34548ad825aa95d6bf0374e966ac9b36e36038a15",
+    "script_sha256_lf": "fd3d1812acfc2b9b23364628d7f96af6d78942ed54f2b2681264cdb7ab52baae",
     "numeric_display_significant_digits": 12
   },
   "pinned_profile": {
     "module": "mik1e80/dxfkit",
     "version": "0.1.1",
-    "submission_ref": "delivery-0.1.1-20261022-evidence",
+    "submission_ref": "submission-0.1.1-20261022",
     "moon_release": "0.10.14+7d59c7ec9",
     "moon_version": "0.1.20260920",
     "moonc_version": "v0.10.14+7d59c7ec9",

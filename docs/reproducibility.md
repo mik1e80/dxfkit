@@ -1,6 +1,6 @@
 # 从指定提交复现交付版本
 
-交付版本使用固定标签 `delivery-0.1.1-20261022-evidence`。标签所指提交是本次库、CLI、测试、网页构建、申报说明与生态对比的共同源码；不以可变的 main 或在线页面当前内容替代提交身份。模块版本仍为 0.1.1，未发布 Mooncakes。此前的 `delivery-0.1.1-20261021`、`delivery-0.1.1-20261022`、`delivery-0.1.1-20261022-ellipse` 和 `delivery-0.1.1-20261022-review` 保留原提交，不移动或覆盖。
+交付版本使用固定标签 `submission-0.1.1-20261022`。标签所指提交是本次库、CLI、测试、网页构建、申报说明与生态对比的共同源码；不以可变的 main 或在线页面当前内容替代提交身份。模块版本仍为 0.1.1，未发布 Mooncakes。此前的 `delivery-0.1.1-20261021`、`delivery-0.1.1-20261022`、`delivery-0.1.1-20261022-ellipse` 和 `delivery-0.1.1-20261022-review` 及 `delivery-0.1.1-20261022-evidence`（679f81a）保留原提交，不移动或覆盖。
 
 ## 固定工具与依赖
 
@@ -40,7 +40,7 @@ $env:PATH = "$HOME/.moon/bin;" + $env:PATH
 以下命令在 PowerShell、Bash 均可执行。使用尚不存在的目录：
 
 ```sh
-git clone --branch delivery-0.1.1-20261022-evidence --depth 1 https://github.com/mik1e80/dxfkit.git dxfkit-delivery
+git clone --branch submission-0.1.1-20261022 --depth 1 https://github.com/mik1e80/dxfkit.git dxfkit-delivery
 cd dxfkit-delivery
 git rev-parse HEAD
 node scripts/environment.cjs
@@ -51,8 +51,11 @@ node scripts/verify-reproduction.cjs --fresh
 
 复现脚本依次执行：依赖获取及版本核对、全目标检查、构建、Wasm/JS/Native/Wasm-GC 测试、语料记录复核、故障检出验证、真实 CLI 回归、Wasm/Native 独立工程调用、10 个再申报证据案例及解析误差/保存输出复核、网页重建和行为断言，最后打包 `_site/`。任何一步失败都会使进程失败，验证记录为 `passed:false`。
 
+最终发布将代码、README、PDF、模型及证据放在同一提交；CI 与 Pages 全部成功后仅建立一个最终申报标签 `submission-0.1.1-20261022`。标签解析出的 SHA 与 release.json、verification.json、model-validation-verification.json 对应，不在 PDF 中写入自引用提交哈希。
+
 成功后的输出：
 
+- `_build/model-validation.json`：10 个模型的实际源提交、dirty 状态、工具版本和断言结果；部署副本为 `model-validation-verification.json`。
 - `_build/reproduction.json`：实际提交、工具版本、依赖及各步退出码。
 - `_build/submission-evidence.json`：当前提交、dirty 状态和工具版本，以及 10 个真实 CLI 案例、诊断和解析误差；与仓库静态基线记录的身份分开标识。
 - `web/dist/release.json`：同一提交、模块版本、工具链、网页资产、申报说明、生态对比与来源，以及追加审查说明和修复前/后记录的 SHA-256。

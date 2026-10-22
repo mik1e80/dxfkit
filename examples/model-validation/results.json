@@ -1,0 +1,980 @@
+{
+  "schema": 1,
+  "checked_on": "2026-10-22",
+  "submission_ref": "submission-0.1.1-20261022",
+  "source_identity": "Final tag resolves source SHA; _build/model-validation.json records actual executing HEAD and dirty state",
+  "provenance": "10 project-authored parametric fixtures; no external CAD visual confirmation or external spline export was performed",
+  "toolchain_profile": {
+    "module": "mik1e80/dxfkit",
+    "version": "0.1.1",
+    "submission_ref": "submission-0.1.1-20261022",
+    "moon_release": "0.10.14+7d59c7ec9",
+    "moon_version": "0.1.20260920",
+    "moonc_version": "v0.10.14+7d59c7ec9",
+    "node_minimum_major": 22,
+    "ci_node_version": "24.19.0",
+    "dependencies": {
+      "moonbitlang/async": "0.22.1",
+      "moonbitlang/x": "0.5.5"
+    }
+  },
+  "passed": 10,
+  "total": 10,
+  "models": [
+    {
+      "id": "01",
+      "model": "models/01-rectangle.dxf",
+      "input_sha256_lf": "5cb70d7f807cb6bb539254fd2fa8bad5d92c3ccdc78f6a9565f2afddc1b456f5",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "examples/model-validation/runner",
+          "examples/model-validation/models/01-rectangle.dxf"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/model-validation/models/01-rectangle.dxf",
+          "--tol",
+          "0.002",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/model-validation/models/01-rectangle.dxf",
+          "--tol",
+          "0.002"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 0,
+        "required": [],
+        "forbidden": []
+      },
+      "actual": {
+        "strict_exit": 0,
+        "incomplete": false,
+        "entity_count": 1,
+        "outline_count": 1,
+        "findings": [],
+        "metrics": {
+          "bounds": [
+            0,
+            0,
+            100,
+            60
+          ],
+          "width": 100,
+          "height": 60,
+          "edges": 4,
+          "area": 6000
+        }
+      },
+      "probes": [],
+      "artifacts": {
+        "public_api": "actual/01-public-api.txt",
+        "report": "actual/01-report.txt",
+        "svg": "actual/01-preview.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "02",
+      "model": "models/02-four-hole-plate.dxf",
+      "input_sha256_lf": "d36236b7aed8e955a557dd59126ecc653d55da35898a66b467e8ab24f7b036ac",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "examples/model-validation/runner",
+          "examples/model-validation/models/02-four-hole-plate.dxf"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/model-validation/models/02-four-hole-plate.dxf",
+          "--tol",
+          "0.002",
+          "--min-gap",
+          "0.5",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/model-validation/models/02-four-hole-plate.dxf",
+          "--tol",
+          "0.002"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 0,
+        "required": [],
+        "forbidden": []
+      },
+      "actual": {
+        "strict_exit": 0,
+        "incomplete": false,
+        "entity_count": 5,
+        "outline_count": 5,
+        "findings": [],
+        "metrics": {
+          "bounds": [
+            0,
+            0,
+            100,
+            60
+          ],
+          "width": 100,
+          "height": 60,
+          "edges": 4,
+          "area": 6000,
+          "centers": [
+            [
+              10,
+              10
+            ],
+            [
+              90,
+              10
+            ],
+            [
+              90,
+              50
+            ],
+            [
+              10,
+              50
+            ]
+          ],
+          "radius": 3,
+          "diameter": 6,
+          "center_pair_distances": [
+            80,
+            89.4427191,
+            40,
+            40,
+            89.4427191,
+            80
+          ],
+          "max_radius_error": 6.66133814775e-15,
+          "analytic_outer_clearance": 7,
+          "clearance_thresholds": {
+            "8": "4 pairs, minimum 7",
+            "0.5": "no finding"
+          }
+        }
+      },
+      "probes": [
+        {
+          "command": [
+            "moon",
+            "run",
+            "cli",
+            "check",
+            "examples/model-validation/models/02-four-hole-plate.dxf",
+            "--tol",
+            "0.002",
+            "--min-gap",
+            "8",
+            "--strict"
+          ],
+          "exit": 1,
+          "report": "actual/02-gap-8.txt"
+        }
+      ],
+      "artifacts": {
+        "public_api": "actual/02-public-api.txt",
+        "report": "actual/02-report.txt",
+        "svg": "actual/02-preview.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "03",
+      "model": "models/03-arcs.dxf",
+      "input_sha256_lf": "4eb0701cdfb676520b3d972af3f33c29bb9f32f967643c930c07a06c3f0c0f60",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "examples/model-validation/runner",
+          "examples/model-validation/models/03-arcs.dxf"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/model-validation/models/03-arcs.dxf",
+          "--tol",
+          "0.002",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/model-validation/models/03-arcs.dxf",
+          "--tol",
+          "0.002"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "required": [
+          "[轮廓闭合]"
+        ],
+        "forbidden": []
+      },
+      "actual": {
+        "strict_exit": 1,
+        "incomplete": false,
+        "entity_count": 2,
+        "outline_count": 2,
+        "findings": [
+          "[警告] [轮廓闭合] 图层「CUT」上有 2 处轮廓没闭合——最宽的缝 34.641016151377535（(40, 12.679491924311229) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+        ],
+        "metrics": {
+          "arcs": [
+            {
+              "handle": "301",
+              "decoded": [
+                30,
+                30,
+                20,
+                5.23598775598,
+                1.0471975512
+              ],
+              "bounds": [
+                40,
+                12.6794919243,
+                50,
+                47.3205080757
+              ],
+              "start": [
+                40,
+                12.6794919243
+              ],
+              "end": [
+                40,
+                47.3205080757
+              ],
+              "ccw_sweep_radians": 2.09439510239,
+              "max_radius_error": 3.5527136788e-15,
+              "samples": 2049,
+              "reference_to_output_max": 0.00194951981392,
+              "output_to_reference_polyline_max": 0.0000026140874192,
+              "limit": 0.002000001
+            },
+            {
+              "handle": "302",
+              "decoded": [
+                80,
+                30,
+                10,
+                1.57079632679,
+                4.71238898038
+              ],
+              "bounds": [
+                70,
+                20,
+                80,
+                40
+              ],
+              "start": [
+                80,
+                40
+              ],
+              "end": [
+                80,
+                20
+              ],
+              "ccw_sweep_radians": 3.14159265359,
+              "max_radius_error": 8.881784197e-15,
+              "samples": 2049,
+              "reference_to_output_max": 0.00197670229934,
+              "output_to_reference_polyline_max": 0.00000294089988318,
+              "limit": 0.002000001
+            }
+          ]
+        }
+      },
+      "probes": [],
+      "artifacts": {
+        "public_api": "actual/03-public-api.txt",
+        "report": "actual/03-report.txt",
+        "svg": "actual/03-preview.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "04",
+      "model": "models/04-ellipse.dxf",
+      "input_sha256_lf": "b7fb093ee9666f613f123deaec489156502d0a2616758765cfcbef8158b2e018",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "examples/model-validation/runner",
+          "examples/model-validation/models/04-ellipse.dxf"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/model-validation/models/04-ellipse.dxf",
+          "--tol",
+          "0.002",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/model-validation/models/04-ellipse.dxf",
+          "--tol",
+          "0.002"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 0,
+        "required": [],
+        "forbidden": []
+      },
+      "actual": {
+        "strict_exit": 0,
+        "incomplete": false,
+        "entity_count": 1,
+        "outline_count": 1,
+        "findings": [],
+        "metrics": {
+          "center": [
+            10,
+            20
+          ],
+          "major_vector": [
+            10,
+            0
+          ],
+          "axis_ratio": 0.5,
+          "major_diameter": 20,
+          "minor_diameter": 10,
+          "bounds": [
+            0,
+            15,
+            20,
+            25
+          ],
+          "max_equation_error": 2.22044604925e-15,
+          "samples": 2049,
+          "reference_to_output_max": 0.000666108136796,
+          "output_to_reference_polyline_max": 0.0000116708728932,
+          "limit": 0.002000001
+        }
+      },
+      "probes": [],
+      "artifacts": {
+        "public_api": "actual/04-public-api.txt",
+        "report": "actual/04-report.txt",
+        "svg": "actual/04-preview.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "05",
+      "model": "models/05-bulge.dxf",
+      "input_sha256_lf": "dbf55fa73bc58dbef10f7e9c1363f0471c8fe078ad44fc1ed71ccb25e6421329",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "examples/model-validation/runner",
+          "examples/model-validation/models/05-bulge.dxf"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/model-validation/models/05-bulge.dxf",
+          "--tol",
+          "0.002",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/model-validation/models/05-bulge.dxf",
+          "--tol",
+          "0.002"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "required": [
+          "[轮廓闭合]"
+        ],
+        "forbidden": []
+      },
+      "actual": {
+        "strict_exit": 1,
+        "incomplete": false,
+        "entity_count": 1,
+        "outline_count": 1,
+        "findings": [
+          "[警告] [轮廓闭合] 图层「CUT」上有 1 处轮廓没闭合——最宽的缝 22.360679774997898（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+        ],
+        "metrics": {
+          "vertices": [
+            [
+              0,
+              0,
+              -1
+            ],
+            [
+              20,
+              0,
+              0
+            ],
+            [
+              20,
+              -10,
+              0
+            ]
+          ],
+          "bounds": [
+            0,
+            -10,
+            20,
+            10
+          ],
+          "arc_side": "above chord y=0",
+          "samples": 2049,
+          "reference_to_output_max": 0.00197670229935,
+          "output_to_reference_polyline_max": 0.0000029408998789,
+          "limit": 0.002000001
+        }
+      },
+      "probes": [],
+      "artifacts": {
+        "public_api": "actual/05-public-api.txt",
+        "report": "actual/05-report.txt",
+        "svg": "actual/05-preview.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "06",
+      "model": "models/06-spline.dxf",
+      "input_sha256_lf": "32a602b16d590842e3a381883efd10202ce6700d70feb2ca6b0fc8921fcc4168",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "examples/model-validation/runner",
+          "examples/model-validation/models/06-spline.dxf"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/model-validation/models/06-spline.dxf",
+          "--tol",
+          "0.002",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/model-validation/models/06-spline.dxf",
+          "--tol",
+          "0.002"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "required": [
+          "[轮廓闭合]"
+        ],
+        "forbidden": []
+      },
+      "actual": {
+        "strict_exit": 1,
+        "incomplete": false,
+        "entity_count": 1,
+        "outline_count": 1,
+        "findings": [
+          "[警告] [轮廓闭合] 图层「CUT」上有 1 处轮廓没闭合——最宽的缝 80（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+        ],
+        "metrics": {
+          "degree": 3,
+          "knots": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          "control_points": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              40
+            ],
+            [
+              80,
+              -40
+            ],
+            [
+              80,
+              0
+            ]
+          ],
+          "endpoints": [
+            [
+              0,
+              0
+            ],
+            [
+              80,
+              0
+            ]
+          ],
+          "reference_kind": "independent analytic Bernstein sampling, NOT an external CAD export",
+          "samples": 2049,
+          "reference_to_output_max": 0.00146967762958,
+          "output_to_reference_polyline_max": 0,
+          "limit": 0.002000001
+        }
+      },
+      "probes": [],
+      "artifacts": {
+        "public_api": "actual/06-public-api.txt",
+        "report": "actual/06-report.txt",
+        "svg": "actual/06-preview.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "07",
+      "model": "models/07-block-inserts.dxf",
+      "input_sha256_lf": "93bc6bb1a1cc2b00fb487ab454c23b388c49ed504f815d0aa978d601d862b584",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "examples/model-validation/runner",
+          "examples/model-validation/models/07-block-inserts.dxf"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/model-validation/models/07-block-inserts.dxf",
+          "--tol",
+          "0.002",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/model-validation/models/07-block-inserts.dxf",
+          "--tol",
+          "0.002"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 0,
+        "required": [],
+        "forbidden": []
+      },
+      "actual": {
+        "strict_exit": 0,
+        "incomplete": false,
+        "entity_count": 3,
+        "outline_count": 3,
+        "findings": [],
+        "metrics": {
+          "placements": [
+            {
+              "insert_handle": "711",
+              "world_vertices": [
+                [
+                  20,
+                  10
+                ],
+                [
+                  20,
+                  30
+                ],
+                [
+                  16,
+                  30
+                ],
+                [
+                  16,
+                  10
+                ]
+              ],
+              "bounds": [
+                16,
+                10,
+                20,
+                30
+              ],
+              "width": 4,
+              "height": 20
+            },
+            {
+              "insert_handle": "712",
+              "world_vertices": [
+                [
+                  80,
+                  10
+                ],
+                [
+                  70,
+                  10
+                ],
+                [
+                  70,
+                  8
+                ],
+                [
+                  80,
+                  8
+                ]
+              ],
+              "bounds": [
+                70,
+                8,
+                80,
+                10
+              ],
+              "width": 10,
+              "height": 2
+            },
+            {
+              "insert_handle": "713",
+              "world_vertices": [
+                [
+                  120,
+                  30
+                ],
+                [
+                  120,
+                  25
+                ],
+                [
+                  128,
+                  25
+                ],
+                [
+                  128,
+                  30
+                ]
+              ],
+              "bounds": [
+                120,
+                25,
+                128,
+                30
+              ],
+              "width": 8,
+              "height": 5
+            }
+          ]
+        }
+      },
+      "probes": [],
+      "artifacts": {
+        "public_api": "actual/07-public-api.txt",
+        "report": "actual/07-report.txt",
+        "svg": "actual/07-preview.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "08",
+      "model": "models/08-layers-and-text.dxf",
+      "input_sha256_lf": "ee2ad4b087f9535a71e9d128664fc024334b66973df52465aeb66bf4642d80d6",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "examples/model-validation/runner",
+          "examples/model-validation/models/08-layers-and-text.dxf"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/model-validation/models/08-layers-and-text.dxf",
+          "--tol",
+          "0.002",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/model-validation/models/08-layers-and-text.dxf",
+          "--tol",
+          "0.002"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "required": [
+          "[文字未转曲线]",
+          "文字尚未转换为轮廓，本工具不检查字形几何，请确认下游软件的文字处理方式。",
+          "AUX-OFF",
+          "AUX-FROZEN",
+          "本工具在部分几何检查中跳过该关闭/冻结图层，请确认下游软件的实际处理方式。",
+          "检查不完整"
+        ],
+        "forbidden": [
+          "[轮廓闭合]",
+          "机床不认字符串",
+          "不会被切",
+          "[重复切割]",
+          "[自相交]"
+        ]
+      },
+      "actual": {
+        "strict_exit": 1,
+        "incomplete": true,
+        "entity_count": 5,
+        "outline_count": 4,
+        "findings": [
+          "[警告] [文字未转曲线] 图层「TEXT」上有 1 处文字：文字尚未转换为轮廓，本工具不检查字形几何，请确认下游软件的文字处理方式。",
+          "[提示] [图层] 图层「AUX-OFF」是关闭的，上面有 1 条实体：本工具在部分几何检查中跳过该关闭/冻结图层，请确认下游软件的实际处理方式。",
+          "[提示] [图层] 图层「AUX-FROZEN」是冻结的，上面有 1 条实体：本工具在部分几何检查中跳过该关闭/冻结图层，请确认下游软件的实际处理方式。"
+        ],
+        "metrics": {
+          "entity_layers": [
+            {
+              "handle": "801",
+              "layer": "CUT"
+            },
+            {
+              "handle": "802",
+              "layer": "CUT"
+            },
+            {
+              "handle": "803",
+              "layer": "TEXT"
+            },
+            {
+              "handle": "804",
+              "layer": "AUX-OFF"
+            },
+            {
+              "handle": "805",
+              "layer": "AUX-FROZEN"
+            }
+          ],
+          "cut_outlines": 2,
+          "cut_closed": true,
+          "text_findings": 1,
+          "off_frozen_info_findings": 2,
+          "closure_findings": 0
+        }
+      },
+      "probes": [],
+      "artifacts": {
+        "public_api": "actual/08-public-api.txt",
+        "report": "actual/08-report.txt",
+        "svg": "actual/08-preview.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "09",
+      "model": "models/09-intentional-errors.dxf",
+      "input_sha256_lf": "affd1d469bd1578bfd305a5fcb5569ffcbabe8b0673da75b3b8c47353c0eafa5",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "examples/model-validation/runner",
+          "examples/model-validation/models/09-intentional-errors.dxf"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/model-validation/models/09-intentional-errors.dxf",
+          "--tol",
+          "0.002",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/model-validation/models/09-intentional-errors.dxf",
+          "--tol",
+          "0.002"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "required": [
+          "[轮廓闭合]",
+          "[重复切割]"
+        ],
+        "forbidden": [
+          "检查不完整",
+          "[自相交]",
+          "[退化几何]"
+        ]
+      },
+      "actual": {
+        "strict_exit": 1,
+        "incomplete": false,
+        "entity_count": 3,
+        "outline_count": 3,
+        "findings": [
+          "[警告] [轮廓闭合] 图层「CUT」上有 1 处轮廓没闭合——最宽的缝 0.1（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断",
+          "[警告] [重复切割] 图层「CUT」有 1 对线段重叠（共 10 长度，(200, 0) 附近），请确认是否存在重复路径"
+        ],
+        "metrics": {
+          "actual_opening": 0.1,
+          "duplicate_handles": [
+            "902",
+            "903"
+          ],
+          "overlap_length": 10,
+          "diagnostic_categories": [
+            "轮廓闭合",
+            "重复切割"
+          ]
+        }
+      },
+      "probes": [],
+      "artifacts": {
+        "public_api": "actual/09-public-api.txt",
+        "report": "actual/09-report.txt",
+        "svg": "actual/09-preview.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "10",
+      "model": "models/10-coverage-boundaries.dxf",
+      "input_sha256_lf": "12d375df133dbeec834ef28d33a18619bc45c2de686c4d25c564bbfdb6947a8e",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "examples/model-validation/runner",
+          "examples/model-validation/models/10-coverage-boundaries.dxf"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/model-validation/models/10-coverage-boundaries.dxf",
+          "--tol",
+          "0.002",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/model-validation/models/10-coverage-boundaries.dxf",
+          "--tol",
+          "0.002"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "required": [
+          "HATCH",
+          "未转换 OCS",
+          "检查不完整"
+        ],
+        "forbidden": []
+      },
+      "actual": {
+        "strict_exit": 1,
+        "incomplete": true,
+        "entity_count": 3,
+        "outline_count": 2,
+        "findings": [
+          "[警告] [检查覆盖] 1 个 CIRCLE 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核",
+          "[警告] [检查覆盖] 1 个 HATCH 实体的轮廓未参与检查；保留记录不表示已验证几何"
+        ],
+        "metrics": {
+          "incomplete": true,
+          "unexamined": [
+            "HATCH boundary",
+            "CIRCLE non-default OCS"
+          ],
+          "normal_rectangle_retained": true
+        }
+      },
+      "probes": [],
+      "artifacts": {
+        "public_api": "actual/10-public-api.txt",
+        "report": "actual/10-report.txt",
+        "svg": "actual/10-preview.svg"
+      },
+      "passed": true
+    }
+  ]
+}

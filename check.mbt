@@ -306,7 +306,7 @@ fn check_radius(
 }
 
 ///|
-/// 文字未转曲线：机床不认字符串，这些位置不会被切。
+/// 文字未转轮廓：不检查字形几何，下游软件的处理方式由使用者确认。
 fn check_texts(placed : Array[Placed], findings : Array[Finding]) -> Unit {
   let counts : Array[(String, Int)] = []
   for p in placed {
@@ -322,7 +322,7 @@ fn check_texts(placed : Array[Placed], findings : Array[Finding]) -> Unit {
     findings.push({
       check: "文字未转曲线",
       severity: Warn,
-      message: "图层「\{c.0}」上有 \{c.1} 处文字没转成曲线——机床不认字符串，这些位置不会被切",
+      message: "图层「\{c.0}」上有 \{c.1} 处文字：文字尚未转换为轮廓，本工具不检查字形几何，请确认下游软件的文字处理方式。",
     })
   }
 }
@@ -358,7 +358,7 @@ fn check_layers(
       findings.push({
         check: "图层",
         severity: Info,
-        message: "图层「\{l.name}」是\{status}的，上面有 \{n} 条实体——不会被切（确认是有意的）",
+        message: "图层「\{l.name}」是\{status}的，上面有 \{n} 条实体：本工具在部分几何检查中跳过该关闭/冻结图层，请确认下游软件的实际处理方式。",
       })
     }
   }
@@ -386,8 +386,7 @@ fn check_layers(
 /// 但刻线、折弯线和有意留的开口本来就是开口。报出来让人确认，
 /// 比替用户下结论诚实。
 ///
-/// 只在会被切到的图层上查：关闭 / 冻结的图层本来就不切
-///（那条在图层检查里单独提示过），再报一遍只会吓人。
+/// 本工具的闭合检查跳过关闭 / 冻结图层；这不推断下游软件或机床行为。
 ///
 /// 串链是朴素的贪心——每层边的数量是图纸实体级的（几百上千），
 /// O(n²) 在单张图上跑得动；真遇到几万条再上空间索引。
@@ -397,7 +396,7 @@ fn check_closure(
   tol : Double,
   findings : Array[Finding],
 ) -> Unit {
-  // 这层有没有「会被切到的开放折线」
+  // 这层有没有按本工具图层筛选约定参与检查的开放折线
   let names : Array[String] = []
   for p in placed {
     let open = match p.flat {
@@ -902,8 +901,8 @@ fn push_unique_int(ids : Array[Int], v : Int) -> Unit {
 }
 
 ///|
-/// 这个图层会不会被切到。图层表里查不到时按「会切」处理——
-/// 宁可多查一遍，漏查的会切出废件。
+/// 是否按本工具约定跳过该图层。图层表中没有的图层继续参与检查。
+/// 不据此判断下游软件或机床是否处理该图层。
 fn is_uncut_layer(tables : Tables?, name : String) -> Bool {
   match tables {
     Some(t) =>

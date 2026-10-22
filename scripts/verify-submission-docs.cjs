@@ -1,7 +1,7 @@
 // Lightweight checks only: document targets, current API wording, About data and PDF envelope.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
-const docs=['README.md','README.mbt.md','docs/submission.md','docs/resubmission-evidence.md','docs/verification-guide.md','docs/delivery-verification.md','docs/review-cases.md'];
+const docs=['README.md','README.mbt.md','docs/submission.md','docs/resubmission-evidence.md','docs/verification-guide.md','docs/delivery-verification.md','docs/review-cases.md','examples/model-validation/README.md','examples/model-validation/SUMMARY.md'];
 let links=0;
 for(const file of docs){
   const text=fs.readFileSync(path.join(root,file),'utf8');

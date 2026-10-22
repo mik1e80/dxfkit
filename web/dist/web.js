@@ -8764,14 +8764,14 @@
             }
           }
           if (n > 0) {
-            const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(83);
+            const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(153);
             _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "图层「");
             _M0MPB13StringBuilder13write__objectGsE(_string_builder, l.name);
             _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "」是");
             _M0MPB13StringBuilder13write__objectGsE(_string_builder, status);
             _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "的，上面有 ");
             _M0MPB13StringBuilder13write__objectGiE(_string_builder, n);
-            _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 条实体——不会被切（确认是有意的）");
+            _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 条实体：本工具在部分几何检查中跳过该关闭/冻结图层，请确认下游软件的实际处理方式。");
             _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(findings, new _M0TP27mik1e806dxfkit7Finding("图层", 0, _string_builder.val));
           }
           break _L;
@@ -9025,12 +9025,12 @@
       const _ = _tmp$2;
       if (_ < _bind$2) {
         const c = counts[_];
-        const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(98);
+        const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(140);
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "图层「");
         _M0MPB13StringBuilder13write__objectGsE(_string_builder, c._0);
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "」上有 ");
         _M0MPB13StringBuilder13write__objectGiE(_string_builder, c._1);
-        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 处文字没转成曲线——机床不认字符串，这些位置不会被切");
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 处文字：文字尚未转换为轮廓，本工具不检查字形几何，请确认下游软件的文字处理方式。");
         _M0MPC15array5Array4pushGRP27mik1e806dxfkit7FindingE(findings, new _M0TP27mik1e806dxfkit7Finding("文字未转曲线", 1, _string_builder.val));
         _tmp$2 = _ + 1 | 0;
         continue;

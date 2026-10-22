@@ -9,7 +9,12 @@ assert(!revision.dirty||process.argv.includes('--allow-dirty'),'Source edits pre
 console.log(run('moon',['build','--target','js','--release','--frozen','--deny-warn']));
 fs.mkdirSync(path.join(root,'web/dist'),{recursive:true});
 fs.copyFileSync(path.join(root,'_build/js/release/build/web/web.js'),path.join(root,'web/dist/web.js'));
+function descendants(rel) {
+  return fs.readdirSync(path.join(root,rel),{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?descendants(rel+'/'+e.name):[rel+'/'+e.name]);
+}
 const assets=['web/index.html','web/style.css','web/app.js','web/dist/web.js','docs/submission.md',
+  'README.md','README.mbt.md','docs/verification-guide.md','output/pdf/dxfkit-submission-one-page.pdf',
+  ...descendants('examples/model-validation'),
   'COMPARISON.md','docs/ecosystem-sources.json','docs/review-cases.md',
   'docs/review-cases-before.json','docs/review-cases-results.json',
   'docs/entity-capabilities.md','docs/resubmission-evidence.md',
