@@ -27,6 +27,8 @@ let svg = drawing.to_svg(0.05)
 
 ## 几何与离散
 
+当前 main 明确拒绝 SPLINE Closed/Periodic 标志，以及非空但不等于控制点数的权重数组；无权重才按全 1。ELLIPSE 轴比接收 `(0,1]`。多段线非零宽度/厚度保留中心线并报告不完整；缺 ENDBLK 按下一块或段末恢复且警告。完整修订见[本轮记录](docs/advisor-review-20261022.md)。
+
 核心轮廓为 LINE、CIRCLE、ARC、ELLIPSE、LWPOLYLINE、普通二维 POLYLINE、受限 SPLINE。POINT 和文字用于位置或简化预览；SOLID/TRACE 在下述受限范围内支持二维边界；HATCH、DIMENSION、3DFACE 等保留已有字段，不能据此认为它们的轮廓已参与检查。
 
 ELLIPSE 的 11/21/31 是相对圆心长轴向量。普通 POLYLINE 不接受拟合、空间和网格语义；损坏顶点保留记录并拒绝整条轮廓，避免拼接出新形状。裸 `Geometry::Face` 不携带 SOLID/TRACE/3DFACE 身份，调用其 `flatten()` / `flatten_checked()` 返回 Empty。SOLID/TRACE 应使用 `Entity::flatten_checked(tol)`，在默认 OCS、零厚度、所有角点同 Z 的范围内生成二维边界；3DFACE 仍报告未覆盖。
@@ -72,6 +74,8 @@ ELLIPSE 的 11/21/31 是相对圆心长轴向量。普通 POLYLINE 不接受拟�
 CLI `stats` 分块读文件、统计 tag、段、版本、编码，不保存全量 tag 或实体。`scan_tags()` 则会保留所有 tag；`check` / `svg` 使用全量图纸，不能作为低内存几何检查入口。
 
 ## 使用与验证
+
+`Layer::is_enabled_for_checks()` 只表示本工具默认筛选规则，旧 `is_machinable()` 保留为同义兼容接口，不判断能否加工。`Drawing::expand_with_limits(tol, ExpandLimits)` 和 `check_with_limits` 支持图纸预算；默认展开上限为 10000 条放置记录、200000 点、100000 次访问，截断会标为不完整。`Drawing::analyze(options)` 使用同一 Expansion 生成 Report/SVG/单位；网页新增 `analyze` JSON 入口，旧 check/svg/svg_error 继续兼容。
 
 - 核心库仅依赖 MoonBit core；CLI / conformance 使用 `moonbitlang/x` 和 `moonbitlang/async` 的文件接口。
 - 库支持 wasm / wasm-gc / JS / native；文件工具支持 wasm / native。

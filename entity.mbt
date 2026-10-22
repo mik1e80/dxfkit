@@ -505,6 +505,7 @@ fn subclass_tags(record : Record, name : String) -> Array[Tag] {
 /// 取——`get` 只会拿到第一对。组码 90 与实际顶点数不符时报告诊断。
 /// 损坏坐标保留原始记录，但不把剩余顶点拼成另一条轮廓。
 fn parse_lwpolyline(record : Record, warnings : Array[String]) -> Geometry? {
+  warn_polyline_extent(record, [43, 40, 41, 39], warnings)
   let elevation = record.get_double(38, 0.0)
   let vertices : Array[PolyVertex] = []
   let mut pending_x : Double? = None
@@ -591,6 +592,11 @@ fn mtext_value(record : Record) -> String {
 /// 重复出现**的，控制点还是三码一组的坐标——按顺序扫，缺 `30` 的
 /// 按 z=0 处理（和 `Record::point` 一个约定）。
 fn parse_spline(record : Record, warnings : Array[String]) -> Geometry {
+  let flags = record.get_int(70, 0)
+  if (flags & 3) != 0 {
+    warnings.push("SPLINE 使用闭合或周期语义，本版本尚未重建该语义；保留记录，轮廓未检查")
+    return Unknown
+  }
   let knots : Array[Double] = []
   let weights : Array[Double] = []
   let control : Array[Vec3] = []
@@ -655,10 +661,12 @@ fn parse_spline(record : Record, warnings : Array[String]) -> Geometry {
   if damaged {
     return Unknown
   }
-  // 权重要和控制点一一对应：非有理样条不写 41，缺的补 1——
-  // 补完两边长度永远一致，求值层就不用再管有没有权重了
-  while weights.length() < control.length() {
-    weights.push(1.0)
+  // 只有完全省略权重时使用全 1；部分或多余权重不能静默改写曲线。
+  if weights.length() == 0 {
+    for _ in control { weights.push(1.0) }
+  } else if weights.length() != control.length() {
+    warnings.push("SPLINE 权重数量与控制点数量不一致；保留记录，未生成该实体轮廓")
+    return Unknown
   }
   Spline(degree=record.get_int(71, 3), knots~, control_points=control, weights~)
 }
@@ -684,6 +692,18 @@ fn parse_polyline_entity(
   vertex_records : ArrayView[Record],
   warnings : Array[String],
 ) -> Entity? {
+  warn_polyline_extent(record, [40, 41, 39], warnings)
+  let mut vertex_width = false
+  for vr in vertex_records {
+    for code in [40, 41] {
+      for tag in vr.all_of(code) {
+        if tag.value.as_double() != 0.0 { vertex_width = true }
+      }
+    }
+  }
+  if vertex_width {
+    warnings.push("POLYLINE 顶点含非零宽度；本工具仅检查中心线，区域/厚度未验证")
+  }
   let common = common_of(record)
   let flags = record.get_int(70, 0)
   // 仅接收普通二维折线。拟合、空间折线和网格不能按普通顶点连线。
@@ -1000,10 +1020,13 @@ pub fn parse_blocks(section : Section) -> Blocks {
     }
     let head = records[i]
     let mut j = i + 1
-    while j < records.length() && records[j].kind != "ENDBLK" {
+    while j < records.length() && records[j].kind != "ENDBLK" && records[j].kind != "BLOCK" {
       j = j + 1
     }
     let name = head.get_string(2)
+    if j >= records.length() || records[j].kind != "ENDBLK" {
+      warnings.push("块「\{name}」缺少 ENDBLK；按下一 BLOCK 或 BLOCKS 段末尾恢复，检查不完整")
+    }
     if name == "" {
       warnings.push("BLOCK 没有名字，已跳过")
     } else {
@@ -1020,12 +1043,24 @@ pub fn parse_blocks(section : Section) -> Blocks {
       let entities = parse_records(records[i + 1:j], warnings)
       blocks.push({ name, base, entities, })
     }
-    if j < records.length() {
+    if j < records.length() && records[j].kind == "ENDBLK" {
       j = j + 1
     }
     i = j
   }
   { blocks, warnings, }
+}
+
+///|
+fn warn_polyline_extent(record : Record, codes : Array[Int], warnings : Array[String]) -> Unit {
+  for code in codes {
+    for tag in record.all_of(code) {
+      if tag.value.as_double() != 0.0 {
+        warnings.push("\{record.kind} 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证")
+        return
+      }
+    }
+  }
 }
 
 ///|

@@ -222,6 +222,8 @@ test "语料块展开：记录未支持的阵列实例" {
     for warning in exp.warnings {
       if warning.contains("INSERT 阵列") {
         assert_true(path.contains("multi_insert_with_attribs"))
+      } else if warning.contains("仅检查中心线") {
+        assert_true(path.has_suffix("text.dxf") || path.has_suffix("text_negative_extrusion.dxf") || path.has_suffix("viewports.dxf") || path.has_suffix("VP4.dxf"))
       } else {
         assert_true(warning.contains("POLYLINE 标志"))
         assert_true(warning.contains("普通二维折线"))
@@ -229,7 +231,7 @@ test "语料块展开：记录未支持的阵列实例" {
     }
   }
   assert_eq(total, 6210)
-  assert_eq(warns, 3)
+  assert_eq(warns, 8)
 }
 
 // ── 流式扫描 ────────────────────────────────────────────────────────────
@@ -334,7 +336,7 @@ test "语料加工检查：锚点" {
     }
   }
   assert_eq(fatal, 1)
-  assert_eq(warn, 148)
+  assert_eq(warn, 153)
   assert_eq(info, 1)
 }
 
@@ -352,8 +354,12 @@ test "语料整体：实体解析的锚点" {
     total = total + es.entities.length()
     warns = warns + es.warnings.length()
     for warning in es.warnings {
-      assert_true(warning.contains("POLYLINE 标志"))
-      assert_true(warning.contains("普通二维折线"))
+      if warning.contains("仅检查中心线") {
+        assert_true(path.has_suffix("VP4.dxf"))
+      } else {
+        assert_true(warning.contains("POLYLINE 标志"))
+        assert_true(warning.contains("普通二维折线"))
+      }
     }
     for e in es.entities {
       if e.is_decoded() {
@@ -363,7 +369,7 @@ test "语料整体：实体解析的锚点" {
   }
   assert_eq(total, 5524)
   assert_eq(decoded, 5404)
-  assert_eq(warns, 2)
+  assert_eq(warns, 4)
 }
 
 ///|

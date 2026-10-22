@@ -97,14 +97,14 @@ function runCheck(base64, name) {
     document.getElementById("preview").replaceChildren();
     return;
   }
-  document.getElementById("report").textContent = check(base64, minGap);
-
-  const svgText = svg(base64, 0.05);
+  const result = JSON.parse(analyze(base64, minGap, 0.05));
+  document.getElementById("report").textContent = result.report;
+  const svgText = result.svg;
   const preview = document.getElementById("preview");
   if (svgText !== "") {
     preview.innerHTML = svgText;
   } else {
-    preview.textContent = svg_error(base64);
+    preview.textContent = result.error;
   }
 }
 

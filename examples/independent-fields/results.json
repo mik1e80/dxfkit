@@ -1,0 +1,3105 @@
+{
+  "reference": "ezdxf 1.4.4",
+  "scope": "Existing 5 external corpus inputs, ENTITIES declared fields including model/paper space, excluding BLOCKS content. No OCS transforms, layout rendering, geometry truth or full compatibility; not new CAD exports.",
+  "passed": 5,
+  "total": 5,
+  "files": [
+    {
+      "file": "testdata/ezdxf/circle_radius_le_0.dxf",
+      "sha256": "e15de0694bd251da052a1ee38eda8d096deab37eed921a44542da8dbe0bff8ac",
+      "records": 2,
+      "numeric_fields": 8,
+      "max_absolute_difference": 0,
+      "tolerance": 1e-9,
+      "differences": [
+        {
+          "field": "CIRCLE/2D[0]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "CIRCLE/2D[1]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "CIRCLE/2D[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "CIRCLE/2D[3]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "CIRCLE/2E[0]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "CIRCLE/2E[1]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "CIRCLE/2E[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "CIRCLE/2E[3]",
+          "dxfkit": -1,
+          "ezdxf": -1,
+          "absolute_difference": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "file": "testdata/ezdxf/uncommon.dxf",
+      "sha256": "5efdd671e3b6d8c45bd0688b1d6479d523f2290f0b390f1584348bf46e34c965",
+      "records": 28,
+      "numeric_fields": 221,
+      "max_absolute_difference": 0,
+      "tolerance": 1e-9,
+      "differences": [
+        {
+          "field": "LINE/222[0]",
+          "dxfkit": 21.88948373460441,
+          "ezdxf": 21.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/222[1]",
+          "dxfkit": 60.30990140386869,
+          "ezdxf": 60.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/222[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/222[3]",
+          "dxfkit": 21.88948373460441,
+          "ezdxf": 21.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/222[4]",
+          "dxfkit": 40.30990140386868,
+          "ezdxf": 40.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/222[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/224[0]",
+          "dxfkit": 31.88948373460441,
+          "ezdxf": 31.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/224[1]",
+          "dxfkit": 60.30990140386869,
+          "ezdxf": 60.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/224[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/224[3]",
+          "dxfkit": 31.88948373460441,
+          "ezdxf": 31.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/224[4]",
+          "dxfkit": 40.30990140386868,
+          "ezdxf": 40.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/224[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/225[0]",
+          "dxfkit": 41.8894837346044,
+          "ezdxf": 41.8894837346044,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/225[1]",
+          "dxfkit": 60.30990140386869,
+          "ezdxf": 60.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/225[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/225[3]",
+          "dxfkit": 41.8894837346044,
+          "ezdxf": 41.8894837346044,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/225[4]",
+          "dxfkit": 40.30990140386868,
+          "ezdxf": 40.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/225[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/226[0]",
+          "dxfkit": 51.88948373460441,
+          "ezdxf": 51.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/226[1]",
+          "dxfkit": 60.30990140386869,
+          "ezdxf": 60.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/226[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/226[3]",
+          "dxfkit": 51.88948373460441,
+          "ezdxf": 51.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/226[4]",
+          "dxfkit": 40.30990140386868,
+          "ezdxf": 40.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/226[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/227[0]",
+          "dxfkit": 61.88948373460441,
+          "ezdxf": 61.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/227[1]",
+          "dxfkit": 60.30990140386869,
+          "ezdxf": 60.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/227[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/227[3]",
+          "dxfkit": 61.88948373460441,
+          "ezdxf": 61.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/227[4]",
+          "dxfkit": 40.30990140386868,
+          "ezdxf": 40.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/227[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/228[0]",
+          "dxfkit": 71.88948373460441,
+          "ezdxf": 71.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/228[1]",
+          "dxfkit": 60.30990140386869,
+          "ezdxf": 60.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/228[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/228[3]",
+          "dxfkit": 71.88948373460441,
+          "ezdxf": 71.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/228[4]",
+          "dxfkit": 40.30990140386868,
+          "ezdxf": 40.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/228[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/229[0]",
+          "dxfkit": 81.88948373460441,
+          "ezdxf": 81.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/229[1]",
+          "dxfkit": 60.30990140386869,
+          "ezdxf": 60.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/229[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/229[3]",
+          "dxfkit": 81.88948373460438,
+          "ezdxf": 81.88948373460438,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/229[4]",
+          "dxfkit": 50.30990140386869,
+          "ezdxf": 50.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/229[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/22A[0]",
+          "dxfkit": 91.88948373460438,
+          "ezdxf": 91.88948373460438,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/22A[1]",
+          "dxfkit": 60.30990140386869,
+          "ezdxf": 60.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/22A[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/22A[3]",
+          "dxfkit": 91.88948373460441,
+          "ezdxf": 91.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/22A[4]",
+          "dxfkit": 50.30990140386869,
+          "ezdxf": 50.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/22A[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/232[0]",
+          "dxfkit": 21.88948373460441,
+          "ezdxf": 21.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/232[1]",
+          "dxfkit": 60.30990140386869,
+          "ezdxf": 60.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/232[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/232[3]",
+          "dxfkit": 91.88948373460438,
+          "ezdxf": 91.88948373460438,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/232[4]",
+          "dxfkit": 60.30990140386869,
+          "ezdxf": 60.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/232[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/235[0]",
+          "dxfkit": 21.88948373460441,
+          "ezdxf": 21.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/235[1]",
+          "dxfkit": 50.30990140386869,
+          "ezdxf": 50.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/235[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/235[3]",
+          "dxfkit": 91.88948373460438,
+          "ezdxf": 91.88948373460438,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/235[4]",
+          "dxfkit": 50.30990140386869,
+          "ezdxf": 50.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/235[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/236[0]",
+          "dxfkit": 21.88948373460441,
+          "ezdxf": 21.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/236[1]",
+          "dxfkit": 40.30990140386868,
+          "ezdxf": 40.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/236[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/236[3]",
+          "dxfkit": 71.88948373460441,
+          "ezdxf": 71.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/236[4]",
+          "dxfkit": 40.30990140386868,
+          "ezdxf": 40.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/236[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/237[0]",
+          "dxfkit": 21.88948373460441,
+          "ezdxf": 21.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/237[1]",
+          "dxfkit": 30.30990140386868,
+          "ezdxf": 30.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/237[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/237[3]",
+          "dxfkit": 51.88948373460441,
+          "ezdxf": 51.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/237[4]",
+          "dxfkit": 30.30990140386869,
+          "ezdxf": 30.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/237[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/238[0]",
+          "dxfkit": 21.88948373460441,
+          "ezdxf": 21.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/238[1]",
+          "dxfkit": 20.30990140386868,
+          "ezdxf": 20.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/238[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/238[3]",
+          "dxfkit": 51.88948373460442,
+          "ezdxf": 51.88948373460442,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/238[4]",
+          "dxfkit": 20.30990140386868,
+          "ezdxf": 20.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/238[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "CIRCLE/32F[0]",
+          "dxfkit": 46.57002769699686,
+          "ezdxf": 46.57002769699686,
+          "absolute_difference": 0
+        },
+        {
+          "field": "CIRCLE/32F[1]",
+          "dxfkit": 54.16002082875706,
+          "ezdxf": 54.16002082875706,
+          "absolute_difference": 0
+        },
+        {
+          "field": "CIRCLE/32F[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "CIRCLE/32F[3]",
+          "dxfkit": 3.089400503595103,
+          "ezdxf": 3.089400503595103,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/361[1]",
+          "dxfkit": 4,
+          "ezdxf": 4,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/361/vertex0[0]",
+          "dxfkit": 52.94913262992776,
+          "ezdxf": 52.94913262992776,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/361/vertex0[1]",
+          "dxfkit": 56.89087154104865,
+          "ezdxf": 56.89087154104865,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/361/vertex0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/361/vertex1[0]",
+          "dxfkit": 52.94913262992776,
+          "ezdxf": 52.94913262992776,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/361/vertex1[1]",
+          "dxfkit": 50.94479491088032,
+          "ezdxf": 50.94479491088032,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/361/vertex1[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/361/vertex2[0]",
+          "dxfkit": 61.08398925804994,
+          "ezdxf": 61.08398925804994,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/361/vertex2[1]",
+          "dxfkit": 50.94479491088032,
+          "ezdxf": 50.94479491088032,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/361/vertex2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/361/vertex3[0]",
+          "dxfkit": 52.94913262992776,
+          "ezdxf": 52.94913262992776,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/361/vertex3[1]",
+          "dxfkit": 56.89087154104865,
+          "ezdxf": 56.89087154104865,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/361/vertex3[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/3F4[1]",
+          "dxfkit": 3,
+          "ezdxf": 3,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/3F4/vertex0[0]",
+          "dxfkit": 63.13537936201239,
+          "ezdxf": 63.13537936201239,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/3F4/vertex0[1]",
+          "dxfkit": 57.09329721686422,
+          "ezdxf": 57.09329721686422,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/3F4/vertex0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/3F4/vertex1[0]",
+          "dxfkit": 63.13537936201239,
+          "ezdxf": 63.13537936201239,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/3F4/vertex1[1]",
+          "dxfkit": 51.14722058669588,
+          "ezdxf": 51.14722058669588,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/3F4/vertex1[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/3F4/vertex2[0]",
+          "dxfkit": 68.11342579170096,
+          "ezdxf": 68.11342579170096,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/3F4/vertex2[1]",
+          "dxfkit": 51.14722058669588,
+          "ezdxf": 51.14722058669588,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/3F4/vertex2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "ARC/3F5[0]",
+          "dxfkit": 62.48195423091837,
+          "ezdxf": 62.48195423091837,
+          "absolute_difference": 0
+        },
+        {
+          "field": "ARC/3F5[1]",
+          "dxfkit": 51.48940586338991,
+          "ezdxf": 51.48940586338991,
+          "absolute_difference": 0
+        },
+        {
+          "field": "ARC/3F5[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "ARC/3F5[3]",
+          "dxfkit": 5.641858089626972,
+          "ezdxf": 5.641858089626972,
+          "absolute_difference": 0
+        },
+        {
+          "field": "ARC/3F5[4]",
+          "dxfkit": 6.222496893710238,
+          "ezdxf": 6.222496893710238,
+          "absolute_difference": 0
+        },
+        {
+          "field": "ARC/3F5[5]",
+          "dxfkit": 1.4547184649769502,
+          "ezdxf": 1.4547184649769502,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/5FA[1]",
+          "dxfkit": 56.96971222021585,
+          "ezdxf": 56.96971222021585,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/5FA[2]",
+          "dxfkit": 44.03719154649542,
+          "ezdxf": 44.03719154649542,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/5FA[3]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/5FA[4]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/5FA[5]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/5FA[6]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/5FA[7]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/613[1]",
+          "dxfkit": 4,
+          "ezdxf": 4,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/613/vertex0[0]",
+          "dxfkit": 51.88948373460441,
+          "ezdxf": 51.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/613/vertex0[1]",
+          "dxfkit": 70.30990140386868,
+          "ezdxf": 70.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/613/vertex0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/613/vertex1[0]",
+          "dxfkit": 61.88948373460441,
+          "ezdxf": 61.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/613/vertex1[1]",
+          "dxfkit": 70.30990140386868,
+          "ezdxf": 70.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/613/vertex1[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/613/vertex2[0]",
+          "dxfkit": 61.88948373460441,
+          "ezdxf": 61.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/613/vertex2[1]",
+          "dxfkit": 60.30990140386869,
+          "ezdxf": 60.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/613/vertex2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/613/vertex3[0]",
+          "dxfkit": 51.88948373460441,
+          "ezdxf": 51.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/613/vertex3[1]",
+          "dxfkit": 60.30990140386869,
+          "ezdxf": 60.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/613/vertex3[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/61B[1]",
+          "dxfkit": 4,
+          "ezdxf": 4,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/61B/vertex0[0]",
+          "dxfkit": 51.88948478607731,
+          "ezdxf": 51.88948478607731,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/61B/vertex0[1]",
+          "dxfkit": 80.30990104645679,
+          "ezdxf": 80.30990104645679,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/61B/vertex0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/61B/vertex1[0]",
+          "dxfkit": 61.88948478607731,
+          "ezdxf": 61.88948478607731,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/61B/vertex1[1]",
+          "dxfkit": 80.30990104645679,
+          "ezdxf": 80.30990104645679,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/61B/vertex1[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/61B/vertex2[0]",
+          "dxfkit": 61.88948478607731,
+          "ezdxf": 61.88948478607731,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/61B/vertex2[1]",
+          "dxfkit": 70.30990104645679,
+          "ezdxf": 70.30990104645679,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/61B/vertex2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/61B/vertex3[0]",
+          "dxfkit": 51.88948478607731,
+          "ezdxf": 51.88948478607731,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/61B/vertex3[1]",
+          "dxfkit": 70.30990104645679,
+          "ezdxf": 70.30990104645679,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/61B/vertex3[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/669[0]",
+          "dxfkit": 51.88948373460441,
+          "ezdxf": 51.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/669[1]",
+          "dxfkit": 30.30990140386869,
+          "ezdxf": 30.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/669[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/669[3]",
+          "dxfkit": 51.88948373460442,
+          "ezdxf": 51.88948373460442,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/669[4]",
+          "dxfkit": 20.30990140386868,
+          "ezdxf": 20.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/669[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66A[0]",
+          "dxfkit": 41.8894837346044,
+          "ezdxf": 41.8894837346044,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66A[1]",
+          "dxfkit": 30.30990140386869,
+          "ezdxf": 30.30990140386869,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66A[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66A[3]",
+          "dxfkit": 41.88948373460442,
+          "ezdxf": 41.88948373460442,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66A[4]",
+          "dxfkit": 20.30990140386868,
+          "ezdxf": 20.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66A[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66B[0]",
+          "dxfkit": 31.88948373460441,
+          "ezdxf": 31.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66B[1]",
+          "dxfkit": 30.30990140386868,
+          "ezdxf": 30.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66B[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66B[3]",
+          "dxfkit": 31.88948373460441,
+          "ezdxf": 31.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66B[4]",
+          "dxfkit": 20.30990140386868,
+          "ezdxf": 20.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66B[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66C[0]",
+          "dxfkit": 21.88948373460441,
+          "ezdxf": 21.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66C[1]",
+          "dxfkit": 30.30990140386868,
+          "ezdxf": 30.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66C[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66C[3]",
+          "dxfkit": 21.88948373460441,
+          "ezdxf": 21.88948373460441,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66C[4]",
+          "dxfkit": 20.30990140386868,
+          "ezdxf": 20.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/66C[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6B4[1]",
+          "dxfkit": 4,
+          "ezdxf": 4,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6B4/vertex0[0]",
+          "dxfkit": 73.73410651759013,
+          "ezdxf": 73.73410651759013,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6B4/vertex0[1]",
+          "dxfkit": 46.57321826871589,
+          "ezdxf": 46.57321826871589,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6B4/vertex0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6B4/vertex1[0]",
+          "dxfkit": 76.90070337271527,
+          "ezdxf": 76.90070337271527,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6B4/vertex1[1]",
+          "dxfkit": 46.57321826871589,
+          "ezdxf": 46.57321826871589,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6B4/vertex1[2]",
+          "dxfkit": 0.9999999999999998,
+          "ezdxf": 0.9999999999999998,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6B4/vertex2[0]",
+          "dxfkit": 86.90070337271526,
+          "ezdxf": 86.90070337271526,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6B4/vertex2[1]",
+          "dxfkit": 46.57321826871589,
+          "ezdxf": 46.57321826871589,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6B4/vertex2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6B4/vertex3[0]",
+          "dxfkit": 89.85873493271322,
+          "ezdxf": 89.85873493271322,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6B4/vertex3[1]",
+          "dxfkit": 46.57321826871589,
+          "ezdxf": 46.57321826871589,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6B4/vertex3[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/6CC[0]",
+          "dxfkit": 71.88948374290075,
+          "ezdxf": 71.88948374290075,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/6CC[1]",
+          "dxfkit": 40.30990140386868,
+          "ezdxf": 40.30990140386868,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/6CC[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/6CC[3]",
+          "dxfkit": 91.88948375119709,
+          "ezdxf": 91.88948375119709,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/6CC[4]",
+          "dxfkit": 40.30990151382245,
+          "ezdxf": 40.30990151382245,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/6CC[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/6CD[0]",
+          "dxfkit": 91.88948375119709,
+          "ezdxf": 91.88948375119709,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/6CD[1]",
+          "dxfkit": 40.30990151382245,
+          "ezdxf": 40.30990151382245,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/6CD[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/6CD[3]",
+          "dxfkit": 91.88948375119709,
+          "ezdxf": 91.88948375119709,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/6CD[4]",
+          "dxfkit": 50.30990151382244,
+          "ezdxf": 50.30990151382244,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/6CD[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9[1]",
+          "dxfkit": 9,
+          "ezdxf": 9,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex0[0]",
+          "dxfkit": 43.36443340583008,
+          "ezdxf": 43.36443340583008,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex0[1]",
+          "dxfkit": 42.44886719725843,
+          "ezdxf": 42.44886719725843,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex1[0]",
+          "dxfkit": 43.36443340583008,
+          "ezdxf": 43.36443340583008,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex1[1]",
+          "dxfkit": 46.62154788754259,
+          "ezdxf": 46.62154788754259,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex1[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex2[0]",
+          "dxfkit": 45.22920250905212,
+          "ezdxf": 45.22920250905212,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex2[1]",
+          "dxfkit": 44.06932576702303,
+          "ezdxf": 44.06932576702303,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex3[0]",
+          "dxfkit": 46.48589449274902,
+          "ezdxf": 46.48589449274902,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex3[1]",
+          "dxfkit": 46.25694469958713,
+          "ezdxf": 46.25694469958713,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex3[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex4[0]",
+          "dxfkit": 45.14812552660077,
+          "ezdxf": 45.14812552660077,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex4[1]",
+          "dxfkit": 42.12477556137298,
+          "ezdxf": 42.12477556137298,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex4[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex5[0]",
+          "dxfkit": 50.58027887136426,
+          "ezdxf": 50.58027887136426,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex5[1]",
+          "dxfkit": 42.12477556137298,
+          "ezdxf": 42.12477556137298,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex5[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex6[0]",
+          "dxfkit": 49.08035594031343,
+          "ezdxf": 49.08035594031343,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex6[1]",
+          "dxfkit": 44.23137158496572,
+          "ezdxf": 44.23137158496572,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex6[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex7[0]",
+          "dxfkit": 51.06674026835286,
+          "ezdxf": 51.06674026835286,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex7[1]",
+          "dxfkit": 47.63433434726898,
+          "ezdxf": 47.63433434726898,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex7[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex8[0]",
+          "dxfkit": 44.70220237197827,
+          "ezdxf": 44.70220237197827,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex8[1]",
+          "dxfkit": 47.63433434726898,
+          "ezdxf": 47.63433434726898,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/6D9/vertex8[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "file": "testdata/ezdxf/insert_bricscad_level_1.dxf",
+      "sha256": "c2597f95c007852db2ba82dedd9558f9318981115dda82fccfc0267ca60e5a56",
+      "records": 12,
+      "numeric_fields": 120,
+      "max_absolute_difference": 0,
+      "tolerance": 1e-9,
+      "differences": [
+        {
+          "field": "INSERT/F4[1]",
+          "dxfkit": 0.018944800242,
+          "ezdxf": 0.018944800242,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/F4[2]",
+          "dxfkit": 7.861085190823,
+          "ezdxf": 7.861085190823,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/F4[3]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/F4[4]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/F4[5]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/F4[6]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/F4[7]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/F7[1]",
+          "dxfkit": 4,
+          "ezdxf": 4,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/F7/vertex0[0]",
+          "dxfkit": -0.644477846617,
+          "ezdxf": -0.644477846617,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/F7/vertex0[1]",
+          "dxfkit": 12.580388629863,
+          "ezdxf": 12.580388629863,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/F7/vertex0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/F7/vertex1[0]",
+          "dxfkit": 3.702064546665,
+          "ezdxf": 3.702064546665,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/F7/vertex1[1]",
+          "dxfkit": 12.580388629863,
+          "ezdxf": 12.580388629863,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/F7/vertex1[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/F7/vertex2[0]",
+          "dxfkit": 3.702064546665,
+          "ezdxf": 3.702064546665,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/F7/vertex2[1]",
+          "dxfkit": 7.044442957905,
+          "ezdxf": 7.044442957905,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/F7/vertex2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/F7/vertex3[0]",
+          "dxfkit": -0.644477846617,
+          "ezdxf": -0.644477846617,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/F7/vertex3[1]",
+          "dxfkit": 7.044442957905,
+          "ezdxf": 7.044442957905,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/F7/vertex3[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/F8[1]",
+          "dxfkit": 7.939834716739,
+          "ezdxf": 7.939834716739,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/F8[2]",
+          "dxfkit": 7.861085190823,
+          "ezdxf": 7.861085190823,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/F8[3]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/F8[4]",
+          "dxfkit": -1,
+          "ezdxf": -1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/F8[5]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/F8[6]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/F8[7]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FB[1]",
+          "dxfkit": 4,
+          "ezdxf": 4,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FB/vertex0[0]",
+          "dxfkit": 4.381446567351,
+          "ezdxf": 4.381446567351,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FB/vertex0[1]",
+          "dxfkit": 12.580388629863,
+          "ezdxf": 12.580388629863,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FB/vertex0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FB/vertex1[0]",
+          "dxfkit": 8.727988960633,
+          "ezdxf": 8.727988960633,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FB/vertex1[1]",
+          "dxfkit": 12.580388629863,
+          "ezdxf": 12.580388629863,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FB/vertex1[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FB/vertex2[0]",
+          "dxfkit": 8.727988960633,
+          "ezdxf": 8.727988960633,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FB/vertex2[1]",
+          "dxfkit": 7.044442957905,
+          "ezdxf": 7.044442957905,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FB/vertex2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FB/vertex3[0]",
+          "dxfkit": 4.381446567351,
+          "ezdxf": 4.381446567351,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FB/vertex3[1]",
+          "dxfkit": 7.044442957905,
+          "ezdxf": 7.044442957905,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FB/vertex3[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/FC[1]",
+          "dxfkit": 10.448001179527,
+          "ezdxf": 10.448001179527,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/FC[2]",
+          "dxfkit": 11.974242459395,
+          "ezdxf": 11.974242459395,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/FC[3]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/FC[4]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/FC[5]",
+          "dxfkit": -1,
+          "ezdxf": -1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/FC[6]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/FC[7]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FF[1]",
+          "dxfkit": 4,
+          "ezdxf": 4,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FF/vertex0[0]",
+          "dxfkit": 9.705726820715,
+          "ezdxf": 9.705726820715,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FF/vertex0[1]",
+          "dxfkit": 12.580388629863,
+          "ezdxf": 12.580388629863,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FF/vertex0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FF/vertex1[0]",
+          "dxfkit": 14.052269213996,
+          "ezdxf": 14.052269213996,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FF/vertex1[1]",
+          "dxfkit": 12.580388629863,
+          "ezdxf": 12.580388629863,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FF/vertex1[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FF/vertex2[0]",
+          "dxfkit": 14.052269213996,
+          "ezdxf": 14.052269213996,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FF/vertex2[1]",
+          "dxfkit": 7.044442957905,
+          "ezdxf": 7.044442957905,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FF/vertex2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FF/vertex3[0]",
+          "dxfkit": 9.705726820715,
+          "ezdxf": 9.705726820715,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FF/vertex3[1]",
+          "dxfkit": 7.044442957905,
+          "ezdxf": 7.044442957905,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/FF/vertex3[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/118[1]",
+          "dxfkit": 2.938493831503,
+          "ezdxf": 2.938493831503,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/118[2]",
+          "dxfkit": 14.926252759746,
+          "ezdxf": 14.926252759746,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/118[3]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/118[4]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/118[5]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/118[6]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/118[7]",
+          "dxfkit": 1.5707963267948966,
+          "ezdxf": 1.5707963267948966,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/11B[1]",
+          "dxfkit": 4,
+          "ezdxf": 4,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/11B/vertex0[0]",
+          "dxfkit": -1.864662308569,
+          "ezdxf": -1.864662308569,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/11B/vertex0[1]",
+          "dxfkit": 14.109610526828,
+          "ezdxf": 14.109610526828,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/11B/vertex0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/11B/vertex1[0]",
+          "dxfkit": -1.864662308569,
+          "ezdxf": -1.864662308569,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/11B/vertex1[1]",
+          "dxfkit": 18.45615292011,
+          "ezdxf": 18.45615292011,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/11B/vertex1[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/11B/vertex2[0]",
+          "dxfkit": 3.671283363389,
+          "ezdxf": 3.671283363389,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/11B/vertex2[1]",
+          "dxfkit": 18.45615292011,
+          "ezdxf": 18.45615292011,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/11B/vertex2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/11B/vertex3[0]",
+          "dxfkit": 3.671283363389,
+          "ezdxf": 3.671283363389,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/11B/vertex3[1]",
+          "dxfkit": 14.109610526828,
+          "ezdxf": 14.109610526828,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/11B/vertex3[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/11C[1]",
+          "dxfkit": 8.81231184483,
+          "ezdxf": 8.81231184483,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/11C[2]",
+          "dxfkit": 17.726886314725,
+          "ezdxf": 17.726886314725,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/11C[3]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/11C[4]",
+          "dxfkit": -1,
+          "ezdxf": -1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/11C[5]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/11C[6]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/11C[7]",
+          "dxfkit": 1.5707963267948966,
+          "ezdxf": 1.5707963267948966,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/120[1]",
+          "dxfkit": 10.888693717036,
+          "ezdxf": 10.888693717036,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/120[2]",
+          "dxfkit": 15.016661555213,
+          "ezdxf": 15.016661555213,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/120[3]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/120[4]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/120[5]",
+          "dxfkit": -1,
+          "ezdxf": -1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/120[6]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "INSERT/120[7]",
+          "dxfkit": 1.5707963267948966,
+          "ezdxf": 1.5707963267948966,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/126[1]",
+          "dxfkit": 4,
+          "ezdxf": 4,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/126/vertex0[0]",
+          "dxfkit": 4.134988469543,
+          "ezdxf": 4.134988469543,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/126/vertex0[1]",
+          "dxfkit": 14.109610526828,
+          "ezdxf": 14.109610526828,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/126/vertex0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/126/vertex1[0]",
+          "dxfkit": 4.134988469543,
+          "ezdxf": 4.134988469543,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/126/vertex1[1]",
+          "dxfkit": 18.45615292011,
+          "ezdxf": 18.45615292011,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/126/vertex1[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/126/vertex2[0]",
+          "dxfkit": 9.670934141501,
+          "ezdxf": 9.670934141501,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/126/vertex2[1]",
+          "dxfkit": 18.45615292011,
+          "ezdxf": 18.45615292011,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/126/vertex2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/126/vertex3[0]",
+          "dxfkit": 9.670934141501,
+          "ezdxf": 9.670934141501,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/126/vertex3[1]",
+          "dxfkit": 14.109610526828,
+          "ezdxf": 14.109610526828,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/126/vertex3[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/127[1]",
+          "dxfkit": 4,
+          "ezdxf": 4,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/127/vertex0[0]",
+          "dxfkit": 10.167424224585,
+          "ezdxf": 10.167424224585,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/127/vertex0[1]",
+          "dxfkit": 14.109610526828,
+          "ezdxf": 14.109610526828,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/127/vertex0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/127/vertex1[0]",
+          "dxfkit": 10.167424224585,
+          "ezdxf": 10.167424224585,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/127/vertex1[1]",
+          "dxfkit": 18.45615292011,
+          "ezdxf": 18.45615292011,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/127/vertex1[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/127/vertex2[0]",
+          "dxfkit": 15.703369896543,
+          "ezdxf": 15.703369896543,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/127/vertex2[1]",
+          "dxfkit": 18.45615292011,
+          "ezdxf": 18.45615292011,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/127/vertex2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/127/vertex3[0]",
+          "dxfkit": 15.703369896543,
+          "ezdxf": 15.703369896543,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/127/vertex3[1]",
+          "dxfkit": 14.109610526828,
+          "ezdxf": 14.109610526828,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/127/vertex3[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "file": "testdata/ezdxf/VP4.dxf",
+      "sha256": "aa535057afadab4ed0fc8cadb4b624d272c90603c7e03f44df1e6a6d1a15acc0",
+      "records": 18,
+      "numeric_fields": 116,
+      "max_absolute_difference": 0,
+      "tolerance": 1e-9,
+      "differences": [
+        {
+          "field": "LWPOLYLINE/DC[1]",
+          "dxfkit": 2,
+          "ezdxf": 2,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DC/vertex0[0]",
+          "dxfkit": 191.4,
+          "ezdxf": 191.4,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DC/vertex0[1]",
+          "dxfkit": 198,
+          "ezdxf": 198,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DC/vertex0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DC/vertex1[0]",
+          "dxfkit": 230.183035457944,
+          "ezdxf": 230.183035457944,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DC/vertex1[1]",
+          "dxfkit": 198,
+          "ezdxf": 198,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DC/vertex1[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DE[1]",
+          "dxfkit": 4,
+          "ezdxf": 4,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DE/vertex0[0]",
+          "dxfkit": 294,
+          "ezdxf": 294,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DE/vertex0[1]",
+          "dxfkit": 374,
+          "ezdxf": 374,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DE/vertex0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DE/vertex1[0]",
+          "dxfkit": 374.874916877885,
+          "ezdxf": 374.874916877885,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DE/vertex1[1]",
+          "dxfkit": 374,
+          "ezdxf": 374,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DE/vertex1[2]",
+          "dxfkit": 1,
+          "ezdxf": 1,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DE/vertex2[0]",
+          "dxfkit": 374.874916877885,
+          "ezdxf": 374.874916877885,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DE/vertex2[1]",
+          "dxfkit": 433.897672557949,
+          "ezdxf": 433.897672557949,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DE/vertex2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DE/vertex3[0]",
+          "dxfkit": 292.564232439676,
+          "ezdxf": 292.564232439676,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DE/vertex3[1]",
+          "dxfkit": 433.897672557949,
+          "ezdxf": 433.897672557949,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LWPOLYLINE/DE/vertex3[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B3[0]",
+          "dxfkit": 17.7,
+          "ezdxf": 17.7,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B3[1]",
+          "dxfkit": 131.5,
+          "ezdxf": 131.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B3[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B3[3]",
+          "dxfkit": 73.3,
+          "ezdxf": 73.3,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B3[4]",
+          "dxfkit": 131.5,
+          "ezdxf": 131.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B3[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B4[0]",
+          "dxfkit": 73.3,
+          "ezdxf": 73.3,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B4[1]",
+          "dxfkit": 131.5,
+          "ezdxf": 131.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B4[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B4[3]",
+          "dxfkit": 73.3,
+          "ezdxf": 73.3,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B4[4]",
+          "dxfkit": 179.5,
+          "ezdxf": 179.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B4[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B5[0]",
+          "dxfkit": 73.3,
+          "ezdxf": 73.3,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B5[1]",
+          "dxfkit": 179.5,
+          "ezdxf": 179.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B5[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B5[3]",
+          "dxfkit": 17.7,
+          "ezdxf": 17.7,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B5[4]",
+          "dxfkit": 179.5,
+          "ezdxf": 179.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B5[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B6[0]",
+          "dxfkit": 17.7,
+          "ezdxf": 17.7,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B6[1]",
+          "dxfkit": 179.5,
+          "ezdxf": 179.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B6[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B6[3]",
+          "dxfkit": 17.7,
+          "ezdxf": 17.7,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B6[4]",
+          "dxfkit": 131.5,
+          "ezdxf": 131.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B6[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B7[0]",
+          "dxfkit": 149.778680979673,
+          "ezdxf": 149.778680979673,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B7[1]",
+          "dxfkit": 177.297013500988,
+          "ezdxf": 177.297013500988,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B7[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B7[3]",
+          "dxfkit": 149.778680979673,
+          "ezdxf": 149.778680979673,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B7[4]",
+          "dxfkit": 125.297013500988,
+          "ezdxf": 125.297013500988,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B7[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B8[0]",
+          "dxfkit": 149.778680979673,
+          "ezdxf": 149.778680979673,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B8[1]",
+          "dxfkit": 125.297013500988,
+          "ezdxf": 125.297013500988,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B8[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B8[3]",
+          "dxfkit": 213.378680979673,
+          "ezdxf": 213.378680979673,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B8[4]",
+          "dxfkit": 125.297013500988,
+          "ezdxf": 125.297013500988,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B8[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B9[0]",
+          "dxfkit": 213.378680979673,
+          "ezdxf": 213.378680979673,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B9[1]",
+          "dxfkit": 125.297013500988,
+          "ezdxf": 125.297013500988,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B9[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B9[3]",
+          "dxfkit": 213.378680979673,
+          "ezdxf": 213.378680979673,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B9[4]",
+          "dxfkit": 177.297013500988,
+          "ezdxf": 177.297013500988,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/B9[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BA[0]",
+          "dxfkit": 213.378680979673,
+          "ezdxf": 213.378680979673,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BA[1]",
+          "dxfkit": 177.297013500988,
+          "ezdxf": 177.297013500988,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BA[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BA[3]",
+          "dxfkit": 149.778680979673,
+          "ezdxf": 149.778680979673,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BA[4]",
+          "dxfkit": 177.297013500988,
+          "ezdxf": 177.297013500988,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BA[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BB[0]",
+          "dxfkit": 23.7,
+          "ezdxf": 23.7,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BB[1]",
+          "dxfkit": 71.81310081211,
+          "ezdxf": 71.81310081211,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BB[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BB[3]",
+          "dxfkit": 23.7,
+          "ezdxf": 23.7,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BB[4]",
+          "dxfkit": 17.81310081211,
+          "ezdxf": 17.81310081211,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BB[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BC[0]",
+          "dxfkit": 23.7,
+          "ezdxf": 23.7,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BC[1]",
+          "dxfkit": 17.81310081211,
+          "ezdxf": 17.81310081211,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BC[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BC[3]",
+          "dxfkit": 85.3,
+          "ezdxf": 85.3,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BC[4]",
+          "dxfkit": 17.81310081211,
+          "ezdxf": 17.81310081211,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BC[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BD[0]",
+          "dxfkit": 85.3,
+          "ezdxf": 85.3,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BD[1]",
+          "dxfkit": 17.81310081211,
+          "ezdxf": 17.81310081211,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BD[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BD[3]",
+          "dxfkit": 85.3,
+          "ezdxf": 85.3,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BD[4]",
+          "dxfkit": 71.81310081211,
+          "ezdxf": 71.81310081211,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BD[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BE[0]",
+          "dxfkit": 85.3,
+          "ezdxf": 85.3,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BE[1]",
+          "dxfkit": 71.81310081211,
+          "ezdxf": 71.81310081211,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BE[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BE[3]",
+          "dxfkit": 23.7,
+          "ezdxf": 23.7,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BE[4]",
+          "dxfkit": 71.81310081211,
+          "ezdxf": 71.81310081211,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BE[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BF[0]",
+          "dxfkit": 157.663210886918,
+          "ezdxf": 157.663210886918,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BF[1]",
+          "dxfkit": 63.5,
+          "ezdxf": 63.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BF[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BF[3]",
+          "dxfkit": 157.663210886918,
+          "ezdxf": 157.663210886918,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BF[4]",
+          "dxfkit": 17.5,
+          "ezdxf": 17.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/BF[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C0[0]",
+          "dxfkit": 157.663210886918,
+          "ezdxf": 157.663210886918,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C0[1]",
+          "dxfkit": 17.5,
+          "ezdxf": 17.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C0[3]",
+          "dxfkit": 213.263210886918,
+          "ezdxf": 213.263210886918,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C0[4]",
+          "dxfkit": 17.5,
+          "ezdxf": 17.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C0[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C1[0]",
+          "dxfkit": 213.263210886918,
+          "ezdxf": 213.263210886918,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C1[1]",
+          "dxfkit": 17.5,
+          "ezdxf": 17.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C1[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C1[3]",
+          "dxfkit": 213.263210886918,
+          "ezdxf": 213.263210886918,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C1[4]",
+          "dxfkit": 63.5,
+          "ezdxf": 63.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C1[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C2[0]",
+          "dxfkit": 213.263210886918,
+          "ezdxf": 213.263210886918,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C2[1]",
+          "dxfkit": 63.5,
+          "ezdxf": 63.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C2[3]",
+          "dxfkit": 157.663210886918,
+          "ezdxf": 157.663210886918,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C2[4]",
+          "dxfkit": 63.5,
+          "ezdxf": 63.5,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/C2[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "file": "testdata/ezdxf/viewports.dxf",
+      "sha256": "f890b657108b04b4787e17b1d6e1e9044485be239246bd2af965b720447c5f7d",
+      "records": 7,
+      "numeric_fields": 42,
+      "max_absolute_difference": 0,
+      "tolerance": 1e-9,
+      "differences": [
+        {
+          "field": "LINE/7A0[0]",
+          "dxfkit": 10.601230578427,
+          "ezdxf": 10.601230578427,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A0[1]",
+          "dxfkit": 46.870064543221,
+          "ezdxf": 46.870064543221,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A0[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A0[3]",
+          "dxfkit": 54.553853571711,
+          "ezdxf": 54.553853571711,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A0[4]",
+          "dxfkit": 46.870064543221,
+          "ezdxf": 46.870064543221,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A0[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A1[0]",
+          "dxfkit": 10.601230578427,
+          "ezdxf": 10.601230578427,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A1[1]",
+          "dxfkit": 41.707230449416,
+          "ezdxf": 41.707230449416,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A1[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A1[3]",
+          "dxfkit": 54.553853571711,
+          "ezdxf": 54.553853571711,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A1[4]",
+          "dxfkit": 41.707230449416,
+          "ezdxf": 41.707230449416,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A1[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A2[0]",
+          "dxfkit": 10.601230578427,
+          "ezdxf": 10.601230578427,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A2[1]",
+          "dxfkit": 37.275417112255,
+          "ezdxf": 37.275417112255,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A2[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A2[3]",
+          "dxfkit": 54.553853571711,
+          "ezdxf": 54.553853571711,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A2[4]",
+          "dxfkit": 37.275417112255,
+          "ezdxf": 37.275417112255,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A2[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A3[0]",
+          "dxfkit": 10.601230578427,
+          "ezdxf": 10.601230578427,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A3[1]",
+          "dxfkit": 32.295338207611,
+          "ezdxf": 32.295338207611,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A3[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A3[3]",
+          "dxfkit": 54.553853571711,
+          "ezdxf": 54.553853571711,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A3[4]",
+          "dxfkit": 32.295338207611,
+          "ezdxf": 32.295338207611,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A3[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A4[0]",
+          "dxfkit": 16.083886253265,
+          "ezdxf": 16.083886253265,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A4[1]",
+          "dxfkit": 49.200193205028,
+          "ezdxf": 49.200193205028,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A4[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A4[3]",
+          "dxfkit": 16.083886253265,
+          "ezdxf": 16.083886253265,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A4[4]",
+          "dxfkit": 29.691076762063,
+          "ezdxf": 29.691076762063,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A4[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A5[0]",
+          "dxfkit": 44.730762154293,
+          "ezdxf": 44.730762154293,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A5[1]",
+          "dxfkit": 49.200193205028,
+          "ezdxf": 49.200193205028,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A5[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A5[3]",
+          "dxfkit": 44.730762154293,
+          "ezdxf": 44.730762154293,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A5[4]",
+          "dxfkit": 29.691076762063,
+          "ezdxf": 29.691076762063,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A5[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A6[0]",
+          "dxfkit": 32.62323087236,
+          "ezdxf": 32.62323087236,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A6[1]",
+          "dxfkit": 49.200193205028,
+          "ezdxf": 49.200193205028,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A6[2]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A6[3]",
+          "dxfkit": 32.62323087236,
+          "ezdxf": 32.62323087236,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A6[4]",
+          "dxfkit": 29.691076762063,
+          "ezdxf": 29.691076762063,
+          "absolute_difference": 0
+        },
+        {
+          "field": "LINE/7A6[5]",
+          "dxfkit": 0,
+          "ezdxf": 0,
+          "absolute_difference": 0
+        }
+      ],
+      "passed": true
+    }
+  ]
+}

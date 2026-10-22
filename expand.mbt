@@ -107,6 +107,18 @@ priv struct ExpandCtx {
   blocks : Array[Block]
   tol : Double
   warnings : Array[String]
+  limits : ExpandLimits
+  mut visits : Int
+  mut points : Int
+  mut stopped : Bool
+}
+
+///|
+/// 图纸级展开预算。访问次数也计入空块和 INSERT，防止只有空引用的扇出。
+pub(all) struct ExpandLimits {
+  max_placed : Int
+  max_points : Int
+  max_visits : Int
 }
 
 ///|
@@ -116,20 +128,30 @@ priv struct ExpandCtx {
 /// 再套上当前累积的变换。展开不了的东西（缺块、循环、太深）
 /// **跳过并警告**，不猜位置。
 pub fn Drawing::expand(self : Drawing, tol : Double) -> Expansion {
+  self.expand_with_limits(tol, {max_placed: 10000, max_points: 200000, max_visits: 100000})
+}
+
+///|
+/// 达到全局预算即停止并报告不完整；不承诺恒定内存或实时性。
+pub fn Drawing::expand_with_limits(self : Drawing, tol : Double, limits : ExpandLimits) -> Expansion {
   if !positive_tolerance(tol) {
     return {
       placed: [],
       warnings: ["离散容差必须是正的有限数字"],
     }
   }
+  if limits.max_placed <= 0 || limits.max_points <= 0 || limits.max_visits <= 0 {
+    return {placed: [], warnings: ["展开资源预算必须为正整数；检查不完整"]}
+  }
   let es = self.entities()
   let blocks = self.blocks()
   let warnings = self.warnings.copy()
   warnings.append(es.warnings)
   warnings.append(blocks.warnings)
-  let ctx : ExpandCtx = { blocks: blocks.blocks, tol, warnings, }
+  let ctx : ExpandCtx = { blocks: blocks.blocks, tol, warnings, limits, visits: 0, points: 0, stopped: false }
   let placed : Array[Placed] = []
   for e in es.entities {
+    if ctx.stopped { break }
     expand_entity(e, ctx, Affine::identity(), "", [], placed)
   }
   { placed, warnings: ctx.warnings, }
@@ -147,6 +169,13 @@ fn expand_entity(
   path : Array[String],
   out : Array[Placed],
 ) -> Unit {
+  if ctx.stopped { return }
+  if ctx.visits >= ctx.limits.max_visits {
+    ctx.stopped = true
+    ctx.warnings.push("展开达到全局资源上限（实体访问次数）；结果不完整")
+    return
+  }
+  ctx.visits += 1
   match e.geom {
     Insert(at~, block~, scale~, rotation~) => {
       // INSERT disappears during expansion, so its unsupported coordinate
@@ -203,6 +232,7 @@ fn expand_entity(
             let new_path = path.copy()
             new_path.push(block)
             for inner in b.entities {
+              if ctx.stopped { break }
               expand_entity(
                 inner, ctx, inner_xform, insert_layer, new_path, out,
               )
@@ -212,6 +242,11 @@ fn expand_entity(
       }
     }
     _ => {
+      if out.length() >= ctx.limits.max_placed {
+        ctx.stopped = true
+        ctx.warnings.push("展开达到全局资源上限（输出实体数）；结果不完整")
+        return
+      }
       // 图层继承只发生在块里：顶层的 0 层实体就是 0 层
       let eff = if inherited != "" && (e.layer() == "" || e.layer() == "0") {
         inherited
@@ -243,6 +278,17 @@ fn expand_entity(
         )
         flat = Empty
       }
+      let count = match flat {
+        Outline(points~, ..) => points.length()
+        Dot(..) | Label(..) => 1
+        Empty => 0
+      }
+      if count > ctx.limits.max_points - ctx.points {
+        ctx.stopped = true
+        ctx.warnings.push("展开达到全局资源上限（离散点总数）；结果不完整")
+        return
+      }
+      ctx.points += count
       out.push({ entity: e, layer: eff, flat, })
     }
   }

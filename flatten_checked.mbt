@@ -38,8 +38,8 @@ fn ellipse_points_checked(
     !finite_number(start_param) ||
     !finite_number(end_param) ||
     !finite_number(ratio) ||
-    ratio <= 0.0 {
-    return Err("椭圆需要有限参数、正轴比和正容差")
+    ratio <= 0.0 || ratio > 1.0 {
+    return Err("椭圆需要有限参数、正容差；短长轴比必须大于0且不超过1")
   }
   let c = center.xy()
   let m = major.xy()

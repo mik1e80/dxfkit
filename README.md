@@ -4,6 +4,8 @@
 
 [在线试用](https://mik1e80.github.io/dxfkit/) · [接口文档](README.mbt.md) · [一页项目申报 PDF](output/pdf/dxfkit-submission-one-page.pdf)
 
+当前 main 的[最近一次顾问方案整改](docs/advisor-review-20261022.md)修复输入语义静默通过，增加图纸级展开预算和网页单次分析。当前部署按相关测试验证，记录明确标为 `targeted-advisor`；旧申报标签及一页 PDF 的历史身份保留，不把本轮称为全量回归通过。
+
 ## 能做什么
 
 - 读取七类核心轮廓实体，处理受限二维 SOLID/TRACE 边界和普通 INSERT。

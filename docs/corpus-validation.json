@@ -121,26 +121,27 @@
     }
   ],
   "source_sha256_lf": {
-    "check.mbt": "8845f940850a0c609e0861816700929183dea5576a1ce815d71c490f913f3fa8",
+    "analyze.mbt": "6e252551631be08080d13b4d2e117d6159e63343f9ea1a3db921d1f0d56c766b",
+    "check.mbt": "759f5b7d72f063d8e12eacd6d64e1ee3370e34af53e8404c6916f2309da45562",
     "cli/smoke.cjs": "012bbad58900e87e79669ef2ed943e92a1a23574bf672e0d8d235e71449a99f2",
     "codepage.mbt": "3c66e54221a8abe2816dbb36ea2efc8d282feb19fe1d8f7e53d74055451f85c4",
     "conformance/audit.mbt": "e97df4682c26c0b917406b82282722e14ae9b9a764c222fbc62322997b6384b9",
     "conformance/corpus.mbt": "9d3acc0ceb4682094c4eae715f616ffe269c38dc55d96ab30e3f740e1c457912",
-    "conformance/corpus_wbtest.mbt": "b4e4a0f24e0000138660d2240e01e4cfede87ee78c3b3830bb3a971f8acff173",
+    "conformance/corpus_wbtest.mbt": "e11e022badf02bd9fc4afeef3e628b2db282ee1ea9eacf378e57cae50f1226bc",
     "conformance/main.mbt": "bbc3342d6e2c8d0f0ced8a398b283e56b0b9a6c0933605997de47663f7677d7a",
-    "entity.mbt": "9dfc88e926ebd178e9557888877f61aa3840fa1c4a91de71c5fcacb34ce6734d",
-    "expand.mbt": "8bf3905e9a80cbbea92a203761e6300b2404775e24ee014c4d87e5b5fac6b2f3",
+    "entity.mbt": "23938921ec3c2a384592d140980e7ab866ec9804d4adc1bcb26dffa3c569086d",
+    "expand.mbt": "f861814a0f9721a0868c06e844a8ff656da7b995f7ee5d2c70b6a327aeccc312",
     "flatten.mbt": "b9a609569c02777f4554a104395f89960d1775de94c39fafe22572b6ab2f3404",
-    "flatten_checked.mbt": "52ce4dc42ef64a9c24a0bb1d38045172b4d7c101c14a458ed1b4bf2b8d208019",
+    "flatten_checked.mbt": "feb8d78ec820ba8c33f60ef541f6ff50867ef91e89fc43a4f892fdd01d8bec4d",
     "header.mbt": "8c114a6e3e0d4a1241696203709d420c29a953bb2d62d99d39e69cefe6fd1739",
     "moon.mod": "6c16316855f68a8a553ef2aeda877d0b6f5b4ef148a30704b7e8f8dadf9c53f1",
-    "preview.mbt": "24e7ab7d83724ca62616cf50ac96544707cfd583f3b23272a62f3092f7965b85",
+    "preview.mbt": "ebca6301bc4048e09ad620ebf57ed09c78cad7d2624071a602da9a7e0d99642d",
     "reader_ascii.mbt": "2754022e3998fea280fb730e23511a5ef21c8f79a53ba3e71db97f21e744d5ca",
     "spline.mbt": "a70866a665ea49e98c3a0a8afb3f4454a1a702c1d41120bcc3539dc3d92faee5",
     "stream.mbt": "428002cc9279c2fc02c0f008f22ffc23520798cf11fc64f2af935eb7980b111b",
     "structure.mbt": "ac34bb30adf9bd3b553255f1701f386db1a27d6bb2fa0f2bed1f27a1df2b9a8d",
     "subclass.mbt": "3dfd8df787489a8bb2986722b24709bcdda047ce4c8b33acbbcb39fb28d4cfbf",
-    "tables.mbt": "cc657fd2d802ba6b71e80ad4f36eff68a82c87b2dec4694ee412592096088f54",
+    "tables.mbt": "769105c1e96753e5dc9e62885ce0b0c53ef6b05a1065d624fbbc689ff8dcc59c",
     "tag.mbt": "8fad78558bdb9f254fe00a43c3a94a2122cbc9b43c14d571952b361bfc293ab1",
     "vec.mbt": "c703d4b972214a6277a5676b848fab9c1202a11ae75355404c098f304a206db4"
   },
@@ -579,7 +580,10 @@
             "decoded": 0
           }
         ],
-        "entity_warnings": [],
+        "entity_warnings": [
+          "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证",
+          "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证"
+        ],
         "expanded_kinds": [
           {
             "kind": "LINE",
@@ -603,8 +607,21 @@
           }
         ],
         "expanded_outlines": 18,
-        "expansion_warnings": [],
+        "expansion_warnings": [
+          "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证",
+          "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证"
+        ],
         "findings": [
+          {
+            "category": "解析",
+            "severity": "警告",
+            "message": "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证"
+          },
+          {
+            "category": "解析",
+            "severity": "警告",
+            "message": "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证"
+          },
           {
             "category": "检查覆盖",
             "severity": "警告",
@@ -3048,8 +3065,15 @@
           }
         ],
         "expanded_outlines": 125,
-        "expansion_warnings": [],
+        "expansion_warnings": [
+          "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证"
+        ],
         "findings": [
+          {
+            "category": "解析",
+            "severity": "警告",
+            "message": "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证"
+          },
           {
             "category": "检查覆盖",
             "severity": "警告",
@@ -3759,8 +3783,15 @@
           }
         ],
         "expanded_outlines": 125,
-        "expansion_warnings": [],
+        "expansion_warnings": [
+          "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证"
+        ],
         "findings": [
+          {
+            "category": "解析",
+            "severity": "警告",
+            "message": "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证"
+          },
           {
             "category": "检查覆盖",
             "severity": "警告",
@@ -4898,8 +4929,15 @@
           }
         ],
         "expanded_outlines": 7,
-        "expansion_warnings": [],
+        "expansion_warnings": [
+          "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证"
+        ],
         "findings": [
+          {
+            "category": "解析",
+            "severity": "警告",
+            "message": "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证"
+          },
           {
             "category": "检查覆盖",
             "severity": "警告",

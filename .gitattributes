@@ -15,3 +15,5 @@ testdata/** -text
 # 保存的真实 CLI 输出与解析对照快照跨平台使用 LF。
 docs/submission-evidence/** text eol=lf
 examples/model-validation/** text eol=lf
+examples/advisor-boundaries/** text eol=lf
+examples/independent-fields/** text eol=lf

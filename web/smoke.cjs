@@ -15,11 +15,19 @@ const context = vm.createContext({console,document,location:{search:''},TextEnco
   btoa:s=>Buffer.from(s,'binary').toString('base64')});
 vm.runInContext(fs.readFileSync(path.join(__dirname,'dist/web.js'),'utf8'),context);
 vm.runInContext(fs.readFileSync(path.join(__dirname,'app.js'),'utf8'),context);
+let analysisCalls=0;
+const actualAnalyze=context.analyze;
+context.analyze=(...args)=>{analysisCalls++;return actualAnalyze(...args);};
+// The page must use one combined call, never the legacy multi-parse path.
+context.check=()=>{throw new Error('page called legacy check');};
+context.svg=()=>{throw new Error('page called legacy svg');};
+context.svg_error=()=>{throw new Error('page called legacy svg_error');};
 const input = name => fs.readFileSync(path.join(__dirname,'../examples',name)).toString('base64');
 const report = document.getElementById('report');
 const gap = document.getElementById('min-gap');
 gap.value='0.5';
 context.runCheck(input('plate.dxf'),'plate.dxf');
+assert.equal(analysisCalls,1);
 assert.match(report.textContent,/致命 0 · 警告 0/);
 assert.match(report.textContent,/毫米/);
 assert.match(report.textContent,/不构成可加工保证/);
@@ -34,6 +42,8 @@ context.runCheck(input('issues.dxf'),'issues.dxf');
 assert.match(report.textContent,/重复切割/);
 assert.match(report.textContent,/严重问题/);
 const empty = Buffer.from('0\nSECTION\n2\nENTITIES\n0\nENDSEC\n0\nEOF\n').toString('base64');
+// Restore compatibility APIs for their separate public-interface checks below.
+vm.runInContext(fs.readFileSync(path.join(__dirname,'dist/web.js'),'utf8'),context);
 assert.match(context.check(empty,0),/没有可检查的二维轮廓/);
 const svg = context.svg(input('curves.dxf'),0.01);
 const lines = [...svg.matchAll(/<polyline points="([^"]*)"/g)].map(m=>m[1].trim().split(/\s+/).map(v=>v.split(',').map(Number)));

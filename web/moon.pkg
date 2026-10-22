@@ -13,6 +13,7 @@ options(
   link: {
     "js": {
       "exports": [
+        "analyze",
         "check",
         "svg",
         "svg_error",

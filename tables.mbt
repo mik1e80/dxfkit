@@ -35,9 +35,9 @@ pub(all) struct Layer {
   color : Int
   /// 线型名
   linetype : String
-  /// 冻结（冻结的图层不参与重新生成，加工时不切）
+  /// 冻结标志；本工具默认检查跳过，不推断下游加工行为。
   frozen : Bool
-  /// 锁定（锁定的图层只是不能编辑，照样会切）
+  /// 锁定标志；本工具不将锁定状态作为检查筛选条件。
   locked : Bool
   /// 线宽，单位是百分之一毫米（-3 表示「用默认值」）
   lineweight : Int
@@ -63,14 +63,15 @@ pub fn Layer::color_index(self : Layer) -> Int {
 }
 
 ///|
-/// 这个图层加工时会不会被切到。
-///
-/// 关掉的、冻结的都不切；锁定的**照样切**（锁定只是防误编辑）。
-///
-/// 这是加工检查要问的第一个问题：**你让我切的那个图层，真的是要切的那个吗？**
-/// 设计师把标注放在「轮廓」图层上的事真的会发生。
-pub fn Layer::is_machinable(self : Layer) -> Bool {
+/// 是否按本工具默认规则参与部分几何检查，不表示 CAM 或机床行为。
+pub fn Layer::is_enabled_for_checks(self : Layer) -> Bool {
   !self.is_off() && !self.frozen
+}
+
+///|
+/// 兼容旧接口；仅表示本工具检查筛选规则，不表示能否加工。
+pub fn Layer::is_machinable(self : Layer) -> Bool {
+  self.is_enabled_for_checks()
 }
 
 // ── 表 ──────────────────────────────────────────────────────────────────

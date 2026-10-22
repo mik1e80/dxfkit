@@ -1,5 +1,7 @@
 # 从指定提交复现交付版本
 
+**当前 main 的后续审查修订**默认执行 `node scripts/verify-advisor.cjs --fresh` 的针对性流程，记录 `validation_profile:targeted-advisor`、`full_suite_run:false`。以下最终申报标签及完整复现命令仍描述历史完整交付；标签不移动。明确需要完整验收时可手动选工作流 `full`，详见[本轮验证范围](advisor-review-20261022.md#验证范围及部署身份)。
+
 交付版本使用固定标签 `submission-0.1.1-20261022`。标签所指提交是本次库、CLI、测试、网页构建、申报说明与生态对比的共同源码；不以可变的 main 或在线页面当前内容替代提交身份。模块版本仍为 0.1.1，未发布 Mooncakes。此前的 `delivery-0.1.1-20261021`、`delivery-0.1.1-20261022`、`delivery-0.1.1-20261022-ellipse` 和 `delivery-0.1.1-20261022-review` 及 `delivery-0.1.1-20261022-evidence`（679f81a）保留原提交，不移动或覆盖。
 
 ## 固定工具与依赖

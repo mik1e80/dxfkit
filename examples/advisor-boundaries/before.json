@@ -1,0 +1,16 @@
+{
+  "source_commit": "f233ddc6c08ffec43e4ef8abfdf4d1cad8f4092e",
+  "provenance": "Summary transcribed from the actual initial moon test execution before modifying production code; only the original five new test groups existed at that point.",
+  "command": "moon test advisor_boundary_wbtest.mbt --deny-warn",
+  "exit_code": 1,
+  "total": 5,
+  "passed": 0,
+  "failed": 5,
+  "failures": [
+    {"test": "advisor closed and periodic splines do not produce false open outlines", "actual": "geom is Unknown was false"},
+    {"test": "advisor spline weight cardinality rejects partial and extra weights", "actual": "geom is Unknown was false"},
+    {"test": "advisor missing ENDBLK recovery retains next block boundary", "actual": "block count was 1; expected 2"},
+    {"test": "advisor ellipse ratio upper boundary and valid unit ratio", "actual": "flatten_checked is Err was false"},
+    {"test": "advisor nonzero polyline width and thickness remain partial checks", "actual": "has_incomplete_checks was false"}
+  ]
+}

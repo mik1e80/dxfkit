@@ -9,7 +9,7 @@
 //
 // - **y 轴翻转**：CAD 的 y 向上、SVG 的 y 向下，内容整体套
 //   `scale(1,-1)`；文字元素再单独翻一次（翻两次才是正的）。
-// - **关闭 / 冻结的图层淡画**：它们不会被切，画得和要切的一样会误导。
+// - **关闭 / 冻结的图层淡画**：标示本工具的检查筛选约定，不推断加工行为。
 // - 文字按原文画——MTEXT 的格式化代码（`\P` 之类）原样出现，
 //   解释它们要写一个格式化解析器，留给以后。
 // - 线宽 / 点半径 / 字号都相对图形大小算：图纸单位是米还是微米，
@@ -21,6 +21,11 @@
 /// `tol` 是离散容差，和检查用的一个口径。
 pub fn Drawing::to_svg(self : Drawing, tol : Double) -> String {
   let exp = self.expand(tol)
+  self.svg_from_expansion(exp)
+}
+
+///|
+fn Drawing::svg_from_expansion(self : Drawing, exp : Expansion) -> String {
   // 世界坐标的范围（只看画得出来的几何；纯文字的图纸会落到空盒）
   let mut box = Aabb2::empty()
   for p in exp.placed {
@@ -87,15 +92,15 @@ pub fn Drawing::to_svg(self : Drawing, tol : Double) -> String {
 }
 
 ///|
-/// 图层 → （颜色, 淡画属性）。关闭 / 冻结的图层淡画——它们不会被切，
-/// 画得和要切的一样会误导。图层表里查不到时用灰色。
+/// 图层 → （颜色, 淡画属性）。按本工具筛选约定淡画关闭/冻结层。
+/// 不推断下游加工行为；图层表里查不到时用灰色。
 fn layer_state(tables : Tables?, layer : String) -> (String, String) {
   match tables {
     Some(t) =>
       match t.layer(layer) {
         Some(l) => {
           let color = aci_color(l.color_index())
-          if l.is_off() || l.frozen {
+          if !l.is_enabled_for_checks() {
             (color, " opacity=\"0.25\"")
           } else {
             (color, "")

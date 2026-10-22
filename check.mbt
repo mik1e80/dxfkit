@@ -145,6 +145,23 @@ pub fn Report::to_text(self : Report) -> String {
 ///
 /// `tol` 既是离散容差、也是判定尺度（重合、闭合都拿它比）。
 pub fn Drawing::check(self : Drawing, opt : CheckOptions) -> Report {
+  if !positive_tolerance(opt.tol) || !finite_number(opt.min_gap) || opt.min_gap < 0.0 {
+    return self.check_expansion(opt, {placed: [], warnings: []})
+  }
+  self.check_expansion(opt, self.expand(opt.tol))
+}
+
+///|
+/// 按显式图纸预算检查；预算截断原因进入检查不完整报告。
+pub fn Drawing::check_with_limits(self : Drawing, opt : CheckOptions, limits : ExpandLimits) -> Report {
+  if !positive_tolerance(opt.tol) || !finite_number(opt.min_gap) || opt.min_gap < 0.0 {
+    return self.check_expansion(opt, {placed: [], warnings: []})
+  }
+  self.check_expansion(opt, self.expand_with_limits(opt.tol, limits))
+}
+
+///|
+fn Drawing::check_expansion(self : Drawing, opt : CheckOptions, exp : Expansion) -> Report {
   let tol = opt.tol
   let findings : Array[Finding] = []
   if !positive_tolerance(tol) ||
@@ -160,7 +177,6 @@ pub fn Drawing::check(self : Drawing, opt : CheckOptions) -> Report {
       ],
     }
   }
-  let exp = self.expand(tol)
   // 展开过程中的问题（缺块、循环引用）本身就是检查结论
   for w in exp.warnings {
     findings.push({ check: "解析", severity: Warn, message: w, })
@@ -907,7 +923,7 @@ fn is_uncut_layer(tables : Tables?, name : String) -> Bool {
   match tables {
     Some(t) =>
       match t.layer(name) {
-        Some(l) => l.is_off() || l.frozen
+        Some(l) => !l.is_enabled_for_checks()
         None => false
       }
     None => false

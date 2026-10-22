@@ -1,10 +1,16 @@
-name: 检查、构建、测试
+name: 按需检查与部署
 
 on:
   push:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      validation:
+        description: '验证范围：默认只运行当前整改相关测试'
+        type: choice
+        default: targeted
+        options: [targeted, full]
 
 permissions:
   contents: read
@@ -23,8 +29,13 @@ jobs:
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- '0.10.14+7d59c7ec9'
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
-      - name: 从干净检出复现所有入口
-        run: node scripts/verify-reproduction.cjs --fresh
+      - name: 从干净检出按需验证
+        run: |
+          if [ "${{ github.event.inputs.validation }}" = "full" ]; then
+            node scripts/verify-reproduction.cjs --fresh
+          else
+            node scripts/verify-advisor.cjs --fresh
+          fi
 
       - name: 保存该提交的验证记录
         uses: actions/upload-artifact@v6

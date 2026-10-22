@@ -4,6 +4,7 @@ const assert=require('node:assert/strict');
 const {spawnSync}=require('node:child_process');
 const {root,profile,run,environment,source}=require('./environment.cjs');
 const allowDirty=process.argv.includes('--allow-dirty');
+process.env.DXFKIT_VALIDATION_PROFILE='full';
 if(process.argv.includes('--fresh')) for(const dir of ['_build','.mooncakes'])
   assert(!fs.existsSync(path.join(root,dir)),`--fresh requires no ${dir}`);
 const actual=environment();
@@ -34,11 +35,13 @@ try {
   execute('node',['scripts/verify-submission-evidence.cjs']);
   execute('node',['examples/model-validation/generate-models.cjs']);
   execute('node',['examples/model-validation/verify.cjs']);
+  execute('node',['examples/advisor-boundaries/verify.cjs']);
+  execute('node',['examples/independent-fields/verify.cjs']);
   execute('node',['scripts/verify-submission-docs.cjs']);
   execute('node',['scripts/build-web.cjs',...dirtyArgs]);
   for(const script of ['web/smoke.cjs','scripts/verify-delivery.cjs','scripts/verify-completeness.cjs','scripts/verify-review-cases.cjs']) execute('node',[script]);
   fs.writeFileSync(path.join(root,'_build/reproduction.json'),JSON.stringify({
-    passed:true,source_commit:revision.commit,source_dirty:revision.dirty,module:profile.module,version:profile.version,
+    passed:true,validation_profile:'full',full_suite_run:true,source_commit:revision.commit,source_dirty:revision.dirty,module:profile.module,version:profile.version,
     toolchain:actual,dependencies,steps},null,2)+'\n');
   execute('node',['scripts/prepare-site.cjs',...dirtyArgs]);
   console.log(`Reproduction PASSED: ${revision.commit}`);

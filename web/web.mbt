@@ -9,6 +9,19 @@
 // 往 HTML 里拼。
 
 ///|
+/// 页面的一次解码/解析/展开入口；旧函数保留供已有调用方使用。
+pub fn analyze(file_base64 : String, min_gap : Double, tol : Double) -> String {
+  let data = match decode(file_base64) {
+    Ok(data) => data
+    Err(msg) => return ({"report": "读不了：" + msg, "svg": "", "error": msg, "unit": ""} : Json).stringify()
+  }
+  let drawing = @dxfkit.build_drawing(@dxfkit.scan_tags(data))
+  let result = drawing.analyze({tol, min_gap})
+  let report = "单位声明：\{result.unit}；坐标及阈值使用图纸原始单位，请先确认。\n" + result.report.to_text()
+  ({"report": report, "svg": result.svg, "error": "", "unit": result.unit} : Json).stringify()
+}
+
+///|
 /// 加工前检查。返回完整文字报告（页面用 textContent 显示）。
 ///
 /// `min_gap` 是允许的最小净距，0 表示不查。
