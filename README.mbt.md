@@ -2,7 +2,7 @@
 
 MoonBit 的 ASCII DXF 读取、二维几何处理与辅助检查库。安装、场景、CLI 和网页入口见 [README.md](README.md)。源码修订版本 0.1.1，本次修订尚未发布到 Mooncakes。
 
-本次范围为七类核心轮廓实体、受限二维 SOLID/TRACE 边界和普通 INSERT；逐字段输入、输出、限制与案例见[交付范围](docs/delivery-scope.md)，追加行为见[五项审查验收](docs/review-cases.md)。
+本次范围为七类核心轮廓实体、受限二维 SOLID/TRACE 边界和普通 INSERT；逐字段输入、输出、限制与案例见[交付范围](docs/delivery-scope.md)，追加行为见[补充几何审查](docs/review-cases.md)。
 
 ## 为什么选择这个范围
 
@@ -29,7 +29,7 @@ let svg = drawing.to_svg(0.05)
 
 核心轮廓为 LINE、CIRCLE、ARC、ELLIPSE、LWPOLYLINE、普通二维 POLYLINE、受限 SPLINE。POINT 和文字用于位置或简化预览；SOLID/TRACE 在下述受限范围内支持二维边界；HATCH、DIMENSION、3DFACE 等保留已有字段，不能据此认为它们的轮廓已参与检查。
 
-ELLIPSE 的 11/21/31 是相对圆心长轴向量。普通 POLYLINE 不接受拟合、空间和网格语义；损坏顶点保留记录并拒绝整条轮廓，避免拼接出新形状。Face 的 flatten / checked 结果为 Empty，检查报告明确未覆盖；这与旧版直接连角点的行为不同。
+ELLIPSE 的 11/21/31 是相对圆心长轴向量。普通 POLYLINE 不接受拟合、空间和网格语义；损坏顶点保留记录并拒绝整条轮廓，避免拼接出新形状。裸 `Geometry::Face` 不携带 SOLID/TRACE/3DFACE 身份，调用其 `flatten()` / `flatten_checked()` 返回 Empty。SOLID/TRACE 应使用 `Entity::flatten_checked(tol)`，在默认 OCS、零厚度、所有角点同 Z 的范围内生成二维边界；3DFACE 仍报告未覆盖。
 
 - `Geometry::flatten_checked(tol)` 返回 `Result[Flat, String]`，是曲线的 checked 入口；整图展开使用保留身份的 Entity::flatten_checked。
 - `spline_points_checked(degree, knots, control_points, weights, tol)` 支持连续、正权重 NURBS 的 XY 离散。
@@ -82,7 +82,7 @@ CLI `stats` 分块读文件、统计 tag、段、版本、编码，不保存全�
 
 验证命令见 [README.md](README.md#验证与开发)。几何正确性以明确反例、解析几何和独立de Boor密集采样验证；第三方文件读取成功、测试数量或汇总点数不能单独证明正确性。
 
-逐实体坐标/尺寸/包围盒/误差和检查器正反例见[验收矩阵](docs/test-accuracy.md)。故障注入只作用于临时副本，验证新测试能检出九类错误，不以“能够编译运行”替代判定正确。
+逐实体坐标/尺寸/包围盒/误差和检查器正反例见[验收矩阵](docs/test-accuracy.md)。故障注入只作用于临时副本，验证列明的语义故障能被测试检出，不以“能够编译运行”替代判定正确。
 
 外部语料另按文件记录[读取、实体字段解码和几何验证证据](docs/corpus-validation.md)。现有 47 张文件均没有逐图纸独立几何真值；产生点列或能执行检查仍只记为已运行不变量回归。
 

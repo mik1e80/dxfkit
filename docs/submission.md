@@ -1,5 +1,7 @@
 # dxfkit 项目申报书（修订稿）
 
+[一页申报 PDF](../output/pdf/dxfkit-submission-one-page.pdf) · [验证材料导航](verification-guide.md)。一页版为本次 GitHub 文档修订，已验证技术交付标签仍保留原提交。
+
 ## 基本信息
 
 - 项目名称：dxfkit —— MoonBit ASCII DXF 读取与二维轮廓辅助检查库

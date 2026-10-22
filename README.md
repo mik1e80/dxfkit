@@ -1,26 +1,28 @@
 # dxfkit
 
-MoonBit ASCII DXF 读取与二维轮廓辅助检查库：在声明字段范围内处理七类核心轮廓、有限二维 SOLID/TRACE 边界和普通 INSERT，提供可复用接口、SVG 预览、三个 CLI 命令和浏览器演示。
+面向 MoonBit 开发者的 **ASCII DXF 读取与二维轮廓辅助检查库**。把图纸记录转换为可复用的数据模型、XY 轮廓、诊断报告和 SVG，提供库、CLI 与浏览器入口。
 
-[在线试用](https://mik1e80.github.io/dxfkit/) · [接口与边界](README.mbt.md) · [项目对比](COMPARISON.md) · [第三方声明](THIRD_PARTY_NOTICES.md)
+[在线试用](https://mik1e80.github.io/dxfkit/) · [接口文档](README.mbt.md) · [一页项目申报 PDF](output/pdf/dxfkit-submission-one-page.pdf)
 
-[兼容性案例](docs/compatibility-cases.md) · [修订后的申报材料](docs/submission.md)：区分文件读取、实体解码和几何检查，不承诺 R10–R2018 完整兼容。
+## 能做什么
 
-[冻结交付范围与实体字段矩阵](docs/delivery-scope.md) · [六类最小问题的预期、实际和自动断言](docs/delivery-verification.md)
+- 读取七类核心轮廓实体，处理受限二维 SOLID/TRACE 边界和普通 INSERT。
+- 辅助检查开放轮廓、退化、自交、重复路径与指定净距，生成报告和 SVG。
+- 报告未支持实体、未转换 OCS、未展开实例和离散失败；用 `--strict` 拦截警告。
 
-[检查不完整的统一处理与混合输入验收](docs/check-completeness.md)：通过 `Report::has_incomplete_checks()` 判断，CLI 与网页报告明确标示，`--strict` 触发失败。
+## 快速运行
 
-[独立 MoonBit 工程调用教程](examples/consumer/README.md)：独立模块依赖本库，直接读取 DXF、提取实体、checked 离散和生成检查报告；包含复制到仓库外的步骤。
+已有 MoonBit 工具链时，在仓库根目录执行：
 
-[几何正确性与检查器验收矩阵](docs/test-accuracy.md)：核对坐标、尺寸、包围盒与解析曲线误差；成对验证报警与不报警，并在临时副本中验证九类故障能否被测试发现。含非原点椭圆的精确包围盒与平移不变性验收。
+```sh
+moon update
+moon run cli check examples/plate.dxf --min-gap 0.5 --strict
+moon run cli svg examples/plate.dxf > plate.svg
+```
 
-[47 张第三方图纸的逐文件验证记录](docs/corpus-validation.md)：分别记录读取、实体字段解码、实际测试和未覆盖部分，不将语料回归统一标为兼容通过。
+样例是声明毫米单位的 100×60 外框与四个半径 3 的圆孔轮廓。首次获取工具链/依赖的时间取决于环境，安装与固定版本见[复现说明](docs/reproducibility.md)。本次源码修订为 **0.1.1**，尚未完成对应 Mooncakes 发布；示例从源码运行。
 
-源码修订版本 **0.1.1**。本次修订尚未发布到 Mooncakes。
-
-[再次申报的证据索引](docs/resubmission-evidence.md) · [实体分层矩阵](docs/entity-capabilities.md) · [独立对照及实际误差](docs/independent-validation.md) · [退回意见响应表](docs/review-response.md)。10 个真实 CLI 案例保存输入、报告、SVG 和断言，运行 `node scripts/verify-submission-evidence.cjs` 复核。
-
-交付固定标签：`delivery-0.1.1-20261022-evidence`。[干净环境复现步骤](docs/reproducibility.md)固定工具链和依赖；运行 `node scripts/verify-reproduction.cjs --fresh` 验证测试、CLI、网页和申报材料对应同一提交。
+只承诺[实体矩阵](docs/entity-capabilities.md)列明的字段和检查，不能据此保证图纸可加工。
 
 ## 解决什么问题
 
@@ -93,7 +95,7 @@ NURBS 先按节点插入分解为有理 Bézier 段，再用控制点凸包判�
 
 推荐使用带实体身份的 `Entity::flatten_checked()`；曲线也可使用 `Geometry::flatten_checked()`、`spline_points_checked()` 获得曲线输入或资源上限的错误原因。`Flat::Empty` 仍表示没有可离散轮廓，调用方须单独核对覆盖范围；旧 `flatten()` / `spline_points()` 保留兼容回退，不能用其占位结果证明几何正确。
 
-ELLIPSE 长轴字段按相对圆心向量读取。SVG 输出使用有限 Double 的往返数字表示，不依赖整数缩放或固定四位小数。损坏顶点拒绝生成整条多段线轮廓并报告；拟合、空间或网格 POLYLINE 不作为普通二维折线处理。接口行为收紧及迁移说明见[六类修复验证](docs/delivery-verification.md#兼容变化)。
+ELLIPSE 长轴字段按相对圆心向量读取。SVG 输出使用有限 Double 的往返数字表示，不依赖整数缩放或固定四位小数。损坏顶点拒绝生成整条多段线轮廓并报告；拟合、空间或网格 POLYLINE 不作为普通二维折线处理。接口行为收紧及迁移说明见[历史最小反例](docs/delivery-verification.md#兼容变化)。
 
 以下限制需在集成时考虑：
 
@@ -112,6 +114,8 @@ ELLIPSE 长轴字段按相对圆心向量读取。SVG 输出使用有限 Double 
 **总内存并非对任何输入都为常数**：超长行、警告数量、不同段名及调用方保留的输出都可能使存储增长。`check` 和 `svg` 仍需读取完整文件。
 
 ## 验证与开发
+
+按改动选取必要检查，默认轻量验证。文档/PDF 改动运行 `node scripts/verify-submission-docs.cjs`；代码改动选择相关测试文件和受影响入口，不默认运行以下全部命令。命令列表保留作按需验收参考，见[验证约定](docs/verification-guide.md#本轮材料修订如何验证)。
 
 ```bash
 moon check --target all --deny-warn
@@ -138,6 +142,30 @@ node scripts/verify-corpus-records.cjs
 独立工程验收把 `examples/consumer/` 复制到系统临时目录后编译运行；Wasm 和 Native 各有 8 个实际检查、运行与退出码断言，含 SOLID 的 Entity 入口；结果记录见教程。示例文件可在独立模块中直接读取。
 
 47 个第三方文件用于读取和回归验证，不是完整 DXF 一致性测试套件。逐文件来源、SHA-256、实际测试和分层结果见[语料案例表](docs/corpus-validation.md)及对应 JSON；当前没有这些外部文件的独立几何真值，不把自建精度测试迁移为逐图纸认证。网页回归使用实际编译产物与最小 DOM，不验证浏览器布局。
+
+## 审阅与申报材料
+
+[兼容性案例](docs/compatibility-cases.md) · [修订后的申报材料](docs/submission.md)：区分文件读取、实体解码和几何检查，不承诺 R10–R2018 完整兼容。
+
+[冻结交付范围与实体字段矩阵](docs/delivery-scope.md) · [历史最小反例与修复记录](docs/delivery-verification.md)
+
+[检查不完整的统一处理与混合输入验收](docs/check-completeness.md)：通过 `Report::has_incomplete_checks()` 判断，CLI 与网页报告明确标示，`--strict` 触发失败。
+
+[独立 MoonBit 工程调用教程](examples/consumer/README.md)：独立模块依赖本库，直接读取 DXF、提取实体、checked 离散和生成检查报告；包含复制到仓库外的步骤。
+
+[几何正确性与检查器验收矩阵](docs/test-accuracy.md)：核对坐标、尺寸、包围盒与解析曲线误差；成对验证报警与不报警，并在临时副本中验证九类故障能否被测试发现。含非原点椭圆的精确包围盒与平移不变性验收。
+
+[47 张第三方图纸的逐文件验证记录](docs/corpus-validation.md)：分别记录读取、实体字段解码、实际测试和未覆盖部分，不将语料回归统一标为兼容通过。
+
+源码修订版本 **0.1.1**。本次修订尚未发布到 Mooncakes。
+
+[再次申报的证据索引](docs/resubmission-evidence.md) · [实体分层矩阵](docs/entity-capabilities.md) · [独立对照及实际误差](docs/independent-validation.md) · [退回意见响应表](docs/review-response.md)。10 个真实 CLI 案例保存输入、报告、SVG 和断言，运行 `node scripts/verify-submission-evidence.cjs` 复核。
+
+交付固定标签：`delivery-0.1.1-20261022-evidence`。[干净环境复现步骤](docs/reproducibility.md)固定工具链和依赖；运行 `node scripts/verify-reproduction.cjs --fresh` 验证测试、CLI、网页和申报材料对应同一提交。
+
+[验证材料导航与名称约定](docs/verification-guide.md)统一使用“历史最小反例 / 补充几何审查 / 正确性与故障检出 / 真实入口证据”四个名称，具体数量留在对应记录中。
+
+本次一页 PDF 和导航属于后续文档修订；上面的固定标签与已验证 Pages 仍指向技术交付版本。
 
 ## 许可
 
