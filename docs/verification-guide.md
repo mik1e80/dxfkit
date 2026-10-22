@@ -11,18 +11,16 @@
 
 ## 本轮材料修订如何验证
 
-当前最终申报标签为 `submission-0.1.1-20261022`，统一包含代码、README、一页 PDF、模型测试与证据。2026-10-22 的历史文档提交 848617a 使用 [skip ci]，当时 Pages 留在 679f81a；这是历史状态，本轮最终完整 CI 及同提交 Pages 通过后才创建最终标签，旧标签不移动。
+当前统一申报目标为 `submission-0.1.1-20261022-r2`。旧 `submission-0.1.1-20261022` 保留 f233ddc，a5d747f 的针对性记录也保留历史身份；r2 不移动旧标签。
 
-日常默认按改动运行必要的轻量验证；本次十类模型和两句报告措辞先做针对性检查，最终收敛阶段按明确要求运行一次完整 CI。
+日常按改动做必要验证，push 默认 targeted-advisor。此次最终收敛在 SPLINE 71 修复、README/申报书/PDF/证据同步完成后，手动运行 validation=full，完整验收及同提交 Pages 成功后才创建 r2。
 
 ```sh
-node scripts/verify-submission-docs.cjs
-node examples/model-validation/generate-models.cjs
-node examples/model-validation/verify.cjs
+node scripts/verify-advisor.cjs
+# 最终 full 复现（干净检出）
+node scripts/verify-reproduction.cjs --fresh
 ```
 
-[十类模型目录](../examples/model-validation/README.md)包含输入、真值、实际数据、报告、SVG 和总结。[一页申报 PDF](../output/pdf/dxfkit-submission-one-page.pdf)与[完整申报书](submission.md)使用同一最终标签，提交 SHA 从标签和 CI/Pages 记录解析。旧机器记录中的采集时源码/编译产物哈希保留其历史含义，不冒充最终执行 SHA；最终实际执行身份见 verification.json 和模型验证记录。
+[r2 说明](r2-submission-20261022.md)记录 3 个次数库测试、14 个边界 CLI 及版本身份规则；[十类模型](../examples/model-validation/README.md)、[ezdxf 对照](../examples/independent-fields/README.md)和[一页 PDF](../output/pdf/dxfkit-submission-one-page.pdf)统一收录。validation_profile=full 且 full_suite_run=true 才表示本次完整验证，不能用 targeted 成功代替。
 
-PDF 生成源为 [build-submission-pdf.py](../scripts/build-submission-pdf.py)，依赖 reportlab 和可嵌入的中文 TrueType 字体；更新后检查页数、文本并渲染查看。未核实截图中的 OSC2026 规则，不将“一页 PDF 必交”写成已核实的官方要求。
-
-后续仍按改动选取相关测试与必要后端，不默认运行全量。完整复现命令保留作明确需要时的最终验收入口。
+PDF 的可复现生成源为 [build-submission-pdf.py](../scripts/build-submission-pdf.py)，更新后用 pypdf 检查一页及文本，并渲染核对排版。未核实比赛官方材料门槛，不作必交规则陈述。

@@ -4,7 +4,12 @@ const draw=body=>'0\nSECTION\n2\nENTITIES\n'+body+'0\nENDSEC\n0\nEOF\n';
 const spline=(flag,weights='')=>'0\nSPLINE\n70\n'+flag+'\n71\n2\n72\n6\n73\n3\n40\n0\n40\n0\n40\n0\n40\n1\n40\n1\n40\n1\n'+weights+'10\n0\n20\n0\n10\n1\n20\n2\n10\n2\n20\n0\n';
 const rect=extra=>'0\nLWPOLYLINE\n90\n4\n70\n1\n'+extra+'10\n0\n20\n0\n10\n2\n20\n0\n10\n2\n20\n1\n10\n0\n20\n1\n';
 const missing='0\nSECTION\n2\nBLOCKS\n0\nBLOCK\n2\nA\n10\n0\n20\n0\n0\nCIRCLE\n10\n0\n20\n0\n40\n1\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n0\nINSERT\n2\nA\n10\n0\n20\n0\n0\nENDSEC\n0\nEOF\n';
+const cubic=fs.readFileSync(path.join(root,'examples/model-validation/models/06-spline.dxf'),'utf8').replace(/\r\n?/g,'\n');
 const cases=[
+  {id:'missing-degree',text:cubic.replace('71\n3\n',''),reason:'缺少次数（71）',outlines:0},
+  {id:'degree-zero',text:cubic.replace('71\n3\n','71\n0\n'),reason:'样条次数',outlines:0},
+  {id:'degree-too-high',text:cubic.replace('71\n3\n','71\n33\n'),reason:'样条次数',outlines:0},
+  {id:'explicit-cubic-control',text:cubic,outlines:1,exit:1,complete:true},
   {id:'closed-spline',text:draw(spline(1)),reason:'闭合或周期',outlines:0},
   {id:'periodic-spline',text:draw(spline(2)),reason:'闭合或周期',outlines:0},
   {id:'partial-weights',text:draw(spline(4,'41\n2\n')),reason:'权重数量',outlines:0},
@@ -24,9 +29,10 @@ for(const c of cases){
   const args=['check',file,'--strict','--tol','0.01'],r=run(args),s=run(['svg',file,'--tol','0.01']);assert.equal(r.exit,c.exit??1,r.text);assert.equal(s.exit,0);
   assert.equal([...s.text.matchAll(/<(?:polygon|polyline)\b/g)].length,c.outlines);
   if(c.reason){assert(r.text.includes(c.reason));assert(r.text.includes('检查不完整'));assert(!r.text.includes('[轮廓闭合]'));}
+  else if(c.complete){assert(!r.text.includes('检查不完整'));assert(r.text.includes('[轮廓闭合]'));}
   else {assert(!r.text.includes('检查不完整'));assert(!/^\[/m.test(r.text));}
   save('actual/'+c.id+'.txt',r.text);save('actual/'+c.id+'.svg',s.text);
   results.push({id:c.id,command:['moon','run','cli',...args],expected:{strict_exit:c.exit??1,outlines:c.outlines,reason:c.reason??null},actual:{strict_exit:r.exit,outlines:c.outlines,report:r.text},passed:true});console.log('PASS boundary '+c.id);
 }
-save('results.json',JSON.stringify({base_commit:'f233ddc6c08ffec43e4ef8abfdf4d1cad8f4092e',scope:'Targeted advisor input boundaries; not a full regression run',passed:results.length,total:cases.length,cases:results},null,2)+'\n');
+save('results.json',JSON.stringify({base_commit:'a5d747f19f8297040a924af38334b7d4e66a75f9',scope:'Advisor boundaries plus r2 explicit-degree cases; suite alone is not full regression',passed:results.length,total:cases.length,cases:results},null,2)+'\n');
 console.log(`${results.length}/${cases.length} boundary CLI cases passed`);

@@ -41,7 +41,7 @@ try {
   execute('node',['scripts/build-web.cjs',...dirtyArgs]);
   for(const script of ['web/smoke.cjs','scripts/verify-delivery.cjs','scripts/verify-completeness.cjs','scripts/verify-review-cases.cjs']) execute('node',[script]);
   fs.writeFileSync(path.join(root,'_build/reproduction.json'),JSON.stringify({
-    passed:true,validation_profile:'full',full_suite_run:true,source_commit:revision.commit,source_dirty:revision.dirty,module:profile.module,version:profile.version,
+    passed:true,validation_profile:'full',full_suite_run:true,submission_ref:profile.submission_ref,source_commit:revision.commit,source_dirty:revision.dirty,module:profile.module,version:profile.version,
     toolchain:actual,dependencies,steps},null,2)+'\n');
   execute('node',['scripts/prepare-site.cjs',...dirtyArgs]);
   console.log(`Reproduction PASSED: ${revision.commit}`);

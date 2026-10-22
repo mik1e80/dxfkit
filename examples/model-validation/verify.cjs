@@ -109,7 +109,7 @@ for(const m of spec.models){
     artifacts:{public_api:save(prefix+'-public-api.txt',probe.stdout),report:save(prefix+'-report.txt',report.stdout),svg:save(prefix+'-preview.svg',svg.stdout)},passed:true});
   console.log('PASS model '+m.id+' '+m.name);
 }
-const result={schema:1,checked_on:'2026-10-22',submission_ref:'submission-0.1.1-20261022',source_identity:'Final tag resolves source SHA; _build/model-validation.json records actual executing HEAD and dirty state',provenance:'10 project-authored parametric fixtures; no external CAD visual confirmation or external spline export was performed',toolchain_profile:require('../../reproduction.json'),passed:results.length,total:spec.models.length,models:results};
+const result={schema:1,checked_on:'2026-10-22',submission_ref:require('../../reproduction.json').submission_ref,source_identity:'Final tag resolves source SHA; _build/model-validation.json records actual executing HEAD and dirty state',provenance:'10 project-authored parametric fixtures; no external CAD visual confirmation or external spline export was performed',toolchain_profile:require('../../reproduction.json'),passed:results.length,total:spec.models.length,models:results};
 save('results.json',JSON.stringify(result,null,2)+'\n');
 const tiles=results.map((r,i)=>{
   const svg=fs.readFileSync(path.join(dir,r.artifacts.svg),'utf8'),view=svg.match(/viewBox="([^"]+)"/)[1];

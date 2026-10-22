@@ -1,8 +1,8 @@
 # 从指定提交复现交付版本
 
-**当前 main 的后续审查修订**默认执行 `node scripts/verify-advisor.cjs --fresh` 的针对性流程，记录 `validation_profile:targeted-advisor`、`full_suite_run:false`。以下最终申报标签及完整复现命令仍描述历史完整交付；标签不移动。明确需要完整验收时可手动选工作流 `full`，详见[本轮验证范围](advisor-review-20261022.md#验证范围及部署身份)。
+普通 main push 默认运行针对性流程 `verify-advisor.cjs`；本次最终 r2 固定提交须在 Actions 手动选择 `validation=full`，执行以下完整复现并部署成功后再打标签。targeted 与 full 的记录各自标明 profile，不互相冒充。
 
-交付版本使用固定标签 `submission-0.1.1-20261022`。标签所指提交是本次库、CLI、测试、网页构建、申报说明与生态对比的共同源码；不以可变的 main 或在线页面当前内容替代提交身份。模块版本仍为 0.1.1，未发布 Mooncakes。此前的 `delivery-0.1.1-20261021`、`delivery-0.1.1-20261022`、`delivery-0.1.1-20261022-ellipse` 和 `delivery-0.1.1-20261022-review` 及 `delivery-0.1.1-20261022-evidence`（679f81a）保留原提交，不移动或覆盖。
+交付版本使用固定标签 `submission-0.1.1-20261022-r2`。标签所指提交是本次库、CLI、测试、网页构建、申报说明与生态对比的共同源码；不以可变的 main 或在线页面当前内容替代提交身份。模块版本仍为 0.1.1，未发布 Mooncakes。此前的 `delivery-0.1.1-20261021`、`delivery-0.1.1-20261022`、`delivery-0.1.1-20261022-ellipse` 和 `delivery-0.1.1-20261022-review` 及 `delivery-0.1.1-20261022-evidence`（679f81a）保留原提交，不移动或覆盖；旧 `submission-0.1.1-20261022`（f233ddc）也保留原 SHA。
 
 ## 固定工具与依赖
 
@@ -42,7 +42,7 @@ $env:PATH = "$HOME/.moon/bin;" + $env:PATH
 以下命令在 PowerShell、Bash 均可执行。使用尚不存在的目录：
 
 ```sh
-git clone --branch submission-0.1.1-20261022 --depth 1 https://github.com/mik1e80/dxfkit.git dxfkit-delivery
+git clone --branch submission-0.1.1-20261022-r2 --depth 1 https://github.com/mik1e80/dxfkit.git dxfkit-delivery
 cd dxfkit-delivery
 git rev-parse HEAD
 node scripts/environment.cjs
@@ -53,7 +53,7 @@ node scripts/verify-reproduction.cjs --fresh
 
 复现脚本依次执行：依赖获取及版本核对、全目标检查、构建、Wasm/JS/Native/Wasm-GC 测试、语料记录复核、故障检出验证、真实 CLI 回归、Wasm/Native 独立工程调用、10 个再申报证据案例及解析误差/保存输出复核、网页重建和行为断言，最后打包 `_site/`。任何一步失败都会使进程失败，验证记录为 `passed:false`。
 
-最终发布将代码、README、PDF、模型及证据放在同一提交；CI 与 Pages 全部成功后仅建立一个最终申报标签 `submission-0.1.1-20261022`。标签解析出的 SHA 与 release.json、verification.json、model-validation-verification.json 对应，不在 PDF 中写入自引用提交哈希。
+最终发布将代码、README、PDF、模型及证据放在同一提交；CI 与 Pages 全部成功后仅建立一个最终申报标签 `submission-0.1.1-20261022-r2`。标签解析出的 SHA 与 release.json、verification.json、model-validation-verification.json 对应，不在 PDF 中写入自引用提交哈希。
 
 成功后的输出：
 
@@ -81,7 +81,7 @@ node web/smoke.cjs
 
 ## CI、Pages 与申报版本如何对应
 
-同一个 [CI 工作流](../.github/workflows/ci.yml) 先执行完整复现，再上传这一轮的 `_site/`。Pages 部署任务通过 `needs: ci` 等待成功，使用同一工作流已上传的站点，不再独立检出或重编译。验证失败时，部署不会执行。
+同一个 [CI 工作流](../.github/workflows/ci.yml) 根据 validation profile 执行针对性验证或完整复现：普通 main push 默认 targeted-advisor；最终申报 r2 须手动选择 full。只有所选验证成功后才上传该提交的 `_site/`。Pages 部署任务通过 `needs: ci` 等待成功，使用同一工作流已上传的站点，不再独立检出或重编译。验证失败时，部署不会执行。
 
 在线站点的 `dist/release.json`、`verification.json` 中的提交必须等于本次交付固定标签解析出的 SHA；release.json 中的申报说明、生态对比和来源记录哈希也必须等于该提交中的对应文件。提交、模块版本、资产哈希和完整验证结果因此能关联起来；打包脚本会拒绝混用另一提交的结果。标签保留历史版本，在线站点会随后续 main 的成功部署更新，核对历史交付应使用该标签和对应 CI 记录。
 

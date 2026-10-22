@@ -592,6 +592,13 @@ fn mtext_value(record : Record) -> String {
 /// 重复出现**的，控制点还是三码一组的坐标——按顺序扫，缺 `30` 的
 /// 按 z=0 处理（和 `Record::point` 一个约定）。
 fn parse_spline(record : Record, warnings : Array[String]) -> Geometry {
+  let degree = match record.get(71) {
+    Some(tag) => tag.value.as_int()
+    None => {
+      warnings.push("SPLINE 缺少次数（71）；无法确定曲线定义，保留记录，轮廓未检查")
+      return Unknown
+    }
+  }
   let flags = record.get_int(70, 0)
   if (flags & 3) != 0 {
     warnings.push("SPLINE 使用闭合或周期语义，本版本尚未重建该语义；保留记录，轮廓未检查")
@@ -668,7 +675,7 @@ fn parse_spline(record : Record, warnings : Array[String]) -> Geometry {
     warnings.push("SPLINE 权重数量与控制点数量不一致；保留记录，未生成该实体轮廓")
     return Unknown
   }
-  Spline(degree=record.get_int(71, 3), knots~, control_points=control, weights~)
+  Spline(degree~, knots~, control_points=control, weights~)
 }
 
 ///|

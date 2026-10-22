@@ -27,7 +27,9 @@ let svg = drawing.to_svg(0.05)
 
 ## 几何与离散
 
-当前 main 明确拒绝 SPLINE Closed/Periodic 标志，以及非空但不等于控制点数的权重数组；无权重才按全 1。ELLIPSE 轴比接收 `(0,1]`。多段线非零宽度/厚度保留中心线并报告不完整；缺 ENDBLK 按下一块或段末恢复且警告。完整修订见[本轮记录](docs/advisor-review-20261022.md)。
+`bounds()` 是原始解码数据的几何包围估计，不代表通过 checked 合法性验证；非法 ELLIPSE 仍可能得到包围估计。可靠几何处理须先使用 `flatten_checked()`，本轮不新增 bounds_checked API。
+
+当前 main 要求显式 SPLINE 次数（71），缺失不再默认三次；明确拒绝 Closed/Periodic 标志，以及非空但不等于控制点数的权重数组；无权重才按全 1。ELLIPSE 轴比接收 `(0,1]`。多段线非零宽度/厚度保留中心线并报告不完整；缺 ENDBLK 按下一块或段末恢复且警告。完整修订见[本轮记录](docs/advisor-review-20261022.md)。
 
 核心轮廓为 LINE、CIRCLE、ARC、ELLIPSE、LWPOLYLINE、普通二维 POLYLINE、受限 SPLINE。POINT 和文字用于位置或简化预览；SOLID/TRACE 在下述受限范围内支持二维边界；HATCH、DIMENSION、3DFACE 等保留已有字段，不能据此认为它们的轮廓已参与检查。
 

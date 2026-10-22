@@ -4,7 +4,7 @@
 
 [在线试用](https://mik1e80.github.io/dxfkit/) · [接口文档](README.mbt.md) · [一页项目申报 PDF](output/pdf/dxfkit-submission-one-page.pdf)
 
-当前 main 的[最近一次顾问方案整改](docs/advisor-review-20261022.md)修复输入语义静默通过，增加图纸级展开预算和网页单次分析。当前部署按相关测试验证，记录明确标为 `targeted-advisor`；旧申报标签及一页 PDF 的历史身份保留，不把本轮称为全量回归通过。
+[r2 最终收敛记录](docs/r2-submission-20261022.md)补齐 SPLINE 缺次数诊断，统一代码、申报书、PDF、模型与 ezdxf 对照。普通 main push 默认针对性验证；本次固定 r2 提交须手动通过 `validation=full` 的完整 CI 和同提交部署后创建新标签。旧标签保持原提交。
 
 ## 能做什么
 
@@ -167,7 +167,7 @@ node scripts/verify-corpus-records.cjs
 
 [再次申报的证据索引](docs/resubmission-evidence.md) · [实体分层矩阵](docs/entity-capabilities.md) · [独立对照及实际误差](docs/independent-validation.md) · [退回意见响应表](docs/review-response.md)。10 个真实 CLI 案例保存输入、报告、SVG 和断言，运行 `node scripts/verify-submission-evidence.cjs` 复核。
 
-交付固定标签：`submission-0.1.1-20261022`。[干净环境复现步骤](docs/reproducibility.md)固定工具链和依赖；运行 `node scripts/verify-reproduction.cjs --fresh` 验证测试、CLI、网页和申报材料对应同一提交。
+交付固定标签：`submission-0.1.1-20261022-r2`。[干净环境复现步骤](docs/reproducibility.md)固定工具链和依赖；运行 `node scripts/verify-reproduction.cjs --fresh` 验证测试、CLI、网页和申报材料对应同一提交。
 
 [验证材料导航与名称约定](docs/verification-guide.md)统一使用“历史最小反例 / 补充几何审查 / 正确性与故障检出 / 真实入口证据”四个名称，具体数量留在对应记录中。
 

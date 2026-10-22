@@ -1,9 +1,105 @@
 {
-  "base_commit": "f233ddc6c08ffec43e4ef8abfdf4d1cad8f4092e",
-  "scope": "Targeted advisor input boundaries; not a full regression run",
-  "passed": 10,
-  "total": 10,
+  "base_commit": "a5d747f19f8297040a924af38334b7d4e66a75f9",
+  "scope": "Advisor boundaries plus r2 explicit-degree cases; suite alone is not full regression",
+  "passed": 14,
+  "total": 14,
   "cases": [
+    {
+      "id": "missing-degree",
+      "command": [
+        "moon",
+        "run",
+        "cli",
+        "check",
+        "examples/advisor-boundaries/models/missing-degree.dxf",
+        "--strict",
+        "--tol",
+        "0.01"
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "outlines": 0,
+        "reason": "缺少次数（71）"
+      },
+      "actual": {
+        "strict_exit": 1,
+        "outlines": 0,
+        "report": "图纸 examples/advisor-boundaries/models/missing-degree.dxf · 单位声明 毫米 · 容差 0.01 · 最小净距 不查（用 --min-gap 指定）\n坐标及阈值按图纸原始单位解释；单位声明需由使用者确认。\n────────────────────────────────────────\n[警告] [解析] SPLINE 缺少次数（71）；无法确定曲线定义，保留记录，轮廓未检查\n[警告] [检查覆盖] 1 个 SPLINE 实体的轮廓未参与检查；保留记录不表示已验证几何\n[警告] [检查覆盖] 没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据\n致命 0 · 警告 3 · 提示 0\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 3 个警告，请复核图纸与加工条件。\n"
+      },
+      "passed": true
+    },
+    {
+      "id": "degree-zero",
+      "command": [
+        "moon",
+        "run",
+        "cli",
+        "check",
+        "examples/advisor-boundaries/models/degree-zero.dxf",
+        "--strict",
+        "--tol",
+        "0.01"
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "outlines": 0,
+        "reason": "样条次数"
+      },
+      "actual": {
+        "strict_exit": 1,
+        "outlines": 0,
+        "report": "图纸 examples/advisor-boundaries/models/degree-zero.dxf · 单位声明 毫米 · 容差 0.01 · 最小净距 不查（用 --min-gap 指定）\n坐标及阈值按图纸原始单位解释；单位声明需由使用者确认。\n────────────────────────────────────────\n[警告] [解析] 实体 SPLINE（句柄 601）未能离散：样条次数、控制点数或节点数无效（次数上限32，控制点上限4096）\n[警告] [检查覆盖] 没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据\n致命 0 · 警告 2 · 提示 0\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 2 个警告，请复核图纸与加工条件。\n"
+      },
+      "passed": true
+    },
+    {
+      "id": "degree-too-high",
+      "command": [
+        "moon",
+        "run",
+        "cli",
+        "check",
+        "examples/advisor-boundaries/models/degree-too-high.dxf",
+        "--strict",
+        "--tol",
+        "0.01"
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "outlines": 0,
+        "reason": "样条次数"
+      },
+      "actual": {
+        "strict_exit": 1,
+        "outlines": 0,
+        "report": "图纸 examples/advisor-boundaries/models/degree-too-high.dxf · 单位声明 毫米 · 容差 0.01 · 最小净距 不查（用 --min-gap 指定）\n坐标及阈值按图纸原始单位解释；单位声明需由使用者确认。\n────────────────────────────────────────\n[警告] [解析] 实体 SPLINE（句柄 601）未能离散：样条次数、控制点数或节点数无效（次数上限32，控制点上限4096）\n[警告] [检查覆盖] 没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据\n致命 0 · 警告 2 · 提示 0\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 2 个警告，请复核图纸与加工条件。\n"
+      },
+      "passed": true
+    },
+    {
+      "id": "explicit-cubic-control",
+      "command": [
+        "moon",
+        "run",
+        "cli",
+        "check",
+        "examples/advisor-boundaries/models/explicit-cubic-control.dxf",
+        "--strict",
+        "--tol",
+        "0.01"
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "outlines": 1,
+        "reason": null
+      },
+      "actual": {
+        "strict_exit": 1,
+        "outlines": 1,
+        "report": "图纸 examples/advisor-boundaries/models/explicit-cubic-control.dxf · 单位声明 毫米 · 容差 0.01 · 最小净距 不查（用 --min-gap 指定）\n坐标及阈值按图纸原始单位解释；单位声明需由使用者确认。\n────────────────────────────────────────\n[警告] [轮廓闭合] 图层「CUT」上有 1 处轮廓没闭合——最宽的缝 80（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断\n致命 0 · 警告 1 · 提示 0\n本次检查发现 1 个警告，请复核图纸与加工条件。\n"
+      },
+      "passed": true
+    },
     {
       "id": "closed-spline",
       "command": [

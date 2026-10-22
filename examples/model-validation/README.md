@@ -38,4 +38,4 @@ node examples/model-validation/verify.cjs
 
 模型 03/05/06 故意为开放曲线，会有预期闭合警告；08 含未转字形轮廓的文字，10 含覆盖限制，严格模式退出 1 是预期结果。只有“实际与预期一致”才计为模型测试通过，不能把 strict=0 当成所有模型的目标。
 
-最终交付标签统一为 `submission-0.1.1-20261022`。`_build/model-validation.json` 保存每次运行的实际 HEAD、dirty 状态和工具版本；完整 CI 通过后随同提交的 Pages 复制为 `model-validation-verification.json`。本目录数据与现有 47 文件回归分开；第三方逐图纸独立几何真值仍为 0/47。
+最终交付标签统一为 `submission-0.1.1-20261022-r2`。`_build/model-validation.json` 保存每次运行的实际 HEAD、dirty 状态和工具版本；完整 CI 通过后随同提交的 Pages 复制为 `model-validation-verification.json`。本目录数据与现有 47 文件回归分开；第三方逐图纸独立几何真值仍为 0/47。

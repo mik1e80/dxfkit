@@ -1,5 +1,7 @@
 # DXFKit 本次交付范围
 
+SPLINE 次数（71）必须显式给出；缺失时保留记录、拒绝轮廓并报告不完整。`bounds()` 只估计原始字段，不等于 checked 几何验证；见 [r2 收敛](r2-submission-20261022.md)。
+
 本页范围基础上，当前 main 已补[最近一次顾问整改](advisor-review-20261022.md)：Closed/Periodic SPLINE 明确拒绝、权重严格匹配、缺 ENDBLK 显式恢复、椭圆轴比限 `(0,1]`、多段线非零宽度/厚度报告中心线检查限制，以及全局展开预算。旧申报标签保持历史提交。
 
 本次交付定位：**面向 MoonBit 开发者的 ASCII DXF 二维轮廓读取与辅助检查库**。核心为七类轮廓实体、受限二维 SOLID/TRACE 边界和普通 INSERT，附带 `check`、`svg`、`stats` 三个 CLI 命令、浏览器演示、公开接口调用示例及回归案例。
