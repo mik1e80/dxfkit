@@ -184,4 +184,6 @@ node scripts/verify-corpus-records.cjs
 
 变更与兼容约定见 [CHANGELOG.md](CHANGELOG.md)；已完成工作、后续优先级及验收条件见[路线图](docs/roadmap.md)，问题复现可提交至 [Issues](https://github.com/mik1e80/dxfkit/issues)。
 
+main 后续补充[两种实际 CAD 软件的三份导出验证](examples/cad-exports/README.md)：FreeCAD / OpenSCAD 原生模型、原始 DXF、版本设置、哈希、测试数据和报告随仓库保存，3/3 本地定向验证通过；这些软件内自建样本不称为第三方生产图纸。
+
 固定 r2 标签保留其已验证内容；main 上后续 CHANGELOG 与路线图整理属于文档更新，不移动 r2 标签。

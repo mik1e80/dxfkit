@@ -1,0 +1,4 @@
+# Native FreeCAD backup files from repeat exports are not the final source models.
+sources/*.FCBak
+sources/*.FCStd1
+__pycache__/
