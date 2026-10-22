@@ -1,0 +1,627 @@
+{
+  "schema": 1,
+  "checked_on": "2026-10-22",
+  "scope": "Self-authored targeted cases; not independent truth for the 47 third-party drawings",
+  "production_source_commit": "1a8185925e2c038039e6f57f32c69421e833d437",
+  "oracle": {
+    "kind": "independent Node analytic formulas; no production geometry helpers or ezdxf runtime",
+    "script": "scripts/verify-submission-evidence.cjs",
+    "script_sha256_lf": "6e3665a9cf6208226ec60df34548ad825aa95d6bf0374e966ac9b36e36038a15",
+    "numeric_display_significant_digits": 12
+  },
+  "pinned_profile": {
+    "module": "mik1e80/dxfkit",
+    "version": "0.1.1",
+    "submission_ref": "delivery-0.1.1-20261022-evidence",
+    "moon_release": "0.10.14+7d59c7ec9",
+    "moon_version": "0.1.20260920",
+    "moonc_version": "v0.10.14+7d59c7ec9",
+    "node_minimum_major": 22,
+    "ci_node_version": "24.19.0",
+    "dependencies": {
+      "moonbitlang/async": "0.22.1",
+      "moonbitlang/x": "0.5.5"
+    }
+  },
+  "passed": 10,
+  "total": 10,
+  "cases": [
+    {
+      "id": "normal-plate",
+      "input": "examples/plate.dxf",
+      "input_sha256_lf": "cad4692c4664b30c88e88f045276da0d5c8733a952f3a0835d05f455a7538e12",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/plate.dxf",
+          "--tol",
+          "0.01",
+          "--min-gap",
+          "0.5",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/plate.dxf",
+          "--tol",
+          "0.01"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 0,
+        "required": [
+          "单位声明 毫米"
+        ],
+        "forbidden": [
+          "检查不完整",
+          "[最小间隙]",
+          "[重复切割]",
+          "[轮廓闭合]",
+          "[退化几何]",
+          "[自相交]"
+        ],
+        "outlines": 5
+      },
+      "actual": {
+        "strict_exit": 0,
+        "svg_exit": 0,
+        "outlines": 5,
+        "findings": [],
+        "metrics": {
+          "outer_width": 100,
+          "outer_height": 60,
+          "outer_area": 6000,
+          "outer_perimeter": 320,
+          "hole_centers": [
+            [
+              10,
+              10
+            ],
+            [
+              90,
+              10
+            ],
+            [
+              90,
+              50
+            ],
+            [
+              10,
+              50
+            ]
+          ],
+          "hole_radius": 3,
+          "hole_diameter": 6,
+          "max_radius_error": 7.1054273576e-15,
+          "max_chord_sagitta": 0.00972807559738,
+          "allowed_radius_error": 1e-10,
+          "allowed_sagitta": 0.0100000001,
+          "declared_unit": "millimeters",
+          "entity_layers": [
+            "CUT",
+            "CUT",
+            "CUT",
+            "CUT",
+            "CUT"
+          ]
+        }
+      },
+      "artifacts": {
+        "report": "docs/submission-evidence/normal-plate.txt",
+        "svg": "docs/submission-evidence/normal-plate.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "problem-paths",
+      "input": "examples/issues.dxf",
+      "input_sha256_lf": "5cc5ebe08b7de5b1d3a78ec9d8f46502dd60b678a693e08e969c036aff964464",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/issues.dxf",
+          "--tol",
+          "0.01",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/issues.dxf",
+          "--tol",
+          "0.01"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "required": [
+          "[警告] [重复切割]",
+          "[致命] [退化几何]",
+          "半径是负数（-1）"
+        ],
+        "forbidden": [
+          "检查不完整"
+        ],
+        "outlines": null
+      },
+      "actual": {
+        "strict_exit": 1,
+        "svg_exit": 0,
+        "outlines": 3,
+        "findings": [
+          "[致命] [退化几何] 图层「CUT」的圆半径是负数（-1），需要修正几何定义",
+          "[警告] [重复切割] 图层「CUT」有 1 对线段重叠（共 10 长度，(0, 0) 附近），请确认是否存在重复路径"
+        ],
+        "metrics": {}
+      },
+      "artifacts": {
+        "report": "docs/submission-evidence/problem-paths.txt",
+        "svg": "docs/submission-evidence/problem-paths.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "open-contour",
+      "input": "examples/evidence/open-contour.dxf",
+      "input_sha256_lf": "81b4c6b256fb4cf878f175d006416f90b640242c7f7e139ffd93116d6be4a83c",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/evidence/open-contour.dxf",
+          "--tol",
+          "0.01",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/evidence/open-contour.dxf",
+          "--tol",
+          "0.01"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "required": [
+          "[警告] [轮廓闭合]",
+          "最宽的缝 10"
+        ],
+        "forbidden": [
+          "检查不完整",
+          "[重复切割]",
+          "[退化几何]"
+        ],
+        "outlines": null
+      },
+      "actual": {
+        "strict_exit": 1,
+        "svg_exit": 0,
+        "outlines": 1,
+        "findings": [
+          "[警告] [轮廓闭合] 图层「CUT」上有 1 处轮廓没闭合——最宽的缝 10（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+        ],
+        "metrics": {}
+      },
+      "artifacts": {
+        "report": "docs/submission-evidence/open-contour.txt",
+        "svg": "docs/submission-evidence/open-contour.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "insufficient-gap",
+      "input": "examples/plate.dxf",
+      "input_sha256_lf": "cad4692c4664b30c88e88f045276da0d5c8733a952f3a0835d05f455a7538e12",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/plate.dxf",
+          "--tol",
+          "0.01",
+          "--min-gap",
+          "8",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/plate.dxf",
+          "--tol",
+          "0.01"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "required": [
+          "[警告] [最小间隙]",
+          "4 对实体",
+          "折线最小距离 7（"
+        ],
+        "forbidden": [
+          "检查不完整",
+          "[自相交]",
+          "[重复切割]"
+        ],
+        "outlines": null
+      },
+      "actual": {
+        "strict_exit": 1,
+        "svg_exit": 0,
+        "outlines": 5,
+        "findings": [
+          "[警告] [最小间隙] 图层「CUT」有 4 对实体轮廓距离低于阈值——折线最小距离 7（(92.96115078791374, 49.51876615742672) 附近）；请结合单位、离散容差与工艺复核"
+        ],
+        "metrics": {}
+      },
+      "artifacts": {
+        "report": "docs/submission-evidence/insufficient-gap.txt",
+        "svg": "docs/submission-evidence/insufficient-gap.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "unsupported-and-ocs",
+      "input": "examples/coverage-limits.dxf",
+      "input_sha256_lf": "9e6b80350d78ad2b635be28c56eb6b2305e25459091d4d6979c3ac6b92a0f478",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/coverage-limits.dxf",
+          "--tol",
+          "0.01",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/coverage-limits.dxf",
+          "--tol",
+          "0.01"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "required": [
+          "检查不完整",
+          "HATCH",
+          "DIMENSION",
+          "RAY",
+          "OCS"
+        ],
+        "forbidden": [],
+        "outlines": null
+      },
+      "actual": {
+        "strict_exit": 1,
+        "svg_exit": 0,
+        "outlines": 1,
+        "findings": [
+          "[警告] [检查覆盖] 1 个 CIRCLE 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核",
+          "[警告] [检查覆盖] 1 个 HATCH 实体的轮廓未参与检查；保留记录不表示已验证几何",
+          "[警告] [检查覆盖] 1 个 DIMENSION 实体的轮廓未参与检查；保留记录不表示已验证几何",
+          "[警告] [检查覆盖] 1 个 RAY 实体的轮廓未参与检查；保留记录不表示已验证几何"
+        ],
+        "metrics": {}
+      },
+      "artifacts": {
+        "report": "docs/submission-evidence/unsupported-and-ocs.txt",
+        "svg": "docs/submission-evidence/unsupported-and-ocs.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "damaged-vertices",
+      "input": "examples/completeness-mixed.dxf",
+      "input_sha256_lf": "022388f82623808d380053baad0d276d3205942847d78713e32bcc991f2d5373",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/completeness-mixed.dxf",
+          "--tol",
+          "0.01",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/completeness-mixed.dxf",
+          "--tol",
+          "0.01"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "required": [
+          "检查不完整",
+          "LWPOLYLINE",
+          "POLYLINE",
+          "SPLINE",
+          "OCS",
+          "RAY"
+        ],
+        "forbidden": [],
+        "outlines": 2
+      },
+      "actual": {
+        "strict_exit": 1,
+        "svg_exit": 0,
+        "outlines": 2,
+        "findings": [
+          "[警告] [解析] LWPOLYLINE 顶点缺少 Y（20），未生成该实体的轮廓",
+          "[警告] [解析] LWPOLYLINE 声明顶点数 3 与完整坐标数 2 不一致；请复核输入",
+          "[警告] [解析] POLYLINE 顶点 2 缺少 X/Y 坐标；未生成该实体的轮廓",
+          "[警告] [解析] SPLINE 控制点缺少 X/Y 坐标；保留记录，未生成该实体的轮廓",
+          "[警告] [解析] 实体 SPLINE（句柄 INVALID-SPLINE）未能离散：样条次数、控制点数或节点数无效（次数上限32，控制点上限4096）",
+          "[警告] [检查覆盖] 1 个 CIRCLE 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核",
+          "[警告] [检查覆盖] 1 个 RAY 实体的轮廓未参与检查；保留记录不表示已验证几何",
+          "[警告] [检查覆盖] 1 个 LWPOLYLINE 实体的轮廓未参与检查；保留记录不表示已验证几何",
+          "[警告] [检查覆盖] 1 个 POLYLINE 实体的轮廓未参与检查；保留记录不表示已验证几何",
+          "[警告] [检查覆盖] 1 个 SPLINE 实体的轮廓未参与检查；保留记录不表示已验证几何"
+        ],
+        "metrics": {}
+      },
+      "artifacts": {
+        "report": "docs/submission-evidence/damaged-vertices.txt",
+        "svg": "docs/submission-evidence/damaged-vertices.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "array-first-only",
+      "input": "examples/evidence/array-limit.dxf",
+      "input_sha256_lf": "ef2684fc5fc52b9275a993dc7963cb5c76cb4e5d804853a7d5293f7d3f596726",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/evidence/array-limit.dxf",
+          "--tol",
+          "0.01",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/evidence/array-limit.dxf",
+          "--tol",
+          "0.01"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "required": [
+          "检查不完整",
+          "阵列暂只展开首个实例"
+        ],
+        "forbidden": [],
+        "outlines": 1
+      },
+      "actual": {
+        "strict_exit": 1,
+        "svg_exit": 0,
+        "outlines": 1,
+        "findings": [
+          "[警告] [解析] INSERT 阵列暂只展开首个实例，其他行列未检查：B"
+        ],
+        "metrics": {}
+      },
+      "artifacts": {
+        "report": "docs/submission-evidence/array-first-only.txt",
+        "svg": "docs/submission-evidence/array-first-only.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "discretization-limit",
+      "input": "examples/consumer/fixtures/discretization-error.dxf",
+      "input_sha256_lf": "7a3f4f97689eec952f4914dea192b0e92b2679888bab9bea9fc12228e8578575",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/consumer/fixtures/discretization-error.dxf",
+          "--tol",
+          "0.01",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/consumer/fixtures/discretization-error.dxf",
+          "--tol",
+          "0.01"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "required": [
+          "检查不完整",
+          "离散"
+        ],
+        "forbidden": [],
+        "outlines": 0
+      },
+      "actual": {
+        "strict_exit": 1,
+        "svg_exit": 0,
+        "outlines": 0,
+        "findings": [
+          "[警告] [解析] 实体 CIRCLE（句柄 ）未能离散：圆离散需要超过4096段，或半径非有限；未满足指定容差",
+          "[警告] [检查覆盖] 没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据"
+        ],
+        "metrics": {}
+      },
+      "artifacts": {
+        "report": "docs/submission-evidence/discretization-limit.txt",
+        "svg": "docs/submission-evidence/discretization-limit.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "analytic-ellipse",
+      "input": "examples/evidence/analytic-ellipse.dxf",
+      "input_sha256_lf": "563cea716a69608ad8f3c7e81008173cdd39041413b5118120df87a95df743ee",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/evidence/analytic-ellipse.dxf",
+          "--tol",
+          "0.002",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/evidence/analytic-ellipse.dxf",
+          "--tol",
+          "0.002"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 0,
+        "required": [],
+        "forbidden": [
+          "检查不完整",
+          "[自相交]"
+        ],
+        "outlines": 1
+      },
+      "actual": {
+        "strict_exit": 0,
+        "svg_exit": 0,
+        "outlines": 1,
+        "findings": [],
+        "metrics": {
+          "samples": 2049,
+          "reference_to_svg_max_distance": 0.000978127563107,
+          "svg_to_reference_polyline_max_distance": 0.00000583543644606,
+          "allowed_distance": 0.002000001,
+          "max_ellipse_equation_error": 5.3290705182e-15,
+          "allowed_equation_error": 1e-10
+        }
+      },
+      "artifacts": {
+        "report": "docs/submission-evidence/analytic-ellipse.txt",
+        "svg": "docs/submission-evidence/analytic-ellipse.svg"
+      },
+      "passed": true
+    },
+    {
+      "id": "analytic-cubic",
+      "input": "examples/evidence/analytic-cubic.dxf",
+      "input_sha256_lf": "b44c8cbb27d9eb09762d4561c738379b4412271e01179ba874b20932270ccfd2",
+      "commands": [
+        [
+          "moon",
+          "run",
+          "cli",
+          "check",
+          "examples/evidence/analytic-cubic.dxf",
+          "--tol",
+          "0.002",
+          "--min-gap",
+          "0",
+          "--strict"
+        ],
+        [
+          "moon",
+          "run",
+          "cli",
+          "svg",
+          "examples/evidence/analytic-cubic.dxf",
+          "--tol",
+          "0.002"
+        ]
+      ],
+      "expected": {
+        "strict_exit": 1,
+        "required": [
+          "[轮廓闭合]"
+        ],
+        "forbidden": [
+          "检查不完整",
+          "[自相交]",
+          "[退化几何]"
+        ],
+        "outlines": 1
+      },
+      "actual": {
+        "strict_exit": 1,
+        "svg_exit": 0,
+        "outlines": 1,
+        "findings": [
+          "[警告] [轮廓闭合] 图层「CUT」上有 1 处轮廓没闭合——最宽的缝 1（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+        ],
+        "metrics": {
+          "samples": 2049,
+          "reference_to_svg_max_distance": 0.00143712816901,
+          "svg_to_reference_polyline_max_distance": 0,
+          "allowed_distance": 0.002000001
+        }
+      },
+      "artifacts": {
+        "report": "docs/submission-evidence/analytic-cubic.txt",
+        "svg": "docs/submission-evidence/analytic-cubic.svg"
+      },
+      "passed": true
+    }
+  ]
+}

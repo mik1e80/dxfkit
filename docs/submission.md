@@ -6,7 +6,7 @@
 - 项目方向：工业软件 / 开发者工具
 - GitHub：<https://github.com/mik1e80/dxfkit>
 - 在线演示：<https://mik1e80.github.io/dxfkit/>
-- 提交版本：固定标签 `delivery-0.1.1-20261022-review`，以该标签的提交 SHA 为准；[干净环境复现与版本核对](reproducibility.md)。网页 release.json 和 verification.json 记录实际源码提交及本文件、生态对比和来源记录的哈希，CI 通过后才部署同一产物。
+- 提交版本：固定标签 `delivery-0.1.1-20261022-evidence`，以该标签的提交 SHA 为准；[干净环境复现与版本核对](reproducibility.md)。网页 release.json 和 verification.json 记录实际源码提交及本文件、生态对比和来源记录的哈希，CI 通过后才部署同一产物。
 - 是否为整体移植：否；参考资料、公式移植和外部语料见下文。
 - 参赛者及联系方式：报名表保留原信息，不在公开仓库展示。
 
@@ -50,12 +50,15 @@ HATCH、DIMENSION、3DFACE、未知实体的轮廓未参与检查。SOLID/TRACE 
 
 ## 可复现案例与完成标准
 
+本轮新增[材料索引](resubmission-evidence.md)、[实体分层矩阵](entity-capabilities.md)、[独立解析对照及实际误差](independent-validation.md)和[退回意见响应表](review-response.md)。10 个真实 CLI 案例保存报告、SVG、完整命令、输入哈希、预期和实际结果；`node scripts/verify-submission-evidence.cjs` 在 CI 中逐项复核，不自动更新快照。
+
 在仓库根目录执行 `moon update` 后运行以下命令。边界反例详见 [兼容性案例](compatibility-cases.md)。
 
 | 输入与命令 | 验证内容 | 预期结果 |
 | --- | --- | --- |
 | `moon run cli check examples/plate.dxf --min-gap 0.5 --strict` | 毫米声明、100×60 外框和四个半径 3 的孔 | 退出 0，仅表示已覆盖检查项未发现问题 |
-| `moon run cli check examples/issues.dxf` | 重复路径、开放轮廓、负半径 | 退出 1，报告具体问题 |
+| `moon run cli check examples/issues.dxf` | 重复路径、负半径 | 退出 1，报告重复警告和负半径致命 |
+| `moon run cli check examples/evidence/open-contour.dxf --tol 0.01 --strict` | 单独验证开放轮廓 | 退出 1，闭合警告、最宽缝 10 |
 | `moon run cli check examples/plate.dxf --min-gap 8 --strict` | 指定净距阈值生效 | 退出 1，报告最小间隙 |
 | `moon run cli check examples/coverage-limits.dxf --strict` | 可读文件含未覆盖语义 | 退出 1，报告 HATCH、DIMENSION、RAY 和 OCS 覆盖限制 |
 | `moon run cli check testdata/ezdxf/Minimal_DXF_AC1009.dxf --strict` | 版本标识与几何覆盖的区别 | 退出 1，提示没有可检查的二维轮廓 |

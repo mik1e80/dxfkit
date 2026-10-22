@@ -32,7 +32,7 @@
 
 `moon run cli check examples/issues.dxf`
 
-预期退出 1，报告重复路径、开放轮廓及负半径。`examples/curves.dxf` 和几何测试另覆盖负 bulge 顺序及 S 形样条，曲线精度不能仅凭预览判断。
+预期退出 1，报告重复路径及负半径；本文件没有闭合告警。开放轮廓单独运行 `moon run cli check examples/evidence/open-contour.dxf --tol 0.01 --strict`，应报告最宽缝 10 并退出 1。完整实际输出见[证据索引](resubmission-evidence.md)。`examples/curves.dxf` 和几何测试另覆盖负 bulge 顺序及 S 形样条，曲线精度不能仅凭预览判断。
 
 ## 自动复核与来源
 

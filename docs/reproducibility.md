@@ -1,6 +1,6 @@
 # 从指定提交复现交付版本
 
-交付版本使用固定标签 `delivery-0.1.1-20261022-review`。标签所指提交是本次库、CLI、测试、网页构建、申报说明与生态对比的共同源码；不以可变的 main 或在线页面当前内容替代提交身份。模块版本仍为 0.1.1，未发布 Mooncakes。此前的 `delivery-0.1.1-20261021`、`delivery-0.1.1-20261022` 和 `delivery-0.1.1-20261022-ellipse` 保留原提交，不移动或覆盖。
+交付版本使用固定标签 `delivery-0.1.1-20261022-evidence`。标签所指提交是本次库、CLI、测试、网页构建、申报说明与生态对比的共同源码；不以可变的 main 或在线页面当前内容替代提交身份。模块版本仍为 0.1.1，未发布 Mooncakes。此前的 `delivery-0.1.1-20261021`、`delivery-0.1.1-20261022`、`delivery-0.1.1-20261022-ellipse` 和 `delivery-0.1.1-20261022-review` 保留原提交，不移动或覆盖。
 
 ## 固定工具与依赖
 
@@ -40,7 +40,7 @@ $env:PATH = "$HOME/.moon/bin;" + $env:PATH
 以下命令在 PowerShell、Bash 均可执行。使用尚不存在的目录：
 
 ```sh
-git clone --branch delivery-0.1.1-20261022-review --depth 1 https://github.com/mik1e80/dxfkit.git dxfkit-delivery
+git clone --branch delivery-0.1.1-20261022-evidence --depth 1 https://github.com/mik1e80/dxfkit.git dxfkit-delivery
 cd dxfkit-delivery
 git rev-parse HEAD
 node scripts/environment.cjs
@@ -49,13 +49,14 @@ node scripts/verify-reproduction.cjs --fresh
 
 `--fresh` 要求检出目录没有 `_build/`、`.mooncakes/`，并要求源码干净。它不删除用户缓存或文件。CI 不恢复依赖缓存；本地本轮验证另从官方归档建立隔离工具链与空 registry，没有复制原项目的依赖、编译输出或用户凭据。
 
-复现脚本依次执行：依赖获取及版本核对、全目标检查、构建、Wasm/JS/Native/Wasm-GC 测试、语料记录复核、故障检出验证、真实 CLI 回归、Wasm/Native 独立工程调用、网页重建和行为断言，最后打包 `_site/`。任何一步失败都会使进程失败，验证记录为 `passed:false`。
+复现脚本依次执行：依赖获取及版本核对、全目标检查、构建、Wasm/JS/Native/Wasm-GC 测试、语料记录复核、故障检出验证、真实 CLI 回归、Wasm/Native 独立工程调用、10 个再申报证据案例及解析误差/保存输出复核、网页重建和行为断言，最后打包 `_site/`。任何一步失败都会使进程失败，验证记录为 `passed:false`。
 
 成功后的输出：
 
 - `_build/reproduction.json`：实际提交、工具版本、依赖及各步退出码。
+- `_build/submission-evidence.json`：当前提交、dirty 状态和工具版本，以及 10 个真实 CLI 案例、诊断和解析误差；与仓库静态基线记录的身份分开标识。
 - `web/dist/release.json`：同一提交、模块版本、工具链、网页资产、申报说明、生态对比与来源，以及追加审查说明和修复前/后记录的 SHA-256。
-- `_site/`：已验证的站点，含 `dist/release.json`、`verification.json` 和该提交的公开文档副本，包括申报说明、生态对比、追加审查及机器记录。
+- `_site/`：已验证的站点，含 `dist/release.json`、`verification.json` 和该提交的公开文档副本，包括申报说明、生态对比、追加审查及机器记录，以及再申报索引、分层矩阵、响应表、独立对照和 `docs/submission-evidence/` 全部保存的报告/SVG/JSON。新增材料同样写入 release.json 的哈希清单。
 
 已有依赖的目录可不加 `--fresh` 重跑。开发时允许未提交改动须显式加 `--allow-dirty`；这类报告会记录 `source_dirty:true`，不能当作干净交付结果。
 

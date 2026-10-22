@@ -11,7 +11,11 @@ fs.mkdirSync(path.join(root,'web/dist'),{recursive:true});
 fs.copyFileSync(path.join(root,'_build/js/release/build/web/web.js'),path.join(root,'web/dist/web.js'));
 const assets=['web/index.html','web/style.css','web/app.js','web/dist/web.js','docs/submission.md',
   'COMPARISON.md','docs/ecosystem-sources.json','docs/review-cases.md',
-  'docs/review-cases-before.json','docs/review-cases-results.json'];
+  'docs/review-cases-before.json','docs/review-cases-results.json',
+  'docs/entity-capabilities.md','docs/resubmission-evidence.md',
+  'docs/independent-validation.md','docs/review-response.md',
+  ...fs.readdirSync(path.join(root,'docs/submission-evidence')).sort().map(f=>'docs/submission-evidence/'+f),
+  ...new Set(JSON.parse(fs.readFileSync(path.join(root,'docs/submission-evidence/results.json'),'utf8')).cases.map(c=>c.input))];
 const manifest={module:profile.module,version:profile.version,source_commit:revision.commit,source_dirty:revision.dirty,
   toolchain:actual,dependencies:profile.dependencies,
   sha256:Object.fromEntries(assets.map(f=>[f,createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex')]))};

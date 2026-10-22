@@ -18,7 +18,9 @@ MoonBit ASCII DXF 读取与二维轮廓辅助检查库：在声明字段范围�
 
 源码修订版本 **0.1.1**。本次修订尚未发布到 Mooncakes。
 
-交付固定标签：`delivery-0.1.1-20261022-review`。[干净环境复现步骤](docs/reproducibility.md)固定工具链和依赖；运行 `node scripts/verify-reproduction.cjs --fresh` 验证测试、CLI、网页和申报材料对应同一提交。
+[再次申报的证据索引](docs/resubmission-evidence.md) · [实体分层矩阵](docs/entity-capabilities.md) · [独立对照及实际误差](docs/independent-validation.md) · [退回意见响应表](docs/review-response.md)。10 个真实 CLI 案例保存输入、报告、SVG 和断言，运行 `node scripts/verify-submission-evidence.cjs` 复核。
+
+交付固定标签：`delivery-0.1.1-20261022-evidence`。[干净环境复现步骤](docs/reproducibility.md)固定工具链和依赖；运行 `node scripts/verify-reproduction.cjs --fresh` 验证测试、CLI、网页和申报材料对应同一提交。
 
 ## 解决什么问题
 
@@ -57,7 +59,7 @@ moon run examples/library --target js
 ```
 
 - `plate.dxf`：声明毫米单位的 100×60 外框及四个半径 3 的孔，用来演示有明确尺寸的二维图纸复核。
-- `issues.dxf`：重复线段、开放边界和负半径，演示发现具体问题。
+- `issues.dxf`：重复线段和负半径；开放轮廓单独用 `examples/evidence/open-contour.dxf` 验证。
 - `curves.dxf`：负 bulge 与 S 形样条，复现本次修复的曲线离散问题。
 
 这些文件是项目自建示例，不代表生产设备或材料的加工认证。`testdata/ezdxf/` 另有 47 个第三方 DXF 回归文件；来源及完整 MIT 条款见第三方声明。

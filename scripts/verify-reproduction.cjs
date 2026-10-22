@@ -31,6 +31,7 @@ try {
   for(const script of ['scripts/verify-corpus-records.cjs','scripts/verify-test-sensitivity.cjs','cli/smoke.cjs']) execute('node',[script]);
   execute('node',['scripts/verify-consumer.cjs']);
   execute('node',['scripts/verify-consumer.cjs','--target','native']);
+  execute('node',['scripts/verify-submission-evidence.cjs']);
   execute('node',['scripts/build-web.cjs',...dirtyArgs]);
   for(const script of ['web/smoke.cjs','scripts/verify-delivery.cjs','scripts/verify-completeness.cjs','scripts/verify-review-cases.cjs']) execute('node',[script]);
   fs.writeFileSync(path.join(root,'_build/reproduction.json'),JSON.stringify({
