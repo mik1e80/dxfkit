@@ -178,7 +178,12 @@ pub fn Drawing::check(self : Drawing, opt : CheckOptions) -> Report {
       _ => ()
     }
     match p.entity.geom {
-      Face(..) | Hatch(..) | Dimension(..) | Unknown =>
+      Face(..) => {
+        if !((p.entity.kind() == "SOLID" || p.entity.kind() == "TRACE") && p.flat is Outline(..)) {
+          bump(unsupported, p.entity.kind())
+        }
+      }
+      Hatch(..) | Dimension(..) | Unknown =>
         bump(unsupported, p.entity.kind())
       _ => ()
     }

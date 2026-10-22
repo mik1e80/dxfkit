@@ -6,7 +6,7 @@
 - 项目方向：工业软件 / 开发者工具
 - GitHub：<https://github.com/mik1e80/dxfkit>
 - 在线演示：<https://mik1e80.github.io/dxfkit/>
-- 提交版本：固定标签 `delivery-0.1.1-20261022-ellipse`，以该标签的提交 SHA 为准；[干净环境复现与版本核对](reproducibility.md)。网页 release.json 和 verification.json 记录实际源码提交及本文件、生态对比和来源记录的哈希，CI 通过后才部署同一产物。
+- 提交版本：固定标签 `delivery-0.1.1-20261022-review`，以该标签的提交 SHA 为准；[干净环境复现与版本核对](reproducibility.md)。网页 release.json 和 verification.json 记录实际源码提交及本文件、生态对比和来源记录的哈希，CI 通过后才部署同一产物。
 - 是否为整体移植：否；参考资料、公式移植和外部语料见下文。
 - 参赛者及联系方式：报名表保留原信息，不在公开仓库展示。
 
@@ -16,7 +16,7 @@ dxfkit 用 MoonBit 实现 ASCII DXF 读取、部分二维实体解码、曲线�
 
 交付终点是：对声明范围内的 ASCII DXF 输入，输出结构化记录、可处理的 XY 折线和检查报告，同时提示未覆盖的实体或语义。项目不是完整 DXF 标准实现，不判断图纸是否可以直接上机加工。
 
-本次范围固定为七类核心轮廓实体和普通 INSERT，附带三个 CLI 命令、浏览器演示和自动验证。逐字段输入、输出、限制及验证入口见[交付范围](delivery-scope.md)，六类核心问题的预期、实际和自动断言见[修复验证](delivery-verification.md)。这些是本项目的完成标准，不作为主办方额外要求。
+本次范围固定为七类核心轮廓实体、受限二维 SOLID/TRACE 边界和普通 INSERT，附带三个 CLI 命令、浏览器演示和自动验证。逐字段输入、输出、限制及验证入口见[交付范围](delivery-scope.md)，六类核心问题的预期、实际和自动断言见[修复验证](delivery-verification.md)。这些是本项目的完成标准，不作为主办方额外要求。
 
 ## DXF 兼容边界与几何检查的关系
 
@@ -30,10 +30,10 @@ dxfkit 用 MoonBit 实现 ASCII DXF 读取、部分二维实体解码、曲线�
 | 二维轮廓 | LINE、CIRCLE、ARC、ELLIPSE、SPLINE、LWPOLYLINE 与普通 POLYLINE 的支持字段 | 不承诺全部实体字段、网格或通用三维模型支持 |
 | 曲线 | bulge、椭圆、连续正权重 NURBS；checked 接口报告无效输入与资源上限 | 不保证任意次数、权重及数值尺度的精度 |
 | 块引用 | 普通 INSERT 的 XY 仿射变换、图层 0 继承、最多 8 层，循环和缺失引用提示 | 第 9 层截断；阵列只展开首实例；非默认 OCS 引用整体跳过并诊断 |
-| 元数据 | 文字内容与位置，HATCH、DIMENSION 的部分字段，SOLID/TRACE/3DFACE 角点 | 字体转轮廓、完整填充边界、关联标注重建及面实体检查 |
+| 元数据 | 文字内容与位置，HATCH、DIMENSION 的部分字段，3DFACE 角点 | 字体转轮廓、完整填充边界、关联标注重建及面实体检查 |
 | 坐标与单位 | XY 投影，显示单位声明；阈值沿用原始坐标单位 | 非默认 OCS 未转换，不自动换算毫米 |
 
-HATCH、DIMENSION、SOLID、TRACE、3DFACE、未知实体的轮廓未参与检查；非默认 OCS 会提示未转换。存在覆盖警告时，不能将其他几何未报错理解为整份图纸通过。CLI `--strict` 将警告也作为失败退出条件。
+HATCH、DIMENSION、3DFACE、未知实体的轮廓未参与检查。SOLID/TRACE 新增受限二维边界：默认 OCS、零厚度、全部角点 Z 相等时，通过 Entity::flatten_checked 生成正确边界；原始 Face 字段不改写。非默认 OCS、非平行 XY 或非零厚度拒绝轮廓；缺第四点恢复带不完整诊断，残缺第四点拒绝。存在覆盖警告时，其他几何未报错不能表示整图通过，CLI `--strict` 因此失败。
 
 完整性通过 `Report::has_incomplete_checks()` 统一判断；丢失顶点/控制点、未转换坐标系、未支持实体及离散失败都进入报告，并明确标为“检查不完整”。同文件有正常轮廓时仍保留全部原因，混合案例和 strict 退出码有[自动验证](check-completeness.md)。
 
@@ -62,13 +62,15 @@ HATCH、DIMENSION、SOLID、TRACE、3DFACE、未知实体的轮廓未参与检�
 
 `node cli/smoke.cjs` 自动核对实际退出码和关键诊断。曲线另用负 bulge、S 形样条及独立 de Boor 密集采样对照验证。47 个外部文件用于回归，不是完整标准认证套件。测试数量随修订变化，以 CI 和实际运行结果为准。
 
-`node scripts/verify-delivery.cjs` 对实际网页产物执行六类最小问题断言：非原点椭圆、SVG 大/微小坐标、LWPOLYLINE 损坏顶点、POLYLINE 损坏顶点、面实体降级、INSERT OCS。机器可读预期和实际输出随仓库保存，未把已有本地 OCS 修复误记为本轮新发现。独立调用工程见 [`examples/consumer/`](../examples/consumer/README.md)：自带模块配置、读取 DXF、提取实体、checked 离散和报告处理；通过 moon.work 使用本地未发布修订，无需网页或内部实现复制。`node scripts/verify-consumer.cjs` 将其复制到仓库外，在 Wasm 和 Native 分别验证 7 个编译/运行用例。正常、问题、未覆盖三种浏览器样例均调用同一 MoonBit 库。
+`node scripts/verify-delivery.cjs` 对实际网页产物执行六类最小问题断言：非原点椭圆、SVG 大/微小坐标、LWPOLYLINE 损坏顶点、POLYLINE 损坏顶点、面实体降级、INSERT OCS。机器可读预期和实际输出随仓库保存，未把已有本地 OCS 修复误记为本轮新发现。独立调用工程见 [`examples/consumer/`](../examples/consumer/README.md)：自带模块配置、读取 DXF、提取实体、checked 离散和报告处理；通过 moon.work 使用本地未发布修订，无需网页或内部实现复制。`node scripts/verify-consumer.cjs` 将其复制到仓库外，在 Wasm 和 Native 分别验证 8 个编译/运行用例。正常、问题、未覆盖三种浏览器样例均调用同一 MoonBit 库。
 
-几何和检查器的结果验收见[测试矩阵](test-accuracy.md)：9 个几何精度测试核对坐标、尺寸、包围盒或独立解析曲线误差；8 个检查器成对测试核对分类、严重程度、定位和阈值边界。另有 2 个实体测试验证圆心 (10,0)、长轴向量 (10,0)、轴比 0.5 的精确包围盒和平移不变性。临时副本中的七类故障均被编译后的实际测试拒绝，包括恢复长轴重复减圆心的旧错误；不以实体数、点数或警告总数代替判定正确。
+几何和检查器的结果验收见[测试矩阵](test-accuracy.md)：9 个几何精度测试核对坐标、尺寸、包围盒或独立解析曲线误差；8 个检查器成对测试核对分类、严重程度、定位和阈值边界。另有 2 个实体测试验证圆心 (10,0)、长轴向量 (10,0)、轴比 0.5 的精确包围盒和平移不变性。临时副本中的九类故障均被编译后的实际测试拒绝，包括恢复长轴重复减圆心的旧错误；不以实体数、点数或警告总数代替判定正确。
 
 第三方文件另有[47 张逐图纸验证记录](corpus-validation.md)：保留来源及文件哈希，分别列出读取结果、实体字段解码、实际参与测试和未覆盖部分。47 张均可读取，当前逐图纸独立几何验证为 0/47；自建解析几何测试不替代这些外部文件的真值，不能写成 47 张“兼容通过”。
 
 ## 参考、依赖与许可
+
+五项追加审查已有[逐项预期、修复前后与真实入口结果](review-cases.md)：11 项库测试与 11 个网页/CLI 案例验证二维 SOLID/TRACE、3DFACE 原始顺序、块 OCS、多段线恢复和大/微小 SVG 矩形，不是另开发五套工具。独立消费工程新增 Entity 接口调用，Wasm / Native 各 8 项验收。错误检出合计 10/10，含面边界顺序与重复第四点的语义错误。
 
 项目自身采用 Apache-2.0。参考 ezdxf 的能力组织、格式资料与部分公式；bulge 换算公式存在移植参考关系，不声称全部算法原创。样条离散采用 Boehm 节点插入与 de Casteljau 细分，测试保留独立 de Boor 求值对照。
 

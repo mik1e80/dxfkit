@@ -388,7 +388,48 @@ pub fn Geometry::flatten(self : Geometry, tol : Double) -> Flat {
         closed=false,
       )
     Text(at~, height~, value~, ..) => Label(at=at.xy(), height~, value~)
-    // 面记录保留字段，但不把文件角点顺序当成已验证的加工轮廓。
+    // Face 不携带 SOLID/TRACE/3DFACE 身份；实体调用方应使用 Entity::flatten_checked。
     Face(..) | Insert(..) | Dimension(..) | Hatch(..) | Unknown => Empty
+  }
+}
+
+///|
+/// 保留实体身份的离散入口。SOLID/TRACE 与 3DFACE 的存储顺序不同，
+/// 不改写原始 Face 角点，也不把仅有 Geometry 的 Face 统一重排。
+pub fn Entity::flatten_checked(self : Entity, tol : Double) -> Result[Flat, String] {
+  if !positive_tolerance(tol) {
+    return Err("离散容差必须是正的有限数字")
+  }
+  match self.geom {
+    Face(corners~) if self.kind() == "SOLID" || self.kind() == "TRACE" => {
+      let record = self.common.record
+      if record.get_double(210, 0.0) != 0.0 ||
+        record.get_double(220, 0.0) != 0.0 ||
+        record.get_double(230, 1.0) != 1.0 {
+        return Err("SOLID/TRACE 未转换 OCS，已跳过轮廓")
+      }
+      if record.get_double(39, 0.0) != 0.0 {
+        return Err("SOLID/TRACE 非零厚度未处理，已跳过轮廓")
+      }
+      if corners.length() != 3 && corners.length() != 4 {
+        return Err("SOLID/TRACE 需要三个或四个完整角点")
+      }
+      for p in corners {
+        if !finite_number(p.x) || !finite_number(p.y) || !finite_number(p.z) {
+          return Err("SOLID/TRACE 角点必须有限")
+        }
+        if p.z != corners[0].z {
+          return Err("SOLID/TRACE 面不平行于 XY 平面，已跳过轮廓")
+        }
+      }
+      let points : Array[Vec2] = [corners[0].xy(), corners[1].xy()]
+      if corners.length() == 4 &&
+        (corners[3].x != corners[2].x || corners[3].y != corners[2].y) {
+        points.push(corners[3].xy())
+      }
+      points.push(corners[2].xy())
+      Ok(Outline(points~, closed=true))
+    }
+    _ => self.geom.flatten_checked(tol)
   }
 }

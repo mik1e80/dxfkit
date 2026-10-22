@@ -1,0 +1,379 @@
+{
+  "suite": "dxfkit-review-cases",
+  "checked_on": "2026-10-22",
+  "platform": "win32",
+  "node": "24.19.0",
+  "bundle_sha256": "7e429db6bba9e0b8319bd0cc794e9b5c97598f4beb5dd2ea9c941e996baac5ec",
+  "passed": 11,
+  "total": 11,
+  "cases": [
+    {
+      "id": "SOLID-rectangle",
+      "input_dxf": "0\nSECTION\n2\nENTITIES\n0\nSOLID\n10\n0\n20\n0\n11\n2\n21\n0\n12\n0\n22\n1\n13\n2\n23\n1\n0\nENDSEC\n0\nEOF\n",
+      "expected": {
+        "strict_exit": 0,
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "svg_tolerance": 0.001,
+        "cli_tolerance": 0.001,
+        "web_check_tolerance": 0.05
+      },
+      "actual": {
+        "outlines": 1,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n（没有发现）\n致命 0 · 警告 0 · 提示 0\n本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。",
+        "strict_exit": 0,
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      "passed": true
+    },
+    {
+      "id": "TRACE-rectangle",
+      "input_dxf": "0\nSECTION\n2\nENTITIES\n0\nTRACE\n10\n0\n20\n0\n11\n2\n21\n0\n12\n0\n22\n1\n13\n2\n23\n1\n0\nENDSEC\n0\nEOF\n",
+      "expected": {
+        "strict_exit": 0,
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "svg_tolerance": 0.001,
+        "cli_tolerance": 0.001,
+        "web_check_tolerance": 0.05
+      },
+      "actual": {
+        "outlines": 1,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n（没有发现）\n致命 0 · 警告 0 · 提示 0\n本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。",
+        "strict_exit": 0,
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      "passed": true
+    },
+    {
+      "id": "SOLID-triangle",
+      "input_dxf": "0\nSECTION\n2\nENTITIES\n0\nSOLID\n10\n0\n20\n0\n11\n2\n21\n0\n12\n0\n22\n1\n13\n0\n23\n1\n0\nENDSEC\n0\nEOF\n",
+      "expected": {
+        "strict_exit": 0,
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "svg_tolerance": 0.001,
+        "cli_tolerance": 0.001,
+        "web_check_tolerance": 0.05
+      },
+      "actual": {
+        "outlines": 1,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n（没有发现）\n致命 0 · 警告 0 · 提示 0\n本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。",
+        "strict_exit": 0,
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      "passed": true
+    },
+    {
+      "id": "3DFACE-metadata",
+      "input_dxf": "0\nSECTION\n2\nENTITIES\n0\n3DFACE\n10\n0\n20\n0\n11\n2\n21\n0\n12\n0\n22\n1\n13\n2\n23\n1\n0\nENDSEC\n0\nEOF\n",
+      "expected": {
+        "strict_exit": 1,
+        "outlines": 0,
+        "svg_tolerance": 0.001,
+        "cli_tolerance": 0.001,
+        "web_check_tolerance": 0.05,
+        "diagnostic_pattern": "3DFACE.*轮廓未参与检查"
+      },
+      "actual": {
+        "outlines": 0,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [检查覆盖] 1 个 3DFACE 实体的轮廓未参与检查；保留记录不表示已验证几何\n[警告] [检查覆盖] 没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据\n致命 0 · 警告 2 · 提示 0\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 2 个警告，请复核图纸与加工条件。",
+        "strict_exit": 1
+      },
+      "passed": true
+    },
+    {
+      "id": "outer-INSERT-OCS",
+      "input_dxf": "0\nSECTION\n2\nBLOCKS\n0\nBLOCK\n2\nA\n10\n0\n20\n0\n0\nINSERT\n2\nB\n5\nINNER\n10\n0\n20\n0\n230\n-1\n0\nCIRCLE\n10\n100\n20\n100\n40\n1\n0\nENDBLK\n0\nBLOCK\n2\nB\n10\n0\n20\n0\n0\nCIRCLE\n10\n0\n20\n0\n40\n2\n0\nENDBLK\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n0\nINSERT\n2\nA\n5\nOUTER\n10\n0\n20\n0\n230\n-1\n0\nENDSEC\n0\nEOF\n",
+      "expected": {
+        "strict_exit": 1,
+        "outlines": 0,
+        "svg_tolerance": 0.001,
+        "cli_tolerance": 0.001,
+        "web_check_tolerance": 0.05,
+        "diagnostic_pattern": "OUTER.*未转换 OCS"
+      },
+      "actual": {
+        "outlines": 0,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [解析] INSERT（句柄 OUTER，图层 ，块 A）带非默认挤出方向；未转换 OCS，已跳过该引用及其子实体\n[警告] [检查覆盖] 没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据\n致命 0 · 警告 2 · 提示 0\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 2 个警告，请复核图纸与加工条件。",
+        "strict_exit": 1
+      },
+      "passed": true
+    },
+    {
+      "id": "nested-INSERT-OCS",
+      "input_dxf": "0\nSECTION\n2\nBLOCKS\n0\nBLOCK\n2\nA\n10\n0\n20\n0\n0\nINSERT\n2\nB\n5\nINNER\n10\n0\n20\n0\n230\n-1\n0\nCIRCLE\n10\n100\n20\n100\n40\n1\n0\nENDBLK\n0\nBLOCK\n2\nB\n10\n0\n20\n0\n0\nCIRCLE\n10\n0\n20\n0\n40\n2\n0\nENDBLK\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n0\nINSERT\n2\nA\n5\nOUTER\n10\n0\n20\n0\n0\nENDSEC\n0\nEOF\n",
+      "expected": {
+        "strict_exit": 1,
+        "outlines": 1,
+        "svg_tolerance": 0.001,
+        "cli_tolerance": 0.001,
+        "web_check_tolerance": 0.05,
+        "diagnostic_pattern": "INNER.*未转换 OCS"
+      },
+      "actual": {
+        "outlines": 1,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [解析] INSERT（句柄 INNER，图层 ，块 B）带非默认挤出方向；未转换 OCS，已跳过该引用及其子实体\n致命 0 · 警告 1 · 提示 0\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 1 个警告，请复核图纸与加工条件。",
+        "strict_exit": 1
+      },
+      "passed": true
+    },
+    {
+      "id": "lost-LWPOLYLINE",
+      "input_dxf": "0\nSECTION\n2\nENTITIES\n0\nCIRCLE\n10\n100\n20\n100\n40\n1\n0\nLWPOLYLINE\n90\n3\n10\n0\n20\n0\n10\n1\n10\n2\n20\n0\n0\nENDSEC\n0\nEOF\n",
+      "expected": {
+        "strict_exit": 1,
+        "outlines": 1,
+        "svg_tolerance": 0.001,
+        "cli_tolerance": 0.001,
+        "web_check_tolerance": 0.05,
+        "diagnostic_pattern": "顶点"
+      },
+      "actual": {
+        "outlines": 1,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [解析] LWPOLYLINE 顶点缺少 Y（20），未生成该实体的轮廓\n[警告] [解析] LWPOLYLINE 声明顶点数 3 与完整坐标数 2 不一致；请复核输入\n[警告] [检查覆盖] 1 个 LWPOLYLINE 实体的轮廓未参与检查；保留记录不表示已验证几何\n致命 0 · 警告 3 · 提示 0\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 3 个警告，请复核图纸与加工条件。",
+        "strict_exit": 1
+      },
+      "passed": true
+    },
+    {
+      "id": "lost-POLYLINE",
+      "input_dxf": "0\nSECTION\n2\nENTITIES\n0\nCIRCLE\n10\n100\n20\n100\n40\n1\n0\nPOLYLINE\n70\n0\n0\nVERTEX\n10\n0\n20\n0\n0\nVERTEX\n10\n1\n0\nVERTEX\n10\n2\n20\n0\n0\nSEQEND\n0\nENDSEC\n0\nEOF\n",
+      "expected": {
+        "strict_exit": 1,
+        "outlines": 1,
+        "svg_tolerance": 0.001,
+        "cli_tolerance": 0.001,
+        "web_check_tolerance": 0.05,
+        "diagnostic_pattern": "顶点"
+      },
+      "actual": {
+        "outlines": 1,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [解析] POLYLINE 顶点 2 缺少 X/Y 坐标；未生成该实体的轮廓\n[警告] [检查覆盖] 1 个 POLYLINE 实体的轮廓未参与检查；保留记录不表示已验证几何\n致命 0 · 警告 2 · 提示 0\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 2 个警告，请复核图纸与加工条件。",
+        "strict_exit": 1
+      },
+      "passed": true
+    },
+    {
+      "id": "count-mismatch",
+      "input_dxf": "0\nSECTION\n2\nENTITIES\n0\nCIRCLE\n10\n100\n20\n100\n40\n1\n0\nLWPOLYLINE\n90\n4\n70\n1\n10\n0\n20\n0\n10\n2\n20\n0\n10\n0\n20\n1\n0\nENDSEC\n0\nEOF\n",
+      "expected": {
+        "strict_exit": 1,
+        "outlines": 2,
+        "svg_tolerance": 0.001,
+        "cli_tolerance": 0.001,
+        "web_check_tolerance": 0.05,
+        "diagnostic_pattern": "顶点数"
+      },
+      "actual": {
+        "outlines": 2,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [解析] LWPOLYLINE 声明顶点数 4 与完整坐标数 3 不一致；请复核输入\n致命 0 · 警告 1 · 提示 0\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 1 个警告，请复核图纸与加工条件。",
+        "strict_exit": 1
+      },
+      "passed": true
+    },
+    {
+      "id": "large-coordinate-rectangle",
+      "input_dxf": "0\nSECTION\n2\nENTITIES\n0\nLWPOLYLINE\n90\n4\n70\n1\n10\n300000\n20\n7\n10\n300002\n20\n7\n10\n300002\n20\n8\n10\n300000\n20\n8\n0\nENDSEC\n0\nEOF\n",
+      "expected": {
+        "strict_exit": 0,
+        "points": [
+          [
+            300000,
+            7
+          ],
+          [
+            300002,
+            7
+          ],
+          [
+            300002,
+            8
+          ],
+          [
+            300000,
+            8
+          ]
+        ],
+        "width": 2,
+        "height": 1,
+        "svg_tolerance": 0.001,
+        "cli_tolerance": 0.001,
+        "web_check_tolerance": 0.05
+      },
+      "actual": {
+        "outlines": 1,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n（没有发现）\n致命 0 · 警告 0 · 提示 0\n本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。",
+        "strict_exit": 0,
+        "points": [
+          [
+            300000,
+            7
+          ],
+          [
+            300002,
+            7
+          ],
+          [
+            300002,
+            8
+          ],
+          [
+            300000,
+            8
+          ]
+        ],
+        "width": 2,
+        "height": 1
+      },
+      "passed": true
+    },
+    {
+      "id": "micro-coordinate-rectangle",
+      "input_dxf": "0\nSECTION\n2\nENTITIES\n0\nLWPOLYLINE\n90\n4\n70\n1\n10\n1e-9\n20\n2e-9\n10\n5e-9\n20\n2e-9\n10\n5e-9\n20\n5e-9\n10\n1e-9\n20\n5e-9\n0\nENDSEC\n0\nEOF\n",
+      "expected": {
+        "strict_exit": 0,
+        "points": [
+          [
+            1e-9,
+            2e-9
+          ],
+          [
+            5e-9,
+            2e-9
+          ],
+          [
+            5e-9,
+            5e-9
+          ],
+          [
+            1e-9,
+            5e-9
+          ]
+        ],
+        "width": 4e-9,
+        "height": 3e-9,
+        "svg_tolerance": 1e-12,
+        "cli_tolerance": 1e-12,
+        "web_check_tolerance": 0.05
+      },
+      "actual": {
+        "outlines": 1,
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n（没有发现）\n致命 0 · 警告 0 · 提示 0\n本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。",
+        "strict_exit": 0,
+        "points": [
+          [
+            1e-9,
+            2e-9
+          ],
+          [
+            5e-9,
+            2e-9
+          ],
+          [
+            5e-9,
+            5e-9
+          ],
+          [
+            1e-9,
+            5e-9
+          ]
+        ],
+        "width": 4e-9,
+        "height": 3e-9
+      },
+      "passed": true
+    }
+  ]
+}

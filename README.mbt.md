@@ -2,7 +2,7 @@
 
 MoonBit 的 ASCII DXF 读取、二维几何处理与辅助检查库。安装、场景、CLI 和网页入口见 [README.md](README.md)。源码修订版本 0.1.1，本次修订尚未发布到 Mooncakes。
 
-本次范围固定为七类核心轮廓实体和普通 INSERT；逐字段输入、输出、限制与案例见[交付范围](docs/delivery-scope.md)，已识别问题的复现和断言见[六类修复验证](docs/delivery-verification.md)。
+本次范围为七类核心轮廓实体、受限二维 SOLID/TRACE 边界和普通 INSERT；逐字段输入、输出、限制与案例见[交付范围](docs/delivery-scope.md)，追加行为见[五项审查验收](docs/review-cases.md)。
 
 ## 为什么选择这个范围
 
@@ -27,11 +27,11 @@ let svg = drawing.to_svg(0.05)
 
 ## 几何与离散
 
-核心轮廓为 LINE、CIRCLE、ARC、ELLIPSE、LWPOLYLINE、普通二维 POLYLINE、受限 SPLINE。POINT 和文字用于位置或简化预览；HATCH、DIMENSION、SOLID、TRACE、3DFACE 等保留已有字段，不能据此认为它们的轮廓已参与检查。
+核心轮廓为 LINE、CIRCLE、ARC、ELLIPSE、LWPOLYLINE、普通二维 POLYLINE、受限 SPLINE。POINT 和文字用于位置或简化预览；SOLID/TRACE 在下述受限范围内支持二维边界；HATCH、DIMENSION、3DFACE 等保留已有字段，不能据此认为它们的轮廓已参与检查。
 
 ELLIPSE 的 11/21/31 是相对圆心长轴向量。普通 POLYLINE 不接受拟合、空间和网格语义；损坏顶点保留记录并拒绝整条轮廓，避免拼接出新形状。Face 的 flatten / checked 结果为 Empty，检查报告明确未覆盖；这与旧版直接连角点的行为不同。
 
-- `Geometry::flatten_checked(tol)` 返回 `Result[Flat, String]`，是检查与展开使用的入口。
+- `Geometry::flatten_checked(tol)` 返回 `Result[Flat, String]`，是曲线的 checked 入口；整图展开使用保留身份的 Entity::flatten_checked。
 - `spline_points_checked(degree, knots, control_points, weights, tol)` 支持连续、正权重 NURBS 的 XY 离散。
 - `arc_from_bulge()` 用逆时针形式描述点集；多段线连接时根据 bulge 符号选择遍历方向，并保留精确原始端点。
 - `Drawing::expand(tol)` 展开嵌套 INSERT，复合仿射变换并处理图层0继承；累计最大拉伸上界用于调整局部容差。
@@ -82,13 +82,19 @@ CLI `stats` 分块读文件、统计 tag、段、版本、编码，不保存全�
 
 验证命令见 [README.md](README.md#验证与开发)。几何正确性以明确反例、解析几何和独立de Boor密集采样验证；第三方文件读取成功、测试数量或汇总点数不能单独证明正确性。
 
-逐实体坐标/尺寸/包围盒/误差和检查器正反例见[验收矩阵](docs/test-accuracy.md)。故障注入只作用于临时副本，验证新测试能检出六类错误，不以“能够编译运行”替代判定正确。
+逐实体坐标/尺寸/包围盒/误差和检查器正反例见[验收矩阵](docs/test-accuracy.md)。故障注入只作用于临时副本，验证新测试能检出九类错误，不以“能够编译运行”替代判定正确。
 
 外部语料另按文件记录[读取、实体字段解码和几何验证证据](docs/corpus-validation.md)。现有 47 张文件均没有逐图纸独立几何真值；产生点列或能执行检查仍只记为已运行不变量回归。
 
+## SOLID / TRACE 的实体入口
+
+`Entity::flatten_checked(tol)` 保留实体身份，默认 OCS、零厚度、所有角点同 Z 时按 0→1→3→2 生成 SOLID/TRACE 闭合边界，标准三角形只输出一次重复的第三/第四点。原始 `Face.corners` 保持文件顺序，3DFACE 不统一重排。
+
+此前这些类型仅保留元数据的边界已调整，详见[追加审查验收与迁移](docs/review-cases.md)。裸 `Geometry::Face` 没有实体身份，其 flatten / checked 仍返回 Empty。整图展开、检查和 SVG 使用新的 Entity 入口。非默认 OCS、非零厚度、非平行 XY 面不产生轮廓；省略第四角点的恢复会报告不完整，部分第四坐标拒绝。
+
 ## 暂未实现
 
-二进制DXF、文件写回、通用编辑、完整引用审计、OCS变换、完整HATCH边界、关联标注重建、面实体轮廓检查、全部INSERT阵列、字体转轮廓、刀路生成和参数化草图约束求解。
+二进制DXF、文件写回、通用编辑、完整引用审计、OCS变换、完整HATCH边界、关联标注重建、通用面实体及三维轮廓检查、全部INSERT阵列、字体转轮廓、刀路生成和参数化草图约束求解。
 
 ## 来源
 

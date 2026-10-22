@@ -27,10 +27,10 @@
 | --- | --- | --- | --- |
 | DXF 数据模型 | `scan_tags` → `build_drawing`；`Drawing::entities()` / `blocks()`，保留原记录、图层、句柄 | 导入程序可读取类型化字段，并对未覆盖记录自行处理，无需从像素反推 CAD 实体 | 仅 ASCII 与[字段矩阵](docs/delivery-scope.md)；保留未知记录不等于完整语义或可写回 |
 | 块展开 | `Drawing::expand(tol)` → `Expansion.placed` / `warnings`；`Placed` 保留实体、生效图层与离散结果 | 获得累计 XY 变换后的点列及来源，无需在应用侧重新实现块基点、缩放、旋转和图层 0 继承 | 普通 INSERT 最多 8 层；阵列只处理首实例，非默认 OCS 跳过并诊断；[最小反例](docs/delivery-verification.md)与[精度矩阵](docs/test-accuracy.md) |
-| 轮廓提取 | `Geometry::flatten_checked(tol)` → `Result[Flat, String]`；`Flat::Outline(points, closed)` | 将支持的曲线转为 XY 点列供显示或计算；局部离散与整图块展开可分别使用 | 七类核心实体的声明字段；无效输入、资源上限返回错误；不支持的几何不能当正常轮廓 |
+| 轮廓提取 | `Entity::flatten_checked(tol)` / `Geometry::flatten_checked(tol)` → `Result[Flat, String]`；`Flat::Outline(points, closed)` | 将支持的曲线转为 XY 点列供显示或计算；局部离散与整图块展开可分别使用 | 七类核心实体及受限 SOLID/TRACE 的声明字段；无效输入、资源上限返回错误；不支持的几何不能当正常轮廓 |
 | 诊断接口 | `Drawing::check(options)` → `Report`；`has_incomplete_checks()`、`has_fatal()`、`to_text()` | 区分“已检查部分未发现问题”与“整图有未检查内容”，实施退出或人工复核策略 | 正常轮廓不能抵消覆盖警告；[混合输入验收](docs/check-completeness.md) |
 
-[独立消费工程](examples/consumer/README.md)已在 Wasm / Native 各用 7 个案例验证读取、实体提取、checked 离散、块展开和报告调用。它不依赖网页，也不复制内部实现。CLI 和网页是这些接口的使用入口，库的复用价值不依赖演示页面存在。
+[独立消费工程](examples/consumer/README.md)已在 Wasm / Native 各用 8 个案例验证读取、实体提取、checked 离散、块展开和报告调用。它不依赖网页，也不复制内部实现。CLI 和网页是这些接口的使用入口，库的复用价值不依赖演示页面存在。
 
 应用可以在 `Expansion` 后取出点列，按目标库的坐标类型、单位、闭合约定和容差写适配层，将 DXF 来源信息作为附加属性传递。这是与通用几何库结合的可行设计方向，**目前没有跨库适配和端到端验证**。从轮廓到刀路还需要 CAM 策略，不能把与 G-code 项目相邻描述为已能直接加工。
 

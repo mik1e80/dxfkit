@@ -85,6 +85,7 @@ moon run . --target wasm -- fixtures/does-not-exist.dxf
 | incomplete + strict | 同样保留全部诊断和正常圆 | 1 |
 | discretization-error + strict | `DISCRETIZATION_ERROR` 说明超过 4096 段；报告检查不完整 | 1 |
 | 文件不存在 | `READ_ERROR` | 2 |
+| solid + strict | Entity::flatten_checked 输出 4 点闭合边界、WORLD_OUTLINES=1、INCOMPLETE=false | 0 |
 | 没有参数或参数格式错误 | Usage | 2 |
 
 本例普通模式只因严重问题退出 1；strict 下，警告或不完整也退出 1。退出 0 不构成可加工证明。
@@ -100,4 +101,4 @@ node scripts/verify-consumer.cjs
 node scripts/verify-consumer.cjs --target native
 ```
 
-脚本将本工程复制到系统临时目录，配置本地库成员，真实执行编译检查和六次程序调用，验证上述字段、点坐标、报告及退出码。它不调用网页或库 CLI，不复制库内部实现；CI 在 Wasm 和 Native 上执行相同验收。机器记录见 [Wasm](../../docs/consumer-wasm-results.json) 和 [Native](../../docs/consumer-native-results.json)。这些记录对应本次本地工具链，不能替代其他环境的实际运行。
+脚本将本工程复制到系统临时目录，配置本地库成员，真实执行编译检查和七次程序调用（共 8 项），新增 SOLID 的实体入口调用。它不调用网页或库 CLI，不复制库内部实现；CI 在 Wasm 和 Native 上执行相同验收。机器记录见 [Wasm](../../docs/consumer-wasm-results.json) 和 [Native](../../docs/consumer-native-results.json)。这些记录对应本次本地工具链，不能替代其他环境的实际运行。

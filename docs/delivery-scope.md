@@ -1,6 +1,6 @@
 # DXFKit 本次交付范围
 
-本次交付定位：**面向 MoonBit 开发者的 ASCII DXF 二维轮廓读取与辅助检查库**。核心为七类轮廓实体和普通 INSERT，附带 `check`、`svg`、`stats` 三个 CLI 命令、浏览器演示、公开接口调用示例及回归案例。
+本次交付定位：**面向 MoonBit 开发者的 ASCII DXF 二维轮廓读取与辅助检查库**。核心为七类轮廓实体、受限二维 SOLID/TRACE 边界和普通 INSERT，附带 `check`、`svg`、`stats` 三个 CLI 命令、浏览器演示、公开接口调用示例及回归案例。
 
 本文是项目的交付约定，不是主办方的额外要求。源码版本为 0.1.1，本次修订尚未发布到 Mooncakes。
 
@@ -48,12 +48,14 @@ ASCII 字节 → 组码及诊断 → 段、记录和子类 → 范围内实体�
 | POINT | 提取位置和点预览；孤点不是闭合轮廓 |
 | TEXT / MTEXT / ATTRIB / ATTDEF | 提取现有内容、位置、字高、旋转字段；简化预览并提示未转轮廓，不做字体轮廓或完整排版 |
 | HATCH / DIMENSION 及相关标注 | 保留原始记录和已提取元数据，报告填充边界或关联几何未检查 |
-| SOLID / TRACE / 3DFACE | 保留 Face 角点字段；flatten / flatten_checked 不产生轮廓，检查报告未覆盖，SVG 不绘制假轮廓 |
+| 3DFACE | 保留 WCS Face 原始角点顺序；不套用 SOLID/TRACE 重排，不生成检查或 SVG 轮廓，报告未覆盖 |
 | 未知实体和未支持的 POLYLINE 变体 | 保留原始记录、类型身份并报告未覆盖；不静默当作已检查 |
 
 其他实体的非默认 OCS 仍报告未转换，其 XY 投影可能参与部分计算；这类输入超出正式几何承诺。INSERT 的非默认 OCS 在展开前整体拒绝。两者都不能用局部结果代表整张图纸检查完成。
 
 ## 检查语义与参数
+
+2026-10-22 按追加审查补充 **SOLID/TRACE 二维边界**：保留原始 10/20/30～13/23/33 字段；Entity::flatten_checked 按 0→1→3→2 连接，第三/第四角点相同时只输出一次。正式边界限于默认 OCS、厚度 39 为 0、全部角点 Z 相等。缺整个第四点仅带诊断恢复三角形，不算完整；残缺第四点拒绝。不是填充区域、通用面或三维体检查。裸 Geometry::Face 仍为空结果；当前完整约定和案例见[追加验收](review-cases.md)。此前仅保留面字段的降级记录是历史状态。
 
 | 检查 | 本次范围 |
 | --- | --- |
@@ -77,6 +79,6 @@ UTF-8 使用宽容解码；CP1252 可解码；其他声明代码页以 Latin-1 �
 - 六类最小技术用例的修复前/后结果、实际 CLI 和网页编译产物断言，见[修复验证](delivery-verification.md)。
 - README、接口文档、案例、来源和申报稿对应同一源码与网页构建；已提交源码、Mooncakes 发布、网站部署和报名表提交分别核实。
 
-完成标准是在列明验证集中得到预期字段、几何和诊断，正常案例无预期外告警；不是对所有可能输入承诺零误报。二进制 DXF、写回编辑、完整 OCS、填充/标注重建、面实体检查、通用三维内核、字体轮廓、刀路及加工可行性认证不属于本次交付。
+完成标准是在列明验证集中得到预期字段、几何和诊断，正常案例无预期外告警；不是对所有可能输入承诺零误报。二进制 DXF、写回编辑、完整 OCS、填充/标注重建、通用面实体及三维体检查、通用三维内核、字体轮廓、刀路及加工可行性认证不属于本次交付。
 
 字段语义参考 Autodesk 的 [ELLIPSE](https://help.autodesk.com/cloudhelp/2020/ENU/AutoCAD-DXF/files/GUID-107CB04F-AD4D-4D2F-8EC9-AC90888063AB.htm)、[POLYLINE](https://help.autodesk.com/cloudhelp/2024/ENU/AutoCAD-DXF/files/GUID-ABF6B778-BE20-4B49-9B58-A94E64CEFFF3.htm) 和 [VERTEX](https://help.autodesk.com/cloudhelp/2024/ENU/AutoCAD-DXF/files/GUID-0741E831-599E-4CBF-91E1-8ADBCFD6556D.htm) 定义。本矩阵列出的是实际交付子集。

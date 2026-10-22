@@ -8,6 +8,8 @@
 
 ## 输入、预期、实际与自动断言
 
+本表 C5 保留 2026-10-21 的降级修复历史。2026-10-22 已追加 SOLID/TRACE 的受限二维边界，当前 C5 输出两条有序轮廓及 3DFACE 未覆盖诊断；原始 Face 不重排。当前行为和迁移见[追加审查验收](review-cases.md)，当前机器结果见 delivery-results.json，不能把历史降级行为当作当前范围。
+
 输入文件均在 [`examples/regressions/`](../examples/regressions/)，为项目自建的 Apache-2.0 最小案例。
 
 | 编号 | 最小输入及预期 | 修复前实际 | 修复后实际和断言 |
@@ -83,7 +85,7 @@ moon run examples/library --target js
 
 - ELLIPSE 修复为标准的相对长轴向量解释；此前依赖错误绝对坐标解释的调用方应修正输入。
 - SVG 使用 Double 往返数字表示，可能出现科学计数法；不要依赖固定四位小数的字符串格式。
-- Face 仍保留角点字段，但 `flatten()` / `flatten_checked()` 返回 Empty；需要面几何的调用方应自行处理或等待独立支持，不再依赖旧版假轮廓。
+- Face 保留原始角点。裸 Geometry 的 flatten / checked 缺少实体身份，仍返回 Empty；新的 Entity::flatten_checked 为受限 SOLID/TRACE 提供正确边界，Drawing::expand/check/SVG 使用该入口。3DFACE 仍只保留字段，不再依赖旧版假轮廓。
 - 损坏坐标或不支持的 POLYLINE 变体保留记录并报告，不能再依赖剩余顶点拼出的轮廓。仅声明顶点数不一致时保留完整坐标并警告；缺 SEQEND 可恢复完整顶点并报告。
 
 椭圆字段依据 [Autodesk ELLIPSE 组码定义](https://help.autodesk.com/cloudhelp/2020/ENU/AutoCAD-DXF/files/GUID-107CB04F-AD4D-4D2F-8EC9-AC90888063AB.htm)。这些定向测试和 47 文件回归都不构成完整 DXF 标准认证，也不证明图纸可加工。

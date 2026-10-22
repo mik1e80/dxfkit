@@ -14,6 +14,10 @@ if (reportIndex >= 0) assert(reportPath, '--report needs a path');
 const geometry = 'geometry_accuracy_wbtest.mbt';
 const checker = 'checker_accuracy_wbtest.mbt';
 const mutations = [
+  { id:'solid-storage-order-used-as-boundary',file:'flatten.mbt',tests:['review_cases_wbtest.mbt'],
+    before:'        points.push(corners[3].xy())',after:'        points.push(corners[2].xy())' },
+  { id:'solid-triangle-keeps-repeated-fourth',file:'flatten.mbt',tests:['review_cases_wbtest.mbt'],
+    before:'(corners[3].x != corners[2].x || corners[3].y != corners[2].y)',after:'true' },
   { id: 'ellipse-major-subtract-center', file: 'entity.mbt', tests: ['entity_wbtest.mbt'],
     before: '                  major~,',
     after: '                  major=Vec3::new(major.x - center.x, major.y - center.y, major.z - center.z),' },
@@ -65,7 +69,7 @@ try {
     if (item.file) fs.copyFileSync(path.join(root, item.file), path.join(work, item.file));
   }
   const result = {suite:'dxfkit-test-sensitivity', target:'wasm-gc',
-    test_sha256:Object.fromEntries([geometry,checker,'entity_wbtest.mbt'].map(f => [f,
+    test_sha256:Object.fromEntries([geometry,checker,'entity_wbtest.mbt','review_cases_wbtest.mbt'].map(f => [f,
       createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex')])),
     passed:results.filter(r => r.passed).length,total:results.length,cases:results};
   if(reportPath) fs.writeFileSync(path.resolve(reportPath),JSON.stringify(result,null,2)+'\n');

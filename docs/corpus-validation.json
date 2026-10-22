@@ -53,9 +53,9 @@
     },
     {
       "id": "G0",
-      "name": "语料几何离散：支持曲线有点列，面实体只保留字段",
+      "name": "语料 Geometry 离散：曲线有点列，无实体身份的 Face 不猜轮廓",
       "scope": "all",
-      "meaning": "点列不变量、汇总数量和面实体降级；不是几何误差验证"
+      "meaning": "Geometry 点列不变量、汇总数量和无身份 Face 的空结果；不是几何误差验证"
     },
     {
       "id": "G1",
@@ -67,7 +67,7 @@
       "id": "C0",
       "name": "语料加工检查：锚点",
       "scope": "all",
-      "meaning": "报告汇总严重程度锚点，不是逐文件判定真值"
+      "meaning": "报告锚点及 uncommon.dxf 的 59B SOLID 三点坐标断言，不是逐文件完整真值"
     },
     {
       "id": "A1",
@@ -121,16 +121,16 @@
     }
   ],
   "source_sha256_lf": {
-    "check.mbt": "7589509fc80f3041fe0858e4b09353ea3d134f15c15808021109ba80060ba372",
-    "cli/smoke.cjs": "915a89fa127f3fdc95332b1e158869d58e7f3c337a92a2005038a7c11777812d",
+    "check.mbt": "91d647c783d6aace45b33768daaff8536210dda2a0a2f6f901b3011e20dac9c6",
+    "cli/smoke.cjs": "012bbad58900e87e79669ef2ed943e92a1a23574bf672e0d8d235e71449a99f2",
     "codepage.mbt": "3c66e54221a8abe2816dbb36ea2efc8d282feb19fe1d8f7e53d74055451f85c4",
     "conformance/audit.mbt": "e97df4682c26c0b917406b82282722e14ae9b9a764c222fbc62322997b6384b9",
     "conformance/corpus.mbt": "9d3acc0ceb4682094c4eae715f616ffe269c38dc55d96ab30e3f740e1c457912",
-    "conformance/corpus_wbtest.mbt": "3cf6490dc4ab5165295f8f4bd7fb39d40ef15798b56d430e1e75020ad5724462",
+    "conformance/corpus_wbtest.mbt": "b4e4a0f24e0000138660d2240e01e4cfede87ee78c3b3830bb3a971f8acff173",
     "conformance/main.mbt": "bbc3342d6e2c8d0f0ced8a398b283e56b0b9a6c0933605997de47663f7677d7a",
-    "entity.mbt": "6b805960d9b6b8c5de5e62f33092208c453bf76de98b01f9c49d96776426e1b8",
-    "expand.mbt": "123de418f668678eecf9dcb5fe72eb157bd03e8321ad3055e7de212d44b60eb9",
-    "flatten.mbt": "36a6774d14565262f7da01bdb878ca1c9345f2e6f24893fbb7174167e6164f4f",
+    "entity.mbt": "9dfc88e926ebd178e9557888877f61aa3840fa1c4a91de71c5fcacb34ce6734d",
+    "expand.mbt": "8bf3905e9a80cbbea92a203761e6300b2404775e24ee014c4d87e5b5fac6b2f3",
+    "flatten.mbt": "b9a609569c02777f4554a104395f89960d1775de94c39fafe22572b6ab2f3404",
     "flatten_checked.mbt": "52ce4dc42ef64a9c24a0bb1d38045172b4d7c101c14a458ed1b4bf2b8d208019",
     "header.mbt": "8c114a6e3e0d4a1241696203709d420c29a953bb2d62d99d39e69cefe6fd1739",
     "moon.mod": "6c16316855f68a8a553ef2aeda877d0b6f5b4ef148a30704b7e8f8dadf9c53f1",
@@ -4271,7 +4271,7 @@
       ],
       "limitations": [
         "未解码 3DSOLID/MESH/MULTILEADER/POLYLINE/RAY/VIEWPORT/XLINE",
-        "仅字段/元数据 ATTDEF/ATTRIB/DIMENSION/MTEXT/SOLID",
+        "仅字段/元数据 ATTDEF/ATTRIB/DIMENSION/MTEXT",
         "非普通二维 POLYLINE 未生成轮廓",
         "缺少逐图纸独立几何真值"
       ],
@@ -4493,7 +4493,7 @@
             "decoded": 0
           }
         ],
-        "expanded_outlines": 29,
+        "expanded_outlines": 30,
         "expansion_warnings": [
           "POLYLINE 标志 64 超出普通二维折线范围；保留记录，轮廓未检查",
           "POLYLINE 标志 64 超出普通二维折线范围；保留记录，轮廓未检查"
@@ -4543,11 +4543,6 @@
             "category": "检查覆盖",
             "severity": "警告",
             "message": "2 个 POLYLINE 实体的轮廓未参与检查；保留记录不表示已验证几何"
-          },
-          {
-            "category": "检查覆盖",
-            "severity": "警告",
-            "message": "1 个 SOLID 实体的轮廓未参与检查；保留记录不表示已验证几何"
           },
           {
             "category": "检查覆盖",

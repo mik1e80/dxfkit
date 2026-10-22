@@ -162,7 +162,7 @@ test "没有 HEADER 段的最小文件：不该崩，也不能假装知道版本
 // ── 几何离散 ────────────────────────────────────────────────────────────
 
 ///|
-test "语料几何离散：支持曲线有点列，面实体只保留字段" {
+test "语料 Geometry 离散：曲线有点列，无实体身份的 Face 不猜轮廓" {
   // 容差 0.01（图纸单位）。文件单位不统一，这里只钉总数当锚点，
   // 以及「离散结果不空、点数至少 2」这个基本不变量
   let tol = 0.01
@@ -294,24 +294,47 @@ test "流式扫描与整份扫描逐 tag 等价" {
 
 ///|
 test "语料加工检查：锚点" {
-  // 2026-10-21：面实体只报告覆盖限制，不再按文件角点顺序误报自交；
-  // 椭圆长轴修正，未支持 POLYLINE 标志显式报告。此处仅保留语料行为锚点。
+  // 2026-10-22：uncommon.dxf 的 59B SOLID 三角形新增正确轮廓，
+  // 仅移除该文件一条 SOLID 未覆盖警告。下面核对具体来源实体，不只改汇总数。
   let mut fatal = 0
   let mut warn = 0
   let mut info = 0
   // 净距不查（min_gap = 0）：语料单位不统一（米制、毫米制混着），
   // 净距阈值没有跨文件通用的值
   for path in corpus_files() {
-    let r = @dxfkit.build_drawing(scan_corpus_file(path)).check({
+    let drawing = @dxfkit.build_drawing(scan_corpus_file(path))
+    let r = drawing.check({
       tol: 0.05,
       min_gap: 0.0,
     })
     fatal = fatal + r.count(@dxfkit.Fatal)
     warn = warn + r.count(@dxfkit.Warn)
     info = info + r.count(@dxfkit.Info)
+    if path.contains("uncommon.dxf") {
+      let solids = drawing.expand(0.05).placed.filter(p => p.entity.kind() == "SOLID")
+      assert_eq(solids.length(), 1)
+      assert_eq(solids[0].entity.handle(), "59B")
+      match solids[0].flat {
+        @dxfkit.Outline(points~, closed~) => {
+          assert_true(closed)
+          assert_eq(points.length(), 3)
+          let expected = [
+            @dxfkit.Vec2::new(64.02674521194035, 41.85743437238119),
+            @dxfkit.Vec2::new(66.6601195237086, 47.31384445061086),
+            @dxfkit.Vec2::new(69.46476993085394, 41.85743437238119),
+          ]
+          for i = 0; i < 3; i = i + 1 {
+            assert_true(points[i].distance(expected[i]) < 1.0e-10)
+            assert_true(points[i].distance(points[(i + 1) % 3]) > 0.0)
+          }
+        }
+        _ => fail("59B SOLID must produce the documented triangle")
+      }
+      assert_false(r.to_text().contains("个 SOLID 实体的轮廓未参与检查"))
+    }
   }
   assert_eq(fatal, 1)
-  assert_eq(warn, 149)
+  assert_eq(warn, 148)
   assert_eq(info, 1)
 }
 

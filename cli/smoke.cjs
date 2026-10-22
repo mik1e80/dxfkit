@@ -35,7 +35,7 @@ for (const file of ['lwpolyline-missing-y.dxf','polyline-missing-y.dxf']) {
   const report = run(['check',`examples/regressions/${file}`,'--strict'],1,/顶点/);
   assert.match(report,/轮廓未参与检查/);
 }
-const faces = run(['check','examples/regressions/face-metadata-only.dxf','--strict'],1,/SOLID 实体的轮廓未参与检查/);
+const faces = run(['check','examples/regressions/face-metadata-only.dxf','--strict'],1,/3DFACE 实体的轮廓未参与检查/);
 assert(!faces.includes('[自相交]'));
 const ellipse = run(['svg','examples/regressions/ellipse-offset.dxf'],0,/<polygon/);
 const firstEllipsePoint = ellipse.match(/points="([^"]*)"/)[1].trim().split(/\s+/)[0].split(',').map(Number);

@@ -1,6 +1,6 @@
 # 从指定提交复现交付版本
 
-交付版本使用固定标签 `delivery-0.1.1-20261022-ellipse`。标签所指提交是本次库、CLI、测试、网页构建、申报说明与生态对比的共同源码；不以可变的 main 或在线页面当前内容替代提交身份。模块版本仍为 0.1.1，未发布 Mooncakes。此前的 `delivery-0.1.1-20261021` 和 `delivery-0.1.1-20261022` 保留原提交，不移动或覆盖。
+交付版本使用固定标签 `delivery-0.1.1-20261022-review`。标签所指提交是本次库、CLI、测试、网页构建、申报说明与生态对比的共同源码；不以可变的 main 或在线页面当前内容替代提交身份。模块版本仍为 0.1.1，未发布 Mooncakes。此前的 `delivery-0.1.1-20261021`、`delivery-0.1.1-20261022` 和 `delivery-0.1.1-20261022-ellipse` 保留原提交，不移动或覆盖。
 
 ## 固定工具与依赖
 
@@ -40,7 +40,7 @@ $env:PATH = "$HOME/.moon/bin;" + $env:PATH
 以下命令在 PowerShell、Bash 均可执行。使用尚不存在的目录：
 
 ```sh
-git clone --branch delivery-0.1.1-20261022-ellipse --depth 1 https://github.com/mik1e80/dxfkit.git dxfkit-delivery
+git clone --branch delivery-0.1.1-20261022-review --depth 1 https://github.com/mik1e80/dxfkit.git dxfkit-delivery
 cd dxfkit-delivery
 git rev-parse HEAD
 node scripts/environment.cjs
@@ -54,8 +54,8 @@ node scripts/verify-reproduction.cjs --fresh
 成功后的输出：
 
 - `_build/reproduction.json`：实际提交、工具版本、依赖及各步退出码。
-- `web/dist/release.json`：同一提交、模块版本、工具链、网页资产、`docs/submission.md`、`COMPARISON.md` 和 `docs/ecosystem-sources.json` 的 SHA-256。
-- `_site/`：已验证的站点，含 `dist/release.json`、`verification.json` 和该提交的申报说明、生态对比与来源记录副本。
+- `web/dist/release.json`：同一提交、模块版本、工具链、网页资产、申报说明、生态对比与来源，以及追加审查说明和修复前/后记录的 SHA-256。
+- `_site/`：已验证的站点，含 `dist/release.json`、`verification.json` 和该提交的公开文档副本，包括申报说明、生态对比、追加审查及机器记录。
 
 已有依赖的目录可不加 `--fresh` 重跑。开发时允许未提交改动须显式加 `--allow-dirty`；这类报告会记录 `source_dirty:true`，不能当作干净交付结果。
 

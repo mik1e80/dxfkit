@@ -769,8 +769,8 @@ test "SOLID 解析出四个角点" {
 }
 
 ///|
-test "SOLID 少第四个角点是三角形" {
-  // 13 和 12 重合时省略 13——保留三个角点，不补假点
+test "SOLID 少第四个角点保留三点恢复并报告检查不完整" {
+  // 标准三角形重复第四角点；这里对省略字段的旧输入保留有诊断的恢复。
   let d = drawing_utf8(
     "0\nSECTION\n2\nENTITIES\n0\nSOLID\n" +
     "10\n0.0\n20\n0.0\n11\n2.0\n21\n0.0\n12\n1.0\n22\n1.0\n" +
@@ -780,6 +780,8 @@ test "SOLID 少第四个角点是三角形" {
     Face(corners~) => assert_eq(corners.length(), 3)
     _ => fail("不是填充面")
   }
+  assert_true(d.entities().warnings.any(w => w.contains("缺第四角点")))
+  assert_true(d.check({ tol: 0.01, min_gap: 0.0 }).has_incomplete_checks())
 }
 
 ///|

@@ -228,7 +228,7 @@ fn expand_entity(
         return
       }
       let local_tol = if stretch > 0.0 { ctx.tol / stretch } else { ctx.tol }
-      let mut flat = match e.geom.flatten_checked(local_tol) {
+      let mut flat = match e.flatten_checked(local_tol) {
         Ok(flat) => transform_flat(flat, xform)
         Err(msg) => {
           ctx.warnings.push(

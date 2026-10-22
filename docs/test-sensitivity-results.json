@@ -4,10 +4,11 @@
   "test_sha256": {
     "geometry_accuracy_wbtest.mbt": "851a7a716960b82f34e26cd90a6c2da51c3ed871636594946135caaca4a918ec",
     "checker_accuracy_wbtest.mbt": "cfd0b15b5cbd0dba6988ba02774b955466207ab76ca7f4dbe3d874c1843e8999",
-    "entity_wbtest.mbt": "50478eeda20716df4930a741281eb59c433e4b26750cc41c96dcd431b467d6ed"
+    "entity_wbtest.mbt": "b9d63996d9f319e03626be64cb546afbba8e03c37c7172e087bcb35cb41782b9",
+    "review_cases_wbtest.mbt": "a2ae69971c867c1da8f8b926693f5d3720d7c43103afd9d4b3a3ca4c8822e949"
   },
-  "passed": 8,
-  "total": 8,
+  "passed": 10,
+  "total": 10,
   "cases": [
     {
       "id": "unmodified-baseline",
@@ -20,6 +21,30 @@
       },
       "passed": true,
       "output": "Total tests: 17, passed: 17, failed: 0.\nUsing cached moonbitlang/x@0.5.5\nUsing cached moonbitlang/async@0.22.1\n"
+    },
+    {
+      "id": "solid-storage-order-used-as-boundary",
+      "expected": "compiled tests must fail",
+      "status": 2,
+      "executed": {
+        "total": 11,
+        "passed": 9,
+        "failed": 2
+      },
+      "passed": true,
+      "output": "[mik1e80/dxfkit] test review_cases_wbtest.mbt:43 (\"review SOLID rectangle follows boundary order without changing stored vertices\") failed: review_cases_wbtest.mbt:29:5-29:42@mik1e80/dxfkit FAILED: `0 != 2`\ndiff:\n-0 +2\n[mik1e80/dxfkit] test review_cases_wbtest.mbt:57 (\"review TRACE rectangle has no crossing diagonals or false self-intersection\") failed: review_cases_wbtest.mbt:29:5-29:42@mik1e80/dxfkit FAILED: `0 != 2`\ndiff:\n-0 +2\nTotal tests: 11, passed: 9, failed: 2.\n"
+    },
+    {
+      "id": "solid-triangle-keeps-repeated-fourth",
+      "expected": "compiled tests must fail",
+      "status": 2,
+      "executed": {
+        "total": 11,
+        "passed": 10,
+        "failed": 1
+      },
+      "passed": true,
+      "output": "[mik1e80/dxfkit] test review_cases_wbtest.mbt:66 (\"review triangular SOLID repeated fourth corner is not a zero-length edge\") failed: review_cases_wbtest.mbt:26:3-26:48@mik1e80/dxfkit FAILED: `4 != 3`\ndiff:\n-4 +3\nTotal tests: 11, passed: 10, failed: 1.\n"
     },
     {
       "id": "ellipse-major-subtract-center",

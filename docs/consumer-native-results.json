@@ -1,7 +1,7 @@
 {
   "suite": "dxfkit-external-consumer",
   "target": "native",
-  "example_sha256": "f23b8cb8dbf321493d0768db1525caf4ea0aa96d327abf43822caa093fbe1d31",
+  "example_sha256": "b39e4d3094941deb2235845b7ee97e35e8c259ef79ad94e1dfcfcb449a9c4bf8",
   "copied_files": [
     "README.md",
     "fixtures",
@@ -11,15 +11,15 @@
     "moon.work"
   ],
   "library_source": "local moon.work member",
-  "passed": 7,
-  "total": 7,
+  "passed": 8,
+  "total": 8,
   "cases": [
     {
       "id": "external-module-check",
       "expectedStatus": 0,
       "actualStatus": 0,
       "expectedPatterns": [],
-      "output": "Using cached moonbitlang/x@0.5.5\nUsing cached moonbitlang/async@0.22.1\nFinished. moon: ran 35 tasks, now up to date\n",
+      "output": "Using cached moonbitlang/async@0.22.1\nUsing cached moonbitlang/x@0.5.5\nFinished. moon: ran 35 tasks, now up to date\n",
       "passed": true
     },
     {
@@ -94,6 +94,21 @@
         "/Usage:/"
       ],
       "output": "Usage: moon run . -- <file.dxf> [--strict]\r\n",
+      "passed": true
+    },
+    {
+      "id": "solid-entity-aware-outline",
+      "expectedStatus": 0,
+      "actualStatus": 0,
+      "expectedPatterns": [
+        "/ENTITY kind=SOLID/",
+        "/LOCAL_OUTLINE vertices=4 closed=true/",
+        "/LOCAL_FIRST=0,0/",
+        "/WORLD_OUTLINES=1/",
+        "/INCOMPLETE=false/",
+        "/致命 0.*警告 0/"
+      ],
+      "output": "UNIT=未声明\r\nENTITIES=1\r\nENTITY kind=SOLID handle= layer=\r\nLOCAL_OUTLINE vertices=4 closed=true\r\nLOCAL_FIRST=0,0\r\nWORLD_OUTLINES=1\r\nINCOMPLETE=false\r\n（没有发现）\r\n致命 0 · 警告 0 · 提示 0\r\n本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。\r\n",
       "passed": true
     }
   ]

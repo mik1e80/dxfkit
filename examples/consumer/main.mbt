@@ -45,8 +45,9 @@ fn main {
         | @dxfkit.Arc(..)
         | @dxfkit.Ellipse(..)
         | @dxfkit.Polyline(..)
-        | @dxfkit.Spline(..) =>
-          match entity.geom.flatten_checked(0.01) {
+        | @dxfkit.Spline(..)
+        | @dxfkit.Face(..) =>
+          match entity.flatten_checked(0.01) {
             Ok(@dxfkit.Outline(points~, closed~)) => {
               println(
                 "LOCAL_OUTLINE vertices=\{points.length()} closed=\{closed}",

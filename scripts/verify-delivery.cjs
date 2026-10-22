@@ -47,12 +47,15 @@ const cases = [
       assert.match(actual.report, /POLYLINE.*顶点.*X\/Y/);
       assert.match(actual.report, /POLYLINE 实体的轮廓未参与检查/); } },
   { id: 'C5', file: 'face-metadata-only.dxf',
-    expected: { outlines: 0, uncheckedKinds: ['SOLID', 'TRACE', '3DFACE'], selfIntersection: false },
+    expected: { outlines: 2, uncheckedKinds: ['3DFACE'], selfIntersection: false },
     observe: data => ({ outlines: points(context.svg(data, 0.05)).length,
+      boundaries: points(context.svg(data, 0.05)),
       report: context.check(data, 0) }),
-    verify: actual => { assert.equal(actual.outlines, 0);
-      for (const kind of ['SOLID', 'TRACE', '3DFACE']) {
-        assert(actual.report.includes(`${kind} 实体的轮廓未参与检查`));
+    verify: actual => { assert.equal(actual.outlines, 2);
+      for (const boundary of actual.boundaries) assert.deepEqual(boundary,[[0,0],[2,0],[2,1],[0,1]]);
+      assert(actual.report.includes('3DFACE 实体的轮廓未参与检查'));
+      for (const kind of ['SOLID', 'TRACE']) {
+        assert(!actual.report.includes(`${kind} 实体的轮廓未参与检查`));
       }
       assert(!actual.report.includes('[自相交]')); } },
   { id: 'C6', file: 'insert-unsupported-ocs.dxf',

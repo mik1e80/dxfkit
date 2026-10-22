@@ -1,0 +1,18 @@
+{
+  "suite": "dxfkit-review-cases-before",
+  "source_commit": "43e6c5b244b33e53562f77cd28f5c1ac16c98718",
+  "checked_on": "2026-10-22",
+  "command": "moon test review_cases_wbtest.mbt --deny-warn",
+  "compiled": true,
+  "total": 9,
+  "passed": 4,
+  "failed": 5,
+  "evidence": "Summary transcribed from the actual pre-fix execution; two guard cases were added afterwards",
+  "failed_cases": [
+    "review SOLID rectangle follows boundary order without changing stored vertices",
+    "review TRACE rectangle has no crossing diagonals or false self-intersection",
+    "review triangular SOLID repeated fourth corner is not a zero-length edge",
+    "review nonparallel SOLID does not silently become a valid XY rectangle",
+    "review partially written fourth corner cannot masquerade as a triangle"
+  ]
+}

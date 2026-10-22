@@ -32,7 +32,7 @@ try {
   execute('node',['scripts/verify-consumer.cjs']);
   execute('node',['scripts/verify-consumer.cjs','--target','native']);
   execute('node',['scripts/build-web.cjs',...dirtyArgs]);
-  for(const script of ['web/smoke.cjs','scripts/verify-delivery.cjs','scripts/verify-completeness.cjs']) execute('node',[script]);
+  for(const script of ['web/smoke.cjs','scripts/verify-delivery.cjs','scripts/verify-completeness.cjs','scripts/verify-review-cases.cjs']) execute('node',[script]);
   fs.writeFileSync(path.join(root,'_build/reproduction.json'),JSON.stringify({
     passed:true,source_commit:revision.commit,source_dirty:revision.dirty,module:profile.module,version:profile.version,
     toolchain:actual,dependencies,steps},null,2)+'\n');

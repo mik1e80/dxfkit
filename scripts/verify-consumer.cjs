@@ -66,13 +66,16 @@ try {
       [/DISCRETIZATION_ERROR:.*4096/, /INCOMPLETE=true/, /检查不完整/]);
     run('read-error', [...command, 'fixtures/does-not-exist.dxf'], 2, [/READ_ERROR/]);
     run('argument-error', command, 2, [/Usage:/]);
+    run('solid-entity-aware-outline', [...command, 'fixtures/solid.dxf', '--strict'], 0,
+      [/ENTITY kind=SOLID/, /LOCAL_OUTLINE vertices=4 closed=true/, /LOCAL_FIRST=0,0/,
+        /WORLD_OUTLINES=1/, /INCOMPLETE=false/, /致命 0.*警告 0/], [/DISCRETIZATION_ERROR/]);
   }
   const result = {
     suite: 'dxfkit-external-consumer', target,
     example_sha256: createHash('sha256')
       .update(fs.readFileSync(path.join(example, 'main.mbt'))).digest('hex'),
     copied_files: files, library_source: 'local moon.work member',
-    passed: results.filter(r => r.passed).length, total: 7, cases: results,
+    passed: results.filter(r => r.passed).length, total: 8, cases: results,
   };
   if (reportPath) fs.writeFileSync(path.resolve(reportPath), JSON.stringify(result, null, 2) + '\n');
   console.log(`${result.passed}/${result.total} external consumer cases passed`);

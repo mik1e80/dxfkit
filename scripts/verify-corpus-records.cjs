@@ -29,9 +29,9 @@ const tests = [
   {id:'R4',name:'流式扫描与整份扫描逐 tag 等价',scope:'all',meaning:'4096/8191 字节分块与全量逐 tag 相同'},
   {id:'E1',name:'语料整体：实体解析的锚点',scope:'all',meaning:'汇总实体/解码数量及诊断锚点，不是逐字段真值'},
   {id:'E2',name:'语料里未解码的实体类型都在预期清单里',scope:'all',meaning:'未解码类型集合'},
-  {id:'G0',name:'语料几何离散：支持曲线有点列，面实体只保留字段',scope:'all',meaning:'点列不变量、汇总数量和面实体降级；不是几何误差验证'},
+  {id:'G0',name:'语料 Geometry 离散：曲线有点列，无实体身份的 Face 不猜轮廓',scope:'all',meaning:'Geometry 点列不变量、汇总数量和无身份 Face 的空结果；不是几何误差验证'},
   {id:'G1',name:'语料块展开：记录未支持的阵列实例',scope:'all',meaning:'展开记录总量和受限输入诊断；不是变换坐标真值'},
-  {id:'C0',name:'语料加工检查：锚点',scope:'all',meaning:'报告汇总严重程度锚点，不是逐文件判定真值'},
+  {id:'C0',name:'语料加工检查：锚点',scope:'all',meaning:'报告锚点及 uncommon.dxf 的 59B SOLID 三点坐标断言，不是逐文件完整真值'},
   {id:'A1',name:'circle_radius_le_0：3016 行 → 1508 个 tag',scope:['circle_radius_le_0.dxf'],meaning:'扫描数量及无扫描警告'},
   {id:'A2',name:'Minimal_DXF_AC1009：35 字节的最小文件',scope:['Minimal_DXF_AC1009.dxf'],meaning:'四个 tag 的值与顺序'},
   {id:'A3',name:'带 HEADER 的 Minimal 文件能读出正确的版本号',scope:['Minimal_DXF_AC1006.dxf','Minimal_DXF_AC1021.dxf'],meaning:'HEADER 版本字段'},
@@ -52,7 +52,7 @@ assert.equal(files.length,47,'this record describes the original 47-file corpus'
 assert.equal(observations.length,files.length);
 const byName = new Map(observations.map(row => [row.file,row]));
 assert.equal(byName.size,files.length);
-const metadataKinds = ['3DFACE','SOLID','TRACE','HATCH','DIMENSION','TEXT','MTEXT','ATTRIB','ATTDEF'];
+const metadataKinds = ['3DFACE','HATCH','DIMENSION','TEXT','MTEXT','ATTRIB','ATTDEF'];
 const cases = files.map(file => {
   const observed = byName.get(file);
   assert(observed,`missing observation ${file}`);

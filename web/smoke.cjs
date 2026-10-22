@@ -47,7 +47,7 @@ nodes.get('sample-normal').events.get('click')();
 assert.match(report.textContent,/致命 0 · 警告 0/);
 assert.match(report.textContent,/毫米/);
 nodes.get('sample-coverage').events.get('click')();
-assert.match(report.textContent,/SOLID 实体的轮廓未参与检查/);
+assert.match(report.textContent,/3DFACE 实体的轮廓未参与检查/);
 assert(!report.textContent.includes('[自相交]'));
 assert.match(document.getElementById('preview').innerHTML,/<polygon/);
 nodes.get('sample').events.get('click')();

@@ -81,9 +81,9 @@ pub(all) enum Geometry {
   Insert(at~ : Vec3, block~ : String, scale~ : Vec3, rotation~ : Double)
   /// 填充面（SOLID / TRACE / 3DFACE 共用）：角点列表，三个或四个。
   ///
-  /// 三角形就是只有三个角点（DXF 里第四个和第三个重合）。
-  /// 注意 SOLID 的角点是「10、11、13、12」的蝴蝶结顺序——把四点
-  /// 直接连成多边形会自交，这里按文件顺序原样存。
+  /// 原样保留文件的 10、11、12、13 顺序，包括三角形重复的第四角点。
+  /// SOLID/TRACE 的边界连接为 10、11、13、12；3DFACE 不能统一重排。
+  /// 需要实体身份的边界入口是 Entity::flatten_checked；裸 Face 不推断轮廓。
   Face(corners~ : Array[Vec3])
   /// 标注（DIMENSION）：定义点、匿名块名、测量值。
   ///
@@ -913,7 +913,15 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
           let corners : Array[Vec3] = [a, b, c]
           match record.point(3) {
             Some(d) => corners.push(d)
-            None => ()
+            None => {
+              if record.count_code(13) + record.count_code(23) + record.count_code(33) > 0 {
+                warnings.push("\{kind} 第四角点坐标不完整，已跳过；不能当作三角形")
+                return None
+              }
+              if kind == "SOLID" || kind == "TRACE" {
+                warnings.push("\{kind} 缺第四角点，按三个已有角点恢复；检查不完整")
+              }
+            }
           }
           Some({ common, geom: Face(corners~), })
         }

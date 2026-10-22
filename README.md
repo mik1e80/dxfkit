@@ -1,6 +1,6 @@
 # dxfkit
 
-MoonBit ASCII DXF 读取与二维轮廓辅助检查库：在声明字段范围内处理七类轮廓实体和普通 INSERT，提供可复用接口、SVG 预览、三个 CLI 命令和浏览器演示。
+MoonBit ASCII DXF 读取与二维轮廓辅助检查库：在声明字段范围内处理七类核心轮廓、有限二维 SOLID/TRACE 边界和普通 INSERT，提供可复用接口、SVG 预览、三个 CLI 命令和浏览器演示。
 
 [在线试用](https://mik1e80.github.io/dxfkit/) · [接口与边界](README.mbt.md) · [项目对比](COMPARISON.md) · [第三方声明](THIRD_PARTY_NOTICES.md)
 
@@ -12,13 +12,13 @@ MoonBit ASCII DXF 读取与二维轮廓辅助检查库：在声明字段范围�
 
 [独立 MoonBit 工程调用教程](examples/consumer/README.md)：独立模块依赖本库，直接读取 DXF、提取实体、checked 离散和生成检查报告；包含复制到仓库外的步骤。
 
-[几何正确性与检查器验收矩阵](docs/test-accuracy.md)：核对坐标、尺寸、包围盒与解析曲线误差；成对验证报警与不报警，并在临时副本中验证七类故障能否被测试发现。含非原点椭圆的精确包围盒与平移不变性验收。
+[几何正确性与检查器验收矩阵](docs/test-accuracy.md)：核对坐标、尺寸、包围盒与解析曲线误差；成对验证报警与不报警，并在临时副本中验证九类故障能否被测试发现。含非原点椭圆的精确包围盒与平移不变性验收。
 
 [47 张第三方图纸的逐文件验证记录](docs/corpus-validation.md)：分别记录读取、实体字段解码、实际测试和未覆盖部分，不将语料回归统一标为兼容通过。
 
 源码修订版本 **0.1.1**。本次修订尚未发布到 Mooncakes。
 
-交付固定标签：`delivery-0.1.1-20261022-ellipse`。[干净环境复现步骤](docs/reproducibility.md)固定工具链和依赖；运行 `node scripts/verify-reproduction.cjs --fresh` 验证测试、CLI、网页和申报材料对应同一提交。
+交付固定标签：`delivery-0.1.1-20261022-review`。[干净环境复现步骤](docs/reproducibility.md)固定工具链和依赖；运行 `node scripts/verify-reproduction.cjs --fresh` 验证测试、CLI、网页和申报材料对应同一提交。
 
 ## 解决什么问题
 
@@ -42,7 +42,7 @@ MoonBit ASCII DXF 读取与二维轮廓辅助检查库：在声明字段范围�
 | 输出 | SVG 预览、文字报告、CLI 退出码 |
 | 大文件 | `TagStream` 分块扫描与 CLI `stats`，不保存整份文件或全量 tag 列表 |
 
-HATCH 边界、DIMENSION 关联几何、SOLID/TRACE/3DFACE 面几何、未知实体、非默认 OCS 和 INSERT 阵列的其余实例未完整检查，报告会提示覆盖限制。解码出实体身份不代表已验证其几何。面角点仍可读取，但不作为轮廓检查或绘制。
+HATCH 边界、DIMENSION 关联几何、3DFACE、未知实体、非默认 OCS 和 INSERT 阵列的其余实例未完整检查。SOLID/TRACE 仅在默认 OCS、零厚度、所有角点同 Z 时生成二维边界；原始 Face 角点不重排。其余输入报告覆盖限制，解码身份不代表几何已完整检查。[追加审查验收](docs/review-cases.md)列出输入、预期、修复前后与真实入口断言。
 
 ## 实际使用示例
 
@@ -89,7 +89,7 @@ node scripts/verify-completeness.cjs
 
 NURBS 先按节点插入分解为有理 Bézier 段，再用控制点凸包判定细分；不再用单个中点代表整条曲线。负 bulge 保持多段线原始的起终点顺序。块放大时根据累计变换调整局部离散容差。
 
-推荐使用 `Geometry::flatten_checked()`、`spline_points_checked()` 获得曲线输入或资源上限的错误原因。`Flat::Empty` 仍表示没有可离散轮廓，调用方须单独核对覆盖范围；旧 `flatten()` / `spline_points()` 保留兼容回退，不能用其占位结果证明几何正确。
+推荐使用带实体身份的 `Entity::flatten_checked()`；曲线也可使用 `Geometry::flatten_checked()`、`spline_points_checked()` 获得曲线输入或资源上限的错误原因。`Flat::Empty` 仍表示没有可离散轮廓，调用方须单独核对覆盖范围；旧 `flatten()` / `spline_points()` 保留兼容回退，不能用其占位结果证明几何正确。
 
 ELLIPSE 长轴字段按相对圆心向量读取。SVG 输出使用有限 Double 的往返数字表示，不依赖整数缩放或固定四位小数。损坏顶点拒绝生成整条多段线轮廓并报告；拟合、空间或网格 POLYLINE 不作为普通二维折线处理。接口行为收紧及迁移说明见[六类修复验证](docs/delivery-verification.md#兼容变化)。
 
@@ -133,7 +133,7 @@ node scripts/verify-corpus-records.cjs
 
 9 个几何精度验收、8 个检查器成对测试及另补的 2 个椭圆实体测试从最小 DXF 开始验证结果。测试敏感性脚本在临时副本中注入长轴重复减圆心、坐标偏移、样条直线化、bulge 镜像、漏报、误报和阈值错误，要求实际断言失败；编译失败不算检出。具体预期和结果见验收矩阵。
 
-独立工程验收把 `examples/consumer/` 复制到系统临时目录后编译运行；Wasm 和 Native 各有 7 个实际检查、运行与退出码断言，结果记录见教程。示例文件可在独立模块中直接读取。
+独立工程验收把 `examples/consumer/` 复制到系统临时目录后编译运行；Wasm 和 Native 各有 8 个实际检查、运行与退出码断言，含 SOLID 的 Entity 入口；结果记录见教程。示例文件可在独立模块中直接读取。
 
 47 个第三方文件用于读取和回归验证，不是完整 DXF 一致性测试套件。逐文件来源、SHA-256、实际测试和分层结果见[语料案例表](docs/corpus-validation.md)及对应 JSON；当前没有这些外部文件的独立几何真值，不把自建精度测试迁移为逐图纸认证。网页回归使用实际编译产物与最小 DOM，不验证浏览器布局。
 

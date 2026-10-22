@@ -60,8 +60,8 @@ test "P0 POLYLINE missing vertex coordinate cannot silently bridge vertices" {
 }
 
 ///|
-test "P0 face records remain readable but never become checked outlines" {
-  for kind in ["SOLID", "TRACE", "3DFACE"] {
+test "P0 3DFACE records remain readable but never become checked outlines" {
+  for kind in ["3DFACE"] {
     let d = delivery_drawing(
       "0\n\{kind}\n10\n0\n20\n0\n11\n2\n21\n0\n12\n0\n22\n1\n13\n2\n23\n1\n",
     )
