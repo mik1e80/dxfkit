@@ -182,4 +182,6 @@ node scripts/verify-corpus-records.cjs
 
 `moon run cli check examples/unsupported-insert-ocs.dxf --strict` 应报告未转换 OCS、跳过该引用，并以 1 退出。该文件故意超出支持边界；普通模式出现警告也可能以 0 退出，不代表完整几何通过。顶层及嵌套路径见 insert_ocs_wbtest.mbt，CLI 与网页另运行真实入口回归。
 
-变更与兼容约定见 [CHANGELOG.md](CHANGELOG.md)。
+变更与兼容约定见 [CHANGELOG.md](CHANGELOG.md)；已完成工作、后续优先级及验收条件见[路线图](docs/roadmap.md)，问题复现可提交至 [Issues](https://github.com/mik1e80/dxfkit/issues)。
+
+固定 r2 标签保留其已验证内容；main 上后续 CHANGELOG 与路线图整理属于文档更新，不移动 r2 标签。

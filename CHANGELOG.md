@@ -1,5 +1,36 @@
 # 变更记录
 
+## 未发布 — r2 后的文档整理
+
+- 补齐以下 r2 交付记录，新增[路线图](docs/roadmap.md)和 README 导航；仅整理文档，未修改库行为、PDF、验证数据或模块版本。
+- 固定申报版本仍为 `submission-0.1.1-20261022-r2`（`94509f3`）；这些后续文档不追加入已存在的标签，不把文档提交声称为新的完整验证版本。
+
+## 0.1.1 源码交付 r2 — 2026-10-22（尚未发布 Mooncakes）
+
+固定标签：[submission-0.1.1-20261022-r2](https://github.com/mik1e80/dxfkit/tree/submission-0.1.1-20261022-r2)，提交 `94509f3d76bfaabde409d39e1b57b8e215a794f3`。以下汇总该标签包含的后续整改；更早轮次的采集记录保留在下面。
+
+### 正确性与覆盖边界
+
+- SPLINE 缺少次数组码 71 时不再默认三次：保留原始记录、返回 Unknown 并报告检查不完整；次数 0/33 由 checked 入口拒绝。缺失、正常三次和越界输入的测试及 CLI 结果见[r2 记录](docs/r2-submission-20261022.md)。
+- SPLINE 的 Closed / Periodic 语义尚未实现时拒绝生成轮廓；部分权重缺失不再自动补 1，只有完全没有权重时使用默认等权重。
+- BLOCK 缺少 ENDBLK 时增加恢复诊断，并保留下一个块定义；不把恢复后的图纸当作完整检查结果。
+- checked 入口拒绝 ELLIPSE 轴比大于 1；LWPOLYLINE 宽度/厚度及普通 POLYLINE 顶点宽度增加覆盖诊断，中心线检查不能代表完整宽度几何验证。
+- 新增 `Layer::is_enabled_for_checks()`，旧 `is_machinable()` 保留兼容；文字与关闭/冻结图层的提示改为本工具的检查边界，不承诺下游机床行为。
+- 新增 `ExpandLimits` 控制展开资源；`Drawing::analyze()` 共享一次展开，减少网页重复解析。尚未引入 Web Worker，不承诺所有大输入均无卡顿。
+- 明确 `bounds()` 是原始解码字段的包围估计，不等于通过 checked 几何验证；本次没有新增 `bounds_checked()`。
+
+### 验证与交付
+
+- 增加[十类参数模型](examples/model-validation/README.md)，保存 DXF、参考数据、实际报告/SVG 和总结；不将这些模型称为来自多种 CAD 软件的新导出文件。
+- [边界 CLI 案例](examples/advisor-boundaries/README.md)扩为 14/14；ezdxf 1.4.4 实跑核对 5 文件、67 条记录、507 个数值字段，最大绝对差 0，见[独立字段对照](examples/independent-fields/README.md)。字段一致不等于完整几何认证，47 张第三方图纸的独立逐图纸几何真值仍为 0/47。
+- 更新一页 PDF、README、复现说明及 GitHub About；区分日常 targeted 验证与最终手动 full 验收，保留旧标签。
+- r2 的[完整 CI 与同提交 Pages 部署](https://github.com/mik1e80/dxfkit/actions/runs/39761104538)成功；四后端测试全部通过（Wasm/Native 各 297，JS/Wasm-GC 各 280），并通过外部消费工程、语料、敏感性与实际入口验证。发布后核对 161 个线上资产，验证身份为 `full`、`full_suite_run=true`、`source_dirty=false`。
+
+### 使用与迁移
+
+- 原来依赖缺失次数默认值、部分权重自动补齐或不支持语义的输入，可能从生成轮廓变为明确拒绝或检查不完整；调用方应处理 `Report::has_incomplete_checks()`，不能把“读取成功”当作“完整几何通过”。
+- SOLID/TRACE 继续通过 `Entity::flatten_checked()` 使用受限二维边界；裸 `Geometry::Face` 的 checked/flatten 仍返回 Empty，3DFACE 不参与二维轮廓检查。本条确认既有行为，没有重新扩大支持范围。
+
 ## 未发布 — 2026-10-22
 
 - 追加五项审查验收：11 项库测试及 11 个真实网页/CLI 案例；最初 9 项修复前 4 通过/5 失败，另补非零厚度和真实零长度边保护。默认 OCS、零厚度、同 Z 的 SOLID/TRACE 新增有序边界，三角形消除格式规定的重复第四点；原始 Face 与 3DFACE 顺序不改写。
