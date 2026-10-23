@@ -1,6 +1,6 @@
 # 从指定提交复现交付版本
 
-固定 r2（94509f3）已通过手动 `validation=full` 的[CI #26 及同提交部署](https://github.com/mik1e80/dxfkit/actions/runs/39761104538)，标签已创建。普通 main push 默认运行针对性流程 `verify-advisor.cjs`；targeted 与 full 的记录各自标明 profile，不互相冒充。后续 main 另增加[格式/API 维护门禁](public-api-review.md)，在依赖获取后执行 `moon fmt --check` 与 `moon info --frozen` 并比较快照；独立维护 CI 不构建或部署站点，这项新增流程不追加入旧 r2 标签。
+固定 r2（94509f3）已通过手动 `validation=full` 的[CI #26 及同提交部署](https://github.com/mik1e80/dxfkit/actions/runs/39761104538)，标签已创建。普通 main push 默认运行针对性流程 `verify-advisor.cjs`；targeted 与 full 的记录各自标明 profile，不互相冒充。后续 main 另增加[格式/API 维护门禁](public-api-review.md)，在依赖获取后执行 `moon fmt --check` 与 `moon info` 并比较快照；独立维护 CI 不构建或部署站点，这项新增流程不追加入旧 r2 标签。
 
 交付版本使用固定标签 `submission-0.1.1-20261022-r2`。标签所指提交是本次库、CLI、测试、网页构建、申报说明与生态对比的共同源码；不以可变的 main 或在线页面当前内容替代提交身份。模块版本仍为 0.1.1，未发布 Mooncakes。此前的 `delivery-0.1.1-20261021`、`delivery-0.1.1-20261022`、`delivery-0.1.1-20261022-ellipse` 和 `delivery-0.1.1-20261022-review` 及 `delivery-0.1.1-20261022-evidence`（679f81a）保留原提交，不移动或覆盖；旧 `submission-0.1.1-20261022`（f233ddc）也保留原 SHA。
 

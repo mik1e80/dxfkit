@@ -3,13 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>dxfkit —— ASCII DXF 二维轮廓读取与辅助检查</title>
+    <title>dxfkit — MoonBit ASCII DXF 读取与二维轮廓辅助检查库</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header class="page-head">
       <h1>dxfkit</h1>
       <p>
+        MoonBit ASCII DXF 读取与二维轮廓辅助检查库。
         拖入 ASCII DXF，查看二维轮廓，并检查开放边界、重叠、单实体自交和指定净距。
         报告只覆盖已支持的二维几何；加工前仍需确认单位、材料、刀具和工艺。
       </p>
@@ -39,7 +40,7 @@
 
       <section class="pane">
         <div class="pane-head">
-          <h2>加工前检查</h2>
+          <h2>二维轮廓辅助检查</h2>
           <label class="gap-field">
             最小净距
             <input type="number" id="min-gap" value="0" min="0" step="any" />

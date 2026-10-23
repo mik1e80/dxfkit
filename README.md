@@ -1,4 +1,4 @@
-# dxfkit
+# dxfkit — MoonBit ASCII DXF 读取与二维轮廓辅助检查库
 
 面向 MoonBit 开发者的 **ASCII DXF 读取与二维轮廓辅助检查库**。把图纸记录转换为可复用的数据模型、XY 轮廓、诊断报告和 SVG，提供库、CLI 与浏览器入口。
 
@@ -123,7 +123,7 @@ ELLIPSE 长轴字段按相对圆心向量读取。SVG 输出使用有限 Double 
 
 按改动选取必要检查，默认轻量验证。文档/PDF 改动运行 `node scripts/verify-submission-docs.cjs`；代码改动选择相关测试文件和受影响入口，不默认运行以下全部命令。命令列表保留作按需验收参考，见[验证约定](docs/verification-guide.md#本轮材料修订如何验证)。
 
-格式与公开接口的轻量门禁为 `node scripts/verify-maintenance.cjs`，执行 `moon fmt --check` 和 `moon info --frozen`，核对已提交的 [API 快照](pkg.generated.mbti)。该门禁已接入当前 main 的 CI / full 流程；[接口审阅与迁移约定](docs/public-api-review.md)说明兼容接口及 checked 边界，独立维护 CI 不部署页面。
+格式与公开接口的轻量门禁为 `node scripts/verify-maintenance.cjs`，执行 `moon fmt --check` 和 `moon info`，核对已提交的 [API 快照](pkg.generated.mbti)。该门禁已接入当前 main 的 CI / full 流程；[接口审阅与迁移约定](docs/public-api-review.md)说明兼容接口及 checked 边界，独立维护 CI 不部署页面。
 
 ```bash
 moon check --target all --deny-warn

@@ -18,7 +18,7 @@ keywords = [
   "moonbit",
 ]
 
-description = "MoonBit ASCII DXF 二维轮廓读取与辅助检查库：七类核心轮廓、普通块展开、SVG预览与流式统计"
+description = "MoonBit ASCII DXF 读取与二维轮廓辅助检查库：七类核心轮廓、普通块展开、SVG预览与流式统计"
 
 // **库本体（仓库根包）只用 MoonBit 自带的核心库，零第三方依赖。**
 //

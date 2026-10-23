@@ -1,6 +1,6 @@
 # dxfkit：接口与实现边界
 
-MoonBit 的 ASCII DXF 读取、二维几何处理与辅助检查库。安装、场景、CLI 和网页入口见 [README.md](README.md)。源码修订版本 0.1.1，本次修订尚未发布到 Mooncakes。
+**MoonBit ASCII DXF 读取与二维轮廓辅助检查库**。安装、场景、CLI 和网页入口见 [README.md](README.md)。源码修订版本 0.1.1，本次修订尚未发布到 Mooncakes。
 
 本次范围为七类核心轮廓实体、受限二维 SOLID/TRACE 边界和普通 INSERT；逐字段输入、输出、限制与案例见[交付范围](docs/delivery-scope.md)，追加行为见[补充几何审查](docs/review-cases.md)。
 

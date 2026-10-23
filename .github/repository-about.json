@@ -1,5 +1,5 @@
 {
-  "description": "MoonBit ASCII DXF reader and 2D contour inspection library with explicit coverage diagnostics, CLI and SVG preview.",
+  "description": "MoonBit ASCII DXF 读取与二维轮廓辅助检查库：明确覆盖边界，提供普通块展开、诊断报告、CLI 与 SVG 预览。",
   "homepage": "https://mik1e80.github.io/dxfkit/",
   "topics": ["moonbit", "dxf", "cad", "geometry", "contours", "svg", "cli"]
 }

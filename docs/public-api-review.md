@@ -1,14 +1,16 @@
 # 格式与公开 API 核对
 
-核对日期：2026-10-22，固定 MoonBit 发行包 `0.10.14+7d59c7ec9`。这是 r2 后 main 的工程维护，不移动固定 r2 标签，也不声称该历史标签已经包含新门禁。
+核对日期：2026-10-22；首次依赖同步修订：2026-10-23。固定 MoonBit 发行包 `0.10.14+7d59c7ec9`。这是 r2 后 main 的工程维护，不移动固定 r2 标签，也不声称该历史标签已经包含新门禁。
 
 ## 格式门禁
 
-现有模块首次 `moon fmt --check` 失败；在副本执行同版本 `moon fmt` 后，统一 34 个源码/包配置文件的排版，不修改算法或测试预期。格式化前后分别运行 `moon info --frozen`，核心库生成的公开接口逐字相同。
+现有模块首次 `moon fmt --check` 失败；在副本执行同版本 `moon fmt` 后，统一 34 个源码/包配置文件的排版，不修改算法或测试预期。格式化前后分别运行 `moon info`，核心库生成的公开接口逐字相同。
 
-[轻量维护脚本](../scripts/verify-maintenance.cjs)依次执行 `moon fmt --check`、`moon info --frozen`，再比较已提交的 [pkg.generated.mbti](../pkg.generated.mbti)。快照不一致即失败，不把自动生成的新签名静默当作审核通过。只有经过接口兼容审阅后才能提交更新后的快照。
+[轻量维护脚本](../scripts/verify-maintenance.cjs)依次执行 `moon fmt --check`、`moon info`，再比较已提交的 [pkg.generated.mbti](../pkg.generated.mbti)。快照不一致即失败，不把自动生成的新签名静默当作审核通过。只有经过接口兼容审阅后才能提交更新后的快照。
 
 该门禁已接入 targeted-advisor 和 full 脚本，位置在依赖获取之后、测试之前；另有[独立维护 CI](../.github/workflows/maintenance.yml)，仅执行依赖获取和格式/API 核对，无测试全量、站点构建、部署或包发布。结果写 `_build/maintenance.json`，明确 `validation_profile=maintenance`、`full_suite_run=false`。
+
+干净 CI 首次运行发现 `moon update` 只更新 registry 索引，不能保证 `.mooncakes` 已安装；因此 `moon info` 不加 `--frozen`，允许首次同步依赖。同步后通过 `moon tree --json` 严格核对 `reproduction.json` 中的固定依赖版本，再比较 API 快照；不沿用已有缓存掩盖此条件。
 
 ## 核心接口审阅
 
