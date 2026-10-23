@@ -1,6 +1,6 @@
 # dxfkit 项目申报书（修订稿）
 
-[一页申报 PDF](../output/pdf/dxfkit-submission-one-page.pdf) · [验证材料导航](verification-guide.md)。本页、PDF、代码与十类模型统一收录于最终申报标签 `submission-0.1.1-20261022-r2`，以同提交 CI 和发布记录核对。
+[一页申报 PDF](../output/pdf/dxfkit-submission-one-page.pdf) · [验证材料导航](verification-guide.md)。固定申报材料（申报书、PDF、代码与十类模型）已收录于最终申报标签 `submission-0.1.1-20261022-r2`（`94509f3`），以同提交 CI 和发布记录核对。main 后续包含文字状态校正、CAD 导出补充及维护门禁，分别记录验证范围，不追加入该固定标签。
 
 ## 基本信息
 
@@ -8,7 +8,7 @@
 - 项目方向：工业软件 / 开发者工具
 - GitHub：<https://github.com/mik1e80/dxfkit>
 - 在线演示：<https://mik1e80.github.io/dxfkit/>
-- 提交版本：固定标签 `submission-0.1.1-20261022-r2`，以该标签的提交 SHA 为准；[干净环境复现与版本核对](reproducibility.md)。网页 release.json 和 verification.json 记录实际源码提交及本文件、生态对比和来源记录的哈希，CI 通过后才部署同一产物。
+- 提交版本：固定标签 `submission-0.1.1-20261022-r2`（`94509f3`）已创建，并已通过[完整 CI #26 及同提交 Pages 部署](https://github.com/mik1e80/dxfkit/actions/runs/39761104538)；[干净环境复现与版本核对](reproducibility.md)。网页 release.json 和 verification.json 记录该版实际源码提交及申报材料、生态对比和来源记录的哈希。
 - 是否为整体移植：否；参考资料、公式移植和外部语料见下文。
 - 参赛者及联系方式：报名表保留原信息，不在公开仓库展示。
 
@@ -52,7 +52,7 @@ HATCH、DIMENSION、3DFACE、未知实体的轮廓未参与检查。SOLID/TRACE 
 
 ## 可复现案例与完成标准
 
-[r2 修订记录](r2-submission-20261022.md)明确要求 SPLINE 次数（71），不再默认三次；新增缺次数、0/33 和正常三次四个 CLI 案例，边界套件合计 14 项。预算、共享分析及五文件 ezdxf 字段对照一并纳入同提交的最终 full 验收，完整 CI 与部署成功后才建立 r2 标签。
+[r2 修订记录](r2-submission-20261022.md)明确要求 SPLINE 次数（71），不再默认三次；新增缺次数、0/33 和正常三次四个 CLI 案例，边界套件合计 14 项。预算、共享分析及五文件 ezdxf 字段对照已一并通过该提交的 `validation=full` 完整 CI #26 和 Pages 部署；r2 标签已经创建并保持原提交。
 
 新增[十类模型](../examples/model-validation/README.md)，将 DXF、独立设计尺寸、公开接口原始数据、实际报告、SVG、解析 CSV 与总结集中放在 examples/model-validation。10/10 模型与预期一致；bulge 未进行 CAD 软件目视确认，样条参考为独立 Bernstein 采样，未进行外部 CAD 导出对照。
 
