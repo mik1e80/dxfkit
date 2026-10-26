@@ -1,6 +1,14 @@
 # dxfkit：接口与实现边界
 
-**MoonBit ASCII DXF 读取与二维轮廓辅助检查库**。安装、场景、CLI 和网页入口见 [README.md](README.md)。源码修订版本 0.1.1，本次修订尚未发布到 Mooncakes。
+**MoonBit ASCII DXF 读取与二维轮廓辅助检查库**。模块版本 0.1.1，安装、场景、CLI 和网页入口见 [README.md](README.md)。
+
+在 MoonBit 工程中添加固定版本依赖：
+
+```sh
+moon add mik1e80/dxfkit@0.1.1
+```
+
+包导入名为 `mik1e80/dxfkit`；独立使用不依赖网页或本库源码工作区。注册表消费验证命令为 `node scripts/verify-consumer.cjs --registry`，与本地 `moon.work` 验证分别记录。
 
 本次范围为七类核心轮廓实体、受限二维 SOLID/TRACE 边界和普通 INSERT；逐字段输入、输出、限制与案例见[交付范围](docs/delivery-scope.md)，追加行为见[补充几何审查](docs/review-cases.md)。
 

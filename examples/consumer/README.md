@@ -15,7 +15,17 @@ moon check --target wasm --deny-warn
 moon run . --target wasm --deny-warn -- fixtures/normal.dxf --strict
 ```
 
-`moon.work` 的 `members = [".", "../.."]` 将本例和仓库中的库模块放入同一工作区。**当前修订尚未发布到 Mooncakes，必须保留这个本地库成员。** `moon.mod` 中的 `mik1e80/dxfkit@0.1.1` 由本地源码解析，不要求从注册表下载该版本；其他依赖首次使用仍需联网获取。该方式依据 [MoonBit 官方本地模块说明](https://tour.moonbitlang.com/basics/module-and-package/index.html#local-module-dependencies)。
+`moon.work` 的 `members = [".", "../.."]` 将本例和仓库中的库模块放入同一工作区，用于源码开发。`moon.mod` 中的 `mik1e80/dxfkit@0.1.1` 在该模式下由本地源码解析，不验证注册表安装；其他依赖首次使用仍需联网获取。该方式依据 [MoonBit 官方本地模块说明](https://tour.moonbitlang.com/basics/module-and-package/index.html#local-module-dependencies)。
+
+## 通过 Mooncakes 使用
+
+独立工程保留 `moon.mod`、`moon.pkg`、`main.mbt` 和 `fixtures/`，不复制 `moon.work`。模块依赖固定为 `mik1e80/dxfkit@0.1.1`，由 registry 解析，不引用本仓库源码。仓库根目录执行以下定向验证会自动复制出独立工程，并核对依赖树来源与八项用例：
+
+```sh
+node scripts/verify-consumer.cjs --registry
+```
+
+该命令需要已发布的固定版本及网络，不能用本地工作区的通过结果替代。
 
 正常样例的关键输出：
 

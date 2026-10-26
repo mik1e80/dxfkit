@@ -16,6 +16,8 @@ function option(name, fallback) {
 const target = option('--target', 'wasm');
 assert(['wasm', 'native'].includes(target), 'file example supports wasm or native');
 const reportPath = option('--report', null);
+const registry = args.includes('--registry');
+const profile = require('../reproduction.json');
 const example = path.join(root, 'examples/consumer');
 const temporaryRoot = fs.realpathSync(os.tmpdir());
 const work = fs.mkdtempSync(path.join(temporaryRoot, 'dxfkit-consumer-'));
@@ -23,8 +25,11 @@ const results = [];
 try {
   fs.cpSync(example, work, {
     recursive: true,
-    filter: source => !path.relative(example, source).split(path.sep)
-      .some(part => ['_build', '.mooncakes', '.git'].includes(part)),
+    filter: source => {
+      const relative = path.relative(example, source);
+      return !(registry && relative === 'moon.work') && !relative.split(path.sep)
+        .some(part => ['_build', '.mooncakes', '.git'].includes(part));
+    },
   });
   // The sample contains application code and fixtures, no dxfkit source files.
   const files = fs.readdirSync(work).sort();
@@ -32,8 +37,10 @@ try {
   assert(!files.includes('entity.mbt'));
   assert(!files.includes('web'));
   const library = root.replaceAll('\\', '/');
-  fs.writeFileSync(path.join(work, 'moon.work'),
+  if (!registry) fs.writeFileSync(path.join(work, 'moon.work'),
     `members = [".", ${JSON.stringify(library)}]\n`);
+  if (registry) assert(!fs.existsSync(path.join(work, 'moon.work')));
+  let resolvedLibrary;
   function run(id, command, expectedStatus, expectedPatterns, absentPatterns = []) {
     const child = spawnSync('moon', command, {
       cwd: work, encoding: 'utf8', timeout: 120000,
@@ -53,6 +60,15 @@ try {
     return !failure;
   }
   if (run('external-module-check', ['check', '--target', target, '--deny-warn'], 0, [])) {
+    if (registry) {
+      const tree = spawnSync('moon', ['tree', '--json'], {cwd: work, encoding: 'utf8', timeout: 120000});
+      if (tree.error) throw tree.error;
+      assert.equal(tree.status, 0, tree.stdout + tree.stderr);
+      const found = JSON.parse(tree.stdout).modules.find(m => m.name === profile.module);
+      assert(found && found.source.kind === 'registry', 'Consumer must resolve dxfkit from registry');
+      assert.equal(found.version, profile.version, 'Unexpected registry version');
+      resolvedLibrary = {module: found.name, version: found.version, source: found.source.kind};
+    }
     const command = ['run', '.', '--target', target, '--frozen', '--deny-warn', '--'];
     run('read-extract-discretize-check', [...command, 'fixtures/normal.dxf', '--strict'], 0,
       [/ENTITIES=1/, /CIRCLE center=10,20 radius=2/,
@@ -74,7 +90,8 @@ try {
     suite: 'dxfkit-external-consumer', target,
     example_sha256: createHash('sha256')
       .update(fs.readFileSync(path.join(example, 'main.mbt'))).digest('hex'),
-    copied_files: files, library_source: 'local moon.work member',
+    copied_files: files, library_source: registry ? 'Mooncakes registry (no moon.work)' : 'local moon.work member',
+    ...(resolvedLibrary ? {resolved_library: resolvedLibrary} : {}),
     passed: results.filter(r => r.passed).length, total: 8, cases: results,
   };
   if (reportPath) fs.writeFileSync(path.resolve(reportPath), JSON.stringify(result, null, 2) + '\n');
