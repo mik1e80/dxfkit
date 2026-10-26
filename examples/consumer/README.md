@@ -22,6 +22,7 @@ moon run . --target wasm --deny-warn -- fixtures/normal.dxf --strict
 独立工程保留 `moon.mod`、`moon.pkg`、`main.mbt` 和 `fixtures/`，不复制 `moon.work`。模块依赖固定为 `mik1e80/dxfkit@0.1.1`，由 registry 解析，不引用本仓库源码。仓库根目录执行以下定向验证会自动复制出独立工程，并核对依赖树来源与八项用例：
 
 ```sh
+moon update
 node scripts/verify-consumer.cjs --registry
 ```
 

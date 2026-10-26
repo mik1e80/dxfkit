@@ -22,7 +22,9 @@ moon run cli check examples/plate.dxf --min-gap 0.5 --strict
 moon run cli svg examples/plate.dxf > plate.svg
 ```
 
-样例是声明毫米单位的 100×60 外框与四个半径 3 的圆孔轮廓。首次获取工具链/依赖的时间取决于环境，安装与固定版本见[复现说明](docs/reproducibility.md)。本次源码修订为 **0.1.1**，尚未完成对应 Mooncakes 发布；示例从源码运行。
+样例是声明毫米单位的 100×60 外框与四个半径 3 的圆孔轮廓。首次获取工具链/依赖的时间取决于环境，安装与固定版本见[复现说明](docs/reproducibility.md)。**0.1.1 已发布到 [Mooncakes](https://mooncakes.io/docs/mik1e80/dxfkit)**；上述示例从仓库源码运行。
+
+其他 MoonBit 工程可运行 `moon add mik1e80/dxfkit@0.1.1`，导入核心库；[registry 消费教程](examples/consumer/README.md#通过-mooncakes-使用)说明如何脱离本地 `moon.work` 使用。发布源提交和包校验和见[0.1.1 发布记录](docs/mooncakes-0.1.1.md)。
 
 只承诺[实体矩阵](docs/entity-capabilities.md)列明的字段和检查，不能据此保证图纸可加工。
 
@@ -165,7 +167,7 @@ node scripts/verify-corpus-records.cjs
 
 [47 张第三方图纸的逐文件验证记录](docs/corpus-validation.md)：分别记录读取、实体字段解码、实际测试和未覆盖部分，不将语料回归统一标为兼容通过。
 
-源码修订版本 **0.1.1**。本次修订尚未发布到 Mooncakes。
+Mooncakes 版本 **0.1.1** 已发布，对应源码提交 `dc3acc8`。固定 r2 申报标签仍对应 `94509f3`，两者的验证范围分别记录。
 
 [再次申报的证据索引](docs/resubmission-evidence.md) · [实体分层矩阵](docs/entity-capabilities.md) · [独立对照及实际误差](docs/independent-validation.md) · [退回意见响应表](docs/review-response.md)。10 个真实 CLI 案例保存输入、报告、SVG 和断言，运行 `node scripts/verify-submission-evidence.cjs` 复核。
 

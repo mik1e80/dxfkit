@@ -71,7 +71,7 @@ HATCH、DIMENSION、3DFACE、未知实体的轮廓未参与检查。SOLID/TRACE 
 
 `node cli/smoke.cjs` 自动核对实际退出码和关键诊断。曲线另用负 bulge、S 形样条及独立 de Boor 密集采样对照验证。47 个外部文件用于回归，不是完整标准认证套件。测试数量随修订变化，以 CI 和实际运行结果为准。
 
-`node scripts/verify-delivery.cjs` 对实际网页产物执行六类最小问题断言：非原点椭圆、SVG 大/微小坐标、LWPOLYLINE 损坏顶点、POLYLINE 损坏顶点、面实体降级、INSERT OCS。机器可读预期和实际输出随仓库保存，未把已有本地 OCS 修复误记为本轮新发现。独立调用工程见 [`examples/consumer/`](../examples/consumer/README.md)：自带模块配置、读取 DXF、提取实体、checked 离散和报告处理；通过 moon.work 使用本地未发布修订，无需网页或内部实现复制。`node scripts/verify-consumer.cjs` 将其复制到仓库外，在 Wasm 和 Native 分别验证 8 个编译/运行用例。正常、问题、未覆盖三种浏览器样例均调用同一 MoonBit 库。
+`node scripts/verify-delivery.cjs` 对实际网页产物执行六类最小问题断言：非原点椭圆、SVG 大/微小坐标、LWPOLYLINE 损坏顶点、POLYLINE 损坏顶点、面实体降级、INSERT OCS。机器可读预期和实际输出随仓库保存，未把已有本地 OCS 修复误记为本轮新发现。独立调用工程见 [`examples/consumer/`](../examples/consumer/README.md)：自带模块配置、读取 DXF、提取实体、checked 离散和报告处理；源码开发模式通过 moon.work 使用本地库，无需网页或内部实现复制。`node scripts/verify-consumer.cjs` 将其复制到仓库外，在 Wasm 和 Native 分别验证 8 个编译/运行用例；新增 `--registry` 模式已对发布的 0.1.1 完成 Wasm 8/8 实跑，见[发布记录](mooncakes-0.1.1.md)。正常、问题、未覆盖三种浏览器样例均调用同一 MoonBit 库。
 
 几何和检查器的结果验收见[测试矩阵](test-accuracy.md)：9 个几何精度测试核对坐标、尺寸、包围盒或独立解析曲线误差；8 个检查器成对测试核对分类、严重程度、定位和阈值边界。另有 2 个实体测试验证圆心 (10,0)、长轴向量 (10,0)、轴比 0.5 的精确包围盒和平移不变性。临时副本中的九类故障均被编译后的实际测试拒绝，包括恢复长轴重复减圆心的旧错误；不以实体数、点数或警告总数代替判定正确。
 
@@ -112,4 +112,4 @@ HATCH、DIMENSION、3DFACE、未知实体的轮廓未参与检查。SOLID/TRACE 
 
 本次撤回跨版本完整覆盖承诺，改为分层能力说明，并补充“读取成功但几何未完整检查”的反例。请同步替换报名表的项目名、简介、功能和差异性，避免其他字段继续保留旧承诺。
 
-源码修订版本 0.1.1 尚未完成本次 Mooncakes 发布，不能描述为已发布版本。报名表更新及其他参赛条件需另外核对，本修订不表示已经通过审核。
+Mooncakes 0.1.1 已于 2026-10-26 发布，发布源提交为 `dc3acc8`，包校验和与执行记录见[发布说明](mooncakes-0.1.1.md)。该发布是固定 r2 之后的补充，不移动 r2 标签。报名表更新及其他参赛条件需另外核对，本修订不表示已经通过审核。
