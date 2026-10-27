@@ -46,6 +46,8 @@ pub fn point_code_parts(Int) -> (Int, Int)?
 
 pub fn polyline_points(Array[PolyVertex], Bool, Double) -> Array[Vec2]
 
+pub fn read_document(Bytes) -> ReadDocument
+
 pub fn scan_tags(Bytes) -> TagScan
 
 pub fn severity_label(Severity) -> String
@@ -106,6 +108,13 @@ pub(all) struct CheckOptions {
   min_gap : Double
 }
 
+pub(all) enum ConformanceProfile {
+  R12
+  BestEffort
+} derive(Eq)
+pub fn ConformanceProfile::equal(Self, Self) -> Bool
+pub fn ConformanceProfile::not_equal(Self, Self) -> Bool
+
 pub(all) struct Drawing {
   version : String
   sections : Array[Section]
@@ -119,6 +128,8 @@ pub fn Drawing::declared_unit_label(Self) -> String
 pub fn Drawing::entities(Self) -> Entities
 pub fn Drawing::expand(Self, Double) -> Expansion
 pub fn Drawing::expand_with_limits(Self, Double, ExpandLimits) -> Expansion
+pub fn Drawing::expand_world(Self, Double) -> WorldExpansion
+pub fn Drawing::expand_world_with_limits(Self, Double, ExpandLimits) -> WorldExpansion
 pub fn Drawing::section(Self, String) -> Section?
 pub fn Drawing::to_svg(Self, Double) -> String
 
@@ -218,6 +229,13 @@ pub(all) struct HeaderVar {
   values : Array[Tag]
 }
 
+pub(all) struct InsertInstance {
+  handle : String
+  block : String
+  row : Int
+  column : Int
+}
+
 pub(all) struct Layer {
   name : String
   color : Int
@@ -231,6 +249,14 @@ pub fn Layer::is_enabled_for_checks(Self) -> Bool
 pub fn Layer::is_machinable(Self) -> Bool
 pub fn Layer::is_off(Self) -> Bool
 
+pub struct Ocs {
+  x_axis : Vec3
+  y_axis : Vec3
+  normal : Vec3
+}
+pub fn Ocs::from_extrusion(Vec3) -> Result[Self, String]
+pub fn Ocs::to_wcs(Self, Vec3) -> Vec3
+
 pub(all) struct Placed {
   entity : Entity
   layer : String
@@ -240,6 +266,21 @@ pub(all) struct Placed {
 pub(all) struct PolyVertex {
   at : Vec3
   mut bulge : Double
+}
+
+pub(all) struct RawRecord {
+  section : String
+  kind : String
+  tags : Array[Tag]
+}
+
+pub(all) struct ReadDocument {
+  source : Bytes
+  scan : TagScan
+  records : Array[RawRecord]
+  drawing : Drawing
+  profile : ConformanceProfile
+  read_warnings : Array[String]
 }
 
 pub(all) struct Record {
@@ -374,6 +415,26 @@ pub fn Vec3::normalize(Self) -> Self
 pub fn Vec3::sub(Self, Self) -> Self
 pub fn Vec3::xy(Self) -> Vec2
 pub fn Vec3::zero() -> Self
+
+pub(all) struct WorldExpansion {
+  placed : Array[WorldPlaced]
+  warnings : Array[String]
+}
+
+pub(all) enum WorldFlat {
+  Outline3(points~ : Array[Vec3], closed~ : Bool)
+  Dot3(at~ : Vec3)
+  Label3(at~ : Vec3, height~ : Double, value~ : String)
+  Face3(corners~ : Array[Vec3])
+  Empty3
+}
+
+pub(all) struct WorldPlaced {
+  entity : Entity
+  layer : String
+  flat : WorldFlat
+  instances : Array[InsertInstance]
+}
 
 // Type aliases
 

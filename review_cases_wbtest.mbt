@@ -116,12 +116,19 @@ test "review 3DFACE keeps its own WCS vertex order and remains outside contour c
 }
 
 ///|
-test "review SOLID non-default OCS has no guessed contour" {
+test "review SOLID negative Z OCS produces an actual reflected contour" {
   let d = review_face("SOLID", "13\n2\n23\n1\n33\n0\n", "230\n-1\n")
-  assert_false(d.expand(0.001).placed.any(p => p.flat is Outline(..)))
+  let world = d.expand_world(0.001)
+  assert_eq(world.warnings.length(), 0)
+  match world.placed[0].flat {
+    Outline3(points~, closed~) => {
+      assert_true(closed)
+      assert_true(points.any(p => p.x == -2.0 && p.y == 1.0 && p.z == 0.0))
+    }
+    _ => fail("reflected SOLID expected")
+  }
   let report = d.check({ tol: 0.001, min_gap: 0.0, })
-  assert_true(report.has_incomplete_checks())
-  assert_true(report.to_text().contains("OCS"))
+  assert_false(report.has_incomplete_checks())
 }
 
 ///|
@@ -142,7 +149,7 @@ test "review partially written fourth corner cannot masquerade as a triangle" {
 }
 
 ///|
-test "review nested INSERT OCS remains incomplete while supported sibling survives" {
+test "review nested cyclic INSERT remains incomplete while supported sibling survives" {
   let d = drawing_with_insert(
     "0\nINSERT\n2\n销\n5\nCD\n10\n0\n20\n0\n230\n-1\n0\nCIRCLE\n10\n0\n20\n0\n40\n2\n",
     "10\n0\n20\n0\n",
@@ -151,7 +158,7 @@ test "review nested INSERT OCS remains incomplete while supported sibling surviv
   let report = d.check({ tol: 0.01, min_gap: 0.0, })
   assert_true(report.has_incomplete_checks())
   assert_true(report.to_text().contains("CD"))
-  assert_true(report.to_text().contains("OCS"))
+  assert_true(report.to_text().contains("循环引用"))
 }
 
 ///|

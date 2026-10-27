@@ -1,5 +1,14 @@
 # 变更记录
 
+## 未发布 — 2026-10-27 R12 读取配置与 WCS
+
+- 新增 `read_document`、`RawRecord` 和 `ConformanceProfile`：AC1009 选择 R12 原始记录保留配置，读取诊断与几何覆盖诊断分离；其他版本明确 best effort，不把原始字段保留宣传为全部标准语义符合。
+- 新增 `Ocs` 和 `WorldExpansion`，保留 XYZ 及 INSERT 来源链；适用实体按 Arbitrary Axis Algorithm 转换，LINE/POINT/3DFACE 的 WCS 坐标不受挤出方向误旋转。
+- INSERT 展开全部行列，处理三维基点、缩放、旋转、OCS 及嵌套。阵列间距不随块缩放；空实例访问也受全局预算限制。
+- `expand` / `Entity::flatten_checked` 改为转换后判断 WCS Z=0 检查平面，倾斜或其他标高保留 XYZ 并报告二维不完整。六项原“OCS 必须跳过”回归改为实际坐标/循环/完整性断言。
+- [六份模型](examples/r12-validation/README.md)保存源 DXF、公开 API 输出、读取/strict 报告与132个坐标分量的设计真值对照；新增23项测试及88项相关回归分批通过，各后端类型检查通过。CI 默认只做必要测试与网页构建，完整验收前不自动覆盖旧 Pages 演示。
+- 本轮不改动报名表，不发布新包、不移动 r2、不创建新最终标签。旧全量快照和 PDF 按其原验证版本保留；建立新完整交付前须刷新受影响的集成证据并验收。完整限制见 [R12 矩阵](docs/r12-profile.md)。
+
 ## 0.1.1 — 2026-10-26（Mooncakes 正式发布）
 
 - 从固定源提交 `dc3acc8` 发布 `mik1e80/dxfkit@0.1.1`，记录上传包、registry 校验和和外部消费验证；[发布记录](docs/mooncakes-0.1.1.md)区分 r2 完整验收与本次轻量发布验证。

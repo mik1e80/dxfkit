@@ -1,0 +1,72 @@
+----
+import {
+  "moonbitlang/async",
+  "moonbitlang/async/fs",
+  "moonbitlang/async/shell",
+  "moonbitlang/core/env",
+  "moonbitlang/core/string",
+}
+----
+
+///|
+async fn main {
+  let args = @env.args()
+  guard args.length() == 2 else { fail("pass the pinned SDK directory") }
+  let sdk = args[1]
+  let moon = sdk + "/bin/moon.exe"
+  let env = { "MOON_HOME": sdk }
+  let version = @shell.Cmd(moon, ["version", "--all"], env~).output()
+  version.check()
+  assert_true(version.stdout().contains("moonc v0.10.14+7d59c7ec9 "))
+  let dir = "examples/r12-validation"
+  @fs.mkdir(dir + "/actual", recursive=true)
+  @fs.write_file(dir + "/actual/toolchain.txt", version.stdout())
+  let names = ["01-array-2x3", "02-scaled-array", "03-rotated-array",
+    "04-base-xyz", "05-nested-array", "06-ocs-array"]
+  let expected_counts = [6, 4, 4, 2, 4, 2]
+  let mut summary = "model\tinstances\txyz_fields_compared\tmax_absolute_error\tpassed\n"
+  for index, name in names {
+    let input = dir + "/models/" + name + ".dxf"
+    let output = @shell.Cmd(moon, ["run", "examples/r12-validation/runner", input], env~).output()
+    output.check()
+    let text = output.stdout().replace(old="\r\n", new="\n")
+    @fs.write_file(dir + "/actual/" + name + "-world.tsv", text)
+    let positions : Array[Array[Double]] = []
+    for line in text.split("\n") {
+      let parts = line.split("\t").to_array()
+      if parts.length() == 4 && parts[0] == "XYZ" {
+        positions.push([@string.parse_double(parts[1]), @string.parse_double(parts[2]), @string.parse_double(parts[3])])
+      }
+    }
+    let count = expected_counts[index]
+    assert_eq(positions.length(), count * 2)
+    let mut error = 0.0
+    for cell = 0; cell < count; cell = cell + 1 {
+      let col = (cell % 2).to_double()
+      let row = (cell / 2).to_double()
+      // Independent design arithmetic: block base equals LINE start; endpoint offset is (1,0,1).
+      let (start, delta) = match index {
+        0 => ([10.0 + col * 7.0, 20.0 + row * 9.0, 0.0], [1.0, 0.0, 1.0])
+        1 => ([col * 10.0, row * 20.0, 0.0], [2.0, 0.0, 2.0])
+        2 => ([-row * 20.0, col * 10.0, 0.0], [0.0, 2.0, 1.0])
+        3 => ([4.0 + col * 10.0, 5.0, 6.0], [2.0, 0.0, 4.0])
+        4 => ([6.0 + col * 20.0, 5.0 + row * 20.0, 0.0], [2.0, 0.0, 1.0])
+        _ => ([0.0, col * 10.0, 0.0], [1.0, 1.0, 0.0])
+      }
+      for axis = 0; axis < 3; axis = axis + 1 {
+        error = error.max((positions[cell * 2][axis] - start[axis]).abs())
+        error = error.max((positions[cell * 2 + 1][axis] - start[axis] - delta[axis]).abs())
+      }
+    }
+    assert_true(error <= 1.0e-9)
+    let read = @shell.Cmd(moon, ["run", "cli", "read", input], env~).output()
+    read.check()
+    @fs.write_file(dir + "/actual/" + name + "-read.txt", read.stdout())
+    let check = @shell.Cmd(moon, ["run", "cli", "check", input, "--tol", "0.01", "--strict"], env~).output()
+    assert_eq(check.exit_code(), 1)
+    @fs.write_file(dir + "/actual/" + name + "-check.txt", check.stdout())
+    summary += "\{name}\t\{count}\t\{count * 6}\t\{error}\ttrue\n"
+    println("PASS \{name}: \{count} instances, max error \{error}")
+  }
+  @fs.write_file(dir + "/results.tsv", summary)
+}

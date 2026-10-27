@@ -1,6 +1,32 @@
 # dxfkit：接口与实现边界
 
-**MoonBit ASCII DXF 读取与二维轮廓辅助检查库**。模块版本 0.1.1，安装、场景、CLI 和网页入口见 [README.md](README.md)。
+**MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库**。当前 main 的新增 R12 API 尚未发布；以下 registry 安装命令获得已发布的 0.1.1，不包含这些新增接口。安装、CLI 和版本区别见 [README.md](README.md)。
+
+## 当前 main：R12 读取和 WCS
+
+```moonbit nocheck
+///|
+test "R12 document and WCS API" {
+  let doc = @dxfkit.read_document(
+    b"0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1009\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n0\nPOINT\n10\n2\n20\n3\n30\n4\n0\nENDSEC\n0\nEOF\n",
+  )
+  assert_true(doc.profile is @dxfkit.R12)
+  assert_eq(doc.read_warnings.length(), 0)
+  let world = doc.drawing.expand_world(0.01)
+  match world.placed[0].flat {
+    @dxfkit.Dot3(at~) => assert_eq(at.z, 4.0)
+    _ => fail("expected WCS point")
+  }
+}
+```
+
+`ReadDocument.source` 保留完整源字节；`records` 保留扫描器输出中的控制记录、组码顺序、重复字段、未知类型及 XDATA。`read_warnings` 诊断读取/结构和版本范围，不把几何未实现混入读取状态。`ConformanceProfile::R12` 表示按 `$ACADVER=AC1009` 选择配置，不是全部必填字段、编码与语义均符合标准的证明。
+
+`Ocs::from_extrusion()` 检查并归一化方向；`to_wcs()` 保留标高。`Drawing::expand_world()` / `expand_world_with_limits()` 返回 WCS XYZ 和 `InsertInstance` 路径（外到内，行列从 0 开始），阵列间距随旋转、不随块缩放。LINE、POINT、3DFACE 已是 WCS，不再按其挤出方向旋转坐标。详见[R12 矩阵](docs/r12-profile.md)。
+
+当前 `Drawing::expand()` 和 `Entity::flatten_checked()` 只把转换后落在 WCS Z=0（容差内）的轮廓交给 XY 检查；其他平面保留世界坐标并拒绝二维结论。`Geometry::flatten_checked()` 仍是没有实体 OCS/来源身份的局部几何接口，调用方不得把它当作 WCS 转换入口。
+
+## 已发布 0.1.1 与既有接口
 
 在 MoonBit 工程中添加固定版本依赖：
 
@@ -41,7 +67,7 @@ let svg = drawing.to_svg(0.05)
 
 核心轮廓为 LINE、CIRCLE、ARC、ELLIPSE、LWPOLYLINE、普通二维 POLYLINE、受限 SPLINE。POINT 和文字用于位置或简化预览；SOLID/TRACE 在下述受限范围内支持二维边界；HATCH、DIMENSION、3DFACE 等保留已有字段，不能据此认为它们的轮廓已参与检查。
 
-ELLIPSE 的 11/21/31 是相对圆心长轴向量。普通 POLYLINE 不接受拟合、空间和网格语义；损坏顶点保留记录并拒绝整条轮廓，避免拼接出新形状。裸 `Geometry::Face` 不携带 SOLID/TRACE/3DFACE 身份，调用其 `flatten()` / `flatten_checked()` 返回 Empty。SOLID/TRACE 应使用 `Entity::flatten_checked(tol)`，在默认 OCS、零厚度、所有角点同 Z 的范围内生成二维边界；3DFACE 仍报告未覆盖。
+ELLIPSE 的 11/21/31 是相对圆心长轴向量。普通 POLYLINE 不接受拟合、空间和网格语义；损坏顶点保留记录并拒绝整条轮廓，避免拼接出新形状。裸 `Geometry::Face` 不携带 SOLID/TRACE/3DFACE 身份，调用其 `flatten()` / `flatten_checked()` 返回 Empty。SOLID/TRACE 应使用 `Entity::flatten_checked(tol)`，当前 main 会转换 OCS，仅将零厚度且转换后在 WCS Z=0 检查平面的边界交给二维检查；3DFACE 仍报告二维未覆盖。
 
 - `Geometry::flatten_checked(tol)` 返回 `Result[Flat, String]`，是曲线的 checked 入口；整图展开使用保留身份的 Entity::flatten_checked。
 - `spline_points_checked(degree, knots, control_points, weights, tol)` 支持连续、正权重 NURBS 的 XY 离散。
@@ -68,7 +94,7 @@ ELLIPSE 的 11/21/31 是相对圆心长轴向量。普通 POLYLINE 不接受拟�
 | 自相交 | 同一实体内非相邻折线段的真交叉 |
 | 重复路径 | 同图层线段的共线重叠，排除同实体相邻段 |
 | 最小净距 | 同图层不同实体的线段距离；跳过容差内的端点接触 |
-| 检查覆盖 | 未支持或只提取元数据的实体、无轮廓、非默认OCS、未展开阵列、解析与离散诊断 |
+| 检查覆盖 | 未重建语义、无可检查轮廓、不适用的 WCS 平面、预算截断、解析与离散诊断 |
 | 文字与图层 | 未转换的文字、图层引用和关闭 / 冻结状态提示 |
 
 净距不是材料最窄厚度。它不覆盖单实体窄颈、跨图层关系，也不能代替刀具半径补偿或热 / 力学分析。曲线先离散后比较，阈值附近的结论需考虑两侧离散误差。
@@ -104,17 +130,17 @@ CLI `stats` 分块读文件、统计 tag、段、版本、编码，不保存全�
 
 ## SOLID / TRACE 的实体入口
 
-`Entity::flatten_checked(tol)` 保留实体身份，默认 OCS、零厚度、所有角点同 Z 时按 0→1→3→2 生成 SOLID/TRACE 闭合边界，标准三角形只输出一次重复的第三/第四点。原始 `Face.corners` 保持文件顺序，3DFACE 不统一重排。
+`Entity::flatten_checked(tol)` 保留实体身份。SOLID/TRACE 的局部角点同 Z、零厚度时按 0→1→3→2 生成边界，再转换 OCS 并判断检查平面；标准三角形只输出一次重复的第三/第四点。原始 `Face.corners` 保持文件顺序，3DFACE 不统一重排。
 
-此前这些类型仅保留元数据的边界已调整，详见[追加审查验收与迁移](docs/review-cases.md)。裸 `Geometry::Face` 没有实体身份，其 flatten / checked 仍返回 Empty。整图展开、检查和 SVG 使用新的 Entity 入口。非默认 OCS、非零厚度、非平行 XY 面不产生轮廓；省略第四角点的恢复会报告不完整，部分第四坐标拒绝。
+此前这些类型仅保留元数据的边界已调整，详见[历史追加审查](docs/review-cases.md)和[当前 R12 迁移说明](docs/r12-profile.md)。裸 `Geometry::Face` 没有实体身份，其 flatten / checked 仍返回 Empty。非默认 OCS 本身不再是拒绝原因；转换后不适用 XY 检查平面或不支持的厚度仍报告不完整。省略第四角点的恢复会报告不完整，部分第四坐标拒绝。
 
 ## 暂未实现
 
-二进制DXF、文件写回、通用编辑、完整引用审计、OCS变换、完整HATCH边界、关联标注重建、通用面实体及三维轮廓检查、全部INSERT阵列、字体转轮廓、刀路生成和参数化草图约束求解。
+二进制DXF、文件写回、通用编辑、全部R12必填字段和引用约束验证、完整HATCH边界、关联标注/属性布局重建、通用三维几何检查、字体转轮廓、刀路生成和参数化草图约束求解。OCS/WCS 与 INSERT 行列几何已实现，不再列作全未支持；受限实体和适用平面见矩阵。
 
 ## 来源
 
 样条格式参考 [Autodesk SPLINE 文档](https://help.autodesk.com/cloudhelp/2026/ENU/AutoCAD-DXF/files/GUID-E1F884F8-AA90-4864-A215-3182D47A9C74.htm)；能力与公式参考 [ezdxf](https://ezdxf.readthedocs.io/en/stable/)；标准样条算法为节点插入、de Casteljau及de Boor。第三方版权、完整许可及已记录的参考关系见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 
 
-非默认 OCS 的 INSERT 在块展开入口报告并跳过整个引用；子实体不会作为正确的 XY 轮廓参与检查或预览。其他实体的非默认 OCS 仍按原有检查覆盖警告处理，未新增通用 OCS 转换。
+INSERT 非默认 OCS 现进入三维变换链。倾斜几何保留在 `expand_world`，二维入口依据转换后的平面诊断，禁止静默丢掉 Z。关联 ATTRIB 的完整布局/阵列复制尚未重建，会另行提示不完整。

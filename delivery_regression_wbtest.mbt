@@ -81,15 +81,16 @@ test "P0 3DFACE records remain readable but never become checked outlines" {
 }
 
 ///|
-test "P0 INSERT unsupported OCS is diagnosed before children lose its identity" {
+test "P0 INSERT tilted WCS coverage diagnostic retains instance identity" {
   let d = drawing_with_insert(
     "0\nCIRCLE\n10\n0\n20\n0\n40\n5\n", "5\nAB\n8\nCUT\n10\n0\n20\n0\n210\n0\n220\n1\n230\n0\n",
   )
   let exp = d.expand(0.05)
-  assert_eq(exp.placed.length(), 0)
+  assert_eq(exp.placed.length(), 1)
+  assert_true(exp.placed[0].flat is Empty)
   assert_true(
     exp.warnings.any(w => {
-      w.contains("OCS") && w.contains("AB") && w.contains("CUT")
+      w.contains("已转换 WCS") && w.contains("AB") && w.contains("CUT")
     }),
   )
   assert_true(d.check({ tol: 0.05, min_gap: 0.0, }).count(Warn) > 0)

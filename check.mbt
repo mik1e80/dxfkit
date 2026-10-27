@@ -195,7 +195,6 @@ fn Drawing::check_expansion(
   }
   // 已解码不等于已检查几何。不能让未支持实体或空图纸得到无问题结论。
   let unsupported : Array[(String, Int)] = []
-  let unconverted_ocs : Array[(String, Int)] = []
   let mut outlines = 0
   for p in exp.placed {
     match p.flat {
@@ -214,19 +213,6 @@ fn Drawing::check_expansion(
       Hatch(..) | Dimension(..) | Unknown => bump(unsupported, p.entity.kind())
       _ => ()
     }
-    let record = p.entity.common.record
-    if record.get_double(210, 0.0) != 0.0 ||
-      record.get_double(220, 0.0) != 0.0 ||
-      record.get_double(230, 1.0) != 1.0 {
-      bump(unconverted_ocs, p.entity.kind())
-    }
-  }
-  for item in unconverted_ocs {
-    findings.push({
-      check: "检查覆盖",
-      severity: Warn,
-      message: "\{item.1} 个 \{item.0} 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核",
-    })
   }
   for item in unsupported {
     findings.push({

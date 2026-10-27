@@ -1,5 +1,5 @@
 {
-  "description": "MoonBit ASCII DXF 读取与二维轮廓辅助检查库：明确覆盖边界，提供普通块展开、诊断报告、CLI 与 SVG 预览。",
+  "description": "MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库：原始字段保留、OCS/WCS、块阵列展开、诊断、CLI 与 SVG。main 新增 R12 API 尚未发布；在线演示为固定 r2。",
   "homepage": "https://mik1e80.github.io/dxfkit/",
   "topics": ["moonbit", "dxf", "cad", "geometry", "contours", "svg", "cli"]
 }

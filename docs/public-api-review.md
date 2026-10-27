@@ -1,5 +1,11 @@
 # 格式与公开 API 核对
 
+## 2026-10-27 新增接口审阅
+
+新增 `read_document`、`ConformanceProfile`、`ReadDocument`、`RawRecord`、`Ocs`、`WorldFlat`、`WorldPlaced`、`WorldExpansion`、`InsertInstance` 及 Drawing 的两个 world 展开入口；旧公开结构的字段与方法签名保留。`Ocs` 由 checked 构造入口创建；内部 Transform3/ExpandCtx/局部离散方法没有暴露。
+
+已用固定 SDK 执行 `moon info` 并审阅新增签名，黑盒测试验证外部调用。行为迁移：Entity checked 和整图展开按 OCS→WCS 后的 WCS Z=0 判断二维适用性，数组不再仅首实例；Geometry checked 仍是局部坐标。新增接口没有进入已经发布的 0.1.1 包；详情见 [R12 矩阵](r12-profile.md)。以下保留原维护记录。
+
 核对日期：2026-10-22；首次依赖同步修订：2026-10-23。固定 MoonBit 发行包 `0.10.14+7d59c7ec9`。这是 r2 后 main 的工程维护，不移动固定 r2 标签，也不声称该历史标签已经包含新门禁。
 
 ## 格式门禁

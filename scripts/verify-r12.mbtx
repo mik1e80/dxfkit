@@ -1,0 +1,37 @@
+----
+import {
+  "moonbitlang/async",
+  "moonbitlang/async/shell",
+  "moonbitlang/core/env",
+}
+----
+
+///|
+async fn main {
+  // Script runner may be newer; always verify the project with its pinned SDK.
+  let args = @env.args()
+  guard args.length() == 2 else { fail("pass the pinned SDK directory") }
+  let sdk = args[1]
+  let moon = sdk + "/bin/moon.exe"
+  let env = { "MOON_HOME": sdk }
+  let version = @shell.Cmd(moon, ["version", "--all"], env~).output()
+  version.check()
+  if !version.stdout().contains("moonc v0.10.14+7d59c7ec9 ") {
+    fail("Use the pinned project SDK")
+  }
+  let checks = [
+    ["fmt", "--check"],
+    ["check", "--target", "all", "--deny-warn"],
+    ["test", "r12_world_wbtest.mbt", "r12_read_test.mbt", "insert_ocs_wbtest.mbt",
+      "review_cases_wbtest.mbt", "completeness_wbtest.mbt", "delivery_regression_wbtest.mbt",
+      "expand_wbtest.mbt", "advisor_boundary_wbtest.mbt", "geometry_accuracy_wbtest.mbt",
+      "geometry_regression_wbtest.mbt", "checker_accuracy_wbtest.mbt", "preview_wbtest.mbt",
+      "--target", "wasm", "--deny-warn"],
+  ]
+  for args in checks {
+    println("moon \{args.join(" ")}")
+    let status = @shell.Cmd(moon, args, env~).each_line(line => println(line))
+    if status != 0 { fail("R12 targeted validation failed: exit \{status}") }
+  }
+  println("PASS: R12 targeted validation; full suite was not run")
+}

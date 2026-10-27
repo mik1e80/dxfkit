@@ -1,0 +1,29 @@
+----
+import {
+  "moonbitlang/async",
+  "moonbitlang/async/fs",
+}
+----
+
+///|
+async fn main {
+  let dir = "examples/r12-validation/models"
+  @fs.mkdir(dir, recursive=true)
+  let line = "0\nLINE\n5\nL1\n8\n0\n10\n1\n20\n2\n30\n3\n11\n2\n21\n2\n31\n4\n"
+  let block = "0\nBLOCK\n2\nPART\n70\n0\n10\n1\n20\n2\n30\n3\n" + line + "0\nENDBLK\n"
+  let nested = "0\nBLOCK\n2\nNEST\n70\n0\n10\n0\n20\n0\n30\n0\n0\nINSERT\n5\nINNER\n2\nPART\n10\n3\n20\n0\n70\n2\n44\n10\n0\nENDBLK\n"
+  let cases = [
+    ("01-array-2x3", "PART", "10\n10\n20\n20\n70\n2\n71\n3\n44\n7\n45\n9\n"),
+    ("02-scaled-array", "PART", "10\n0\n20\n0\n41\n2\n42\n2\n43\n2\n70\n2\n71\n2\n44\n10\n45\n20\n"),
+    ("03-rotated-array", "PART", "10\n0\n20\n0\n41\n2\n42\n3\n50\n90\n70\n2\n71\n2\n44\n10\n45\n20\n"),
+    ("04-base-xyz", "PART", "10\n4\n20\n5\n30\n6\n41\n2\n42\n3\n43\n4\n70\n2\n44\n10\n"),
+    ("05-nested-array", "NEST", "10\n0\n20\n5\n41\n2\n42\n2\n71\n2\n45\n20\n"),
+    ("06-ocs-array", "PART", "10\n0\n20\n0\n70\n2\n44\n10\n210\n1\n220\n0\n230\n0\n"),
+  ]
+  for (name, reference, tags) in cases {
+    let dxf = "0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1009\n0\nENDSEC\n0\nSECTION\n2\nTABLES\n0\nENDSEC\n0\nSECTION\n2\nBLOCKS\n" + block + nested +
+      "0\nENDSEC\n0\nSECTION\n2\nENTITIES\n0\nINSERT\n5\nOUTER\n8\nCUT\n2\n" + reference + "\n" + tags + "0\nENDSEC\n0\nEOF\n"
+    @fs.write_file("\{dir}/\{name}.dxf", dxf)
+    println("wrote \{name}")
+  }
+}

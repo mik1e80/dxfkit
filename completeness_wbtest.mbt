@@ -14,10 +14,12 @@ test "normal contour cannot mask unsupported entities in the final verdict" {
 }
 
 ///|
-test "normal contour cannot mask unconverted OCS in the final verdict" {
-  let d = completeness_drawing("0\nCIRCLE\n10\n0\n20\n0\n40\n2\n230\n-1\n")
+test "normal contour cannot mask a WCS contour outside the XY inspection plane" {
+  let d = completeness_drawing(
+    "0\nCIRCLE\n10\n0\n20\n0\n40\n2\n210\n1\n230\n0\n",
+  )
   let report = d.check({ tol: 0.05, min_gap: 0.0, })
-  assert_true(report.to_text().contains("OCS"))
+  assert_true(report.to_text().contains("已转换 WCS"))
   assert_true(report.verdict().contains("检查不完整"))
   assert_true(report.has_incomplete_checks())
 }

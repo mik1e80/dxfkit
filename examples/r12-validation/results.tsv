@@ -1,0 +1,7 @@
+model	instances	xyz_fields_compared	max_absolute_error	passed
+01-array-2x3	6	36	0	true
+02-scaled-array	4	24	0	true
+03-rotated-array	4	24	1.7763568394002505e-15	true
+04-base-xyz	2	12	0	true
+05-nested-array	4	24	0	true
+06-ocs-array	2	12	0	true

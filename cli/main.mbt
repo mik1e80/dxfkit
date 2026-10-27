@@ -24,12 +24,45 @@ async fn main {
     "check" => run_check(args[2:])
     "svg" => run_svg(args[2:])
     "stats" => run_stats(args[2:])
+    "read" => run_read(args[2:])
     cmd => {
       println("不认识的命令「\{cmd}」")
       usage()
       @sys.exit(2)
     }
   }
+}
+
+///|
+/// Report record-preservation/structure separately from geometry checking.
+fn run_read(args : ArrayView[String]) -> Unit {
+  if args.length() != 1 {
+    println("用法：dxfkit read 图纸.dxf")
+    @sys.exit(2)
+    return
+  }
+  let data = @fs.read_file_to_bytes(args[0]) catch {
+    _ => {
+      println("读取文件失败：\{args[0]}")
+      @sys.exit(2)
+      return
+    }
+  }
+  let doc = @dxfkit.read_document(data)
+  let profile = match doc.profile {
+    R12 => "R12/AC1009"
+    BestEffort => "best-effort"
+  }
+  println(
+    "读取配置 \{profile} · \{doc.records.length()} 条原始记录 · \{doc.scan.tags.length()} 个 tag · 保留 \{data.length()} 字节",
+  )
+  println(
+    "结构检查不等于完整标准符合性或几何检查；原始字节包含扫描器忽略的 EOF 后数据。",
+  )
+  for w in doc.read_warnings {
+    println("读取警告：\{w}")
+  }
+  @sys.exit(if doc.read_warnings.length() == 0 { 0 } else { 1 })
 }
 
 ///|
@@ -391,9 +424,12 @@ fn parse_num(s : String) -> Double? {
 
 ///|
 fn usage() -> Unit {
-  println("dxfkit —— DXF 图纸的加工前检查")
+  println("dxfkit —— ASCII DXF R12 记录读取与二维轮廓辅助检查")
   println("")
   println("用法：")
+  println(
+    "  dxfkit read <图纸.dxf>  # 读取配置、原始记录数和结构诊断",
+  )
   println("  dxfkit check <图纸.dxf> [--tol 0.05] [--min-gap 0.5] [--strict]")
   println(
     "        加工前检查：轮廓闭合、自相交、重复切割、最小间隙、",

@@ -3,16 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>dxfkit — MoonBit ASCII DXF 读取与二维轮廓辅助检查库</title>
+    <title>dxfkit — MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header class="page-head">
       <h1>dxfkit</h1>
       <p>
-        MoonBit ASCII DXF 读取与二维轮廓辅助检查库。
+        MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库。
         拖入 ASCII DXF，查看二维轮廓，并检查开放边界、重叠、单实体自交和指定净距。
-        报告只覆盖已支持的二维几何；加工前仍需确认单位、材料、刀具和工艺。
+        OCS 转换后保留 WCS 坐标；检查只覆盖受支持且位于 Z=0 的二维几何。
+        加工前仍需确认单位、材料、刀具和工艺。
       </p>
     </header>
 

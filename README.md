@@ -1,6 +1,8 @@
-# dxfkit — MoonBit ASCII DXF 读取与二维轮廓辅助检查库
+# dxfkit — MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库
 
-面向 MoonBit 开发者的 **ASCII DXF 读取与二维轮廓辅助检查库**。把图纸记录转换为可复用的数据模型、XY 轮廓、诊断报告和 SVG，提供库、CLI 与浏览器入口。
+面向 MoonBit 开发者的 **ASCII DXF R12（AC1009）记录读取与二维轮廓辅助检查库**。当前 main 增加原始字节/记录保留、OCS→WCS 和 INSERT 阵列展开，分别报告读取、坐标重建与二维检查的边界。其他版本按已实现能力尽力读取。
+
+**版本区别：** 本轮 R12 API 尚未发布到 Mooncakes，未建立新的最终交付标签。[R12 范围与符合性矩阵](docs/r12-profile.md)及[六份模型、坐标数据和总结](examples/r12-validation/README.md)描述当前源码；保留全部原始字段不等于已验证全部 R12 标准语义。已发布的 0.1.1、固定 r2 标签及线上演示保持各自原版本。
 
 [在线试用](https://mik1e80.github.io/dxfkit/) · [接口文档](README.mbt.md) · [一页项目申报 PDF](output/pdf/dxfkit-submission-one-page.pdf)
 
@@ -8,9 +10,9 @@
 
 ## 能做什么
 
-- 读取七类核心轮廓实体，处理受限二维 SOLID/TRACE 边界和普通 INSERT。
+- 按 R12 配置保留各段原始记录和字段，提供七类既有核心轮廓、受限二维 SOLID/TRACE 以及带实例来源的块/阵列展开。
 - 辅助检查开放轮廓、退化、自交、重复路径与指定净距，生成报告和 SVG。
-- 报告未支持实体、未转换 OCS、未展开实例和离散失败；用 `--strict` 拦截警告。
+- 将适用实体的 OCS 转为 WCS 并保留 XYZ；非 XY 检查平面、未支持语义、预算截断和离散失败进入不完整报告，`--strict` 拦截警告。
 
 ## 快速运行
 
@@ -18,6 +20,7 @@
 
 ```sh
 moon update
+moon run cli read examples/r12-validation/models/06-ocs-array.dxf
 moon run cli check examples/plate.dxf --min-gap 0.5 --strict
 moon run cli svg examples/plate.dxf > plate.svg
 ```
@@ -44,13 +47,13 @@ moon run cli svg examples/plate.dxf > plate.svg
 | --- | --- |
 | 读取 | ASCII DXF 组码、三种换行、分段与子类、HEADER、图层和块；保留未知实体记录并给出诊断 |
 | 核心轮廓 | LINE、CIRCLE、ARC、ELLIPSE、LWPOLYLINE、普通二维 POLYLINE、受限 SPLINE；仅承诺字段矩阵中的行为 |
-| 块与其他信息 | 普通 INSERT 的 XY 展开、最多 8 层；点/文字预览及其他实体已有元数据提取 |
+| 块与其他信息 | INSERT 行列阵列、XYZ 基点、缩放/旋转/OCS、最多 8 层嵌套；WorldExpansion 保留来源句柄和逐层行列号 |
 | 几何 | bulge 圆弧、椭圆、连续正权重 NURBS 的 XY 离散；嵌套块仿射变换 |
 | 检查 | 退化几何、文字、图层、端点闭合、单实体自交、共线重叠、指定净距与检查覆盖提示 |
 | 输出 | SVG 预览、文字报告、CLI 退出码 |
 | 大文件 | `TagStream` 分块扫描与 CLI `stats`，不保存整份文件或全量 tag 列表 |
 
-HATCH 边界、DIMENSION 关联几何、3DFACE、未知实体、非默认 OCS 和 INSERT 阵列的其余实例未完整检查。SOLID/TRACE 仅在默认 OCS、零厚度、所有角点同 Z 时生成二维边界；原始 Face 角点不重排。其余输入报告覆盖限制，解码身份不代表几何已完整检查。[追加审查验收](docs/review-cases.md)列出输入、预期、修复前后与真实入口断言。
+R12 的 SHAPE、VIEWPORT、DIMENSION、空间/网格 POLYLINE 等保留原始字段，尚未完整重建语义；HATCH、ELLIPSE、SPLINE、LWPOLYLINE 是非 R12 扩展，沿用明确受限的既有能力。3DFACE 保留 WCS 角点但不参与二维轮廓检查。SOLID/TRACE 在零厚度、局部同 Z 且转换后落入 WCS Z=0 检查平面时生成边界；其余三维轮廓保留 XYZ 并报告二维检查不完整。[R12 矩阵](docs/r12-profile.md)为当前行为入口；旧审查/模型数据保留其原验证版本，不代表本轮已重新完成全部验证。
 
 ## 十类模型与测试数据
 

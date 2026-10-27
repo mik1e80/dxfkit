@@ -50,7 +50,7 @@ const lines = [...svg.matchAll(/<polyline points="([^"]*)"/g)].map(m=>m[1].trim(
 assert.equal(lines.length,2);
 assert.deepEqual(lines[0].at(-1),[2,0]);
 assert(lines[1].some(([x,y])=>Math.abs(y)>0.2),'S形样条不能画成直线');
-assert.match(context.check(input('unsupported-insert-ocs.dxf'),0),/未转换 OCS/);
+assert.match(context.check(input('unsupported-insert-ocs.dxf'),0),/已转换 WCS/);
 assert(!context.svg(input('unsupported-insert-ocs.dxf'),0.05).includes('<polyline'));
 gap.value='0';
 nodes.get('sample-normal').events.get('click')();
@@ -65,7 +65,8 @@ assert.match(report.textContent,/严重问题/);
 context.runCheck(input('completeness-mixed.dxf'),'completeness-mixed.dxf');
 assert.match(report.textContent,/检查不完整/);
 assert.match(report.textContent,/SPLINE 控制点/);
-assert.match(report.textContent,/未转换 OCS/);
+// Negative-Z OCS is now converted and remains in the XY plane.
+assert(!report.textContent.includes('未转换 OCS'));
 assert(!report.textContent.includes('没有可检查的二维轮廓'));
 assert.match(document.getElementById('preview').innerHTML,/<polygon/);
 const missingDegree=fs.readFileSync(path.join(__dirname,'../examples/advisor-boundaries/models/missing-degree.dxf')).toString('base64');

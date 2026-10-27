@@ -400,17 +400,24 @@ pub fn Entity::flatten_checked(
   self : Entity,
   tol : Double,
 ) -> Result[Flat, String] {
+  match entity_world_flat(self, tol, Transform3::identity()) {
+    Ok(world) => world_to_xy(world, tol)
+    Err(msg) => Err(msg)
+  }
+}
+
+///|
+/// Entity-local discretization; OCS conversion belongs to the world pipeline.
+fn Entity::flatten_local_checked(
+  self : Entity,
+  tol : Double,
+) -> Result[Flat, String] {
   if !positive_tolerance(tol) {
     return Err("离散容差必须是正的有限数字")
   }
   match self.geom {
     Face(corners~) if self.kind() == "SOLID" || self.kind() == "TRACE" => {
       let record = self.common.record
-      if record.get_double(210, 0.0) != 0.0 ||
-        record.get_double(220, 0.0) != 0.0 ||
-        record.get_double(230, 1.0) != 1.0 {
-        return Err("SOLID/TRACE 未转换 OCS，已跳过轮廓")
-      }
       if record.get_double(39, 0.0) != 0.0 {
         return Err("SOLID/TRACE 非零厚度未处理，已跳过轮廓")
       }
