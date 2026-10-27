@@ -59,9 +59,9 @@
     },
     {
       "id": "G1",
-      "name": "语料块展开：记录未支持的阵列实例",
+      "name": "语料块展开：WCS 阵列位置与覆盖诊断",
       "scope": "all",
-      "meaning": "展开记录总量和受限输入诊断；不是变换坐标真值"
+      "meaning": "展开数量及覆盖诊断；multi_insert_with_attribs 的25个FLAG、100个顶点按15度解析矩阵对照；不代表整图几何认证"
     },
     {
       "id": "C0",
@@ -122,20 +122,22 @@
   ],
   "source_sha256_lf": {
     "analyze.mbt": "10e8e322970725a5ef0b80d21eec4de5b6de60cf2ab339440074a09a79badac5",
-    "check.mbt": "2730538db5ef954036c3d448d9e7c2908b321fcf32d1db72f753fc49cc6c3c81",
-    "cli/smoke.cjs": "012bbad58900e87e79669ef2ed943e92a1a23574bf672e0d8d235e71449a99f2",
+    "check.mbt": "5faa79f717e0e8fb81830b5490ba5e9b88d7319aafcd2f194be2259ec477130e",
+    "cli/smoke.cjs": "2a277df25d18ead7b798de3bc1622ed50e377342bbbc5206cfb12f9fb407f820",
     "codepage.mbt": "3c66e54221a8abe2816dbb36ea2efc8d282feb19fe1d8f7e53d74055451f85c4",
     "conformance/audit.mbt": "e97df4682c26c0b917406b82282722e14ae9b9a764c222fbc62322997b6384b9",
     "conformance/corpus.mbt": "9d3acc0ceb4682094c4eae715f616ffe269c38dc55d96ab30e3f740e1c457912",
-    "conformance/corpus_wbtest.mbt": "ab69c428e89832dbc3147ae919fe6c59d28e91eff0dffb202126be6ee8186254",
+    "conformance/corpus_wbtest.mbt": "78869ea94c407ed12798c1c010ab747908d85724983f0b7e21e78c9488c96dcb",
     "conformance/main.mbt": "cb476d196c036a93a9336f13a7e465c85627a6051d426fb79a31b5f400505887",
     "entity.mbt": "7a4c82c2aca0aea97483d4e6c40dc6b17bfd99c1a30d3a0994c439fb3c57a4db",
-    "expand.mbt": "b3a2c450ae2df20f0c127aa9c479d1fe393ea356d4d0410e2e99ae048f35786f",
-    "flatten.mbt": "797ae620a8abfdc8aed9d3eb3fe8fef3e9333c2f85d8726121621cb4bdee6923",
+    "expand.mbt": "25a61b06dcee49b869cb8c74f09adb1b547d21869625616f1e388338f1eaa377",
+    "flatten.mbt": "4088f01bcb3cc314cd821aedb5a2de1d1e4c9cb6038f36272b403ea5be3b8eb3",
     "flatten_checked.mbt": "c929bcf1e4de148ff567f19c0d6e5058f78c4f40731b700c40dfaec09cb625de",
     "header.mbt": "8c114a6e3e0d4a1241696203709d420c29a953bb2d62d99d39e69cefe6fd1739",
-    "moon.mod": "66c7f6f250580c2abb78919eeda3e805dd453f60a66e2d3eef46545cbf6c0faa",
+    "moon.mod": "944bb43f31bb1f73b56870e3dd2275c754fe90aacc7027fd97569fdcaf85fcb0",
+    "ocs.mbt": "0b5b4378c4b47463762dd63246f2c66e8842b7e793928e99dea6df31e41cedb2",
     "preview.mbt": "ebca6301bc4048e09ad620ebf57ed09c78cad7d2624071a602da9a7e0d99642d",
+    "read_document.mbt": "4796ada7bd8556887fdd65011087ab5b477f1480a9f7be6daac651be32f3bee8",
     "reader_ascii.mbt": "2754022e3998fea280fb730e23511a5ef21c8f79a53ba3e71db97f21e744d5ca",
     "spline.mbt": "a70866a665ea49e98c3a0a8afb3f4454a1a702c1d41120bcc3539dc3d92faee5",
     "stream.mbt": "428002cc9279c2fc02c0f008f22ffc23520798cf11fc64f2af935eb7980b111b",
@@ -143,7 +145,8 @@
     "subclass.mbt": "e8ba6e83ca44fc6a0d1861dbaff9c0e12b25bd96435906c1f12b03c84a27b26e",
     "tables.mbt": "95f6b11983f5cc89ebf87545f7040c3ac0cbc6f665cf90eaf6ed62a13ce1be38",
     "tag.mbt": "068dc1697a17c7a42b29db32d4024768df87687ce772581b6717aa10df141d7c",
-    "vec.mbt": "ce50bb334f4886ed224b4682e4671d74f82b6e87a3d3c6fc09ad919d2f8b4d4a"
+    "vec.mbt": "ce50bb334f4886ed224b4682e4671d74f82b6e87a3d3c6fc09ad919d2f8b4d4a",
+    "world_flat.mbt": "1200a46a9605e0bdd8f65b57498682f10ba17e83ee421b137f59e38eafc15519"
   },
   "summary": {
     "files": 47,
@@ -151,6 +154,8 @@
     "observed_entities": 5524,
     "decoded_entities": 5404,
     "independently_verified_geometry_files": 0,
+    "partially_verified_geometry_files": 1,
+    "analytically_verified_polyline_instances": 25,
     "incomplete_reports": 46,
     "conformance_tests": {
       "total": 14,
@@ -316,6 +321,7 @@
       ],
       "limitations": [
         "仅字段/元数据 3DFACE",
+        "WCS已保留；部分几何不适用Z=0检查平面",
         "缺少逐图纸独立几何真值"
       ],
       "observed": {
@@ -353,18 +359,25 @@
             "decoded": 1
           }
         ],
-        "expanded_outlines": 1,
-        "expansion_warnings": [],
+        "expanded_outlines": 0,
+        "expansion_warnings": [
+          "LINE（句柄 ，图层 1，实例 ）：已转换 WCS，但轮廓不在 Z=0 的 XY 检查平面；XYZ 保留于 expand_world，二维检查不完整"
+        ],
         "findings": [
+          {
+            "category": "解析",
+            "severity": "警告",
+            "message": "LINE（句柄 ，图层 1，实例 ）：已转换 WCS，但轮廓不在 Z=0 的 XY 检查平面；XYZ 保留于 expand_world，二维检查不完整"
+          },
           {
             "category": "检查覆盖",
             "severity": "警告",
             "message": "2 个 3DFACE 实体的轮廓未参与检查；保留记录不表示已验证几何"
           },
           {
-            "category": "轮廓闭合",
+            "category": "检查覆盖",
             "severity": "警告",
-            "message": "图层「1」上有 1 处轮廓没闭合——最宽的缝 1（(0, -0.5) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+            "message": "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据"
           }
         ],
         "incomplete": true,
@@ -2756,7 +2769,6 @@
       ],
       "limitations": [
         "仅字段/元数据 MTEXT",
-        "非默认 OCS 未转换",
         "缺少逐图纸独立几何真值"
       ],
       "observed": {
@@ -2798,11 +2810,6 @@
         "expansion_warnings": [],
         "findings": [
           {
-            "category": "检查覆盖",
-            "severity": "警告",
-            "message": "4 个 MTEXT 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核"
-          },
-          {
             "category": "文字未转曲线",
             "severity": "警告",
             "message": "图层「0」上有 8 处文字：文字尚未转换为轮廓，本工具不检查字形几何，请确认下游软件的文字处理方式。"
@@ -2838,9 +2845,9 @@
         "meaning": "is_decoded 字段输出计数，不是全字段语义认证"
       },
       "geometry": {
-        "status": "not-independently-verified",
-        "verified_entities": 0,
-        "reason": "仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准"
+        "status": "partially-verified",
+        "verified_entities": 25,
+        "reason": "G1以源顶点(0,0)/(0,5)/(4,3)/(0,3)、5x5间距10和15度解析矩阵核对100个WCS顶点；未认证圆、文字、关联属性及整图"
       },
       "participating_tests": [
         "R1",
@@ -2855,8 +2862,8 @@
       ],
       "limitations": [
         "仅字段/元数据 ATTDEF/ATTRIB",
-        "阵列其余实例未展开",
-        "缺少逐图纸独立几何真值"
+        "关联属性完整布局/阵列复制未重建",
+        "已验证25个FLAG的WCS顶点；其余几何未独立验证"
       ],
       "observed": {
         "file": "multi_insert_with_attribs.dxf",
@@ -2884,8 +2891,8 @@
         "expanded_kinds": [
           {
             "kind": "ATTDEF",
-            "total": 3,
-            "decoded": 3
+            "total": 75,
+            "decoded": 75
           },
           {
             "kind": "ATTRIB",
@@ -2894,29 +2901,29 @@
           },
           {
             "kind": "CIRCLE",
-            "total": 1,
-            "decoded": 1
+            "total": 25,
+            "decoded": 25
           },
           {
             "kind": "POLYLINE",
-            "total": 1,
-            "decoded": 1
+            "total": 25,
+            "decoded": 25
           }
         ],
-        "expanded_outlines": 2,
+        "expanded_outlines": 50,
         "expansion_warnings": [
-          "INSERT 阵列暂只展开首个实例，其他行列未检查：FLAG"
+          "INSERT 3B 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
         ],
         "findings": [
           {
             "category": "解析",
             "severity": "警告",
-            "message": "INSERT 阵列暂只展开首个实例，其他行列未检查：FLAG"
+            "message": "INSERT 3B 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
           },
           {
             "category": "文字未转曲线",
             "severity": "警告",
-            "message": "图层「FLAGS」上有 3 处文字：文字尚未转换为轮廓，本工具不检查字形几何，请确认下游软件的文字处理方式。"
+            "message": "图层「FLAGS」上有 75 处文字：文字尚未转换为轮廓，本工具不检查字形几何，请确认下游软件的文字处理方式。"
           },
           {
             "category": "文字未转曲线",
@@ -2926,7 +2933,7 @@
           {
             "category": "轮廓闭合",
             "severity": "警告",
-            "message": "图层「FLAGS」上有 1 处轮廓没闭合——最宽的缝 3.0000000000000004（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+            "message": "图层「FLAGS」上有 25 处轮廓没闭合——最宽的缝 3.000000000000002（(16.730326074756157, 14.835639164941098) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
           }
         ],
         "incomplete": true,
@@ -2972,6 +2979,7 @@
       "limitations": [
         "未解码 VIEWPORT",
         "仅字段/元数据 ATTDEF/ATTRIB/MTEXT/TEXT",
+        "关联属性完整布局/阵列复制未重建",
         "缺少逐图纸独立几何真值"
       ],
       "observed": {
@@ -3066,13 +3074,19 @@
         ],
         "expanded_outlines": 125,
         "expansion_warnings": [
-          "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证"
+          "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证",
+          "INSERT 756 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
         ],
         "findings": [
           {
             "category": "解析",
             "severity": "警告",
             "message": "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证"
+          },
+          {
+            "category": "解析",
+            "severity": "警告",
+            "message": "INSERT 756 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
           },
           {
             "category": "检查覆盖",
@@ -3689,7 +3703,7 @@
       "limitations": [
         "未解码 VIEWPORT",
         "仅字段/元数据 ATTDEF/ATTRIB/MTEXT/TEXT",
-        "非默认 OCS 未转换",
+        "关联属性完整布局/阵列复制未重建",
         "缺少逐图纸独立几何真值"
       ],
       "observed": {
@@ -3784,7 +3798,8 @@
         ],
         "expanded_outlines": 125,
         "expansion_warnings": [
-          "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证"
+          "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证",
+          "INSERT 756 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
         ],
         "findings": [
           {
@@ -3793,19 +3808,9 @@
             "message": "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证"
           },
           {
-            "category": "检查覆盖",
+            "category": "解析",
             "severity": "警告",
-            "message": "30 个 MTEXT 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核"
-          },
-          {
-            "category": "检查覆盖",
-            "severity": "警告",
-            "message": "62 个 TEXT 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核"
-          },
-          {
-            "category": "检查覆盖",
-            "severity": "警告",
-            "message": "4 个 ATTRIB 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核"
+            "message": "INSERT 756 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
           },
           {
             "category": "检查覆盖",
@@ -4303,6 +4308,7 @@
       "limitations": [
         "未解码 3DSOLID/MESH/MULTILEADER/POLYLINE/RAY/VIEWPORT/XLINE",
         "仅字段/元数据 ATTDEF/ATTRIB/DIMENSION/MTEXT",
+        "关联属性完整布局/阵列复制未重建",
         "非普通二维 POLYLINE 未生成轮廓",
         "缺少逐图纸独立几何真值"
       ],
@@ -4527,7 +4533,8 @@
         "expanded_outlines": 30,
         "expansion_warnings": [
           "POLYLINE 标志 64 超出普通二维折线范围；保留记录，轮廓未检查",
-          "POLYLINE 标志 64 超出普通二维折线范围；保留记录，轮廓未检查"
+          "POLYLINE 标志 64 超出普通二维折线范围；保留记录，轮廓未检查",
+          "INSERT 5FA 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
         ],
         "findings": [
           {
@@ -4539,6 +4546,11 @@
             "category": "解析",
             "severity": "警告",
             "message": "POLYLINE 标志 64 超出普通二维折线范围；保留记录，轮廓未检查"
+          },
+          {
+            "category": "解析",
+            "severity": "警告",
+            "message": "INSERT 5FA 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
           },
           {
             "category": "检查覆盖",

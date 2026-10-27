@@ -600,7 +600,7 @@ fn check_crossings(
         // y 方向粗筛
         if !(t.min_y > s.max_y + tol || s.min_y > t.max_y + tol) {
           if !(s.owner == t.owner && adjacent_segs(s, t)) {
-            if s.owner == t.owner && proper_cross(s.a, s.b, t.a, t.b) {
+            if s.owner == t.owner && proper_cross(s.a, s.b, t.a, t.b, tol) {
               push_unique_int(self_crossed, s.owner)
             }
             let over = overlap_length(s.a, s.b, t.a, t.b, tol)
@@ -690,7 +690,22 @@ fn adjacent_segs(s : CutSeg, t : CutSeg) -> Bool {
 /// 两段**真正穿过**（交点严格在两段的内部）才算交叉。
 /// 端点相接、共线重叠都不算——前者可能是合法的连接，
 /// 后者归「重复切割」。
-fn proper_cross(a1 : Vec2, a2 : Vec2, b1 : Vec2, b2 : Vec2) -> Bool {
+fn proper_cross(
+  a1 : Vec2,
+  a2 : Vec2,
+  b1 : Vec2,
+  b2 : Vec2,
+  tol : Double,
+) -> Bool {
+  // Affine rounding can move a mathematically touching endpoint infinitesimally
+  // across a segment. Classify endpoint/segment contacts using the caller's
+  // distance tolerance before testing the orientation signs.
+  if dist_to_segment(a1, b1, b2) <= tol ||
+    dist_to_segment(a2, b1, b2) <= tol ||
+    dist_to_segment(b1, a1, a2) <= tol ||
+    dist_to_segment(b2, a1, a2) <= tol {
+    return false
+  }
   let d1 = orient(a1, a2, b1)
   let d2 = orient(a1, a2, b2)
   let d3 = orient(b1, b2, a1)

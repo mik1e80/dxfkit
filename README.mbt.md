@@ -1,6 +1,6 @@
 # dxfkit：接口与实现边界
 
-**MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库**。当前 main 的新增 R12 API 尚未发布；以下 registry 安装命令获得已发布的 0.1.1，不包含这些新增接口。安装、CLI 和版本区别见 [README.md](README.md)。
+**MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库**。当前main为未发布0.2.0开发版；以下registry安装命令获得已发布0.1.1，不包含新增R12接口。当前结构诊断、自交接触容差和版本迁移见[本轮记录](docs/resubmission-20261027.md)；安装、CLI和版本区别见[README](README.md)。
 
 ## 当前 main：R12 读取和 WCS
 

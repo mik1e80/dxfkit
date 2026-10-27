@@ -3,7 +3,7 @@
 本表保留现有 47 个 ezdxf 文件，分别记录读取、实体解码输出和独立几何验证。**没有“兼容通过”这一统一结论。**
 
 实测读取 47/47；顶层实体输出 5524，其中 5404 个 is_decoded=true；46 份检查报告标为不完整。
-**独立几何真值验证：0/47。** 已运行离散、展开及检查不变量，不等于验证每张图纸的坐标、尺寸或完整语义。P0 的自建解析几何测试不能自动替代这些外部文件的真值。
+**整图独立几何真值验证：0/47。** 本轮另对 multi_insert_with_attribs.dxf 的25个FLAG轮廓、100个WCS顶点执行解析矩阵对照；这项部分验证不升级为整张文件认证。其他文件仍仅有离散、展开和检查不变量。
 
 ## 来源与身份
 
@@ -23,7 +23,7 @@
 | 图纸 | 来源 | 读取 | 实体字段解码 d/n | 几何真值验证 | 实际测试 | 未覆盖/限制 |
 | --- | --- | --- | --- | --- | --- | --- |
 | [3dface.dxf](../testdata/ezdxf/3dface.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/3dface.dxf) | 成功 | 71/71 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 3DFACE/MTEXT/TEXT；缺少逐图纸独立几何真值 |
-| [Minimal_DXF_AC1006.dxf](../testdata/ezdxf/Minimal_DXF_AC1006.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/Minimal_DXF_AC1006.dxf) | 成功 | 3/3 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0, A3 | 仅字段/元数据 3DFACE；缺少逐图纸独立几何真值 |
+| [Minimal_DXF_AC1006.dxf](../testdata/ezdxf/Minimal_DXF_AC1006.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/Minimal_DXF_AC1006.dxf) | 成功 | 3/3 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0, A3 | 仅字段/元数据 3DFACE；WCS已保留；部分几何不适用Z=0检查平面；缺少逐图纸独立几何真值 |
 | [Minimal_DXF_AC1009.dxf](../testdata/ezdxf/Minimal_DXF_AC1009.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/Minimal_DXF_AC1009.dxf) | 成功 | 0/0（不适用） | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0, A2, A4, CLI1 | 无顶层实体，解码不适用；缺少逐图纸独立几何真值 |
 | [Minimal_DXF_AC1021.dxf](../testdata/ezdxf/Minimal_DXF_AC1021.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/Minimal_DXF_AC1021.dxf) | 成功 | 0/0（不适用） | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0, A3 | 无顶层实体，解码不适用；缺少逐图纸独立几何真值 |
 | [VP4.dxf](../testdata/ezdxf/VP4.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/VP4.dxf) | 成功 | 22/27 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 未解码 VIEWPORT；仅字段/元数据 TEXT；缺少逐图纸独立几何真值 |
@@ -48,20 +48,20 @@
 | [mtext_columns_R2000.dxf](../testdata/ezdxf/mtext_columns_R2000.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/mtext_columns_R2000.dxf) | 成功 | 9/9 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 MTEXT；缺少逐图纸独立几何真值 |
 | [mtext_columns_R2007.dxf](../testdata/ezdxf/mtext_columns_R2007.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/mtext_columns_R2007.dxf) | 成功 | 9/9 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 MTEXT；缺少逐图纸独立几何真值 |
 | [mtext_columns_R2018.dxf](../testdata/ezdxf/mtext_columns_R2018.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/mtext_columns_R2018.dxf) | 成功 | 3/3 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 MTEXT；缺少逐图纸独立几何真值 |
-| [mtext_complex_inline_codes.dxf](../testdata/ezdxf/mtext_complex_inline_codes.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/mtext_complex_inline_codes.dxf) | 成功 | 12/12 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 MTEXT；非默认 OCS 未转换；缺少逐图纸独立几何真值 |
-| [multi_insert_with_attribs.dxf](../testdata/ezdxf/multi_insert_with_attribs.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/multi_insert_with_attribs.dxf) | 成功 | 4/4 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 ATTDEF/ATTRIB；阵列其余实例未展开；缺少逐图纸独立几何真值 |
-| [text.dxf](../testdata/ezdxf/text.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/text.dxf) | 成功 | 226/228 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 未解码 VIEWPORT；仅字段/元数据 ATTDEF/ATTRIB/MTEXT/TEXT；缺少逐图纸独立几何真值 |
+| [mtext_complex_inline_codes.dxf](../testdata/ezdxf/mtext_complex_inline_codes.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/mtext_complex_inline_codes.dxf) | 成功 | 12/12 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 MTEXT；缺少逐图纸独立几何真值 |
+| [multi_insert_with_attribs.dxf](../testdata/ezdxf/multi_insert_with_attribs.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/multi_insert_with_attribs.dxf) | 成功 | 4/4 | 25个轮廓部分验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 ATTDEF/ATTRIB；关联属性完整布局/阵列复制未重建；已验证25个FLAG的WCS顶点；其余几何未独立验证 |
+| [text.dxf](../testdata/ezdxf/text.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/text.dxf) | 成功 | 226/228 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 未解码 VIEWPORT；仅字段/元数据 ATTDEF/ATTRIB/MTEXT/TEXT；关联属性完整布局/阵列复制未重建；缺少逐图纸独立几何真值 |
 | [text_alignments.dxf](../testdata/ezdxf/text_alignments.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_alignments.dxf) | 成功 | 58/58 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 TEXT；缺少逐图纸独立几何真值 |
 | [text_fonts.dxf](../testdata/ezdxf/text_fonts.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_fonts.dxf) | 成功 | 1344/1344 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 TEXT；缺少逐图纸独立几何真值 |
 | [text_in_viewports.dxf](../testdata/ezdxf/text_in_viewports.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_in_viewports.dxf) | 成功 | 18/25 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 未解码 VIEWPORT；仅字段/元数据 TEXT；缺少逐图纸独立几何真值 |
 | [text_mirror_shx_font.dxf](../testdata/ezdxf/text_mirror_shx_font.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_mirror_shx_font.dxf) | 成功 | 672/672 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 TEXT；缺少逐图纸独立几何真值 |
 | [text_mirror_true_type_font.dxf](../testdata/ezdxf/text_mirror_true_type_font.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_mirror_true_type_font.dxf) | 成功 | 672/672 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 TEXT；缺少逐图纸独立几何真值 |
-| [text_negative_extrusion.dxf](../testdata/ezdxf/text_negative_extrusion.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_negative_extrusion.dxf) | 成功 | 226/228 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 未解码 VIEWPORT；仅字段/元数据 ATTDEF/ATTRIB/MTEXT/TEXT；非默认 OCS 未转换；缺少逐图纸独立几何真值 |
+| [text_negative_extrusion.dxf](../testdata/ezdxf/text_negative_extrusion.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_negative_extrusion.dxf) | 成功 | 226/228 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 未解码 VIEWPORT；仅字段/元数据 ATTDEF/ATTRIB/MTEXT/TEXT；关联属性完整布局/阵列复制未重建；缺少逐图纸独立几何真值 |
 | [text_oblique_rotate.dxf](../testdata/ezdxf/text_oblique_rotate.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_oblique_rotate.dxf) | 成功 | 317/317 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 TEXT；缺少逐图纸独立几何真值 |
 | [text_stacked_shx_font.dxf](../testdata/ezdxf/text_stacked_shx_font.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_stacked_shx_font.dxf) | 成功 | 439/439 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 TEXT；缺少逐图纸独立几何真值 |
 | [text_stacked_true_type_font.dxf](../testdata/ezdxf/text_stacked_true_type_font.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_stacked_true_type_font.dxf) | 成功 | 439/439 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 TEXT；缺少逐图纸独立几何真值 |
 | [transform_hatch_pattern.dxf](../testdata/ezdxf/transform_hatch_pattern.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/transform_hatch_pattern.dxf) | 成功 | 24/24 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 HATCH/MTEXT；缺少逐图纸独立几何真值 |
-| [uncommon.dxf](../testdata/ezdxf/uncommon.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/uncommon.dxf) | 成功 | 72/85 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 未解码 3DSOLID/MESH/MULTILEADER/POLYLINE/RAY/VIEWPORT/XLINE；仅字段/元数据 ATTDEF/ATTRIB/DIMENSION/MTEXT；非普通二维 POLYLINE 未生成轮廓；缺少逐图纸独立几何真值 |
+| [uncommon.dxf](../testdata/ezdxf/uncommon.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/uncommon.dxf) | 成功 | 72/85 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 未解码 3DSOLID/MESH/MULTILEADER/POLYLINE/RAY/VIEWPORT/XLINE；仅字段/元数据 ATTDEF/ATTRIB/DIMENSION/MTEXT；关联属性完整布局/阵列复制未重建；非普通二维 POLYLINE 未生成轮廓；缺少逐图纸独立几何真值 |
 | [valid_lineweights.dxf](../testdata/ezdxf/valid_lineweights.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/valid_lineweights.dxf) | 成功 | 50/50 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 仅字段/元数据 TEXT；缺少逐图纸独立几何真值 |
 | [viewport_frozen_layers.dxf](../testdata/ezdxf/viewport_frozen_layers.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/viewport_frozen_layers.dxf) | 成功 | 7/11 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 未解码 VIEWPORT；仅字段/元数据 TEXT；缺少逐图纸独立几何真值 |
 | [viewports.dxf](../testdata/ezdxf/viewports.dxf) | [ezdxf](https://github.com/mozman/ezdxf/blob/master/examples_dxf/viewports.dxf) | 成功 | 19/36 | 未独立验证 | R1, R2, R3, R4, E1, E2, G0, G1, C0 | 未解码 IMAGE/VIEWPORT；仅字段/元数据 MTEXT/TEXT；缺少逐图纸独立几何真值 |
@@ -83,7 +83,7 @@ R/E/G/C/A 项均由 [conformance/corpus_wbtest.mbt](../conformance/corpus_wbtest
 | E1 | 语料整体：实体解析的锚点 | 汇总实体/解码数量及诊断锚点，不是逐字段真值 |
 | E2 | 语料里未解码的实体类型都在预期清单里 | 未解码类型集合 |
 | G0 | 语料 Geometry 离散：曲线有点列，无实体身份的 Face 不猜轮廓 | Geometry 点列不变量、汇总数量和无身份 Face 的空结果；不是几何误差验证 |
-| G1 | 语料块展开：记录未支持的阵列实例 | 展开记录总量和受限输入诊断；不是变换坐标真值 |
+| G1 | 语料块展开：WCS 阵列位置与覆盖诊断 | 展开数量及覆盖诊断；multi_insert_with_attribs 的25个FLAG、100个顶点按15度解析矩阵对照；不代表整图几何认证 |
 | C0 | 语料加工检查：锚点 | 报告锚点及 uncommon.dxf 的 59B SOLID 三点坐标断言，不是逐文件完整真值 |
 | A1 | circle_radius_le_0：3016 行 → 1508 个 tag | 扫描数量及无扫描警告 |
 | A2 | Minimal_DXF_AC1009：35 字节的最小文件 | 四个 tag 的值与顺序 |

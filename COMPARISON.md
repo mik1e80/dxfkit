@@ -1,19 +1,20 @@
 # dxfkit 在 MoonBit 生态中的价值与差异
 
-**核对日期：2026-10-22（Asia/Shanghai）。** 本文比较 MoonBit 中实际存在的 CAD、二维几何、G-code 和位图轮廓项目。dxfkit 的贡献是把 **DXF 数据模型、普通块展开、二维轮廓提取与检查完整性诊断** 组成可被其他 MoonBit 程序调用的流程。距离、相交、曲线离散等算法与现有项目有交集，不能据此宣称独占。
+**核对日期：原六项为2026-10-22；直接DXF模块补查为2026-10-27（Asia/Shanghai）。** 本文比较 MoonBit 中实际存在的 DXF/CAD、二维几何、G-code 和位图轮廓项目。当前0.2.0开发版将 **有来源的DXF记录、WCS与块阵列、受限轮廓和完整性诊断** 组成可调用流程；不把相交、距离、曲线或DXF基础读取宣称为独占能力。
 
 ## 核对方法与证据范围
 
-核对了下表六个模块的 `moon.mod` 和项目文档，链接固定到实际读取的 GitHub 提交；模块名、版本、提交和文档 blob SHA 另存于[来源记录](docs/ecosystem-sources.json)。表中的版本是本次核对版本，不承诺始终为最新版本。
+原六项核对模块配置和文档；本次另用`moon search dxf --limit 10`检索到dxfkit、jww_parser、mooncam及moon-geometry，并直接核对moon-geometry的DXF源码与API。jww_parser/mooncam仅登记为检索候选，本轮未据此作源码能力断言。新增项目的注册表版本为0.251.0；固定核对的GitHub源码已为0.252.0，两者身份分开记录。[来源记录](docs/ecosystem-sources.json)保存日期、版本和固定提交，不把旧索引快照说成新检索结果。
 
 这六个模块也存在于 2026-10-22 刷新成功的 [Mooncakes 注册表](https://mooncakes.io/git/index)快照 `8e723fa3236d4145bb3dcbf02cf5ade258cbd3d8`。检索了 3201 份模块索引的名称、描述和关键词，使用 `dxf|cad|geometry|gcode|contour|step|vector.trace` 大小写无关匹配，再人工选择 CAD、二维几何、G-code、位图轮廓及制造检查方向的代表项目。子串检索含误命中，也会漏掉未使用这些关键词的模块，不把候选列表当作完整目录。
 
-下表反映公开文档中的接口与目标；**本轮没有运行这六个项目的测试、性能比较或跨库集成**。未在所核对文档中列出的功能只记为“未见声明”，不推断其源码中绝对不存在。本次不是对全部公开、私有或未发布 MoonBit 项目的普查，不得据此写“生态唯一”。
+下表反映公开文档、接口及明确列明的源码；**本轮没有运行这些项目的测试、性能比较或跨库集成**。未在所核对材料中列出的功能只记为“未见声明”，不推断其整个项目中绝对不存在。本次不是对全部公开、私有或未发布MoonBit项目的普查，不得据此写“生态唯一”。
 
 ## MoonBit 同类与相邻项目对比
 
 | 实际项目与核对版本 | 文档证据中的能力 / 接口 | 与 dxfkit 的交集 | dxfkit 的差异与边界 | 核对日期 |
 | --- | --- | --- | --- | --- |
+| [walkzzz/moon-geometry 0.251.0](https://mooncakes.io/docs/walkzzz/moon-geometry/io/dxf_io)（注册表）；[源码0.252.0](https://github.com/walkzzz/moon-geometry/blob/0a3348382b9475c6a6b0792579c4e2ffea371fa4/moon.mod)；[固定DXF实现](https://github.com/walkzzz/moon-geometry/blob/0a3348382b9475c6a6b0792579c4e2ffea371fa4/io/dxf_io/dxf_io.mbt) / [API](https://github.com/walkzzz/moon-geometry/blob/0a3348382b9475c6a6b0792579c4e2ffea371fa4/io/dxf_io/pkg.generated.mbti) | `dxf_parse` / `dxf_write`、DxfDocument；该模块的实体枚举为LINE、CIRCLE、LWPOLYLINE顶点 | 直接重合于DXF文本读取、基本几何数据和图纸交换；对方另有DXF写出 | dxfkit提供有序原始记录、来源/图层、ARC/bulge/受限曲线、OCS/WCS、块阵列和覆盖诊断；本库没有写出。核对的dxf_io实现未包含这些块/坐标/诊断路径，不据此评价整个几何库的成熟度或性能 | 2026-10-27 |
 | [gmlewis/step 0.1.22](https://mooncakes.io/docs/gmlewis/step)；[固定文档](https://github.com/gmlewis/moonbit-step/blob/3d77e2bed4bef957f7019af754bf8d2a5e772cea/README.md) | STEP 解析 / 序列化与三维建模 DSL；`parse_repository_from_string_result`、`Design::new`、`write_step` | CAD 交换数据模型、结构化读取、变换及错误报告 | dxfkit 面向 ASCII DXF 的段、图层、实体与普通 INSERT，输出有限范围的 XY 轮廓与报告；不提供 STEP 写出、三维建模或无损序列化。对方所核对文档未声明 DXF 读取流程 | 2026-10-22 |
 | [cn-xjr/moongeokit 0.3.0](https://mooncakes.io/docs/cn-xjr/moongeokit)；[固定文档](https://github.com/cn-xjr/moongeokit/blob/0300c9cd7600c255011ddae96c9f7d929679e18a/README.mbt.md) | `Point` / `Polyline` / `Polygon`、距离 / 相交 / 凸包，`GridSpatialIndex::query_nearest`，GeoJSON 输出 | 二维点列、包围盒、距离和相交等计算 | dxfkit 增加 DXF 读取、图层 / 句柄来源、bulge / 样条、块展开和覆盖诊断；不提供通用可变网格索引或 GeoJSON 接口。对方所核对文档未声明 DXF 模型与块解码 | 2026-10-22 |
 | [totto2727/geo 0.1.3](https://mooncakes.io/docs/totto2727/geo)；[固定文档](https://github.com/totto2727-org/geo/blob/bc35dd29f37d3a052cd67310d5a2cb62fd3118ab/README.mbt.md) | 二维类型与算法、布尔 / 三角剖分、鲁棒谓词和 R-tree；如 `HasArea::unsigned_area`、`orient2d` | 点线面计算、测量、变换与拓扑相关处理 | dxfkit 聚焦 DXF 到带来源轮廓和辅助报告的流程；不提供整套地理算法、鲁棒谓词或区域布尔接口，不宣称几何基础更广。对方所核对文档未声明 DXF 组码与块引用入口 | 2026-10-22 |
@@ -26,7 +27,7 @@
 | 调用阶段 | 已有接口与输出 | 调用方得到的实际价值 | 限制与验证证据 |
 | --- | --- | --- | --- |
 | DXF 数据模型 | `scan_tags` → `build_drawing`；`Drawing::entities()` / `blocks()`，保留原记录、图层、句柄 | 导入程序可读取类型化字段，并对未覆盖记录自行处理，无需从像素反推 CAD 实体 | 仅 ASCII 与[字段矩阵](docs/delivery-scope.md)；保留未知记录不等于完整语义或可写回 |
-| 块展开 | `Drawing::expand(tol)` → `Expansion.placed` / `warnings`；`Placed` 保留实体、生效图层与离散结果 | 获得累计 XY 变换后的点列及来源，无需在应用侧重新实现块基点、缩放、旋转和图层 0 继承 | 普通 INSERT 最多 8 层；阵列只处理首实例，非默认 OCS 跳过并诊断；[最小反例](docs/delivery-verification.md)与[精度矩阵](docs/test-accuracy.md) |
+| 块展开 | `Drawing::expand_world(tol)` → WCS XYZ、`WorldPlaced.instances`；`expand`只输出适用XY检查平面的几何 | 累计三维基点/缩放/旋转/OCS和行列实例，保留源句柄、生效图层及来源链 | 最多8层及全图预算；关联属性布局未重建；[R12矩阵](docs/r12-profile.md)、[外部案例](examples/r12-validation/EXTERNAL.md) |
 | 轮廓提取 | `Entity::flatten_checked(tol)` / `Geometry::flatten_checked(tol)` → `Result[Flat, String]`；`Flat::Outline(points, closed)` | 将支持的曲线转为 XY 点列供显示或计算；局部离散与整图块展开可分别使用 | 七类核心实体及受限 SOLID/TRACE 的声明字段；无效输入、资源上限返回错误；不支持的几何不能当正常轮廓 |
 | 诊断接口 | `Drawing::check(options)` → `Report`；`has_incomplete_checks()`、`has_fatal()`、`to_text()` | 区分“已检查部分未发现问题”与“整图有未检查内容”，实施退出或人工复核策略 | 正常轮廓不能抵消覆盖警告；[混合输入验收](docs/check-completeness.md) |
 
@@ -40,6 +41,6 @@
 
 ## 可用于报名表的差异性说明
 
-> MoonBit 生态已有 STEP 建模、二维几何、G-code 审查和位图轮廓项目。dxfkit 面向已有 ASCII DXF 图纸，将段 / 图层 / 实体数据模型、普通 INSERT 的 XY 展开、支持曲线的轮廓提取及检查完整性诊断组成可复用接口；独立 MoonBit 工程可直接调用，并以明确尺寸案例、覆盖反例和跨目标测试验证。其差异在于 DXF 语义到轮廓及诊断的组合流程。项目只承诺已列明实体与字段，不提供完整 CAD / CAM 能力；与相邻项目的集成仍需适配和验证。
+> MoonBit生态已有基本DXF读写、STEP、二维几何、G-code和位图轮廓项目。dxfkit将有来源的DXF记录、OCS/WCS、块阵列、受限轮廓和检查完整性诊断组成可复用接口，使用明确尺寸、解析坐标及覆盖反例验证。与基本DXF模块有真实交集，独立贡献在于坐标/实例/诊断的组合流程；不提供完整标准符合性、写出或完整CAD/CAM能力，与相邻项目尚未实现集成。
 
 本轮未取得用户采用或第三方集成证据，因此“实际价值”由已运行的独立调用工程及明确输入 / 输出支持，不写成已有生产部署、性能领先或市场占有结论。第三方图纸独立几何真值仍为 0/47，生态比较不提升该覆盖等级。

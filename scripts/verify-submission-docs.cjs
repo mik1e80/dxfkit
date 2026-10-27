@@ -1,7 +1,7 @@
 // Lightweight checks only: document targets, current API wording, About data and PDF envelope.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
-const docs=['README.md','README.mbt.md','docs/submission.md','docs/resubmission-evidence.md','docs/verification-guide.md','docs/delivery-verification.md','docs/review-cases.md','examples/model-validation/README.md','examples/model-validation/SUMMARY.md','docs/r2-submission-20261022.md'];
+const docs=['README.md','README.mbt.md','COMPARISON.md','docs/submission.md','docs/resubmission-evidence.md','docs/verification-guide.md','docs/delivery-verification.md','docs/review-cases.md','docs/r12-profile.md','docs/resubmission-20261027.md','docs/review-response.md','examples/r12-validation/README.md','examples/r12-validation/EXTERNAL.md','examples/model-validation/README.md','examples/model-validation/SUMMARY.md','docs/r2-submission-20261022.md'];
 let links=0;
 for(const file of docs){
   const text=fs.readFileSync(path.join(root,file),'utf8');
@@ -16,6 +16,12 @@ assert(api.includes('裸 `Geometry::Face`'));
 assert(api.includes('`Entity::flatten_checked(tol)`'));
 assert(!api.includes('Face 的 flatten / checked 结果为 Empty'));
 const readme=fs.readFileSync(path.join(root,'README.md'),'utf8');
+const profile=require('../reproduction.json');
+const proposal=fs.readFileSync(path.join(root,'docs/submission.md'),'utf8');
+assert(proposal.trimEnd().split(/\r?\n/).length<=30,'Keep the main-contest Markdown brief within 30 lines');
+assert(readme.includes(profile.version)&&proposal.includes(profile.version),'Current candidate version must be explicit');
+assert(proposal.includes('未发布')&&proposal.includes('targeted-r12'));
+assert(!proposal.includes('阵列只展开首实例')&&!proposal.includes('非默认 OCS 引用整体跳过'));
 assert(readme.indexOf('## 快速运行')<readme.indexOf('## 验证与开发'));
 assert(readme.indexOf('## 审阅与申报材料')>readme.indexOf('## 快速运行'));
 const about=JSON.parse(fs.readFileSync(path.join(root,'.github/repository-about.json'),'utf8'));

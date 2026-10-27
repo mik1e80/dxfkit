@@ -1,6 +1,6 @@
 # 十类模型测试总结
 
-核对日期：2026-10-22。10/10 主模型通过逐项断言；这是项目自建模型，不是新增第三方图纸认证。所有测试均从实际 DXF 文件经公开库接口和 CLI 执行。
+核对日期：2026-10-27。10/10 主模型通过逐项断言；这是项目自建模型，不是新增第三方图纸认证。所有测试均从实际 DXF 文件经公开库接口和 CLI 执行。
 
 | 模型 | 输入 | 实际 strict 退出码 | 检查不完整 | 报告 / SVG / 数据 |
 | --- | --- | --- | --- | --- |
@@ -15,6 +15,6 @@
 | 09 | [09-intentional-errors.dxf](models/09-intentional-errors.dxf) | 1 | false | [报告](actual/09-report.txt) / [SVG](actual/09-preview.svg) / [接口数据](actual/09-public-api.txt) |
 | 10 | [10-coverage-boundaries.dxf](models/10-coverage-boundaries.dxf) | 1 | true | [报告](actual/10-report.txt) / [SVG](actual/10-preview.svg) / [接口数据](actual/10-public-api.txt) |
 
-尺寸、字段、曲线双向采样误差、块坐标、预期和实际诊断见 [results.json](results.json)，人工指定的几何定义见 [expected.json](expected.json)。02 另保存阈值 8 的净距报警结果；0.5 时正常无发现。08 同时检出文字未转轮廓及两种图层状态提示，并断言关闭/冻结层未产生本工具的闭合告警。09 检出开口和重复线；10 明确标记检查不完整。
+尺寸、字段、曲线双向采样误差、块坐标、预期和实际诊断见 [results.json](results.json)，人工指定的几何定义见 [expected.json](expected.json)。02 另保存阈值 8 的净距报警结果；0.5 时正常无发现。08 同时检出文字未转轮廓及两种图层状态提示，并断言关闭/冻结层未产生本工具的闭合告警。09 检出开口和重复线；10 因 HATCH 明确标记检查不完整，同时验证负Z OCS圆已转换到WCS圆心(-150,30)、半径5。
 
-05 未进行 CAD 软件目视确认；06 使用独立 Bernstein 解析采样，未进行外部 CAD 导出对照。这两项外部确认不能由 10/10 自动测试结果代替。47 个第三方文件的逐文件独立几何真值仍为 0/47。
+05 未进行 CAD 软件目视确认；06 使用独立 Bernstein 解析采样，未进行外部 CAD 导出对照。这两项外部确认不能由 10/10 自动测试结果代替。47 个第三方文件的整图独立几何真值仍为 0/47；其中阵列FLAG的部分顶点验证另见R12外部案例。

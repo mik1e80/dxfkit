@@ -10,9 +10,9 @@ const cases=[
   {id:'problem-paths',file:'examples/issues.dxf',exit:1,required:['[警告] [重复切割]','[致命] [退化几何]','半径是负数（-1）'],forbidden:['检查不完整']},
   {id:'open-contour',file:'examples/evidence/open-contour.dxf',exit:1,required:['[警告] [轮廓闭合]','最宽的缝 10'],forbidden:['检查不完整','[重复切割]','[退化几何]']},
   {id:'insufficient-gap',file:'examples/plate.dxf',gap:8,exit:1,required:['[警告] [最小间隙]','4 对实体','折线最小距离 7（'],forbidden:['检查不完整','[自相交]','[重复切割]']},
-  {id:'unsupported-and-ocs',file:'examples/coverage-limits.dxf',exit:1,required:['检查不完整','HATCH','DIMENSION','RAY','OCS']},
-  {id:'damaged-vertices',file:'examples/completeness-mixed.dxf',exit:1,required:['检查不完整','LWPOLYLINE','POLYLINE','SPLINE','OCS','RAY'],polygons:2},
-  {id:'array-first-only',file:'examples/evidence/array-limit.dxf',exit:1,required:['检查不完整','阵列暂只展开首个实例'],polygons:1},
+  {id:'unsupported-and-ocs',file:'examples/coverage-limits.dxf',exit:1,required:['检查不完整','HATCH','DIMENSION','RAY'],forbidden:['未转换 OCS']},
+  {id:'damaged-vertices',file:'examples/completeness-mixed.dxf',exit:1,required:['检查不完整','LWPOLYLINE','POLYLINE','SPLINE','RAY'],forbidden:['未转换 OCS'],polygons:2},
+  {id:'array-expanded',file:'examples/evidence/array-limit.dxf',exit:0,forbidden:['检查不完整','阵列暂只展开首个实例','[自相交]'],polygons:4},
   {id:'discretization-limit',file:'examples/consumer/fixtures/discretization-error.dxf',exit:1,required:['检查不完整','离散'],polygons:0},
   {id:'analytic-ellipse',file:'examples/evidence/analytic-ellipse.dxf',tol:0.002,exit:0,polygons:1,forbidden:['检查不完整','[自相交]']},
   {id:'analytic-cubic',file:'examples/evidence/analytic-cubic.dxf',tol:0.002,exit:1,polygons:1,required:['[轮廓闭合]'],forbidden:['检查不完整','[自相交]','[退化几何]']},
@@ -62,6 +62,11 @@ for(const c of cases){
   const shapes=outlines(svg.text);
   if(c.polygons!==undefined)assert.equal(shapes.length,c.polygons,c.id);
   let metrics={};
+  if(c.id==='array-expanded'){
+    const centers=[[0,0],[10,0],[0,10],[10,10]];
+    shapes.forEach((shape,i)=>{assert(shape.closed);for(const p of shape.points)near(Math.hypot(p[0]-centers[i][0],p[1]-centers[i][1]),2);});
+    metrics={instances:4,centers,radius:2};
+  }
   if(c.id==='normal-plate'){
     const outer=shapes[0];assert(outer.closed);
     assert.deepEqual(outer.points,[[0,0],[100,0],[100,60],[0,60]]);
@@ -107,7 +112,7 @@ for(const c of cases){
     artifacts:{report:artifact(c.id+'.txt',report.text),svg:artifact(c.id+'.svg',svg.text)},passed:true});
   console.log('PASS evidence '+c.id);
 }
-const record={schema:1,checked_on:'2026-10-22',scope:'Self-authored targeted cases; not independent truth for the 47 third-party drawings',
+const record={schema:1,checked_on:'2026-10-27',scope:'Current R12-upgrade CLI regression cases; not complete independent truth for the 47 third-party drawings',
   historical_geometry_baseline_commit:'1a8185925e2c038039e6f57f32c69421e833d437',
   oracle:{kind:'independent Node analytic formulas; no production geometry helpers or ezdxf runtime',script:'scripts/verify-submission-evidence.cjs',script_sha256_lf:hash(lf(fs.readFileSync(__filename,'utf8'))),numeric_display_significant_digits:12},
   pinned_profile:JSON.parse(fs.readFileSync(path.join(root,'reproduction.json'),'utf8')),passed:results.length,total:cases.length,cases:results};

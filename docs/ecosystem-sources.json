@@ -1,7 +1,8 @@
 {
-  "checked_on": "2026-10-22",
+  "checked_on": "2026-10-27",
   "timezone": "Asia/Shanghai",
-  "scope": "Six publicly registered adjacent MoonBit modules; not an exhaustive ecosystem census or an interoperability certification",
+  "scope": "Six adjacent modules checked on 2026-10-22 plus one direct DXF module checked on 2026-10-27; not an exhaustive ecosystem census or interoperability certification",
+  "additional_search": {"date":"2026-10-27","command":"moon search dxf --limit 10","modules_found":4,"candidates":["mik1e80/dxfkit@0.1.1","f4ah6o/jww_parser@0.202609.1","huahai29/mooncam@0.3.0","walkzzz/moon-geometry@0.251.0"],"scope":"Only moon-geometry DXF source/API reviewed in this supplement; other new candidates are registry descriptions, not verified source capability claims"},
   "registry": {
     "url": "https://mooncakes.io/git/index",
     "snapshot_commit": "8e723fa3236d4145bb3dcbf02cf5ade258cbd3d8",
@@ -18,6 +19,22 @@
     "version_claim": "Observed versions in this snapshot, cross-checked against pinned GitHub moon.mod; not a promise of latest versions"
   },
   "projects": [
+    {
+      "module":"walkzzz/moon-geometry",
+      "package":"walkzzz/moon-geometry/io/dxf_io",
+      "version":"0.251.0",
+      "version_source":"Mooncakes search result",
+      "source_module_version":"0.252.0",
+      "checked_on":"2026-10-27",
+      "repository":"https://github.com/walkzzz/moon-geometry",
+      "repository_commit":"0a3348382b9475c6a6b0792579c4e2ffea371fa4",
+      "evidence":[
+        {"kind":"module_configuration","url":"https://github.com/walkzzz/moon-geometry/blob/0a3348382b9475c6a6b0792579c4e2ffea371fa4/moon.mod"},
+        {"kind":"implementation","url":"https://github.com/walkzzz/moon-geometry/blob/0a3348382b9475c6a6b0792579c4e2ffea371fa4/io/dxf_io/dxf_io.mbt"},
+        {"kind":"public_api","url":"https://github.com/walkzzz/moon-geometry/blob/0a3348382b9475c6a6b0792579c4e2ffea371fa4/io/dxf_io/pkg.generated.mbti"}
+      ],
+      "assessment":"Direct DXF overlap: parse/write and LINE/CIRCLE/LWPOLYLINE. Source/API inspected; its tests, performance and cross-library integration not executed. Registry and inspected main versions are deliberately distinguished."
+    },
     {
       "module": "cjcjwe/gcode-toolkit",
       "version": "0.3.1",

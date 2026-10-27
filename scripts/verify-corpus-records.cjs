@@ -30,7 +30,7 @@ const tests = [
   {id:'E1',name:'语料整体：实体解析的锚点',scope:'all',meaning:'汇总实体/解码数量及诊断锚点，不是逐字段真值'},
   {id:'E2',name:'语料里未解码的实体类型都在预期清单里',scope:'all',meaning:'未解码类型集合'},
   {id:'G0',name:'语料 Geometry 离散：曲线有点列，无实体身份的 Face 不猜轮廓',scope:'all',meaning:'Geometry 点列不变量、汇总数量和无身份 Face 的空结果；不是几何误差验证'},
-  {id:'G1',name:'语料块展开：记录未支持的阵列实例',scope:'all',meaning:'展开记录总量和受限输入诊断；不是变换坐标真值'},
+  {id:'G1',name:'语料块展开：WCS 阵列位置与覆盖诊断',scope:'all',meaning:'展开数量及覆盖诊断；multi_insert_with_attribs 的25个FLAG、100个顶点按15度解析矩阵对照；不代表整图几何认证'},
   {id:'C0',name:'语料加工检查：锚点',scope:'all',meaning:'报告锚点及 uncommon.dxf 的 59B SOLID 三点坐标断言，不是逐文件完整真值'},
   {id:'A1',name:'circle_radius_le_0：3016 行 → 1508 个 tag',scope:['circle_radius_le_0.dxf'],meaning:'扫描数量及无扫描警告'},
   {id:'A2',name:'Minimal_DXF_AC1009：35 字节的最小文件',scope:['Minimal_DXF_AC1009.dxf'],meaning:'四个 tag 的值与顺序'},
@@ -69,12 +69,13 @@ const cases = files.map(file => {
   if (!total) limitations.push('无顶层实体，解码不适用');
   if (unknown.length) limitations.push(`未解码 ${unknown.join('/')}`);
   if (metadata.length) limitations.push(`仅字段/元数据 ${metadata.join('/')}`);
-  if (observed.findings.some(f => f.message.includes('OCS'))) limitations.push('非默认 OCS 未转换');
-  if (observed.expansion_warnings.some(s => s.includes('INSERT 阵列'))) limitations.push('阵列其余实例未展开');
+  if (observed.findings.some(f => f.message.includes('未转换 OCS'))) limitations.push('存在未完成的坐标转换');
+  if (observed.expansion_warnings.some(s => s.includes('检查平面'))) limitations.push('WCS已保留；部分几何不适用Z=0检查平面');
+  if (observed.expansion_warnings.some(s => s.includes('关联 ATTRIB'))) limitations.push('关联属性完整布局/阵列复制未重建');
   if ([...observed.entity_warnings,...observed.expansion_warnings].some(s => s.includes('POLYLINE 标志'))) limitations.push('非普通二维 POLYLINE 未生成轮廓');
   if (file === 'xclip.dxf') limitations.push('未加载外部参照/未验证裁剪');
   if (file === 'images.dxf') limitations.push('外部图像未加载');
-  limitations.push('缺少逐图纸独立几何真值');
+  limitations.push(file==='multi_insert_with_attribs.dxf'?'已验证25个FLAG的WCS顶点；其余几何未独立验证':'缺少逐图纸独立几何真值');
   const participating = tests.filter(t => t.scope==='all'||t.scope.includes(file)).map(t => t.id);
   if(file==='Minimal_DXF_AC1009.dxf') participating.push('CLI1');
   return {
@@ -84,8 +85,8 @@ const cases = files.map(file => {
     reading:{status:'success',meaning:'字节读取及扫描不变量成立；不表示完整标准读取'},
     decoding:{status:total===0?'not-applicable':decoded===total?'all-observed-entities':'partial',
       observed:total,decoded,meaning:'is_decoded 字段输出计数，不是全字段语义认证'},
-    geometry:{status:'not-independently-verified',verified_entities:0,
-      reason:'仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准'},
+    geometry:{status:file==='multi_insert_with_attribs.dxf'?'partially-verified':'not-independently-verified',verified_entities:file==='multi_insert_with_attribs.dxf'?25:0,
+      reason:file==='multi_insert_with_attribs.dxf'?'G1以源顶点(0,0)/(0,5)/(4,3)/(0,3)、5x5间距10和15度解析矩阵核对100个WCS顶点；未认证圆、文字、关联属性及整图':'仅执行离散/展开不变量及报告锚点，未建立本文件的独立坐标/误差基准'},
     participating_tests:participating,limitations,observed,
   };
 });
@@ -105,7 +106,7 @@ const report = {
   summary:{files:cases.length,read_success:cases.length,
     observed_entities:cases.reduce((n,c)=>n+c.decoding.observed,0),
     decoded_entities:cases.reduce((n,c)=>n+c.decoding.decoded,0),
-    independently_verified_geometry_files:0,
+    independently_verified_geometry_files:0,partially_verified_geometry_files:1,analytically_verified_polyline_instances:25,
     incomplete_reports:cases.filter(c=>c.observed.incomplete).length,
     conformance_tests:{total:14,passed:14},cli_empty_input_exit:1},
   cases,
@@ -115,7 +116,7 @@ const lines = [
   '# 第三方 DXF 图纸逐文件验证记录','',
   '本表保留现有 47 个 ezdxf 文件，分别记录读取、实体解码输出和独立几何验证。**没有“兼容通过”这一统一结论。**', '',
   `实测读取 ${cases.length}/${cases.length}；顶层实体输出 ${report.summary.observed_entities}，其中 ${report.summary.decoded_entities} 个 is_decoded=true；${report.summary.incomplete_reports} 份检查报告标为不完整。`,
-  '**独立几何真值验证：0/47。** 已运行离散、展开及检查不变量，不等于验证每张图纸的坐标、尺寸或完整语义。P0 的自建解析几何测试不能自动替代这些外部文件的真值。','',
+  '**整图独立几何真值验证：0/47。** 本轮另对 multi_insert_with_attribs.dxf 的25个FLAG轮廓、100个WCS顶点执行解析矩阵对照；这项部分验证不升级为整张文件认证。其他文件仍仅有离散、展开和检查不变量。','',
   '## 来源与身份','',
   '来源：[mozman/ezdxf examples_dxf](https://github.com/mozman/ezdxf/tree/master/examples_dxf)，MIT；完整许可见[第三方声明](../THIRD_PARTY_NOTICES.md)。',
   '本仓库首次收录提交：[6f5d182](https://github.com/mik1e80/dxfkit/commit/6f5d18250170d52921e9cc35cee583c045355ab5)。未记录上游提交号，不能补猜。表中来源链接是历史文件路径引用，master 的文件可能移动或删除。',
@@ -129,7 +130,7 @@ const lines = [
   '| 图纸 | 来源 | 读取 | 实体字段解码 d/n | 几何真值验证 | 实际测试 | 未覆盖/限制 |',
   '| --- | --- | --- | --- | --- | --- | --- |',
 ];
-for(const c of cases) lines.push(`| [${c.file}](../testdata/ezdxf/${c.file}) | [ezdxf](${c.source.reference_url}) | 成功 | ${c.decoding.decoded}/${c.decoding.observed}${c.decoding.observed?'':'（不适用）'} | 未独立验证 | ${c.participating_tests.join(', ')} | ${escape(c.limitations.join('；'))} |`);
+for(const c of cases) lines.push(`| [${c.file}](../testdata/ezdxf/${c.file}) | [ezdxf](${c.source.reference_url}) | 成功 | ${c.decoding.decoded}/${c.decoding.observed}${c.decoding.observed?'':'（不适用）'} | ${c.geometry.verified_entities?'25个轮廓部分验证':'未独立验证'} | ${c.participating_tests.join(', ')} | ${escape(c.limitations.join('；'))} |`);
 lines.push('', '## 实际参与的测试','',
   'R/E/G/C/A 项均由 [conformance/corpus_wbtest.mbt](../conformance/corpus_wbtest.mbt) 的真实测试执行；带“汇总”的测试不提供逐文件几何真值。', '',
   '| ID | 测试名称 | 实际断言范围 |','| --- | --- | --- |');
@@ -149,4 +150,4 @@ for(const [file,text] of Object.entries(outputs)) {
     assert.equal(changed.length,0,`${file} differs: ${JSON.stringify(changed.slice(0,8))}`);
   } else assert(read(file).toString().replaceAll('\r\n','\n')===text,`${file} is stale; review and run --write`);
 }
-console.log(`47 corpus records ${write?'updated':'verified'}; 14 tests passed; geometry independently verified: 0/47`);
+console.log(`47 corpus records ${write?'updated':'verified'}; 14 tests passed; full-document geometry truth: 0/47; 25 FLAG outlines partially verified`);

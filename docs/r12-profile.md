@@ -1,6 +1,6 @@
 # R12 读取配置与几何边界
 
-核对日期：2026-10-27。本文对应当前 main 的未发布实现，不改写 Mooncakes 0.1.1 或 `submission-0.1.1-20261022-r2` 的行为与验收记录。
+核对日期：2026-10-27。本文对应当前main的未发布0.2.0实现，不改写Mooncakes0.1.1或`submission-0.1.1-20261022-r2`的行为与验收记录。[本轮自查反馈整改](resubmission-20261027.md)记录新增结构诊断和接触误报修复。
 
 项目定位为 **MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库**。选择 `$ACADVER=AC1009` 为明确基线，但目前不使用“完整符合 R12 标准”的表述：有序保留记录和字段，与逐实体验证全部必填字段、关联语义和几何重建，是不同工作。二进制 DXF、DWG、写回、完整 CAD 绘制和 CAM 决策不在范围内。
 
@@ -20,6 +20,7 @@
 | HEADER 所有变量、TABLES 所有表项的原始字段 | `RawRecord.tags`、`ReadDocument.source` | `r12_read_test.mbt` | 有序保留；部分 HEADER/表有既有类型解码，不声称全表语义校验 |
 | BLOCKS、ENTITIES、控制记录和 XDATA | 同上 | `r12_read_test.mbt` | 未知实体/字段也保留；读取状态与几何覆盖独立 |
 | 缺 ENDSEC、ENDTAB、ENDBLK、SEQEND、EOF | `validate_record_structure` | `r12_read_test.mbt` | 明确结构警告；不是完整语法验证器 |
+| 孤立VERTEX/ATTRIB、序列中断、错误所在段/缺外层记录 | 同上 | `r12_structure_test.mbt` | 原记录保留，结构问题必须诊断；正常序列有不报警对照 |
 | Arbitrary Axis Algorithm、方向归一化 | `ocs.mbt` | `r12_world_wbtest.mbt` | ±Z、X、Y、(1,1,1)、零向量和大尺度方向 |
 | LINE、POINT、3DFACE 坐标本属 WCS | `world_flat.mbt` | `r12_world_wbtest.mbt` | 挤出方向不再错误旋转这些坐标 |
 | OCS 圆/弧/二维多段线/文字/SOLID/TRACE | `entity_world_flat` | 圆心、半径及反射 SOLID 定向测试 | 平面离散后转换 XYZ；局部非法/空间语义仍拒绝 |
@@ -27,6 +28,7 @@
 | 嵌套、图层 0 继承及实例来源 | `WorldPlaced.instances` | 嵌套阵列、普通块测试 | 八层上限；重复位置的行列实例也保留，不合并 |
 | 全图预算覆盖空数组实例 | `expand_visit`、`ExpandLimits` | `R12 large empty arrays stop at visit budget` | 输入行列巨大时停止并报告不完整，不承诺实时性 |
 | 非 XY 几何保留与二维适用性 | `WorldFlat`、`world_to_xy` | YZ 轮廓及混合正常/倾斜图测试 | 不静默丢掉 Z；报告带图层和实例来源 |
+| 第三方MINSERT及端点接触 | `conformance/corpus_wbtest.mbt`、`checker_array_contacts_wbtest.mbt` | [外部阵列专项](../examples/r12-validation/EXTERNAL.md) | 25个FLAG/100顶点解析对照、25圆采样；接触不误报，真交叉仍检出 |
 
 ## R12 实体矩阵
 
@@ -64,4 +66,4 @@ OCS_to_WCS( i + R*g + R*S*(p-b) )
 
 本轮只跑相关测试、类型检查、格式/API 检查和文件级模型，不运行整套测试，不创建最终申报标签，不发布新版 Mooncakes，也不自动替换旧 Pages 演示。新旧公开结构的原字段保持不变，新增 API 快照已生成并审阅；`Entity::flatten_checked` 和整图展开的坐标/平面行为发生上述变化，调用者应处理 Result 和完整性诊断。
 
-旧 `docs/submission-evidence`、47 文件语料结果、十类参数模型和 PDF 对应其记录的原版本；涉及“OCS 未转换”“阵列仅首实例”的旧预期已过时。本轮不伪造全量重验结果。建立新的完整交付前，需要刷新这些受影响的集成证据、完成全量验收，再为同一提交建立新标签，旧标签不移动。全部 R12 必填字段、引用约束及语义符合性验证仍属待办，不能仅通过改标题宣布完成。
+本轮已刷新受影响的CLI、47文件观察、十类参数模型、网页审查和PDF，旧“OCS未转换/阵列仅首实例”不再作为当前正确预期；这些重放仍不等于整仓库全量。历史数据可在旧提交核对。建立新最终交付前仍须按需要完成相应完整验收，再为同一提交建立新标签；旧标签不移动。全部R12必填字段、引用约束及语义符合性验证仍属待办，不能仅通过改标题宣布完成。

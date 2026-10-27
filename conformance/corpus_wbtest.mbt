@@ -211,17 +211,28 @@ test "语料 Geometry 离散：曲线有点列，无实体身份的 Face 不猜�
 }
 
 ///|
-test "语料块展开：记录未支持的阵列实例" {
-  // 47个文件仍保留6210条展开记录；部分记录没有可检查的轮廓。
+test "语料块展开：WCS 阵列位置与覆盖诊断" {
+  // R12 upgrade adds 24 FLAG instances (5 records each); all source DXF bytes
+  // remain unchanged. Verify positions/provenance, not only aggregate counts.
   let mut total = 0
   let mut warns = 0
   for path in corpus_files() {
-    let exp = @dxfkit.build_drawing(scan_corpus_file(path)).expand(0.05)
+    let drawing = @dxfkit.build_drawing(scan_corpus_file(path))
+    let exp = drawing.expand(0.05)
     total = total + exp.placed.length()
     warns = warns + exp.warnings.length()
     for warning in exp.warnings {
-      if warning.contains("INSERT 阵列") {
-        assert_true(path.contains("multi_insert_with_attribs"))
+      if warning.contains("关联 ATTRIB") {
+        assert_true(
+          path.has_suffix("multi_insert_with_attribs.dxf") ||
+          path.has_suffix("text.dxf") ||
+          path.has_suffix("text_negative_extrusion.dxf") ||
+          path.has_suffix("uncommon.dxf"),
+        )
+        assert_true(warning.contains("检查不完整"))
+      } else if warning.contains("已转换 WCS") {
+        assert_true(path.has_suffix("Minimal_DXF_AC1006.dxf"))
+        assert_true(warning.contains("检查平面"))
       } else if warning.contains("仅检查中心线") {
         assert_true(
           path.has_suffix("text.dxf") ||
@@ -234,9 +245,54 @@ test "语料块展开：记录未支持的阵列实例" {
         assert_true(warning.contains("普通二维折线"))
       }
     }
+    if path.has_suffix("multi_insert_with_attribs.dxf") {
+      let world = drawing.expand_world(0.05)
+      let flags = world.placed.filter(p => p.entity.handle() == "31")
+      let circles = world.placed.filter(p => p.entity.handle() == "37")
+      assert_eq(flags.length(), 25)
+      assert_eq(circles.length(), 25)
+      let cs = (6.0.sqrt() + 2.0.sqrt()) / 4.0
+      let sn = (6.0.sqrt() - 2.0.sqrt()) / 4.0
+      let vertices = [(0.0, 0.0), (0.0, 5.0), (4.0, 3.0), (0.0, 3.0)]
+      for i, p in flags {
+        assert_eq(p.instances.length(), 1)
+        assert_eq(p.instances[0].handle, "3B")
+        assert_eq(p.instances[0].row, i / 5)
+        assert_eq(p.instances[0].column, i % 5)
+        match p.flat {
+          @dxfkit.Outline3(points~, closed~) => {
+            assert_false(closed)
+            assert_eq(points.length(), 4)
+            for j, point in points {
+              let x = vertices[j].0 + (i % 5).to_double() * 10.0
+              let y = vertices[j].1 + (i / 5).to_double() * 10.0
+              assert_true((point.x - (cs * x - sn * y)).abs() < 1.0e-10)
+              assert_true((point.y - (sn * x + cs * y)).abs() < 1.0e-10)
+              assert_eq(point.z, 0.0)
+            }
+          }
+          _ => fail("FLAG polyline must retain its four WCS vertices")
+        }
+      }
+      assert_false(exp.warnings.any(w => w.contains("阵列暂只展开")))
+      assert_true(exp.warnings.any(w => w.contains("ATTRIB")))
+    }
+    if path.has_suffix("Minimal_DXF_AC1006.dxf") {
+      let world = drawing.expand_world(0.05)
+      let lines = world.placed.filter(p => p.entity.kind() == "LINE")
+      assert_eq(lines.length(), 1)
+      match lines[0].flat {
+        @dxfkit.Outline3(points~, ..) => {
+          assert_eq(points[0].z, 0.5)
+          assert_eq(points[1].z, -0.5)
+        }
+        _ => fail("spatial LINE endpoints must remain available")
+      }
+      assert_false(exp.placed.any(p => p.flat is @dxfkit.Outline(..)))
+    }
   }
-  assert_eq(total, 6210)
-  assert_eq(warns, 8)
+  assert_eq(total, 6330)
+  assert_eq(warns, 12)
 }
 
 // ── 流式扫描 ────────────────────────────────────────────────────────────
@@ -314,6 +370,12 @@ test "语料加工检查：锚点" {
     fatal = fatal + r.count(@dxfkit.Fatal)
     warn = warn + r.count(@dxfkit.Warn)
     info = info + r.count(@dxfkit.Info)
+    if path.has_suffix("multi_insert_with_attribs.dxf") {
+      assert_false(r.findings.any(f => f.check == "自相交"))
+      assert_true(r.to_text().contains("25 处轮廓没闭合"))
+      assert_true(r.to_text().contains("关联 ATTRIB"))
+      assert_true(r.has_incomplete_checks())
+    }
     if path.contains("uncommon.dxf") {
       let solids = drawing.expand(0.05).placed.filter(p => {
         p.entity.kind() == "SOLID"

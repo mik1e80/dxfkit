@@ -19,7 +19,7 @@ async fn main {
   version.check()
   assert_true(version.stdout().contains("moonc v0.10.14+7d59c7ec9 "))
   let dir = "examples/r12-validation"
-  @fs.mkdir(dir + "/actual", recursive=true)
+  if !@fs.exists(dir + "/actual") { @fs.mkdir(dir + "/actual", recursive=true) }
   @fs.write_file(dir + "/actual/toolchain.txt", version.stdout())
   let names = ["01-array-2x3", "02-scaled-array", "03-rotated-array",
     "04-base-xyz", "05-nested-array", "06-ocs-array"]

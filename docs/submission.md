@@ -1,117 +1,26 @@
-# dxfkit 项目申报书（修订稿）
+# dxfkit 项目说明（2026-10-27 R12 修订）
 
-**仓库版本注记（2026-10-27）：** 本文及 PDF 保留固定 r2 的材料身份；当前 main 的 R12 代码升级和实测范围见 [R12 说明](r12-profile.md)，尚未建立新的完整验收标签。此注记只修改 GitHub 内文档，不代表已更新任何报名系统。
+**名称：** MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库。
+**项目方向：** 工业软件基础库／开发者工具；[GitHub源码](https://github.com/mik1e80/dxfkit)。
+**当前身份：** main中的未发布0.2.0开发版；本文、[一页PDF](../output/pdf/dxfkit-submission-one-page.pdf)、代码及本轮证据随同一提交保存，精确SHA见该提交CI。历史r2与已发布0.1.1分别保留，不作为当前R12全量验收证明。
 
-[一页申报 PDF](../output/pdf/dxfkit-submission-one-page.pdf) · [验证材料导航](verification-guide.md)。固定申报材料（申报书、PDF、代码与十类模型）已收录于最终申报标签 `submission-0.1.1-20261022-r2`（`94509f3`），以同提交 CI 和发布记录核对。main 后续包含文字状态校正、CAD 导出补充及维护门禁，分别记录验证范围，不追加入该固定标签。
+## 用途与交付终点
+为MoonBit程序提供ASCII DXF原始记录读取、选择性实体解码、OCS/WCS和块实例展开、受限二维轮廓及辅助报告，服务图纸导入、预览与CAM前人工复核。
+以AC1009选择R12记录读取配置，保留源字节、有序组码、未知字段及控制记录；诊断段／表／块／子实体序列结构。其他版本按已实现能力尽力读取。**记录保留不表示全部R12字段和关联语义均符合标准。**
 
-## 基本信息
+## 核心功能与技术路线
+ASCII字节→Tag/RawRecord/Drawing→实体字段→WCS XYZ与INSERT来源链→适用的XY轮廓→Report/SVG。
+INSERT处理全部行列、XYZ基点、缩放、旋转、OCS和八层内嵌套；阵列间距不随块缩放。LINE/POINT/3DFACE坐标本属WCS，不再按其挤出方向旋转。
+七类既有核心曲线及受限SOLID/TRACE支持轮廓离散；ELLIPSE/SPLINE/LWPOLYLINE等作为非R12扩展单列。二维检查限WCS Z=0（容差内），包括闭合、自交、重复、退化及指定净距。
+无法检查的平面、关联属性布局、损坏输入及预算截断明确报告不完整；strict失败不被其他正常轮廓掩盖。[逐层范围矩阵](r12-profile.md)列明输入、输出、限制及测试。
 
-- 项目名称：dxfkit —— MoonBit ASCII DXF 读取与二维轮廓辅助检查库
-- 项目方向：工业软件 / 开发者工具
-- GitHub：<https://github.com/mik1e80/dxfkit>
-- 在线演示：<https://mik1e80.github.io/dxfkit/>
-- 提交版本：固定标签 `submission-0.1.1-20261022-r2`（`94509f3`）已创建，并已通过[完整 CI #26 及同提交 Pages 部署](https://github.com/mik1e80/dxfkit/actions/runs/39761104538)；[干净环境复现与版本核对](reproducibility.md)。网页 release.json 和 verification.json 记录该版实际源码提交及申报材料、生态对比和来源记录的哈希。
-- 是否为整体移植：否；参考资料、公式移植和外部语料见下文。
-- 参赛者及联系方式：报名表保留原信息，不在公开仓库展示。
+## 测试、文档与真实证据
+六份AC1009模型保存22实例、132坐标分量的设计对照；第三方阵列专项核对25个FLAG、100个WCS顶点及25个圆采样，另以ezdxf1.4.4作格式审计；不把格式审计当坐标真值。
+十类参数模型、47文件回归、真实CLI报告/SVG、接口调用工程及三份既有CAD导出记录可复核。[当前证据索引](resubmission-evidence.md)区分整图认证、部分几何验证和不变量回归。
+CI覆盖格式/API、类型检查、受影响库测试、含两个曾失败用例的语料子集及网页回归；本轮为targeted-r12，不运行或宣称整仓库全量验收。
 
-## 项目简介
-
-dxfkit 用 MoonBit 实现 ASCII DXF 读取、部分二维实体解码、曲线离散和几何辅助检查，提供库、CLI 与浏览器入口。面向需要读取 CAD 图纸、预览轮廓或在进入 CAM 前筛查几何问题的 MoonBit 开发者。
-
-交付终点是：对声明范围内的 ASCII DXF 输入，输出结构化记录、可处理的 XY 折线和检查报告，同时提示未覆盖的实体或语义。项目不是完整 DXF 标准实现，不判断图纸是否可以直接上机加工。
-
-本次范围固定为七类核心轮廓实体、受限二维 SOLID/TRACE 边界和普通 INSERT，附带三个 CLI 命令、浏览器演示和自动验证。逐字段输入、输出、限制及验证入口见[交付范围](delivery-scope.md)，六类核心问题的预期、实际和自动断言见[修复验证](delivery-verification.md)。这些是本项目的完成标准，不作为主办方额外要求。
-
-## DXF 兼容边界与几何检查的关系
-
-撤回原申报中的“解析覆盖 R10–R2018”承诺。47 个回归文件包含 AC1006、AC1009 到 AC1032 的样例，仅证明这些具体文件的回归行为，不代表每个版本、每种实体或全部字段均兼容。
-
-处理流程：ASCII 字节 → 组码及诊断 → 段与原始记录 → 部分实体解码 → 支持几何的 XY 离散及块展开 → 几何报告。读取成功、识别实体类型、轮廓参与检查是三个不同结论。
-
-| 层次 | 已交付范围 | 未覆盖或限制 |
-| --- | --- | --- |
-| 文件读取 | ASCII 组码、段、子类、HEADER、图层与块；未知记录保留及部分坏行诊断 | 二进制 DXF、写回、字节级无损往返、完整引用和标准一致性审计 |
-| 二维轮廓 | LINE、CIRCLE、ARC、ELLIPSE、SPLINE、LWPOLYLINE 与普通 POLYLINE 的支持字段 | 不承诺全部实体字段、网格或通用三维模型支持 |
-| 曲线 | bulge、椭圆、连续正权重 NURBS；checked 接口报告无效输入与资源上限 | 不保证任意次数、权重及数值尺度的精度 |
-| 块引用 | 普通 INSERT 的 XY 仿射变换、图层 0 继承、最多 8 层，循环和缺失引用提示 | 第 9 层截断；阵列只展开首实例；非默认 OCS 引用整体跳过并诊断 |
-| 元数据 | 文字内容与位置，HATCH、DIMENSION 的部分字段，3DFACE 角点 | 字体转轮廓、完整填充边界、关联标注重建及面实体检查 |
-| 坐标与单位 | XY 投影，显示单位声明；阈值沿用原始坐标单位 | 非默认 OCS 未转换，不自动换算毫米 |
-
-HATCH、DIMENSION、3DFACE、未知实体的轮廓未参与检查。SOLID/TRACE 新增受限二维边界：默认 OCS、零厚度、全部角点 Z 相等时，通过 Entity::flatten_checked 生成正确边界；原始 Face 字段不改写。非默认 OCS、非平行 XY 或非零厚度拒绝轮廓；缺第四点恢复带不完整诊断，残缺第四点拒绝。存在覆盖警告时，其他几何未报错不能表示整图通过，CLI `--strict` 因此失败。
-
-完整性通过 `Report::has_incomplete_checks()` 统一判断；丢失顶点/控制点、未转换坐标系、未支持实体及离散失败都进入报告，并明确标为“检查不完整”。同文件有正常轮廓时仍保留全部原因，混合案例和 strict 退出码有[自动验证](check-completeness.md)。
-
-## 核心功能范围
-
-1. 读取与诊断：保留原始记录，供调用方识别未覆盖内容和继续处理。
-2. 几何离散：支持曲线转折线，按累计块变换调整局部离散容差。
-3. 辅助检查：退化几何、文字、同图层端点闭合、单实体非相邻段自交、共线重叠、同图层不同实体的指定净距。
-4. SVG 和网页：网页调用同一 MoonBit 库的 JS 编译产物，文件在浏览器本地处理。
-5. CLI：`check`、`svg`、`stats`。普通模式退出 0 仍可能有警告；严格模式可作警告门禁。
-6. 流式扫描：`TagStream` 和 `stats` 不保存全量图纸；超长行、警告和统计项仍可能增长。`check` 与 `svg` 读取完整文件。
-
-净距不等于材料壁厚，不覆盖单实体窄颈或跨图层关系。关闭 / 冻结图层的筛选是工具约定，不代表 CAM 一定如此处理。材料、刀具、切缝和加工策略需要另行确认。
-
-## 可复现案例与完成标准
-
-[r2 修订记录](r2-submission-20261022.md)明确要求 SPLINE 次数（71），不再默认三次；新增缺次数、0/33 和正常三次四个 CLI 案例，边界套件合计 14 项。预算、共享分析及五文件 ezdxf 字段对照已一并通过该提交的 `validation=full` 完整 CI #26 和 Pages 部署；r2 标签已经创建并保持原提交。
-
-新增[十类模型](../examples/model-validation/README.md)，将 DXF、独立设计尺寸、公开接口原始数据、实际报告、SVG、解析 CSV 与总结集中放在 examples/model-validation。10/10 模型与预期一致；bulge 未进行 CAD 软件目视确认，样条参考为独立 Bernstein 采样，未进行外部 CAD 导出对照。
-
-本轮新增[材料索引](resubmission-evidence.md)、[实体分层矩阵](entity-capabilities.md)、[独立解析对照及实际误差](independent-validation.md)和[退回意见响应表](review-response.md)。10 个真实 CLI 案例保存报告、SVG、完整命令、输入哈希、预期和实际结果；`node scripts/verify-submission-evidence.cjs` 在 CI 中逐项复核，不自动更新快照。
-
-在仓库根目录执行 `moon update` 后运行以下命令。边界反例详见 [兼容性案例](compatibility-cases.md)。
-
-| 输入与命令 | 验证内容 | 预期结果 |
-| --- | --- | --- |
-| `moon run cli check examples/plate.dxf --min-gap 0.5 --strict` | 毫米声明、100×60 外框和四个半径 3 的孔 | 退出 0，仅表示已覆盖检查项未发现问题 |
-| `moon run cli check examples/issues.dxf` | 重复路径、负半径 | 退出 1，报告重复警告和负半径致命 |
-| `moon run cli check examples/evidence/open-contour.dxf --tol 0.01 --strict` | 单独验证开放轮廓 | 退出 1，闭合警告、最宽缝 10 |
-| `moon run cli check examples/plate.dxf --min-gap 8 --strict` | 指定净距阈值生效 | 退出 1，报告最小间隙 |
-| `moon run cli check examples/coverage-limits.dxf --strict` | 可读文件含未覆盖语义 | 退出 1，报告 HATCH、DIMENSION、RAY 和 OCS 覆盖限制 |
-| `moon run cli check testdata/ezdxf/Minimal_DXF_AC1009.dxf --strict` | 版本标识与几何覆盖的区别 | 退出 1，提示没有可检查的二维轮廓 |
-
-`node cli/smoke.cjs` 自动核对实际退出码和关键诊断。曲线另用负 bulge、S 形样条及独立 de Boor 密集采样对照验证。47 个外部文件用于回归，不是完整标准认证套件。测试数量随修订变化，以 CI 和实际运行结果为准。
-
-`node scripts/verify-delivery.cjs` 对实际网页产物执行六类最小问题断言：非原点椭圆、SVG 大/微小坐标、LWPOLYLINE 损坏顶点、POLYLINE 损坏顶点、面实体降级、INSERT OCS。机器可读预期和实际输出随仓库保存，未把已有本地 OCS 修复误记为本轮新发现。独立调用工程见 [`examples/consumer/`](../examples/consumer/README.md)：自带模块配置、读取 DXF、提取实体、checked 离散和报告处理；源码开发模式通过 moon.work 使用本地库，无需网页或内部实现复制。`node scripts/verify-consumer.cjs` 将其复制到仓库外，在 Wasm 和 Native 分别验证 8 个编译/运行用例；新增 `--registry` 模式已对发布的 0.1.1 完成 Wasm 8/8 实跑，见[发布记录](mooncakes-0.1.1.md)。正常、问题、未覆盖三种浏览器样例均调用同一 MoonBit 库。
-
-几何和检查器的结果验收见[测试矩阵](test-accuracy.md)：9 个几何精度测试核对坐标、尺寸、包围盒或独立解析曲线误差；8 个检查器成对测试核对分类、严重程度、定位和阈值边界。另有 2 个实体测试验证圆心 (10,0)、长轴向量 (10,0)、轴比 0.5 的精确包围盒和平移不变性。临时副本中的九类故障均被编译后的实际测试拒绝，包括恢复长轴重复减圆心的旧错误；不以实体数、点数或警告总数代替判定正确。
-
-第三方文件另有[47 张逐图纸验证记录](corpus-validation.md)：保留来源及文件哈希，分别列出读取结果、实体字段解码、实际参与测试和未覆盖部分。47 张均可读取，当前逐图纸独立几何验证为 0/47；自建解析几何测试不替代这些外部文件的真值，不能写成 47 张“兼容通过”。
-
-## 参考、依赖与许可
-
-五项追加审查已有[逐项预期、修复前后与真实入口结果](review-cases.md)：11 项库测试与 11 个网页/CLI 案例验证二维 SOLID/TRACE、3DFACE 原始顺序、块 OCS、多段线恢复和大/微小 SVG 矩形，不是另开发五套工具。独立消费工程新增 Entity 接口调用，Wasm / Native 各 8 项验收。错误检出合计 10/10，含面边界顺序与重复第四点的语义错误。
-
-项目自身采用 Apache-2.0。参考 ezdxf 的能力组织、格式资料与部分公式；bulge 换算公式存在移植参考关系，不声称全部算法原创。样条离散采用 Boehm 节点插入与 de Casteljau 细分，测试保留独立 de Boor 求值对照。
-
-47 个外部 DXF 文件来自 ezdxf，来源和完整 MIT 条款收录于 `THIRD_PARTY_NOTICES.md`；`examples/` 为项目自建案例。核心库仅使用 MoonBit core，CLI 和语料回归子包使用 `moonbitlang/x`、`moonbitlang/async`，不将整个仓库描述为零依赖。
-
-## 差异性与对比
-
-**核对日期：2026-10-22。** [生态对比表](../COMPARISON.md)逐项列出六个真实 MoonBit 项目的核对版本、固定源码文档、能力交集和差别；[来源记录](ecosystem-sources.json)保存提交与文档 blob SHA。本轮核对公开配置和文档，未运行相邻项目的测试、性能比较或跨库集成，不据此作生态穷尽性结论。
-
-| MoonBit 项目（核对版本） | 能力交集 | dxfkit 的范围与差别 |
-| --- | --- | --- |
-| [gmlewis/step 0.1.22](https://github.com/gmlewis/moonbit-step/blob/3d77e2bed4bef957f7019af754bf8d2a5e772cea/README.md) | CAD 数据模型、读取、变换与诊断 | 本库面向 ASCII DXF 及 XY 轮廓，不提供对方的 STEP 序列化和三维建模 |
-| [cn-xjr/moongeokit 0.3.0](https://github.com/cn-xjr/moongeokit/blob/0300c9cd7600c255011ddae96c9f7d929679e18a/README.mbt.md) | 距离、相交、包围盒与二维点列 | 本库增加 DXF 图层 / 句柄、块展开及覆盖诊断，不提供通用网格索引 |
-| [totto2727/geo 0.1.3](https://github.com/totto2727-org/geo/blob/bc35dd29f37d3a052cd67310d5a2cb62fd3118ab/README.mbt.md) | 二维测量、变换与拓扑处理 | 本库聚焦 DXF 语义到轮廓，不提供对方整套地理算法、鲁棒谓词和布尔接口 |
-| [cjcjwe/gcode-toolkit 0.3.1](https://github.com/cjcjwe/moonbit-gcode-toolkit/blob/89c6b7c9dd7c3b7de7566cb917cdc86a5fa5d516/README.mbt.md) | 工业文本解析、结构化诊断及批处理 | 本库处理 CAM 前的图纸轮廓，不生成 G-code，不检查控制器指令 |
-| [zgfzgf899/moonbit-vector-trace-plan 0.2.2](https://github.com/zgfzgf899/moonbit-vector-trace-plan/blob/f1cb9c7e813971ad1f51c29dfbbfe758b6f436bb/README.md) | 轮廓、曲线近似、几何和 SVG 输出 | 对方从像素描摹路径并规划绘制，本库从 DXF 实体 / 图层 / 块提取轮廓，不提供位图追踪或机器计划 |
-| [Mgk789a/moonbit-gerberkit 0.2.4](https://github.com/Mgk789a/moonbit-gerberkit/blob/80e332f79d2d826fca00e40f3fd8cd0593b95b2f/README.mbt.md) | 制造数据模型、闭合、重复几何、净距与报告 | 对方处理 PCB Gerber / Excellon；本库处理 DXF 实体与块。不提供 PCB 孔环宽、电气连通或制造配置检查 |
-
-组合价值落实为 `scan_tags` / `build_drawing` 的数据模型、`Drawing::expand()` 的带来源世界坐标轮廓、`Geometry::flatten_checked()` 的显式离散结果，以及 `Drawing::check()` / `Report::has_incomplete_checks()` 的完整性诊断。调用方可保留来源并决定如何处理未检查内容；[独立消费工程](../examples/consumer/README.md)已验证这些公共接口的直接调用。
-
-将点列转交其他几何或路径库仍需坐标、单位、闭合约定和容差适配，目前没有跨库适配器或完整 CAM 流程。不使用“生态唯一”“加工能力独占”、已有生产采用或未经验证的性能领先结论；ezdxf 是成熟 Python 参考，不是生态差异性的主要对照，也不宣称全面替代它。
-
-## 预期场景
-
-- MoonBit 程序读取 ASCII DXF，提取图层、记录及支持的二维轮廓。
-- 工作室进入 CAM 前辅助筛查开放边界、重叠线和指定净距，并人工复核覆盖警告。
-- 图纸档案批量统计版本声明、段和规模；流式统计不表示已检查几何。
-
-## 再次提交说明
-
-本次撤回跨版本完整覆盖承诺，改为分层能力说明，并补充“读取成功但几何未完整检查”的反例。请同步替换报名表的项目名、简介、功能和差异性，避免其他字段继续保留旧承诺。
-
-Mooncakes 0.1.1 已于 2026-10-26 发布，发布源提交为 `dc3acc8`，包校验和与执行记录见[发布说明](mooncakes-0.1.1.md)。该发布是固定 r2 之后的补充，不移动 r2 标签。报名表更新及其他参赛条件需另外核对，本修订不表示已经通过审核。
+## 来源、差异与边界
+核心由MoonBit实现；参考Autodesk格式资料、标准曲线算法及MIT许可的ezdxf资料/语料，来源与许可证见[第三方声明](../THIRD_PARTY_NOTICES.md)；项目采用Apache-2.0。
+对比包含现有MoonBit DXF读写模块，独立贡献是记录来源、坐标/块实例、轮廓和完整性诊断的组合；[生态比较](../COMPARISON.md)不宣称唯一。
+尚未完成全部R12必填字段/引用约束、完整关联属性/视口/网格/字形/标注语义；不提供DWG、写回、刀路或可加工性认证。是否认可该明确交付终点需主办方判断；[退回响应](review-response.md)不写成已通过审核。
+Mooncakes0.1.1已发布，0.2.0与新增R12 API尚未发布；[线上演示](https://mik1e80.github.io/dxfkit/)仍为历史r2。Gitlink同步及报名信息由参赛者自行核对，本轮只更新GitHub材料和代码。

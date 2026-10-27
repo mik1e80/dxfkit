@@ -66,7 +66,7 @@ try {
       assert.equal(tree.status, 0, tree.stdout + tree.stderr);
       const found = JSON.parse(tree.stdout).modules.find(m => m.name === profile.module);
       assert(found && found.source.kind === 'registry', 'Consumer must resolve dxfkit from registry');
-      assert.equal(found.version, profile.version, 'Unexpected registry version');
+      assert.equal(found.version, profile.published_version || profile.version, 'Unexpected registry version');
       resolvedLibrary = {module: found.name, version: found.version, source: found.source.kind};
     }
     const command = ['run', '.', '--target', target, '--frozen', '--deny-warn', '--'];

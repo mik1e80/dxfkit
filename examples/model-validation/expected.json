@@ -548,10 +548,11 @@
       "strict_exit": 1,
       "required": [
         "HATCH",
-        "未转换 OCS",
         "检查不完整"
       ],
-      "forbidden": [],
+      "forbidden": [
+        "未转换 OCS"
+      ],
       "truth": {
         "normal_rectangle": [
           [
@@ -572,13 +573,18 @@
           ]
         ],
         "unsupported_boundary": "HATCH",
-        "unconverted_ocs": {
+        "converted_ocs": {
           "entity": "CIRCLE",
           "normal": [
             0,
             0,
             -1
-          ]
+          ],
+          "wcs_center": [
+            -150,
+            30
+          ],
+          "radius": 5
         },
         "expected_incomplete": true
       }

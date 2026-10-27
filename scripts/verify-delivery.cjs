@@ -59,11 +59,11 @@ const cases = [
       }
       assert(!actual.report.includes('[自相交]')); } },
   { id: 'C6', file: 'insert-unsupported-ocs.dxf',
-    expected: { outlines: 0, diagnosticIdentity: ['OCS', 'AB', 'CUT', 'PART'] },
+    expected: { outlines: 0, diagnosticIdentity: ['已转换 WCS', 'AB', 'CUT', 'PART'] },
     observe: data => ({ outlines: points(context.svg(data, 0.05)).length,
       report: context.check(data, 0) }),
     verify: actual => { assert.equal(actual.outlines, 0);
-      for (const identity of ['OCS', 'AB', 'CUT', 'PART']) assert(actual.report.includes(identity)); } },
+      for (const identity of ['已转换 WCS', 'AB', 'CUT', 'PART']) assert(actual.report.includes(identity)); } },
 ];
 const results = cases.map(test => {
   let actual;

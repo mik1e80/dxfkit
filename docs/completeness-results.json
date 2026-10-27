@@ -1,6 +1,6 @@
 {
   "suite": "dxfkit-check-completeness",
-  "bundle_sha256": "a90cc4c1c23df15f5372051fcf7d358dec2a8a20ba1a775441565a375cb02f28",
+  "bundle_sha256": "4e52d99b28c935622f74266121279430acef1cf2728305f380bc96dc7aa66d14",
   "passed": 10,
   "total": 10,
   "cases": [
@@ -19,7 +19,7 @@
       "passed": true
     },
     {
-      "id": "unconverted-ocs",
+      "id": "tilted-wcs",
       "expected": {
         "incomplete": true,
         "normalVisible": true
@@ -28,7 +28,7 @@
         "incomplete": true,
         "reasonPresent": true,
         "normalVisible": true,
-        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [检查覆盖] 1 个 CIRCLE 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核\n致命 0 · 警告 1 · 提示 0\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 1 个警告，请复核图纸与加工条件。"
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [解析] CIRCLE（句柄 ，图层 ，实例 ）：已转换 WCS，但轮廓不在 Z=0 的 XY 检查平面；XYZ 保留于 expand_world，二维检查不完整\n致命 0 · 警告 1 · 提示 0\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 1 个警告，请复核图纸与加工条件。"
       },
       "passed": true
     },
@@ -98,7 +98,7 @@
         "incomplete": true,
         "reasonPresent": true,
         "normalVisible": true,
-        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [解析] INSERT（句柄 AB，图层 CUT，块 PART）带非默认挤出方向；未转换 OCS，已跳过该引用及其子实体\n致命 0 · 警告 1 · 提示 0\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 1 个警告，请复核图纸与加工条件。"
+        "report": "单位声明：未声明；坐标及阈值使用图纸原始单位，请先确认。\n[警告] [解析] CIRCLE（句柄 ，图层 CUT，实例 AB:PART[0,0]）：已转换 WCS，但轮廓不在 Z=0 的 XY 检查平面；XYZ 保留于 expand_world，二维检查不完整\n致命 0 · 警告 1 · 提示 0\n检查不完整：存在未解析、未转换或未能检查的内容。本次检查发现 1 个警告，请复核图纸与加工条件。"
       },
       "passed": true
     },

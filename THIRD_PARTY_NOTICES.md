@@ -84,7 +84,7 @@ ezdxf 的版权与完整 MIT 条款已在上一节保留，随项目分发。
 | 依赖 | 用途 | 用在哪 | 许可证 |
 | --- | --- | --- | --- |
 | `moonbitlang/x` | 读文件（`fs`）；命令行退出码（`sys`） | `conformance/`、`cli/` 及独立 `examples/consumer/` 工程；库本体和网页版不使用 | Apache-2.0 |
-| `moonbitlang/async` | 分块读文件（`fs` 的 `read_at`，`moonbitlang/x/fs` 只能一次读完） | **只有 `cli/` 子包**（`stats` 命令） | Apache-2.0 |
+| `moonbitlang/async` | 分块读文件及可选验证脚本的文件/子进程接口 | `cli/` 的 `stats` 与 `.mbtx` 开发脚本；核心库不使用 | Apache-2.0 |
 
 
 ## 浏览器分发补充

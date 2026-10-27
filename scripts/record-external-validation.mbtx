@@ -1,0 +1,50 @@
+----
+import {
+  "moonbitlang/async",
+  "moonbitlang/async/fs",
+  "moonbitlang/async/shell",
+  "moonbitlang/core/env",
+  "moonbitlang/core/json",
+}
+----
+
+///|
+async fn main {
+  let args = @env.args()
+  guard args.length() == 4 else { fail("pass pinned SDK directory, Python executable and ezdxf dependency directory") }
+  let sdk = args[1]
+  let python = args[2]
+  let dependencies = args[3]
+  let dir = "examples/r12-validation/external-actual"
+  if !@fs.exists(dir) { @fs.mkdir(dir, recursive=true) }
+  let file = "testdata/ezdxf/multi_insert_with_attribs.dxf"
+  let before = @shell.Cmd("git", ["hash-object", file]).output()
+  before.check()
+  let version = @shell.Cmd(python, ["-m", "ezdxf", "-V"], env={ "PYTHONPATH": dependencies }).output()
+  version.check()
+  assert_true(version.stdout().contains("1.4.4"))
+  // No --save or --explore: audit may repair an in-memory document, never the input.
+  let audit = @shell.Cmd(python, ["-m", "ezdxf", "audit", file], env={ "PYTHONPATH": dependencies }).output()
+  audit.check()
+  let audit_text = audit.stdout().replace(old="\r\n", new="\n")
+  assert_true(audit_text.contains("No errors found"))
+  let world = @shell.Cmd(sdk + "/bin/moon.exe", ["run", "examples/r12-validation/external"], env={ "MOON_HOME": sdk }).output()
+  world.check()
+  let data = @json.parse(world.stdout())
+  match data {
+    { "polyline_instances": Number(n, ..), "self_intersection_findings": Number(crossings, ..), .. } => {
+      assert_eq(n, 25.0)
+      assert_eq(crossings, 0.0)
+    }
+    _ => fail("invalid external geometry report")
+  }
+  let after = @shell.Cmd("git", ["hash-object", file]).output()
+  after.check()
+  assert_eq(before.stdout(), after.stdout())
+  @fs.write_file(dir + "/ezdxf-audit.txt", version.stdout() + audit_text)
+  @fs.write_file(dir + "/geometry.json", world.stdout())
+  @fs.write_file(dir + "/input-git-blob.txt", before.stdout())
+  println(audit_text)
+  println(world.stdout())
+  println("External audit and analytical WCS reference passed; input unchanged; no full-document compatibility claim")
+}

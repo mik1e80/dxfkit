@@ -9,7 +9,7 @@ const verification=JSON.parse(fs.readFileSync(path.join(root,'_build/reproductio
 const evidence=JSON.parse(fs.readFileSync(path.join(root,'_build/submission-evidence.json'),'utf8'));
 const models=JSON.parse(fs.readFileSync(path.join(root,'_build/model-validation.json'),'utf8'));
 assert(verification.passed&&verification.source_commit===revision.commit,'Verification must pass for this commit');
-assert(['full','targeted-advisor'].includes(verification.validation_profile),'Explicit validation profile required');
+assert(['full','targeted-advisor','targeted-r12'].includes(verification.validation_profile),'Explicit validation profile required');
 assert(manifest.validation_profile===verification.validation_profile,'Build/validation profile mismatch');
 assert(evidence.source_commit===revision.commit&&evidence.passed===evidence.total&&evidence.total===10,'Submission evidence must pass for this commit');
 assert(models.source_commit===revision.commit&&models.passed===10&&models.total===10,'Ten models must pass for this commit');

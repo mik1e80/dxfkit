@@ -25,12 +25,13 @@ run(['svg','examples/plate.dxf','--tol','bad'],2);
 run(['svg','examples/plate.dxf'],0,/<svg/);
 run(['stats','examples/plate.dxf'],0,/警告 0 条/);
 run(['check','testdata/ezdxf/Minimal_DXF_AC1009.dxf','--strict'],1,/没有可检查的二维轮廓/);
-const coverage = run(['check','examples/coverage-limits.dxf','--strict'],1,/未转换 OCS/);
+  const coverage = run(['check','examples/coverage-limits.dxf','--strict'],1,/检查不完整/);
+  assert(!coverage.includes('未转换 OCS'));
 for (const kind of ['HATCH','DIMENSION','RAY']) {
   assert.match(coverage,new RegExp(`${kind} 实体的轮廓未参与检查`));
 }
 assert(fs.readFileSync(path.join(root,'examples/curves.dxf'),'utf8').includes('SPLINE'));
-run(['check','examples/unsupported-insert-ocs.dxf','--strict'],1,/未转换 OCS/);
+  run(['check','examples/unsupported-insert-ocs.dxf','--strict'],1,/已转换 WCS/);
 for (const file of ['lwpolyline-missing-y.dxf','polyline-missing-y.dxf']) {
   const report = run(['check',`examples/regressions/${file}`,'--strict'],1,/顶点/);
   assert.match(report,/轮廓未参与检查/);
@@ -45,7 +46,7 @@ const largePoints = large.match(/points="([^"]*)"/)[1].trim().split(/\s+/).map(p
 assert.deepEqual(largePoints,[[-300000,1e-9],[300010,2e-9]]);
 run(['check','examples/regressions/insert-unsupported-ocs.dxf','--strict'],1,/AB/);
 const mixed = run(['check','examples/completeness-mixed.dxf'],0,/检查不完整/);
-for (const marker of ['RAY 实体的轮廓未参与检查','未转换 OCS','LWPOLYLINE','POLYLINE','未能离散','SPLINE 控制点']) {
+  for (const marker of ['RAY 实体的轮廓未参与检查','LWPOLYLINE','POLYLINE','未能离散','SPLINE 控制点']) {
   assert(mixed.includes(marker),`mixed input lost diagnostic: ${marker}`);
 }
 assert(!mixed.includes('没有可检查的二维轮廓'),'normal circle must survive');

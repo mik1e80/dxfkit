@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       validation:
-        description: '验证范围：默认只运行当前整改相关测试'
+        description: '默认仅运行R12及受影响的必要检查；full须按需手动选择'
         type: choice
         default: targeted
         options: [targeted, full]
@@ -23,65 +23,33 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '24.19.0'
-
-      - name: 安装固定版本 MoonBit（不复用依赖缓存）
+      - name: 安装固定版本MoonBit
         run: |
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- '0.10.14+7d59c7ec9'
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
-
-      - name: 手动完整验收（须先刷新本轮受影响的集成证据）
+      - name: R12定向验证（含两个曾失败的语料回归，不是全量）
+        if: github.event.inputs.validation != 'full'
+        run: node scripts/verify-advisor.cjs --fresh
+      - name: 手动完整验收（仅按需运行）
         if: github.event.inputs.validation == 'full'
         run: node scripts/verify-reproduction.cjs --fresh
-
-      - name: 获取 R12 定向检查的固定依赖
-        if: github.event.inputs.validation != 'full'
-        run: moon update
-
-      - name: 格式与公开 API 维护门禁
-        if: github.event.inputs.validation != 'full'
-        run: node scripts/verify-maintenance.cjs
-
-      - name: 各后端类型检查
-        if: github.event.inputs.validation != 'full'
-        run: moon check --target all --deny-warn
-
-      - name: R12 及受影响几何的必要测试（非全量）
-        if: github.event.inputs.validation != 'full'
-        run: moon test r12_world_wbtest.mbt r12_read_test.mbt insert_ocs_wbtest.mbt review_cases_wbtest.mbt completeness_wbtest.mbt delivery_regression_wbtest.mbt expand_wbtest.mbt advisor_boundary_wbtest.mbt geometry_accuracy_wbtest.mbt geometry_regression_wbtest.mbt checker_accuracy_wbtest.mbt preview_wbtest.mbt --target wasm --deny-warn
-
-      - name: 文件级 R12 公开 API 调用
-        if: github.event.inputs.validation != 'full'
-        run: moon run examples/r12-validation/runner examples/r12-validation/models/06-ocs-array.dxf
-
-      - name: R12 读取命令
-        if: github.event.inputs.validation != 'full'
-        run: moon run cli read examples/r12-validation/models/06-ocs-array.dxf
-
-      - name: 构建同提交网页（仅构建，不发布）
-        if: github.event.inputs.validation != 'full'
-        run: node scripts/build-web.cjs
-
-      - name: 网页必要回归
-        if: github.event.inputs.validation != 'full'
-        run: node web/smoke.cjs
-
-      - name: 保存该提交的验证记录
+      - name: 保存同提交验证记录
+        if: always()
         uses: actions/upload-artifact@v6
         with:
           name: verification-${{ github.sha }}
           path: |
             _build/reproduction.json
+            _build/maintenance.json
             _build/model-validation.json
             _build/submission-evidence.json
             web/dist/release.json
             output/pdf/dxfkit-submission-one-page.pdf
+            docs/corpus-validation.json
             examples/model-validation/results.json
-            examples/model-validation/SUMMARY.md
-            _build/maintenance.json
-            examples/r12-validation/actual
             examples/r12-validation/results.tsv
-
-      - name: 上传已通过验证的同一站点产物
+            examples/r12-validation/external-actual
+      - name: 上传完整验收后的同提交站点
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && github.event.inputs.validation == 'full'
         uses: actions/upload-pages-artifact@v5
         with:

@@ -1,0 +1,5 @@
+ezdxf 1.4.4 from C:\Users\MIKE\Documents\GitHub\json-to-markdown-table\dxfkit-oracle-deps-20261022\ezdxf
+Python version: 3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]
+using C-extensions: yes
+auditing file: testdata/ezdxf/multi_insert_with_attribs.dxf
+No errors found.

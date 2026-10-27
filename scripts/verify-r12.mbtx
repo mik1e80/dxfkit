@@ -22,7 +22,7 @@ async fn main {
   let checks = [
     ["fmt", "--check"],
     ["check", "--target", "all", "--deny-warn"],
-    ["test", "r12_world_wbtest.mbt", "r12_read_test.mbt", "insert_ocs_wbtest.mbt",
+    ["test", "r12_world_wbtest.mbt", "r12_read_test.mbt", "r12_structure_test.mbt", "checker_array_contacts_wbtest.mbt", "insert_ocs_wbtest.mbt",
       "review_cases_wbtest.mbt", "completeness_wbtest.mbt", "delivery_regression_wbtest.mbt",
       "expand_wbtest.mbt", "advisor_boundary_wbtest.mbt", "geometry_accuracy_wbtest.mbt",
       "geometry_regression_wbtest.mbt", "checker_accuracy_wbtest.mbt", "preview_wbtest.mbt",
@@ -32,6 +32,11 @@ async fn main {
     println("moon \{args.join(" ")}")
     let status = @shell.Cmd(moon, args, env~).each_line(line => println(line))
     if status != 0 { fail("R12 targeted validation failed: exit \{status}") }
+  }
+  for pattern in ["*语料块展开*", "*语料加工检查*"] {
+    let status = @shell.Cmd(moon, ["test", "conformance", "--filter", pattern,
+      "--target", "wasm", "--deny-warn"], env~).each_line(line => println(line))
+    if status != 0 { fail("Affected corpus regression failed") }
   }
   println("PASS: R12 targeted validation; full suite was not run")
 }

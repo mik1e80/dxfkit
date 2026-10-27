@@ -1,13 +1,15 @@
 {
   "schema": 1,
-  "checked_on": "2026-10-22",
-  "submission_ref": "submission-0.1.1-20261022-r2",
-  "source_identity": "Final tag resolves source SHA; _build/model-validation.json records actual executing HEAD and dirty state",
+  "checked_on": "2026-10-27",
+  "submission_ref": "main",
+  "source_identity": "Current main candidate; _build/model-validation.json records actual executing HEAD and dirty state; not historical r2 full acceptance",
   "provenance": "10 project-authored parametric fixtures; no external CAD visual confirmation or external spline export was performed",
   "toolchain_profile": {
     "module": "mik1e80/dxfkit",
-    "version": "0.1.1",
-    "submission_ref": "submission-0.1.1-20261022-r2",
+    "version": "0.2.0",
+    "published_version": "0.1.1",
+    "submission_ref": "main",
+    "historical_submission_ref": "submission-0.1.1-20261022-r2",
     "moon_release": "0.10.14+7d59c7ec9",
     "moon_version": "0.1.20260920",
     "moonc_version": "v0.10.14+7d59c7ec9",
@@ -945,10 +947,11 @@
         "strict_exit": 1,
         "required": [
           "HATCH",
-          "未转换 OCS",
           "检查不完整"
         ],
-        "forbidden": []
+        "forbidden": [
+          "未转换 OCS"
+        ]
       },
       "actual": {
         "strict_exit": 1,
@@ -956,16 +959,19 @@
         "entity_count": 3,
         "outline_count": 2,
         "findings": [
-          "[警告] [检查覆盖] 1 个 CIRCLE 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核",
           "[警告] [检查覆盖] 1 个 HATCH 实体的轮廓未参与检查；保留记录不表示已验证几何"
         ],
         "metrics": {
           "incomplete": true,
           "unexamined": [
-            "HATCH boundary",
-            "CIRCLE non-default OCS"
+            "HATCH boundary"
           ],
-          "normal_rectangle_retained": true
+          "normal_rectangle_retained": true,
+          "converted_ocs_center": [
+            -150,
+            30
+          ],
+          "max_circle_radius_error": 1.50990331349e-14
         }
       },
       "probes": [],

@@ -27,12 +27,12 @@ function withNormal(file) {
 }
 const cases = [
   { id:'unsupported', text:drawing('0\nRAY\n10\n0\n20\n0\n11\n1\n21\n0\n'), reason:/RAY.*轮廓未参与检查/, incomplete:true },
-  { id:'unconverted-ocs', text:drawing('0\nCIRCLE\n10\n0\n20\n0\n40\n2\n230\n-1\n'), reason:/未转换 OCS/, incomplete:true },
+  { id:'tilted-wcs', text:drawing('0\nCIRCLE\n10\n0\n20\n0\n40\n2\n210\n1\n230\n0\n'), reason:/已转换 WCS/, incomplete:true },
   { id:'lost-lwpolyline', text:withNormal('examples/regressions/lwpolyline-missing-y.dxf'), reason:/LWPOLYLINE.*顶点/, incomplete:true },
   { id:'lost-polyline', text:withNormal('examples/regressions/polyline-missing-y.dxf'), reason:/POLYLINE.*顶点/, incomplete:true },
   { id:'failed-discretization', text:drawing('0\nSPLINE\n71\n3\n10\n0\n20\n0\n'), reason:/SPLINE.*未能离散/, incomplete:true },
   { id:'lost-spline-control', text:drawing('0\nSPLINE\n71\n1\n40\n0\n40\n0\n40\n1\n40\n1\n10\n0\n20\n0\n10\n1\n10\n2\n20\n0\n'), reason:/SPLINE.*控制点.*缺少/, incomplete:true },
-  { id:'insert-ocs', text:withNormal('examples/regressions/insert-unsupported-ocs.dxf'), reason:/INSERT.*未转换 OCS/, incomplete:true },
+  { id:'insert-ocs', text:withNormal('examples/regressions/insert-unsupported-ocs.dxf'), reason:/AB.*已转换 WCS/, incomplete:true },
   { id:'resource-limit', text:drawing('0\nCIRCLE\n10\n0\n20\n0\n40\n1e10\n'), reason:/4096/, incomplete:true },
   { id:'supported-only', text:drawing(''), reason:/警告 0/, incomplete:false },
   { id:'geometric-warning-only', text:drawing('0\nLINE\n10\n0\n20\n0\n11\n2\n21\n0\n'), reason:/轮廓闭合/, incomplete:false },

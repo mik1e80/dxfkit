@@ -155,6 +155,41 @@ fn validate_record_structure(
         warnings.push("段外记录 \{r.kind} 已保留，结构无效")
       }
     } else {
+      let child = (sequence == "POLYLINE" && r.kind == "VERTEX") ||
+        (sequence == "INSERT/ATTRIB" && r.kind == "ATTRIB") ||
+        r.kind == "SEQEND"
+      if sequence != "" && !child {
+        warnings.push(
+          "\{sequence} 缺少 SEQEND，遇到 \{r.kind} 时结束恢复；读取结构不完整",
+        )
+        sequence = ""
+      }
+      if r.kind == "VERTEX" && sequence != "POLYLINE" {
+        warnings.push("VERTEX 没有所属 POLYLINE 序列；记录已保留")
+      }
+      if r.kind == "ATTRIB" && sequence != "INSERT/ATTRIB" {
+        warnings.push(
+          "ATTRIB 没有所属 INSERT 属性序列；记录已保留",
+        )
+      }
+      if (r.kind == "TABLE" || r.kind == "ENDTAB") && section != "TABLES" {
+        warnings.push("\{r.kind} 所在段必须是 TABLES；记录已保留")
+      }
+      if (r.kind == "BLOCK" || r.kind == "ENDBLK") && section != "BLOCKS" {
+        warnings.push("\{r.kind} 所在段必须是 BLOCKS；记录已保留")
+      }
+      if section == "TABLES" &&
+        !table &&
+        r.kind != "TABLE" &&
+        r.kind != "ENDTAB" {
+        warnings.push("表项 \{r.kind} 没有所属 TABLE；记录已保留")
+      }
+      if section == "BLOCKS" &&
+        !block &&
+        r.kind != "BLOCK" &&
+        r.kind != "ENDBLK" {
+        warnings.push("实体 \{r.kind} 没有所属 BLOCK；记录已保留")
+      }
       match r.kind {
         "TABLE" => {
           if table {

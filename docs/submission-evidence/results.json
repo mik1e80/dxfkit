@@ -1,18 +1,20 @@
 {
   "schema": 1,
-  "checked_on": "2026-10-22",
-  "scope": "Self-authored targeted cases; not independent truth for the 47 third-party drawings",
+  "checked_on": "2026-10-27",
+  "scope": "Current R12-upgrade CLI regression cases; not complete independent truth for the 47 third-party drawings",
   "historical_geometry_baseline_commit": "1a8185925e2c038039e6f57f32c69421e833d437",
   "oracle": {
     "kind": "independent Node analytic formulas; no production geometry helpers or ezdxf runtime",
     "script": "scripts/verify-submission-evidence.cjs",
-    "script_sha256_lf": "fd3d1812acfc2b9b23364628d7f96af6d78942ed54f2b2681264cdb7ab52baae",
+    "script_sha256_lf": "b6df3329756af9d8b7df62761fef1fe5364d0b5290128ecf4bae5efcb43d3bdc",
     "numeric_display_significant_digits": 12
   },
   "pinned_profile": {
     "module": "mik1e80/dxfkit",
-    "version": "0.1.1",
-    "submission_ref": "submission-0.1.1-20261022-r2",
+    "version": "0.2.0",
+    "published_version": "0.1.1",
+    "submission_ref": "main",
+    "historical_submission_ref": "submission-0.1.1-20261022-r2",
     "moon_release": "0.10.14+7d59c7ec9",
     "moon_version": "0.1.20260920",
     "moonc_version": "v0.10.14+7d59c7ec9",
@@ -317,21 +319,23 @@
           "检查不完整",
           "HATCH",
           "DIMENSION",
-          "RAY",
-          "OCS"
+          "RAY"
         ],
-        "forbidden": [],
+        "forbidden": [
+          "未转换 OCS"
+        ],
         "outlines": null
       },
       "actual": {
         "strict_exit": 1,
         "svg_exit": 0,
-        "outlines": 1,
+        "outlines": 0,
         "findings": [
-          "[警告] [检查覆盖] 1 个 CIRCLE 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核",
+          "[警告] [解析] CIRCLE（句柄 ，图层 CUT，实例 ）：已转换 WCS，但轮廓不在 Z=0 的 XY 检查平面；XYZ 保留于 expand_world，二维检查不完整",
           "[警告] [检查覆盖] 1 个 HATCH 实体的轮廓未参与检查；保留记录不表示已验证几何",
           "[警告] [检查覆盖] 1 个 DIMENSION 实体的轮廓未参与检查；保留记录不表示已验证几何",
-          "[警告] [检查覆盖] 1 个 RAY 实体的轮廓未参与检查；保留记录不表示已验证几何"
+          "[警告] [检查覆盖] 1 个 RAY 实体的轮廓未参与检查；保留记录不表示已验证几何",
+          "[警告] [检查覆盖] 没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据"
         ],
         "metrics": {}
       },
@@ -375,10 +379,11 @@
           "LWPOLYLINE",
           "POLYLINE",
           "SPLINE",
-          "OCS",
           "RAY"
         ],
-        "forbidden": [],
+        "forbidden": [
+          "未转换 OCS"
+        ],
         "outlines": 2
       },
       "actual": {
@@ -391,7 +396,6 @@
           "[警告] [解析] POLYLINE 顶点 2 缺少 X/Y 坐标；未生成该实体的轮廓",
           "[警告] [解析] SPLINE 控制点缺少 X/Y 坐标；保留记录，未生成该实体的轮廓",
           "[警告] [解析] 实体 SPLINE（句柄 INVALID-SPLINE）未能离散：样条次数、控制点数或节点数无效（次数上限32，控制点上限4096）",
-          "[警告] [检查覆盖] 1 个 CIRCLE 实体带非默认挤出方向；本工具未转换 OCS，几何结果需另行复核",
           "[警告] [检查覆盖] 1 个 RAY 实体的轮廓未参与检查；保留记录不表示已验证几何",
           "[警告] [检查覆盖] 1 个 LWPOLYLINE 实体的轮廓未参与检查；保留记录不表示已验证几何",
           "[警告] [检查覆盖] 1 个 POLYLINE 实体的轮廓未参与检查；保留记录不表示已验证几何",
@@ -406,7 +410,7 @@
       "passed": true
     },
     {
-      "id": "array-first-only",
+      "id": "array-expanded",
       "input": "examples/evidence/array-limit.dxf",
       "input_sha256_lf": "ef2684fc5fc52b9275a993dc7963cb5c76cb4e5d804853a7d5293f7d3f596726",
       "commands": [
@@ -433,26 +437,46 @@
         ]
       ],
       "expected": {
-        "strict_exit": 1,
-        "required": [
+        "strict_exit": 0,
+        "required": [],
+        "forbidden": [
           "检查不完整",
-          "阵列暂只展开首个实例"
+          "阵列暂只展开首个实例",
+          "[自相交]"
         ],
-        "forbidden": [],
-        "outlines": 1
+        "outlines": 4
       },
       "actual": {
-        "strict_exit": 1,
+        "strict_exit": 0,
         "svg_exit": 0,
-        "outlines": 1,
-        "findings": [
-          "[警告] [解析] INSERT 阵列暂只展开首个实例，其他行列未检查：B"
-        ],
-        "metrics": {}
+        "outlines": 4,
+        "findings": [],
+        "metrics": {
+          "instances": 4,
+          "centers": [
+            [
+              0,
+              0
+            ],
+            [
+              10,
+              0
+            ],
+            [
+              0,
+              10
+            ],
+            [
+              10,
+              10
+            ]
+          ],
+          "radius": 2
+        }
       },
       "artifacts": {
-        "report": "docs/submission-evidence/array-first-only.txt",
-        "svg": "docs/submission-evidence/array-first-only.svg"
+        "report": "docs/submission-evidence/array-expanded.txt",
+        "svg": "docs/submission-evidence/array-expanded.svg"
       },
       "passed": true
     },

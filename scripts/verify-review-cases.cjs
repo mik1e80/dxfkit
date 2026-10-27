@@ -15,8 +15,9 @@ const cases=[];
 for(const kind of ['SOLID','TRACE'])cases.push({id:kind+'-rectangle',text:drawing(face(kind)),status:0,points:[[0,0],[2,0],[2,1],[0,1]],clean:true});
 cases.push({id:'SOLID-triangle',text:drawing(face('SOLID','13\n0\n23\n1\n')),status:0,points:[[0,0],[2,0],[0,1]],clean:true});
 cases.push({id:'3DFACE-metadata',text:drawing(face('3DFACE')),status:1,count:0,reason:/3DFACE.*轮廓未参与检查/});
-cases.push({id:'outer-INSERT-OCS',text:nested(true),status:1,count:0,reason:/OUTER.*未转换 OCS/});
-cases.push({id:'nested-INSERT-OCS',text:nested(false),status:1,count:1,reason:/INNER.*未转换 OCS/});
+cases.push({id:'outer-INSERT-OCS',text:nested(true),status:0,count:2,firstPoints:[[2,0],[-101,100]],clean:true});
+cases.push({id:'nested-INSERT-OCS',text:nested(false),status:0,count:2,firstPoints:[[-2,0],[101,100]],clean:true});
+cases.push({id:'tilted-INSERT-OCS',text:nested(false).replace('5\nOUTER\n10\n0\n20\n0\n','5\nOUTER\n10\n0\n20\n0\n210\n1\n230\n0\n'),status:1,count:0,reason:/OUTER.*已转换 WCS/});
 for(const [id,body]of [
   ['lost-LWPOLYLINE','0\nLWPOLYLINE\n90\n3\n10\n0\n20\n0\n10\n1\n10\n2\n20\n0\n'],
   ['lost-POLYLINE','0\nPOLYLINE\n70\n0\n0\nVERTEX\n10\n0\n20\n0\n0\nVERTEX\n10\n1\n0\nVERTEX\n10\n2\n20\n0\n0\nSEQEND\n'],
@@ -45,6 +46,7 @@ try{
       }
       if(c.width){const xs=polygons[0].map(p=>p[0]),ys=polygons[0].map(p=>p[1]);actual.width=Math.max(...xs)-Math.min(...xs);actual.height=Math.max(...ys)-Math.min(...ys);assert(Math.abs(actual.width-c.width)<=(c.tol||1e-12));assert(Math.abs(actual.height-c.height)<=(c.tol||1e-12));}
       if(c.count!==undefined)assert.equal(polygons.length,c.count);
+      if(c.firstPoints){actual.first_points=polygons.map(p=>p[0]);c.firstPoints.forEach((p,i)=>p.forEach((v,k)=>assert(Math.abs(polygons[i][0][k]-v)<1e-9)));}
       if(c.reason){assert.match(report,c.reason);assert.match(report,/检查不完整/);assert.match(child.stdout+child.stderr,/检查不完整/);}
       if(c.clean){assert(!report.includes('检查不完整'));assert(!report.includes('[自相交]'));assert(!report.includes('零长度'));}
       results.push({id:c.id,input_dxf:c.text,expected:{strict_exit:c.status,points:c.points,outlines:c.count,width:c.width,height:c.height,
@@ -53,7 +55,7 @@ try{
     }catch(e){results.push({id:c.id,input_dxf:c.text,actual,passed:false,error:e.message});console.log('FAIL '+c.id+': '+e.message);}
   }
 }finally{assert(path.dirname(path.resolve(work))===temp&&path.basename(work).startsWith('dxfkit-review-'));fs.rmSync(work,{recursive:true,force:true});}
-const report={suite:'dxfkit-review-cases',checked_on:'2026-10-22',platform:process.platform,node:process.versions.node,
+const report={suite:'dxfkit-review-cases',checked_on:'2026-10-27',platform:process.platform,node:process.versions.node,
   bundle_sha256:createHash('sha256').update(source).digest('hex'),passed:results.filter(r=>r.passed).length,total:results.length,cases:results};
 const index=process.argv.indexOf('--report');if(index>=0){assert(process.argv[index+1]);fs.writeFileSync(path.resolve(process.argv[index+1]),JSON.stringify(report,null,2)+'\n');}
 console.log(`${report.passed}/${report.total} review cases passed`);if(report.passed!==report.total)process.exitCode=1;

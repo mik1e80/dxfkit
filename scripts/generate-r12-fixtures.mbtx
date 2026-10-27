@@ -8,7 +8,7 @@ import {
 ///|
 async fn main {
   let dir = "examples/r12-validation/models"
-  @fs.mkdir(dir, recursive=true)
+  if !@fs.exists(dir) { @fs.mkdir(dir, recursive=true) }
   let line = "0\nLINE\n5\nL1\n8\n0\n10\n1\n20\n2\n30\n3\n11\n2\n21\n2\n31\n4\n"
   let block = "0\nBLOCK\n2\nPART\n70\n0\n10\n1\n20\n2\n30\n3\n" + line + "0\nENDBLK\n"
   let nested = "0\nBLOCK\n2\nNEST\n70\n0\n10\n0\n20\n0\n30\n0\n0\nINSERT\n5\nINNER\n2\nPART\n10\n3\n20\n0\n70\n2\n44\n10\n0\nENDBLK\n"
