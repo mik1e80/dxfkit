@@ -153,15 +153,26 @@ pub fn spline_points_checked(
   if end <= start {
     return Err("样条没有非空参数域")
   }
+  if !finite_number(end - start) {
+    return Err("样条参数域数值范围过大")
+  }
+  let mut weight_scale = 0.0
+  for i = 0; i < count; i = i + 1 {
+    let weight = weight_at(weights, i)
+    if !finite_number(weight) || weight <= 0.0 {
+      return Err("样条需要正的有限权重")
+    }
+    weight_scale = weight_scale.max(weight)
+  }
   let mut ctrl : Array[Vec3] = []
   for i = 0; i < count; i = i + 1 {
     let p = control_points[i]
-    let w = weight_at(weights, i)
+    let w = weight_at(weights, i) / weight_scale
     if !finite_number(p.x) ||
       !finite_number(p.y) ||
       !finite_number(p.z) ||
       !finite_number(w) ||
-      w <= 0.0 ||
+      w < 1.0e-100 ||
       !finite_number(p.x * w) ||
       !finite_number(p.y * w) {
       return Err("样条需要有限坐标与正的有限权重")

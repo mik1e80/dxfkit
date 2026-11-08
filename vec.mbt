@@ -65,7 +65,7 @@ pub fn Vec2::cross(self : Vec2, other : Vec2) -> Double {
 ///|
 /// 模长。
 pub fn Vec2::length(self : Vec2) -> Double {
-  (self.x * self.x + self.y * self.y).sqrt()
+  scaled_hypot(self.x, self.y)
 }
 
 ///|
@@ -164,7 +164,7 @@ pub fn Vec3::dot(self : Vec3, other : Vec3) -> Double {
 
 ///|
 pub fn Vec3::length(self : Vec3) -> Double {
-  (self.x * self.x + self.y * self.y + self.z * self.z).sqrt()
+  scaled_hypot(scaled_hypot(self.x, self.y), self.z)
 }
 
 ///|

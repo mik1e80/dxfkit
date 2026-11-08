@@ -4,6 +4,8 @@
 
 [接口与迁移](README.mbt.md) · [R12 范围矩阵](docs/r12-profile.md) · [本轮修改与证据](docs/resubmission-20261027.md) · [一页项目说明](output/pdf/dxfkit-submission-one-page.pdf)
 
+处理外部图纸前请查看[安全使用边界](SECURITY.md)与[11月7日整改记录](docs/security-20261107.md)。当前源码加入读取/几何预算、统一结构警告、分叉连接诊断和网页Worker；已发布0.1.1及历史Pages不含这些新增防护。[机器能力矩阵](docs/capabilities.json)分别描述记录、字段、几何与检查状态。
+
 ## 能做什么
 
 - `read_document` 保留源字节和有序组码记录，诊断段、表、块和子实体序列结构；读取诊断与几何检查分开。

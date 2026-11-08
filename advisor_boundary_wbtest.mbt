@@ -77,7 +77,12 @@ test "advisor nonzero polyline width and thickness remain partial checks" {
     assert_true(d.entities().entities[0].geom is Polyline(..))
     let r = d.check({ tol: 0.01, min_gap: 0.0, })
     assert_true(r.has_incomplete_checks())
-    assert_true(r.to_text().contains("仅检查中心线"))
+    if extra == "39\n1\n" {
+      assert_true(r.to_text().contains("厚度未重建"))
+      assert_false(d.expand(0.01).placed.any(p => p.flat is Outline(..)))
+    } else {
+      assert_true(r.to_text().contains("仅检查中心线"))
+    }
   }
   let d = advisor_draw(base + "43\n0\n40\n0\n41\n0\n39\n0\n" + points)
   assert_false(d.check({ tol: 0.01, min_gap: 0.0, }).has_incomplete_checks())

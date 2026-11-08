@@ -57,3 +57,18 @@ const mixedPolygons = [...mixedSvg.matchAll(/<polygon\b[^>]*points="([^"]*)"/g)]
   .map(m=>m[1].trim().split(/\s+/).map(p=>p.split(',').map(Number)));
 assert(mixedPolygons.some(points=>points.every(([x,y])=>x>=99&&x<=101&&y>=99&&y<=101)));
 console.log('CLI回归通过：真实示例、警告门禁、参数、单位与流式入口。');
+fs.mkdirSync(path.join(root,'_build'),{recursive:true});
+const securityDir=fs.mkdtempSync(path.join(root,'_build','security-cli-'));
+const oversized=path.join(securityDir,'oversized.dxf'),orphan=path.join(securityDir,'orphan.dxf');
+try {
+  fs.writeFileSync(oversized,'');fs.truncateSync(oversized,65*1024*1024);
+  for(const command of ['read','check','svg'])run([command,oversized],2,/64 MiB/);
+  fs.writeFileSync(orphan,'0\nSECTION\n2\nENTITIES\n0\nCIRCLE\n10\n0\n20\n0\n40\n2\n0\nVERTEX\n10\n5\n20\n5\n0\nENDSEC\n0\nEOF\n');
+  const report=run(['check',orphan,'--strict'],1,/VERTEX/);
+  assert.match(report,/检查不完整/);
+} finally {
+  if(fs.existsSync(oversized))fs.unlinkSync(oversized);
+  if(fs.existsSync(orphan))fs.unlinkSync(orphan);
+  fs.rmdirSync(securityDir);
+}
+console.log('CLI安全回归通过：分配前大小限制、读取诊断贯通strict。');

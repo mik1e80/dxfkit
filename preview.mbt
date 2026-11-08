@@ -26,6 +26,9 @@ pub fn Drawing::to_svg(self : Drawing, tol : Double) -> String {
 
 ///|
 fn Drawing::svg_from_expansion(self : Drawing, exp : Expansion) -> String {
+  if !preview_range_ok(exp) {
+    return ""
+  }
   // 世界坐标的范围（只看画得出来的几何；纯文字的图纸会落到空盒）
   let mut box = Aabb2::empty()
   for p in exp.placed {
@@ -48,8 +51,11 @@ fn Drawing::svg_from_expansion(self : Drawing, exp : Expansion) -> String {
   let vy = -(box.max.y + margin)
   let vw = size.x + margin * 2.0
   let vh = size.y + margin * 2.0
-  let height = 800.0 * vh / vw
-  let diag = (vw * vw + vh * vh).sqrt()
+  let height = 800.0 * (vh / vw)
+  let diag = scaled_hypot(vw, vh)
+  if ![vx, vy, vw, vh, height, diag].all(finite_number) {
+    return ""
+  }
   let stroke = diag / 400.0
   let tables = match self.section("TABLES") {
     Some(t) => Some(parse_tables(t))

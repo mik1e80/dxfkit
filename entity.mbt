@@ -169,15 +169,19 @@ pub(all) struct Entities {
 /// **缺 x 或 y 返回 `None`**——那说明记录坏了，交给调用方决定怎么办
 /// （本文件的选择是跳过并警告，而不是拿原点补）。
 pub fn Record::point(self : Record, n : Int) -> Vec3? {
-  let x = match self.get(10 + n) {
-    Some(t) => t.value.as_double()
-    None => return None
+  let x = match self.require_double(10 + n) {
+    Ok(v) => v
+    Err(_) => return None
   }
-  let y = match self.get(20 + n) {
-    Some(t) => t.value.as_double()
-    None => return None
+  let y = match self.require_double(20 + n) {
+    Ok(v) => v
+    Err(_) => return None
   }
-  let z = self.get_double(30 + n, 0.0)
+  let z = match self.try_double(30 + n) {
+    Ok(Some(v)) => v
+    Ok(None) => 0.0
+    Err(_) => return None
+  }
   Some(Vec3::new(x, y, z))
 }
 
@@ -450,7 +454,21 @@ fn parse_records(
   let entities : Array[Entity] = []
   let mut i = 0
   while i < records.length() {
+    if warnings.length() >= 1000 {
+      warnings.push(
+        "实体解码诊断达到资源上限；剩余记录未解码，检查不完整",
+      )
+      break
+    }
     let record = records[i]
+    if !valid_numeric_tags(record) {
+      warnings.push(
+        "\{record.kind} 数值字段类型错误；保留记录，不生成猜测几何",
+      )
+      entities.push({ common: common_of(record), geom: Unknown, })
+      i += 1
+      continue
+    }
     if record.kind == "POLYLINE" {
       // 顶点不在这一条记录里——跟在后面的 VERTEX 记录中，`SEQEND` 收尾
       let mut j = i + 1
@@ -722,6 +740,12 @@ fn parse_polyline_entity(
   warn_polyline_extent(record, [40, 41, 39], warnings)
   let mut vertex_width = false
   for vr in vertex_records {
+    if !valid_numeric_tags(vr) {
+      warnings.push(
+        "POLYLINE 顶点数值类型错误；保留记录，不生成猜测几何",
+      )
+      return Some({ common: common_of(record), geom: Unknown, })
+    }
     for code in [40, 41] {
       for tag in vr.all_of(code) {
         if tag.value.as_double() != 0.0 {
@@ -778,9 +802,9 @@ fn parse_polyline_entity(
 /// 取一个组码的数值。**没写返回 `None`**——和 `get_double` 的默认值
 /// 是两回事：这里要区分「写了 0」和「根本没写」，缺必填字段是要报警的。
 fn number_of(record : Record, code : Int) -> Double? {
-  match record.get(code) {
-    Some(t) => Some(t.value.as_double())
-    None => None
+  match record.require_double(code) {
+    Ok(value) => Some(value)
+    Err(_) => None
   }
 }
 
@@ -1099,6 +1123,12 @@ fn warn_polyline_extent(
   codes : Array[Int],
   warnings : Array[String],
 ) -> Unit {
+  if record.get_double(39, 0.0) != 0.0 {
+    warnings.push(
+      "\{record.kind} 非零厚度未重建；原始记录保留，轮廓未检查",
+    )
+    return
+  }
   for code in codes {
     for tag in record.all_of(code) {
       if tag.value.as_double() != 0.0 {

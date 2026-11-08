@@ -41,33 +41,16 @@ pub(all) struct TagScan {
 /// 两个入口共用同一套状态机（这里就是它的一次性封装），
 /// 行为不会有两套。
 pub fn scan_tags(data : Bytes) -> TagScan {
-  let stream = TagStream::new()
+  scan_tags_with_limits(data, ReadLimits::default())
+}
+
+///|
+/// Explicit bounded scan; exhaustion leaves a diagnostic and a partial tag prefix.
+pub fn scan_tags_with_limits(data : Bytes, limits : ReadLimits) -> TagScan {
+  let stream = TagStream::with_limits(limits)
   let tags = stream.feed(data)
   tags.append(stream.finish())
   { tags, warnings: stream.warnings(), encoding: stream.encoding().unwrap(), }
-}
-
-///|
-/// 从 `from` 开始找这一行的结束位置（不含换行符本身）。
-fn line_end(data : Bytes, from : Int) -> Int {
-  let mut i = from
-  while i < data.length() && data[i] != b'\n' && data[i] != b'\r' {
-    i = i + 1
-  }
-  i
-}
-
-///|
-/// 从行尾跳到下一行的开头，三种换行都认。
-fn advance_past_newline(data : Bytes, at : Int) -> Int {
-  let mut i = at
-  if i < data.length() && data[i] == b'\r' {
-    i = i + 1
-  }
-  if i < data.length() && data[i] == b'\n' {
-    i = i + 1
-  }
-  i
 }
 
 ///|

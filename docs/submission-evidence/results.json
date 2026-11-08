@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "checked_on": "2026-10-27",
+  "checked_on": "2026-11-07",
   "scope": "Current R12-upgrade CLI regression cases; not complete independent truth for the 47 third-party drawings",
   "historical_geometry_baseline_commit": "1a8185925e2c038039e6f57f32c69421e833d437",
   "oracle": {
     "kind": "independent Node analytic formulas; no production geometry helpers or ezdxf runtime",
     "script": "scripts/verify-submission-evidence.cjs",
-    "script_sha256_lf": "b6df3329756af9d8b7df62761fef1fe5364d0b5290128ecf4bae5efcb43d3bdc",
+    "script_sha256_lf": "7accb0b0b07fbdc73227b2731c955bc67f2b67c06d371028307537eb33d33d3b",
     "numeric_display_significant_digits": 12
   },
   "pinned_profile": {
@@ -206,7 +206,7 @@
         "strict_exit": 1,
         "required": [
           "[警告] [轮廓闭合]",
-          "最宽的缝 10"
+          "端点间距样本 10"
         ],
         "forbidden": [
           "检查不完整",
@@ -220,7 +220,7 @@
         "svg_exit": 0,
         "outlines": 1,
         "findings": [
-          "[警告] [轮廓闭合] 图层「CUT」上有 1 处轮廓没闭合——最宽的缝 10（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          "[警告] [轮廓闭合] 图层「CUT」上有 1 处轮廓没闭合——端点间距样本 10（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
         ],
         "metrics": {}
       },
@@ -632,7 +632,7 @@
         "svg_exit": 0,
         "outlines": 1,
         "findings": [
-          "[警告] [轮廓闭合] 图层「CUT」上有 1 处轮廓没闭合——最宽的缝 1（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
+          "[警告] [轮廓闭合] 图层「CUT」上有 1 处轮廓没闭合——端点间距样本 1（(0, 0) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断"
         ],
         "metrics": {
           "samples": 2049,

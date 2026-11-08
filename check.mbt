@@ -173,6 +173,7 @@ fn Drawing::check_expansion(
   self : Drawing,
   opt : CheckOptions,
   exp : Expansion,
+  budget? : GeometryBudget = GeometryBudget::default(),
 ) -> Report {
   let tol = opt.tol
   let findings : Array[Finding] = []
@@ -192,6 +193,17 @@ fn Drawing::check_expansion(
   // 展开过程中的问题（缺块、循环引用）本身就是检查结论
   for w in exp.warnings {
     findings.push({ check: "解析", severity: Warn, message: w, })
+  }
+  if !preview_range_ok(exp) ||
+    tol < 1.0e-100 ||
+    tol > 1.0e100 ||
+    opt.min_gap > 1.0e100 {
+    findings.push({
+      check: "检查覆盖",
+      severity: Warn,
+      message: "几何数值或预览资源超出安全范围；XY检查与SVG未完成",
+    })
+    return { findings, }
   }
   // 已解码不等于已检查几何。不能让未支持实体或空图纸得到无问题结论。
   let unsupported : Array[(String, Int)] = []
@@ -239,9 +251,26 @@ fn Drawing::check_expansion(
     None => None
   }
   check_layers(tables, exp.placed, findings)
-  check_closure(exp.placed, tables, tol, findings)
-  check_crossings(exp.placed, tables, tol, findings)
-  check_min_gap(exp.placed, tables, opt, findings)
+  let work : CheckWork = {
+    remaining: budget.max_candidates,
+    stopped: budget.max_candidates <= 0,
+  }
+  if !work.stopped {
+    check_closure(exp.placed, tables, tol, findings, work)
+  }
+  if !work.stopped {
+    check_crossings(exp.placed, tables, tol, findings, work)
+  }
+  if !work.stopped {
+    check_min_gap(exp.placed, tables, opt, findings, work)
+  }
+  if work.stopped {
+    findings.push({
+      check: "检查覆盖",
+      severity: Warn,
+      message: "几何候选对达到资源上限；后续拓扑/相交/净距检查未完成",
+    })
+  }
   { findings, }
 }
 
@@ -392,8 +421,7 @@ fn check_layers(
 }
 
 ///|
-/// 轮廓闭合：同一个图层里的开放折线按端点容差串成链条，
-/// 串不动之后头尾还对不上的，就是没闭合的轮廓。
+/// 轮廓闭合：同层开放折线建立端点等价图，按连通分量和度数判读。
 ///
 /// 为什么不标致命：**判断不了意图**——轮廓件缺一段确实会散架，
 /// 但刻线、折弯线和有意留的开口本来就是开口。报出来让人确认，
@@ -401,13 +429,13 @@ fn check_layers(
 ///
 /// 本工具的闭合检查跳过关闭 / 冻结图层；这不推断下游软件或机床行为。
 ///
-/// 串链是朴素的贪心——每层边的数量是图纸实体级的（几百上千），
-/// O(n²) 在单张图上跑得动；真遇到几万条再上空间索引。
+/// 候选端点沿X扫掠并扣减共享预算；分叉不以贪心顺序猜测连接。
 fn check_closure(
   placed : Array[Placed],
   tables : Tables?,
   tol : Double,
   findings : Array[Finding],
+  work : CheckWork,
 ) -> Unit {
   // 这层有没有按本工具图层筛选约定参与检查的开放折线
   let names : Array[String] = []
@@ -444,82 +472,32 @@ fn check_closure(
         _ => ()
       }
     }
-    let (open_count, worst_gap, at) = open_chains(edges, tol)
+    let (open_count, worst_gap, at, branched) = endpoint_topology(
+      edges, tol, work,
+    )
+    if work.stopped {
+      return
+    }
+    if branched {
+      findings.push({
+        check: "轮廓连接",
+        severity: Warn,
+        message: "图层「\{layer}」存在分叉或多重端点连接；不能视为普通闭合环",
+      })
+    }
     if open_count > 0 {
+      let description = if branched {
+        "非简单闭合环的连通分量（开放或分叉）"
+      } else {
+        "轮廓没闭合"
+      }
       findings.push({
         check: "轮廓闭合",
         severity: Warn,
-        message: "图层「\{layer}」上有 \{open_count} 处轮廓没闭合——最宽的缝 \{worst_gap}（(\{at.x}, \{at.y}) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断",
+        message: "图层「\{layer}」上有 \{open_count} 处\{description}——端点间距样本 \{worst_gap}（(\{at.x}, \{at.y}) 附近）；若用于封闭区域切割，请确认端点连接；开放刀路需按工艺判断",
       })
     }
   }
-}
-
-///|
-/// 把一组开放段按端点（容差内）串成链，数出没闭合的条数。
-/// 返回（没闭合的条数、最宽的缝、缝的位置）。
-fn open_chains(
-  edges : Array[(Vec2, Vec2)],
-  tol : Double,
-) -> (Int, Double, Vec2) {
-  let used : Array[Bool] = []
-  for _ in edges {
-    used.push(false)
-  }
-  let mut open = 0
-  let mut worst = 0.0
-  let mut at = Vec2::zero()
-  let mut i = 0
-  while i < edges.length() {
-    if used[i] {
-      i = i + 1
-      continue
-    }
-    used[i] = true
-    let mut head = edges[i].0
-    let mut tail = edges[i].1
-    // 两头都往外接，接到接不动为止
-    let mut grew = true
-    while grew {
-      grew = false
-      let mut j = 0
-      while j < edges.length() {
-        if used[j] {
-          j = j + 1
-          continue
-        }
-        let (a, b) = edges[j]
-        if tail.distance(a) <= tol {
-          tail = b
-          used[j] = true
-          grew = true
-        } else if tail.distance(b) <= tol {
-          tail = a
-          used[j] = true
-          grew = true
-        } else if head.distance(a) <= tol {
-          head = b
-          used[j] = true
-          grew = true
-        } else if head.distance(b) <= tol {
-          head = a
-          used[j] = true
-          grew = true
-        }
-        j = j + 1
-      }
-    }
-    let gap = head.distance(tail)
-    if gap > tol {
-      open = open + 1
-      if gap > worst {
-        worst = gap
-        at = head
-      }
-    }
-    i = i + 1
-  }
-  (open, worst, at)
 }
 
 // ── 自相交与重复切割 ────────────────────────────────────────────────────
@@ -560,6 +538,7 @@ fn check_crossings(
   tables : Tables?,
   tol : Double,
   findings : Array[Finding],
+  work : CheckWork,
 ) -> Unit {
   let layers : Array[String] = []
   for p in placed {
@@ -596,6 +575,9 @@ fn check_crossings(
       let s = segs[i]
       let mut j = i + 1
       while j < segs.length() && segs[j].min_x <= s.max_x + tol {
+        if !work.spend() {
+          return
+        }
         let t = segs[j]
         // y 方向粗筛
         if !(t.min_y > s.max_y + tol || s.min_y > t.max_y + tol) {
@@ -775,6 +757,7 @@ fn check_min_gap(
   tables : Tables?,
   opt : CheckOptions,
   findings : Array[Finding],
+  work : CheckWork,
 ) -> Unit {
   if opt.min_gap <= 0.0 {
     return
@@ -804,7 +787,7 @@ fn check_min_gap(
         0
       }
     })
-    let near : Array[(Int, Int)] = []
+    let near : Map[Int64, Bool] = Map([])
     let mut worst = opt.min_gap
     let mut at = Vec2::zero()
     let mut i = 0
@@ -812,6 +795,9 @@ fn check_min_gap(
       let s = segs[i]
       let mut j = i + 1
       while j < segs.length() && segs[j].min_x <= s.max_x + opt.min_gap {
+        if !work.spend() {
+          return
+        }
         let t = segs[j]
         if s.owner != t.owner &&
           !(t.min_y > s.max_y + opt.min_gap || s.min_y > t.max_y + opt.min_gap) {
@@ -823,7 +809,9 @@ fn check_min_gap(
           if !touching {
             let gap = segment_gap(s.a, s.b, t.a, t.b)
             if gap < opt.min_gap {
-              push_unique_pair(near, s.owner, t.owner)
+              let a = s.owner.min(t.owner).to_int64()
+              let b = s.owner.max(t.owner).to_int64()
+              near[(a << 32) | b] = true
               if gap < worst {
                 worst = gap
                 at = s.a
@@ -893,19 +881,6 @@ fn on_segment(a : Vec2, b : Vec2, p : Vec2) -> Bool {
   p.x <= a.x.max(b.x) &&
   p.y >= a.y.min(b.y) &&
   p.y <= a.y.max(b.y)
-}
-
-///|
-/// 往「实体对」表里加一对（小下标记在前），去重。
-fn push_unique_pair(pairs : Array[(Int, Int)], a : Int, b : Int) -> Unit {
-  let x = if a < b { a } else { b }
-  let y = if a < b { b } else { a }
-  for p in pairs {
-    if p.0 == x && p.1 == y {
-      return
-    }
-  }
-  pairs.push((x, y))
 }
 
 ///|

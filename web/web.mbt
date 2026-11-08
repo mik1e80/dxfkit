@@ -20,10 +20,15 @@ pub fn analyze(file_base64 : String, min_gap : Double, tol : Double) -> String {
   }
   let drawing = @dxfkit.build_drawing(@dxfkit.scan_tags(data))
   let result = drawing.analyze({ tol, min_gap, })
+  let error = if result.svg == "" {
+    "SVG未生成：参数、数值或预览资源超出安全范围；请查看报告"
+  } else {
+    ""
+  }
   let report = "单位声明：\{result.unit}；坐标及阈值使用图纸原始单位，请先确认。\n" +
     result.report.to_text()
   (
-    { "report": report, "svg": result.svg, "error": "", "unit": result.unit } :
+    { "report": report, "svg": result.svg, "error": error, "unit": result.unit } :
     Json).stringify()
 }
 
@@ -62,6 +67,9 @@ pub fn svg_error(file_base64 : String) -> String {
 ///|
 /// 把 base64 解成字节，失败时给中文错误。
 fn decode(file_base64 : String) -> Result[Bytes, String] {
+  if file_base64.length() > 89478488 {
+    return Err("文件超过64 MiB读取上限")
+  }
   if file_base64.length() == 0 {
     return Err("没有收到文件内容")
   }

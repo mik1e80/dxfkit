@@ -32,15 +32,53 @@ pub(all) struct ReadDocument {
 /// Read an ASCII DXF without discarding unrecognized fields or record types.
 /// `source` also retains comments, formatting and bytes after EOF that the scanner ignores.
 pub fn read_document(source : Bytes) -> ReadDocument {
-  let scan = scan_tags(source)
-  let drawing = build_drawing(scan)
+  read_document_with_limits(source, ReadLimits::default())
+}
+
+///|
+/// Raw source is caller-owned; budgets bound scanning and derived representations.
+pub fn read_document_with_limits(
+  source : Bytes,
+  limits : ReadLimits,
+) -> ReadDocument {
+  let scan = scan_tags_with_limits(source, limits)
+  let records = raw_records(scan.tags)
+  let drawing = build_drawing_raw(scan, records)
   let profile = if drawing.version == "AC1009" { R12 } else { BestEffort }
   let warnings = drawing.warnings.copy()
+  if profile == BestEffort {
+    warnings.push(
+      "未选择 R12/AC1009：其他版本仅按已实现能力尽力读取",
+    )
+  } else {
+    for r in records {
+      if warnings.length() >= 1000 {
+        break
+      }
+      if r.kind == "SECTION" &&
+        !["HEADER", "TABLES", "BLOCKS", "ENTITIES"].contains(r.section) {
+        warnings.push(
+          "R12 范围外的段 \{r.section}；原始记录已保留",
+        )
+      }
+      if (r.section == "ENTITIES" || r.section == "BLOCKS") &&
+        !r12_record_kind(r.kind) {
+        warnings.push(
+          "R12 范围外或未知记录 \{r.kind}；原始字段已保留",
+        )
+      }
+    }
+  }
+  { source, scan, records, drawing, profile, read_warnings: warnings, }
+}
+
+///|
+fn raw_records(tags : Array[Tag]) -> Array[RawRecord] {
   let records : Array[RawRecord] = []
   let mut section = ""
   let mut pending : Array[Tag] = []
   let mut kind = ""
-  for tag in scan.tags {
+  for tag in tags {
     if tag.code == 0 && pending.length() > 0 {
       if kind == "SECTION" {
         section = raw_section_name(pending)
@@ -62,29 +100,7 @@ pub fn read_document(source : Bytes) -> ReadDocument {
     }
     records.push({ section, kind, tags: pending, })
   }
-  validate_record_structure(records, warnings)
-  if profile == BestEffort {
-    warnings.push(
-      "未选择 R12/AC1009：其他版本仅按已实现能力尽力读取",
-    )
-  } else {
-    for r in records {
-      if r.kind == "SECTION" &&
-        !["HEADER", "TABLES", "BLOCKS", "ENTITIES"].contains(r.section) {
-        warnings.push(
-          "R12 范围外的段 \{r.section}；原始记录已保留",
-        )
-      }
-      if r.section == "ENTITIES" || r.section == "BLOCKS" {
-        if !r12_record_kind(r.kind) {
-          warnings.push(
-            "R12 范围外或未知记录 \{r.kind}；原始字段已保留",
-          )
-        }
-      }
-    }
-  }
-  { source, scan, records, drawing, profile, read_warnings: warnings, }
+  records
 }
 
 ///|
@@ -118,6 +134,10 @@ fn validate_record_structure(
   let mut sequence = ""
   let mut eof = false
   for r in records {
+    if warnings.length() >= 1000 {
+      warnings.push("结构诊断达到资源上限；检查不完整")
+      break
+    }
     if r.kind == "SECTION" {
       if section != "" {
         warnings.push("SECTION 嵌套，读取结构不完整")

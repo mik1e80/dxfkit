@@ -1,7 +1,7 @@
 // Lightweight checks only: document targets, current API wording, About data and PDF envelope.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
-const docs=['README.md','README.mbt.md','COMPARISON.md','docs/submission.md','docs/resubmission-evidence.md','docs/verification-guide.md','docs/delivery-verification.md','docs/review-cases.md','docs/r12-profile.md','docs/resubmission-20261027.md','docs/review-response.md','examples/r12-validation/README.md','examples/r12-validation/EXTERNAL.md','examples/model-validation/README.md','examples/model-validation/SUMMARY.md','docs/r2-submission-20261022.md'];
+const docs=['SECURITY.md','CONTRIBUTING.md','docs/security-20261107.md','README.md','README.mbt.md','COMPARISON.md','docs/submission.md','docs/resubmission-evidence.md','docs/verification-guide.md','docs/delivery-verification.md','docs/review-cases.md','docs/r12-profile.md','docs/resubmission-20261027.md','docs/review-response.md','examples/r12-validation/README.md','examples/r12-validation/EXTERNAL.md','examples/model-validation/README.md','examples/model-validation/SUMMARY.md','docs/r2-submission-20261022.md'];
 let links=0;
 for(const file of docs){
   const text=fs.readFileSync(path.join(root,file),'utf8');
@@ -33,3 +33,14 @@ const pdf=fs.readFileSync(path.join(root,'output/pdf/dxfkit-submission-one-page.
 assert(pdf.subarray(0,5).toString()==='%PDF-'&&pdf.length>10000);
 assert.equal([...pdf.toString('latin1').matchAll(/\/Type\s*\/Page\b/g)].length,1,'Expected one PDF page object; also inspect with pypdf and render');
 console.log(`PASS: ${docs.length} documents, ${links} local links, Face API wording, About fields and one-page PDF envelope`);
+const capabilities=JSON.parse(fs.readFileSync(path.join(root,'docs/capabilities.json'),'utf8'));
+assert.equal(capabilities.schema,'dxfkit-capabilities-v1');
+assert(capabilities.version.startsWith(profile.version));
+const kinds=new Set();
+for(const row of capabilities.entities){
+ assert.equal(typeof row.r12,'boolean');
+ for(const field of ['raw','fields','geometry','check'])assert.equal(typeof row[field],'string');
+ for(const kind of row.kinds){assert(!kinds.has(kind));kinds.add(kind);}
+}
+for(const kind of ['LINE','INSERT','ATTRIB','SHAPE','SPLINE'])assert(kinds.has(kind));
+assert(fs.existsSync(path.join(root,'web/worker.js')));

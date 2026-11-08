@@ -54,7 +54,8 @@ pub(all) struct WorldExpansion {
 
 ///|
 priv struct ExpandCtx {
-  blocks : Array[Block]
+  blocks : Map[String, Block]
+  duplicates : Map[String, Bool]
   tol : Double
   warnings : Array[String]
   limits : ExpandLimits
@@ -98,8 +99,18 @@ pub fn Drawing::expand_world_with_limits(
   let warnings = self.warnings.copy()
   warnings.append(es.warnings)
   warnings.append(blocks.warnings)
+  let index : Map[String, Block] = Map([])
+  let duplicates : Map[String, Bool] = Map([])
+  for block in blocks.blocks {
+    if index.contains(block.name) {
+      duplicates[block.name] = true
+    } else {
+      index[block.name] = block
+    }
+  }
   let ctx : ExpandCtx = {
-    blocks: blocks.blocks,
+    blocks: index,
+    duplicates,
     tol,
     warnings,
     limits,
@@ -120,6 +131,11 @@ pub fn Drawing::expand_world_with_limits(
 ///|
 fn expand_visit(ctx : ExpandCtx) -> Bool {
   if ctx.stopped {
+    return false
+  }
+  if ctx.warnings.length() >= 1000 {
+    ctx.stopped = true
+    ctx.warnings.push("展开诊断达到资源上限；检查不完整")
     return false
   }
   if ctx.visits >= ctx.limits.max_visits {
@@ -179,13 +195,13 @@ fn expand_entity_world(
         )
         return
       }
-      let mut found : Block? = None
-      for b in ctx.blocks {
-        if b.name == block {
-          found = Some(b)
-        }
+      if ctx.duplicates.contains(block) {
+        ctx.warnings.push(
+          "块名「\{block}」重复，引用含歧义；未展开，检查不完整",
+        )
+        return
       }
-      let b = match found {
+      let b = match ctx.blocks.get(block) {
         Some(b) => b
         None => {
           ctx.warnings.push(

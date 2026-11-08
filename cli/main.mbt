@@ -35,15 +35,15 @@ async fn main {
 
 ///|
 /// Report record-preservation/structure separately from geometry checking.
-fn run_read(args : ArrayView[String]) -> Unit {
+async fn run_read(args : ArrayView[String]) -> Unit {
   if args.length() != 1 {
     println("用法：dxfkit read 图纸.dxf")
     @sys.exit(2)
     return
   }
-  let data = @fs.read_file_to_bytes(args[0]) catch {
-    _ => {
-      println("读取文件失败：\{args[0]}")
+  let data = match read_file_bounded(args[0]) {
+    Some(data) => data
+    None => {
       @sys.exit(2)
       return
     }
@@ -66,7 +66,7 @@ fn run_read(args : ArrayView[String]) -> Unit {
 }
 
 ///|
-fn run_check(args : ArrayView[String]) -> Unit {
+async fn run_check(args : ArrayView[String]) -> Unit {
   let mut path = ""
   let mut tol = 0.05
   let mut min_gap = 0.0
@@ -155,7 +155,7 @@ fn run_check(args : ArrayView[String]) -> Unit {
 }
 
 ///|
-fn run_svg(args : ArrayView[String]) -> Unit {
+async fn run_svg(args : ArrayView[String]) -> Unit {
   let mut path = ""
   let mut tol = 0.05
   let mut i = 0
@@ -200,7 +200,13 @@ fn run_svg(args : ArrayView[String]) -> Unit {
       return
     }
   }
-  println(@dxfkit.build_drawing(scan).to_svg(tol))
+  let svg = @dxfkit.build_drawing(scan).to_svg(tol)
+  if svg == "" {
+    println("无法生成预览：几何数值或资源超出安全范围")
+    @sys.exit(1)
+    return
+  }
+  println(svg)
   @sys.exit(0)
 }
 
@@ -250,7 +256,7 @@ async fn run_stats(args : ArrayView[String]) -> Unit {
   let buf : FixedArray[Byte] = FixedArray::make(chunk, b'\x00')
   let mut pos = 0L
   let mut failure : String? = None
-  while pos < size && failure is None {
+  while pos < size && failure is None && !stream.is_limited() {
     let remain = size - pos
     let want = if remain < chunk.to_int64() { remain.to_int() } else { chunk }
     let n = file.read_at(buf, position=pos, offset=0, len=want) catch {
@@ -292,6 +298,9 @@ async fn run_stats(args : ArrayView[String]) -> Unit {
     "编码 \{stream.encoding().unwrap().to_display()} · 版本 \{ver_note}",
   )
   println("tag \{tracker.tag_count()} 个 · 警告 \{warnings.length()} 条")
+  for warning in warnings {
+    println("扫描警告：\{warning}")
+  }
   // 段里数的是组码 0 记录：HEADER 的变量不是记录，所以它显示 0
   let sb = StringBuilder()
   for s in tracker.sections() {
@@ -301,7 +310,7 @@ async fn run_stats(args : ArrayView[String]) -> Unit {
     sb.write_string("\{s.0}(\{s.1})")
   }
   println("段        \{sb}")
-  @sys.exit(0)
+  @sys.exit(if warnings.length() > 0 { 1 } else { 0 })
 }
 
 ///|
@@ -401,14 +410,63 @@ fn StatsTracker::sections(self : StatsTracker) -> Array[(String, Int)] {
 
 ///|
 /// 读文件并扫描。读不了返回 `None`（问题已经打在屏幕上了）。
-fn scan_file(path : String) -> @dxfkit.TagScan? {
-  let data = @fs.read_file_to_bytes(path) catch {
-    @fs.IOError(msg) => {
-      println("读不了 \{path}：\{msg}")
+async fn scan_file(path : String) -> @dxfkit.TagScan? {
+  let data = match read_file_bounded(path) {
+    Some(data) => data
+    None => return None
+  }
+  Some(@dxfkit.scan_tags(data))
+}
+
+///|
+/// Check size on the opened handle before allocation; read at most that size,
+/// reject concurrent size changes instead of returning a silent truncated file.
+async fn read_file_bounded(path : String) -> Bytes? {
+  let file = @asyncfs.open(path, mode=@asyncfs.Mode::ReadOnly) catch {
+    err => {
+      println("打不开文件：\{err}")
       return None
     }
   }
-  Some(@dxfkit.scan_tags(data))
+  defer file.close()
+  let size = file.size() catch {
+    err => {
+      println("无法读取文件大小：\{err}")
+      return None
+    }
+  }
+  if size < 0L || size > @dxfkit.ReadLimits::default().max_file_bytes.to_int64() {
+    println(
+      "文件超过64 MiB读取上限；未分配整文件缓冲，读取不完整",
+    )
+    return None
+  }
+  let data : FixedArray[Byte] = FixedArray::make(size.to_int(), b'\x00')
+  let mut pos = 0
+  while pos < data.length() {
+    let n = file.read_at(
+      data,
+      position=pos.to_int64(),
+      offset=pos,
+      len=(data.length() - pos).min(262144),
+    ) catch {
+      err => {
+        println("读取文件失败：\{err}")
+        return None
+      }
+    }
+    if n <= 0 {
+      println("文件读取提前结束；结果不完整")
+      return None
+    }
+    pos += n
+  }
+  let after = file.size() catch { _ => return None }
+  if after != size {
+    println("读取期间文件大小改变；请重试")
+    return None
+  }
+  Some(Bytes::from_iter(data.iter()))
 }
 
 ///|

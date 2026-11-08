@@ -18,7 +18,7 @@ const cases=[
   {id:'ellipse-ratio',text:draw('0\nELLIPSE\n10\n0\n20\n0\n11\n3\n21\n0\n40\n1.2\n'),reason:'短长轴比',outlines:0},
   {id:'constant-width',text:draw(rect('43\n5\n')),reason:'仅检查中心线',outlines:1},
   {id:'vertex-width',text:draw(rect('40\n2\n')),reason:'仅检查中心线',outlines:1},
-  {id:'thickness',text:draw(rect('39\n1\n')),reason:'仅检查中心线',outlines:1},
+  {id:'thickness',text:draw(rect('39\n1\n')),reason:'非零厚度未重建',outlines:0},
   {id:'zero-width-control',text:draw(rect('43\n0\n40\n0\n41\n0\n39\n0\n')),outlines:1,exit:0},
 ];
 function save(file,text){const p=path.join(__dirname,file);if(write){fs.mkdirSync(path.dirname(p),{recursive:true});fs.writeFileSync(p,text);}else assert.equal(fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n'),text,file);}

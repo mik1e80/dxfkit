@@ -1,0 +1,21 @@
+{
+  "schema":"dxfkit-capabilities-v1",
+  "version":"0.2.0-unpublished",
+  "baseline":"AC1009 record profile; not complete R12 semantic certification",
+  "read_boundary":"within ReadLimits; source caller-owned; exhaustion incomplete",
+  "check_plane":"WCS abs(z)<=CheckOptions.tol; shared plane/endpoint/flatten tolerance",
+  "entities":[
+    {"kinds":["LINE","POINT"],"r12":true,"raw":"preserved","fields":"subset","geometry":"WCS XYZ","check":"LINE XY outlines; POINT metadata"},
+    {"kinds":["CIRCLE","ARC"],"r12":true,"raw":"preserved","fields":"subset","geometry":"OCS to WCS checked sampling","check":"applicable XY outlines"},
+    {"kinds":["POLYLINE"],"r12":true,"raw":"preserved","fields":"ordinary 2D vertices/bulge","geometry":"2D only; spatial/mesh/fitting rejected","check":"centerline; width diagnosed; thickness rejected"},
+    {"kinds":["INSERT"],"r12":true,"raw":"preserved","fields":"base/scale/rotation/array/OCS","geometry":"bounded instances; duplicate names rejected","check":"supported child outlines; ATTRIB layout/replication incomplete"},
+    {"kinds":["SOLID","TRACE"],"r12":true,"raw":"preserved","fields":"corners","geometry":"restricted planar boundary","check":"applicable XY outlines"},
+    {"kinds":["3DFACE"],"r12":true,"raw":"preserved","fields":"corners","geometry":"WCS face metadata","check":"not a 2D contour"},
+    {"kinds":["TEXT","ATTDEF","ATTRIB"],"r12":true,"raw":"preserved","fields":"simplified text","geometry":"insertion point; approximate upright label; glyph/affine/layout not rebuilt","check":"text coverage warning"},
+    {"kinds":["DIMENSION"],"r12":true,"raw":"preserved","fields":"simplified metadata","geometry":"not rebuilt","check":"incomplete coverage"},
+    {"kinds":["SHAPE","VIEWPORT","3DLINE"],"r12":true,"raw":"preserved","fields":"raw only","geometry":"not rebuilt","check":"incomplete coverage"},
+    {"kinds":["ELLIPSE","SPLINE","LWPOLYLINE"],"r12":false,"raw":"preserved","fields":"extension subset","geometry":"checked subset","check":"applicable XY outlines; limitations diagnosed"},
+    {"kinds":["HATCH","MTEXT"],"r12":false,"raw":"preserved","fields":"simplified metadata","geometry":"no HATCH boundary or faithful MTEXT layout","check":"incomplete coverage"}
+  ],
+  "unknown_entities":{"raw":"preserved within budgets","fields":"raw","geometry":"not rebuilt","check":"incomplete coverage"}
+}

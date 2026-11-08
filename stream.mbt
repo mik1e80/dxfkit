@@ -1,203 +1,264 @@
-// 流式扫描：分块喂字节，边喂边出 tag。
-//
-// 为什么要有这个：整份扫描（`scan_tags`）要把整个文件读进内存。
-// 流式不保留完整文件，但会保留当前块、未完成行及扫描警告。
-// 超长行和大量警告仍可能使内存随输入增长。
-//
-// 正确性的地基是一个巧合：**编码判断只看文件前 1024 字节**
-//（`decide_encoding` 的实现范围）。所以流式这边
-// 攒够前 1024 字节再定编码、再往外吐 tag，和整份扫描对同一个文件的
-// 判断必然一致。语料上逐 tag 对过账（`corpus_wbtest` 里那条等价性测试）。
-//
-// `scan_tags` 自己也改成了这层的封装：一处状态机、两个入口，
-// 行为不会有第二套。
+///|
+/// Parsing budgets include malformed input; exhaustion stops with an explicit warning.
+pub(all) struct ReadLimits {
+  max_file_bytes : Int
+  max_line_bytes : Int
+  max_tags : Int
+  max_records : Int
+  max_warnings : Int
+  max_string_bytes : Int
+}
 
 ///|
-/// 流式扫描器：`feed` 分块喂入，`finish` 收尾。
-///
-/// tag 是「组码一行、值一行」的配对，配对可能横跨块边界——内部
-/// 缓冲没读完的行，`feed` 之间不用调用方操心。
+pub fn ReadLimits::default() -> ReadLimits {
+  {
+    max_file_bytes: 67108864,
+    max_line_bytes: 1048576,
+    max_tags: 1000000,
+    max_records: 200000,
+    max_warnings: 1000,
+    max_string_bytes: 1048576,
+  }
+}
+
+///|
+/// Byte-linear streaming scanner with a bounded encoding prefix and growing line.
+/// Caller-owned input bytes are not freed by scanner limits.
 pub(all) struct TagStream {
-  /// 没消费完的字节。定编码之前，这是攒着的文件头部前缀
-  priv mut buffer : Bytes
+  priv prefix : Array[Byte]
+  priv mut line : Array[Byte]
   priv mut line_no : Int
-  /// 上一行读到的组码（tag 成对，读到组码就得等它的值）
   priv mut pending : Int?
   priv warn : Array[String]
-  /// 文件编码。**定下来之前不往外吐任何 tag**——值怎么解码全靠它
   priv mut enc : Encoding?
   priv mut finished : Bool
-  /// 碰到 `0 / EOF` 之后一律不看了（EOF 后面可能是垃圾字节）
   priv mut eof_seen : Bool
+  priv mut skip_lf : Bool
+  priv limits : ReadLimits
+  priv mut bytes : Int
+  priv mut tags : Int
+  priv mut records : Int
+  priv mut limited : Bool
 }
 
 ///|
 pub fn TagStream::new() -> TagStream {
-  let empty : Array[Byte] = []
-  {
-    buffer: Bytes::from_array(empty),
+  TagStream::with_limits(ReadLimits::default())
+}
+
+///|
+pub fn TagStream::with_limits(limits : ReadLimits) -> TagStream {
+  let stream : TagStream = {
+    prefix: [],
+    line: [],
     line_no: 0,
     pending: None,
     warn: [],
     enc: None,
     finished: false,
     eof_seen: false,
+    skip_lf: false,
+    limits,
+    bytes: 0,
+    tags: 0,
+    records: 0,
+    limited: false,
+  }
+  if limits.max_file_bytes <= 0 ||
+    limits.max_line_bytes <= 0 ||
+    limits.max_tags <= 0 ||
+    limits.max_records <= 0 ||
+    limits.max_warnings <= 0 ||
+    limits.max_string_bytes <= 0 {
+    stream.stop_limit("读取预算必须为正整数")
+  }
+  stream
+}
+
+///|
+/// Further feeds after exhaustion are ignored; partial tags are not a complete file.
+pub fn TagStream::is_limited(self : TagStream) -> Bool {
+  self.limited
+}
+
+///|
+fn TagStream::stop_limit(self : TagStream, reason : String) -> Unit {
+  if self.limited {
+    return
+  }
+  self.limited = true
+  self.line = []
+  let cap = self.limits.max_warnings.max(1)
+  if self.warn.length() >= cap {
+    self.warn.pop() |> ignore
+  }
+  self.warn.push("读取资源上限：" + reason + "；读取/检查不完整")
+}
+
+///|
+fn TagStream::warning(self : TagStream, message : String) -> Unit {
+  if self.warn.length() >= self.limits.max_warnings {
+    self.stop_limit("警告数量")
+  } else {
+    self.warn.push(message)
   }
 }
 
 ///|
-/// 分块喂入，返回这次新扫出来的 tag。
-///
-/// 头部攒够 1024 字节之前可能一个都不吐（在等编码判断）——
-/// 这是设计，不是卡住了；`finish` 会把不足 1024 字节的文件收尾。
 pub fn TagStream::feed(self : TagStream, chunk : Bytes) -> Array[Tag] {
   let out : Array[Tag] = []
-  if self.finished || self.eof_seen {
+  if self.finished || self.eof_seen || self.limited {
     return out
   }
-  self.buffer = concat_bytes(self.buffer, chunk)
-  if self.enc is None {
-    if self.buffer.length() < 1024 {
-      return out
-    }
-    self.choose_encoding()
+  // Reject before copying. Overflow cannot wrap the cumulative byte counter.
+  if chunk.length() > self.limits.max_file_bytes - self.bytes {
+    self.stop_limit("文件字节数")
+    return out
   }
-  self.consume_lines(out)
+  self.bytes += chunk.length()
+  for byte in chunk {
+    if self.eof_seen || self.limited {
+      break
+    }
+    if self.enc is None {
+      self.prefix.push(byte)
+      if self.prefix.length() == 1024 {
+        self.choose_encoding(out)
+      }
+    } else {
+      self.consume_byte(byte, out)
+    }
+  }
   out
 }
 
 ///|
-/// 收尾：把缓冲里剩下的消费掉（最后一行没有换行符也算一整行），
-/// 报出「组码后面没有值」这类截断警告。之后 `feed` 再喂什么都返回空。
 pub fn TagStream::finish(self : TagStream) -> Array[Tag] {
   let out : Array[Tag] = []
   if self.finished {
     return out
   }
   self.finished = true
-  if self.eof_seen {
+  if self.enc is None {
+    self.choose_encoding(out)
+  }
+  if self.eof_seen || self.limited {
     return out
   }
-  if self.enc is None {
-    // 不足 1024 字节的小文件：用现有的全部判断——和整份扫描对
-    // 短文件的行为一致（decide_encoding 自己会截到 1024）
-    self.choose_encoding()
+  if self.line.length() > 0 {
+    self.consume_line(out)
   }
-  self.consume_lines(out)
-  match self.pending {
-    Some(code) =>
-      self.warn.push(
-        "文件在最后一行截断了：组码 \{code} 后面没有值（可能是文件被切断了）",
-      )
-    None => ()
+  if !self.limited {
+    match self.pending {
+      Some(code) =>
+        self.warning(
+          "文件在最后一行截断了：组码 \{code} 后面没有值（可能是文件被切断了）",
+        )
+      None => ()
+    }
   }
   out
 }
 
 ///|
-/// 扫描中攒下的警告（和 `TagScan.warnings` 同源）。
 pub fn TagStream::warnings(self : TagStream) -> Array[String] {
   self.warn.copy()
 }
 
 ///|
-/// 文件编码；还没定（还没攒够 1024 字节）时是 `None`。
 pub fn TagStream::encoding(self : TagStream) -> Encoding? {
   self.enc
 }
 
 ///|
-fn TagStream::choose_encoding(self : TagStream) -> Unit {
-  let enc = decide_encoding(self.buffer)
+fn TagStream::choose_encoding(self : TagStream, out : Array[Tag]) -> Unit {
+  let enc = decide_encoding(Bytes::from_array(self.prefix))
   self.enc = Some(enc)
   if enc.is_fallback() {
-    self.warn.push(
+    self.warning(
       "未支持的\{enc.to_display()}按Latin-1降级解码；文字可能失真",
     )
   }
+  for byte in self.prefix {
+    if self.eof_seen || self.limited {
+      break
+    }
+    self.consume_byte(byte, out)
+  }
+  self.prefix.clear()
 }
 
 ///|
-/// 消费缓冲里所有**能确定边界**的行，产出 tag。
-///
-/// 一行算「确定」：看到了换行符——`\r\n` 要看得到下一个字节，
-/// 不然不知道 `\r` 后面跟不跟 `\n`；或者正在收尾（缓冲末尾即文件末尾）。
-fn TagStream::consume_lines(self : TagStream, out : Array[Tag]) -> Unit {
-  let data = self.buffer
+fn TagStream::consume_byte(
+  self : TagStream,
+  byte : Byte,
+  out : Array[Tag],
+) -> Unit {
+  if self.skip_lf {
+    self.skip_lf = false
+    if byte == b'\n' {
+      return
+    }
+  }
+  if byte == b'\r' || byte == b'\n' {
+    self.skip_lf = byte == b'\r'
+    self.consume_line(out)
+  } else if self.line.length() >= self.limits.max_line_bytes {
+    self.stop_limit("单行字节数")
+  } else {
+    self.line.push(byte)
+  }
+}
+
+///|
+fn TagStream::consume_line(self : TagStream, out : Array[Tag]) -> Unit {
+  let data = Bytes::from_array(self.line)
+  self.line = []
+  self.line_no += 1
   let n = data.length()
-  let mut pos = 0
-  let mut done = false
-  while pos < n && !done {
-    let e = line_end(data, pos)
-    if e >= n && !self.finished {
-      // 行还没写完——留着等下一块
-      break
-    }
-    if e < n && data[e] == b'\r' && e + 1 >= n && !self.finished {
-      // `\r` 是块里的最后一个字节：可能是 `\r\n` 的前半——等下一块
-      break
-    }
-    let start = pos
-    pos = advance_past_newline(data, e)
-    self.line_no = self.line_no + 1
-    match self.pending {
-      None =>
-        match parse_group_code(data, start, e) {
-          Some(code) => self.pending = Some(code)
-          None =>
-            if line_is_blank(data, start, e) {
-              () // 空行是正常现象，不报警告
-            } else {
-              self.warn.push(
-                "第 \{self.line_no} 行：这一行应该是组码，但读不出整数（" +
-                "内容：\{preview(data, start, e)}），已跳过",
-              )
-            }
-        }
-      Some(code) => {
-        let value = match parse_value(code, data, start, e, self.enc.unwrap()) {
-          Ok(value) => value
-          Err(msg) => {
-            self.warn.push(
-              "第\{self.line_no}行组码\{code}：\{msg}；保留原文，几何结果需复核",
+  match self.pending {
+    None =>
+      match parse_group_code(data, 0, n) {
+        Some(code) => self.pending = Some(code)
+        None =>
+          if !line_is_blank(data, 0, n) {
+            self.warning(
+              "第 \{self.line_no} 行：这一行应该是组码，但读不出整数（内容：\{preview(data, 0, n)}），已跳过",
             )
-            Str(decode_text(slice_range(data, start, e), self.enc.unwrap()))
           }
+      }
+    Some(code) => {
+      if self.tags >= self.limits.max_tags ||
+        (code == 0 && self.records >= self.limits.max_records) {
+        self.stop_limit("tag 或记录数量")
+        return
+      }
+      if (code_type(code) is Str || code_type(code) is Bin) &&
+        n > self.limits.max_string_bytes {
+        self.stop_limit("字符串字节数")
+        return
+      }
+      let value = match parse_value(code, data, 0, n, self.enc.unwrap()) {
+        Ok(value) => value
+        Err(msg) => {
+          self.warning(
+            "第\{self.line_no}行组码\{code}：\{msg}；保留原文，几何结果需复核",
+          )
+          Str(decode_text(data, self.enc.unwrap()))
         }
-        out.push(Tag::new(code, value))
-        self.pending = None
-        // `0 / EOF` 是文件结束标志，后面的都不看
-        if code == 0 && value.as_string() == "EOF" {
-          self.eof_seen = true
-          done = true
-        }
+      }
+      if self.limited {
+        return
+      }
+      out.push(Tag::new(code, value))
+      self.tags += 1
+      if code == 0 {
+        self.records += 1
+      }
+      self.pending = None
+      if code == 0 && value.as_string() == "EOF" {
+        self.eof_seen = true
       }
     }
   }
-  // 丢掉消费过的部分；EOF 之后剩下的（垃圾字节）也一并丢掉
-  if done {
-    let empty : Array[Byte] = []
-    self.buffer = Bytes::from_array(empty)
-  } else if pos > 0 {
-    self.buffer = slice_range(data, pos, n)
-  }
-}
-
-///|
-/// 拼两块字节。
-fn concat_bytes(a : Bytes, b : Bytes) -> Bytes {
-  if a.length() == 0 {
-    return b
-  }
-  if b.length() == 0 {
-    return a
-  }
-  let out : Array[Byte] = []
-  for i = 0; i < a.length(); i = i + 1 {
-    out.push(a[i])
-  }
-  for i = 0; i < b.length(); i = i + 1 {
-    out.push(b[i])
-  }
-  Bytes::from_array(out)
 }

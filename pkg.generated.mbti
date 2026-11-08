@@ -48,7 +48,11 @@ pub fn polyline_points(Array[PolyVertex], Bool, Double) -> Array[Vec2]
 
 pub fn read_document(Bytes) -> ReadDocument
 
+pub fn read_document_with_limits(Bytes, ReadLimits) -> ReadDocument
+
 pub fn scan_tags(Bytes) -> TagScan
+
+pub fn scan_tags_with_limits(Bytes, ReadLimits) -> TagScan
 
 pub fn severity_label(Severity) -> String
 
@@ -123,6 +127,7 @@ pub(all) struct Drawing {
 pub fn Drawing::analyze(Self, CheckOptions) -> DrawingAnalysis
 pub fn Drawing::blocks(Self) -> Blocks
 pub fn Drawing::check(Self, CheckOptions) -> Report
+pub fn Drawing::check_with_budget(Self, CheckOptions, GeometryBudget) -> Report
 pub fn Drawing::check_with_limits(Self, CheckOptions, ExpandLimits) -> Report
 pub fn Drawing::declared_unit_label(Self) -> String
 pub fn Drawing::entities(Self) -> Entities
@@ -213,6 +218,11 @@ pub fn Geometry::bounds(Self) -> Aabb2?
 pub fn Geometry::flatten(Self, Double) -> Flat
 pub fn Geometry::flatten_checked(Self, Double) -> Result[Flat, String]
 
+pub(all) struct GeometryBudget {
+  max_candidates : Int
+}
+pub fn GeometryBudget::default() -> Self
+
 pub(all) struct Header {
   vars : Array[HeaderVar]
 }
@@ -283,6 +293,16 @@ pub(all) struct ReadDocument {
   read_warnings : Array[String]
 }
 
+pub(all) struct ReadLimits {
+  max_file_bytes : Int
+  max_line_bytes : Int
+  max_tags : Int
+  max_records : Int
+  max_warnings : Int
+  max_string_bytes : Int
+}
+pub fn ReadLimits::default() -> Self
+
 pub(all) struct Record {
   kind : String
   common : Array[Tag]
@@ -299,7 +319,11 @@ pub fn Record::get_string(Self, Int) -> String
 pub fn Record::has_subclass(Self, String) -> Bool
 pub fn Record::is_legacy(Self) -> Bool
 pub fn Record::point(Self, Int) -> Vec3?
+pub fn Record::require_double(Self, Int) -> Result[Double, String]
+pub fn Record::require_int(Self, Int) -> Result[Int, String]
 pub fn Record::subclass_names(Self) -> Array[String]
+pub fn Record::try_double(Self, Int) -> Result[Double?, String]
+pub fn Record::try_int(Self, Int) -> Result[Int?, String]
 
 pub(all) struct Report {
   findings : Array[Finding]
@@ -355,8 +379,10 @@ pub(all) struct TagStream {
 pub fn TagStream::encoding(Self) -> Encoding?
 pub fn TagStream::feed(Self, Bytes) -> Array[Tag]
 pub fn TagStream::finish(Self) -> Array[Tag]
+pub fn TagStream::is_limited(Self) -> Bool
 pub fn TagStream::new() -> Self
 pub fn TagStream::warnings(Self) -> Array[String]
+pub fn TagStream::with_limits(ReadLimits) -> Self
 
 pub(all) enum TagType {
   Str

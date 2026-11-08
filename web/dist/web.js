@@ -22,10 +22,21 @@
     this.min = param0;
     this.max = param1;
   }
+  function _M0TP27mik1e806dxfkit10ReadLimits(param0, param1, param2, param3, param4, param5) {
+    this.max_file_bytes = param0;
+    this.max_line_bytes = param1;
+    this.max_tags = param2;
+    this.max_records = param3;
+    this.max_warnings = param4;
+    this.max_string_bytes = param5;
+  }
   function _M0TP27mik1e806dxfkit12ExpandLimits(param0, param1, param2) {
     this.max_placed = param0;
     this.max_points = param1;
     this.max_visits = param2;
+  }
+  function _M0TP27mik1e806dxfkit14GeometryBudget(param0) {
+    this.max_candidates = param0;
   }
   function _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err(param0) {
     this._0 = param0;
@@ -76,6 +87,14 @@
     this._0 = param0;
   }
   _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE2Ok.prototype.$tag = 1;
+  function _M0DTPC16result6ResultGOdsE3Err(param0) {
+    this._0 = param0;
+  }
+  _M0DTPC16result6ResultGOdsE3Err.prototype.$tag = 0;
+  function _M0DTPC16result6ResultGOdsE2Ok(param0) {
+    this._0 = param0;
+  }
+  _M0DTPC16result6ResultGOdsE2Ok.prototype.$tag = 1;
   function _M0DTPC16result6ResultGRP27mik1e806dxfkit3OcssE3Err(param0) {
     this._0 = param0;
   }
@@ -139,6 +158,10 @@
     this.f = param0;
     this.size_hint = param1;
   }
+  function _M0TPB4IterGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(param0, param1) {
+    this.f = param0;
+    this.size_hint = param1;
+  }
   function _M0TPB9ArrayViewGkE(param0, param1, param2) {
     this.buf = param0;
     this.start = param1;
@@ -179,6 +202,33 @@
     this.head = param5;
     this.tail = param6;
   }
+  function _M0TPB3MapGsbE(param0, param1, param2, param3, param4, param5, param6) {
+    this.entries = param0;
+    this.size = param1;
+    this.capacity = param2;
+    this.capacity_mask = param3;
+    this.grow_at = param4;
+    this.head = param5;
+    this.tail = param6;
+  }
+  function _M0TPB3MapGlbE(param0, param1, param2, param3, param4, param5, param6) {
+    this.entries = param0;
+    this.size = param1;
+    this.capacity = param2;
+    this.capacity_mask = param3;
+    this.grow_at = param4;
+    this.head = param5;
+    this.tail = param6;
+  }
+  function _M0TPB3MapGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(param0, param1, param2, param3, param4, param5, param6) {
+    this.entries = param0;
+    this.size = param1;
+    this.capacity = param2;
+    this.capacity_mask = param3;
+    this.grow_at = param4;
+    this.head = param5;
+    this.tail = param6;
+  }
   function _M0TPB5EntryGsRPB4JsonE(param0, param1, param2, param3, param4, param5) {
     this.prev = param0;
     this.next = param1;
@@ -187,15 +237,58 @@
     this.key = param4;
     this.value = param5;
   }
+  function _M0TPB5EntryGsbE(param0, param1, param2, param3, param4, param5) {
+    this.prev = param0;
+    this.next = param1;
+    this.psl = param2;
+    this.hash = param3;
+    this.key = param4;
+    this.value = param5;
+  }
+  function _M0TPB5EntryGsRP27mik1e806dxfkit5BlockE(param0, param1, param2, param3, param4, param5) {
+    this.prev = param0;
+    this.next = param1;
+    this.psl = param2;
+    this.hash = param3;
+    this.key = param4;
+    this.value = param5;
+  }
+  function _M0TPB5EntryGlbE(param0, param1, param2, param3, param4, param5) {
+    this.prev = param0;
+    this.next = param1;
+    this.psl = param2;
+    this.hash = param3;
+    this.key = param4;
+    this.value = param5;
+  }
+  function _M0TPB5EntryGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(param0, param1, param2, param3, param4, param5) {
+    this.prev = param0;
+    this.next = param1;
+    this.psl = param2;
+    this.hash = param3;
+    this.key = param4;
+    this.value = param5;
+  }
+  function _M0DTPC16option6OptionGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE4None() {}
+  _M0DTPC16option6OptionGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE4None.prototype.$tag = 0;
+  const _M0DTPC16option6OptionGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE4None__ = new _M0DTPC16option6OptionGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE4None();
+  function _M0DTPC16option6OptionGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE4Some(param0) {
+    this._0 = param0;
+  }
+  _M0DTPC16option6OptionGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE4Some.prototype.$tag = 1;
   function _M0TPB8MutLocalGORPB5EntryGsRPB4JsonEE(param0) {
     this.val = param0;
   }
   function _M0TPB8MutLocalGiE(param0) {
     this.val = param0;
   }
+  function _M0TPB8MutLocalGORPB5EntryGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EEE(param0) {
+    this.val = param0;
+  }
   const _M0MPB7JSArray4copy = (arr) => arr.slice(0);
   const _M0MPC16double6Double8mod__ffi = (a, b) => (a % b);
   const $bytes_literal$0 = new Uint8Array();
+  const _M0MPB7JSArray11set__length = (arr, len) => { arr.length = len; };
   const _M0MPB7JSArray12append__view = (dst, src, src_offset, len) => {
      for (let i = 0; i < len; i++) {
        dst.push(src[src_offset + i]);
@@ -203,6 +296,11 @@
    };
   const _M0MPB7JSArray3pop = (arr) => arr.pop();
   function _M0TPB12MutArrayViewGRP27mik1e806dxfkit6CutSegE(param0, param1, param2) {
+    this.buf = param0;
+    this.start = param1;
+    this.end = param2;
+  }
+  function _M0TPB12MutArrayViewGiE(param0, param1, param2) {
     this.buf = param0;
     this.start = param1;
     this.end = param2;
@@ -480,14 +578,34 @@
     this.sections = param1;
     this.warnings = param2;
   }
-  function _M0TP27mik1e806dxfkit9TagStream(param0, param1, param2, param3, param4, param5, param6) {
-    this.buffer = param0;
-    this.line_no = param1;
-    this.pending = param2;
-    this.warn = param3;
-    this.enc = param4;
-    this.finished = param5;
-    this.eof_seen = param6;
+  function _M0TP27mik1e806dxfkit9RawRecord(param0, param1, param2) {
+    this.section = param0;
+    this.kind = param1;
+    this.tags = param2;
+  }
+  function _M0DTPC16result6ResultGdsE3Err(param0) {
+    this._0 = param0;
+  }
+  _M0DTPC16result6ResultGdsE3Err.prototype.$tag = 0;
+  function _M0DTPC16result6ResultGdsE2Ok(param0) {
+    this._0 = param0;
+  }
+  _M0DTPC16result6ResultGdsE2Ok.prototype.$tag = 1;
+  function _M0TP27mik1e806dxfkit9TagStream(param0, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13) {
+    this.prefix = param0;
+    this.line = param1;
+    this.line_no = param2;
+    this.pending = param3;
+    this.warn = param4;
+    this.enc = param5;
+    this.finished = param6;
+    this.eof_seen = param7;
+    this.skip_lf = param8;
+    this.limits = param9;
+    this.bytes = param10;
+    this.tags = param11;
+    this.records = param12;
+    this.limited = param13;
   }
   function _M0DTP27mik1e806dxfkit8Encoding4Utf8() {}
   _M0DTP27mik1e806dxfkit8Encoding4Utf8.prototype.$tag = 0;
@@ -632,14 +750,25 @@
     this.placed = param0;
     this.warnings = param1;
   }
-  function _M0TP27mik1e806dxfkit9ExpandCtx(param0, param1, param2, param3, param4, param5, param6) {
+  function _M0TPB9ArrayViewGUsRP27mik1e806dxfkit5BlockEE(param0, param1, param2) {
+    this.buf = param0;
+    this.start = param1;
+    this.end = param2;
+  }
+  function _M0TPB9ArrayViewGUsbEE(param0, param1, param2) {
+    this.buf = param0;
+    this.start = param1;
+    this.end = param2;
+  }
+  function _M0TP27mik1e806dxfkit9ExpandCtx(param0, param1, param2, param3, param4, param5, param6, param7) {
     this.blocks = param0;
-    this.tol = param1;
-    this.warnings = param2;
-    this.limits = param3;
-    this.visits = param4;
-    this.points = param5;
-    this.stopped = param6;
+    this.duplicates = param1;
+    this.tol = param2;
+    this.warnings = param3;
+    this.limits = param4;
+    this.visits = param5;
+    this.points = param6;
+    this.stopped = param7;
   }
   function _M0TP27mik1e806dxfkit6Placed(param0, param1, param2) {
     this.entity = param0;
@@ -657,6 +786,11 @@
   function _M0TP27mik1e806dxfkit6Header(param0) {
     this.vars = param0;
   }
+  function _M0TPB9ArrayViewGUiRPB5ArrayGRP27mik1e806dxfkit4Vec2EEE(param0, param1, param2) {
+    this.buf = param0;
+    this.start = param1;
+    this.end = param2;
+  }
   function _M0TP27mik1e806dxfkit6CutSeg(param0, param1, param2, param3, param4, param5, param6, param7, param8, param9) {
     this.a = param0;
     this.b = param1;
@@ -669,8 +803,17 @@
     this.count = param8;
     this.closed = param9;
   }
+  function _M0TPB9ArrayViewGUlbEE(param0, param1, param2) {
+    this.buf = param0;
+    this.start = param1;
+    this.end = param2;
+  }
   function _M0TP27mik1e806dxfkit6Report(param0) {
     this.findings = param0;
+  }
+  function _M0TP27mik1e806dxfkit9CheckWork(param0, param1) {
+    this.remaining = param0;
+    this.stopped = param1;
   }
   function _M0TP27mik1e806dxfkit15DrawingAnalysis(param0, param1, param2) {
     this.report = param0;
@@ -714,7 +857,10 @@
   const _M0FPB18double__min__value = $i64_reinterpret_f64(18442240474082181119n);
   const _M0MPB4Iter4nextN6constrS9909GUsRPB4JsonEE = 0;
   const _M0MPB4Iter4nextN6constrS9910GUsRPB4JsonEE = 0;
+  const _M0MPB4Iter4nextN6constrS9909GRPB5ArrayGRP27mik1e806dxfkit4Vec2EE = 0;
+  const _M0MPB4Iter4nextN6constrS9910GRPB5ArrayGRP27mik1e806dxfkit4Vec2EE = 0;
   const _M0MPB4Iter3newN6constrS9917GUsRPB4JsonEE = 0;
+  const _M0MPB4Iter3newN6constrS9917GRPB5ArrayGRP27mik1e806dxfkit4Vec2EE = 0;
   const _M0FPC16double14not__a__number = $i64_reinterpret_f64(9221120237041090561n);
   const _M0FPC16double8infinity = $i64_reinterpret_f64(9218868437227405312n);
   const _M0FPC16double13neg__infinity = $i64_reinterpret_f64(18442240474082181120n);
@@ -796,98 +942,108 @@
   const _M0FPC28internal7strconv10int__pow10 = [1n, 10n, 100n, 1000n, 10000n, 100000n, 1000000n, 10000000n, 100000000n, 1000000000n, 10000000000n, 100000000000n, 1000000000000n, 10000000000000n, 100000000000000n, 1000000000000000n];
   const _M0FPC28internal7strconv5table = [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1e+012, 1e+013, 1e+014, 1e+015, 1e+016, 1e+017, 1e+018, 1e+019, 1e+020, 1e+021, 1e+022, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   const _M0FPC28internal7strconv12checked__mulN6constrS1163 = 0n;
-  const _M0FP27mik1e806dxfkit12parse__layerN3subS1086 = "AcDbLayerTableRecord";
-  const _M0FP27mik1e806dxfkit21parse__codepage__nameN7_2abindS1830 = "ANSI_";
-  const _M0MP27mik1e806dxfkit7Drawing20expand__with__limitsN7_2abindS2411 = "/";
-  const _M0MP27mik1e806dxfkit4Vec34zeroN6recordS3020 = new _M0TP27mik1e806dxfkit4Vec3(0, 0, 0);
-  const _M0MP27mik1e806dxfkit4Vec24zeroN6recordS3032 = new _M0TP27mik1e806dxfkit4Vec2(0, 0);
-  const _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3033 = new _M0TP27mik1e806dxfkit4Vec2(1e+308, 1e+308);
-  const _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3034 = new _M0TP27mik1e806dxfkit4Vec2(-1e+308, -1e+308);
-  const _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3035 = new _M0TP27mik1e806dxfkit5Aabb2(_M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3033, _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3034);
-  const _M0FP27mik1e806dxfkit17expansion__limitsN6recordS3100 = new _M0TP27mik1e806dxfkit12ExpandLimits(10000, 200000, 100000);
+  const _M0FP27mik1e806dxfkit12parse__layerN3subS1178 = "AcDbLayerTableRecord";
+  const _M0FP27mik1e806dxfkit21parse__codepage__nameN7_2abindS2050 = "ANSI_";
+  const _M0MP27mik1e806dxfkit7Drawing20expand__with__limitsN7_2abindS2629 = "/";
+  const _M0MP27mik1e806dxfkit4Vec34zeroN6recordS3299 = new _M0TP27mik1e806dxfkit4Vec3(0, 0, 0);
+  const _M0MP27mik1e806dxfkit4Vec24zeroN6recordS3313 = new _M0TP27mik1e806dxfkit4Vec2(0, 0);
+  const _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3314 = new _M0TP27mik1e806dxfkit4Vec2(1e+308, 1e+308);
+  const _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3315 = new _M0TP27mik1e806dxfkit4Vec2(-1e+308, -1e+308);
+  const _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3316 = new _M0TP27mik1e806dxfkit5Aabb2(_M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3314, _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3315);
+  const _M0MP27mik1e806dxfkit10ReadLimits7defaultN6recordS3352 = new _M0TP27mik1e806dxfkit10ReadLimits(67108864, 1048576, 1000000, 200000, 1000, 1048576);
+  const _M0FP27mik1e806dxfkit17expansion__limitsN6recordS3364 = new _M0TP27mik1e806dxfkit12ExpandLimits(10000, 200000, 100000);
+  const _M0MP27mik1e806dxfkit14GeometryBudget7defaultN6recordS3387 = new _M0TP27mik1e806dxfkit14GeometryBudget(1000000);
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3252 = { _0: 60, _1: 79 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3253 = { _0: 170, _1: 179 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3254 = { _0: 270, _1: 289 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3255 = { _0: 370, _1: 389 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3256 = { _0: 400, _1: 409 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3257 = { _0: 1060, _1: 1070 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3258 = { _0: 90, _1: 99 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3259 = { _0: 420, _1: 429 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3260 = { _0: 440, _1: 459 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3261 = { _0: 1071, _1: 1071 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3262 = { _0: 160, _1: 169 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3263 = { _0: 10, _1: 59 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3264 = { _0: 110, _1: 149 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3265 = { _0: 210, _1: 239 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3266 = { _0: 460, _1: 469 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3267 = { _0: 1010, _1: 1059 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3268 = { _0: 290, _1: 299 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3269 = { _0: 310, _1: 319 };
+  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3270 = { _0: 1004, _1: 1004 };
   const _M0FPC28internal7strconv17check__underscoreN25_2atransition__table__222S230 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 5, 5, 5, 5, 5, 0, 1, 2, 5];
   const _M0FPC28internal7strconv15parse__inf__nanN25_2atransition__table__304S312 = [14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 3, 4, 14, 14, 14, 14, 14, 14, 14, 7, 14, 14, 14, 14, 5, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 6, 14, 14, 14, 0, 14, 14, 14, 14, 14, 14, 14, 14, 14, 8, 14, 14, 14, 14, 14, 1, 14, 14, 9, 14, 14, 14, 14, 14, 14, 14, 14, 10, 14, 14, 14, 14, 14, 14, 11, 14, 14, 14, 14, 14, 14, 14, 14, 14, 12, 14, 14, 14, 14, 14, 14, 14, 14, 13, 14, 1, 14, 14, 14, 14, 14, 14, 14];
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3039 = { _0: 60, _1: 79 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3040 = { _0: 170, _1: 179 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3041 = { _0: 270, _1: 289 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3042 = { _0: 370, _1: 389 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3043 = { _0: 400, _1: 409 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3044 = { _0: 1060, _1: 1070 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3045 = { _0: 90, _1: 99 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3046 = { _0: 420, _1: 429 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3047 = { _0: 440, _1: 459 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3048 = { _0: 1071, _1: 1071 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3049 = { _0: 160, _1: 169 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3050 = { _0: 10, _1: 59 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3051 = { _0: 110, _1: 149 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3052 = { _0: 210, _1: 239 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3053 = { _0: 460, _1: 469 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3054 = { _0: 1010, _1: 1059 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3055 = { _0: 290, _1: 299 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3056 = { _0: 310, _1: 319 };
-  const _M0FP27mik1e806dxfkit10code__typeN5tupleS3057 = { _0: 1004, _1: 1004 };
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3090 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效整数或超出32位范围");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3091 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("数值超出16位范围");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3092 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效浮点数");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3093 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("数值必须有限");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3094 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效64位整数");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3095 = new _M0DTP27mik1e806dxfkit8TagValue4Bool(false);
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3096 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(_M0FP27mik1e806dxfkit12parse__valueN6constrS3095);
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3097 = new _M0DTP27mik1e806dxfkit8TagValue4Bool(true);
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3098 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(_M0FP27mik1e806dxfkit12parse__valueN6constrS3097);
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3099 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("布尔数值必须为0或1");
-  const _M0MP27mik1e806dxfkit7Drawing16check__expansionN6recordS3123 = new _M0TP27mik1e806dxfkit7Finding("参数", 2, "容差必须是正的有限数字，最小净距必须是非负有限数字");
-  const _M0MP27mik1e806dxfkit7Drawing16check__expansionN6recordS3124 = new _M0TP27mik1e806dxfkit7Finding("检查覆盖", 1, "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据");
-  const _M0FP27mik1e806dxfkit13world__to__xyN6constrS3029 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("已转换 WCS，但轮廓不在 Z=0 的 XY 检查平面");
-  const _M0FP27mik1e806dxfkit13world__to__xyN6constrS3030 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("点不在 XY 检查平面");
-  const _M0FP27mik1e806dxfkit13world__to__xyN6constrS3031 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("文字插入点不在 XY 检查平面");
-  const _M0MP27mik1e806dxfkit3Ocs15from__extrusionN6constrS2993 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit3OcssE3Err("OCS 挤出方向必须是有限非零向量");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2994 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("离散容差必须是正的有限数字");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2995 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条次数、控制点数或节点数无效（次数上限32，控制点上限4096）");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2996 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条权重数必须为零或等于控制点数");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2997 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条节点必须有限且不递减");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2998 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条没有非空参数域");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2999 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条需要有限坐标与正的有限权重");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3000 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("节点重复次数超过次数加一");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3001 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("内部重节点使样条断裂，不能连接为单条折线");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3002 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条离散超过深度或点数上限，或遇到数值溢出；未满足指定容差");
-  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3003 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条没有可离散的节点区间");
-  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3004 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆需要有限参数、正容差；短长轴比必须大于0且不超过1");
-  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3005 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆长轴的 XY 投影长度为零");
-  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3006 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆参数跨度超出一周");
-  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3007 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆离散超过65536点上限");
-  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3008 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("离散容差必须是正的有限数字");
-  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3009 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("圆离散需要超过4096段，或半径非有限；未满足指定容差");
-  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3010 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("圆弧参数必须有限");
-  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3011 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("圆弧离散超过4096段上限；未满足指定容差");
-  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3012 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("多段线 bulge 必须有限");
-  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3013 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("多段线圆弧超出数值或4096段上限；未满足指定容差");
-  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3014 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("离散结果含非有限坐标或字高");
-  const _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3015 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("离散容差必须是正的有限数字");
-  const _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3016 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("SOLID/TRACE 非零厚度未处理，已跳过轮廓");
-  const _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3017 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("SOLID/TRACE 需要三个或四个完整角点");
-  const _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3018 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("SOLID/TRACE 角点必须有限");
-  const _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3019 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("SOLID/TRACE 面不平行于 XY 平面，已跳过轮廓");
-  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3021 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("离散容差必须是正的有限数字");
-  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3022 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("变换后坐标非有限");
-  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3023 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("变换后坐标非有限");
-  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3024 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("变换后坐标非有限");
-  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3025 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("二维多段线包含不一致的顶点 Z；原记录保留");
-  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3026 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("非 R12 椭圆的空间平面未离散；原记录保留");
-  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3027 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("非 R12 空间样条未离散；原记录保留");
-  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3028 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("变换后坐标或字高非有限");
-  const _M0FP27mik1e806dxfkit12layer__stateN5tupleS3101 = { _0: "#808080", _1: "" };
-  const _M0FP27mik1e806dxfkit12layer__stateN5tupleS3102 = { _0: "#808080", _1: "" };
-  const _M0FP27mik1e806dxfkit15group__sectionsN6constrS3089 = "HEADER";
-  const _M0FP37mik1e806dxfkit3web6decodeN6constrS56 = new _M0DTPC16result6ResultGzsE3Err("没有收到文件内容");
-  const _M0FP37mik1e806dxfkit3web6decodeN6constrS57 = new _M0DTPC16result6ResultGzsE3Err("文件内容解码失败，可能上传时出错了");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3354 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效整数或超出32位范围");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3355 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("数值超出16位范围");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3356 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效浮点数");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3357 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("数值必须有限");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3358 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效64位整数");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3359 = new _M0DTP27mik1e806dxfkit8TagValue4Bool(false);
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3360 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(_M0FP27mik1e806dxfkit12parse__valueN6constrS3359);
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3361 = new _M0DTP27mik1e806dxfkit8TagValue4Bool(true);
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3362 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(_M0FP27mik1e806dxfkit12parse__valueN6constrS3361);
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3363 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("布尔数值必须为0或1");
   const _M0FPB4seed = _M0FPB12random__seed();
+  const _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3388 = new _M0TP27mik1e806dxfkit7Finding("参数", 2, "容差必须是正的有限数字，最小净距必须是非负有限数字");
+  const _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3389 = new _M0TP27mik1e806dxfkit7Finding("检查覆盖", 1, "几何数值或预览资源超出安全范围；XY检查与SVG未完成");
+  const _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3390 = new _M0TP27mik1e806dxfkit7Finding("检查覆盖", 1, "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据");
+  const _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3391 = new _M0TP27mik1e806dxfkit7Finding("检查覆盖", 1, "几何候选对达到资源上限；后续拓扑/相交/净距检查未完成");
+  const _M0FP27mik1e806dxfkit13world__to__xyN6constrS3310 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("已转换 WCS，但轮廓不在 Z=0 的 XY 检查平面");
+  const _M0FP27mik1e806dxfkit13world__to__xyN6constrS3311 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("点不在 XY 检查平面");
+  const _M0FP27mik1e806dxfkit13world__to__xyN6constrS3312 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("文字插入点不在 XY 检查平面");
+  const _M0MP27mik1e806dxfkit6Record11try__doubleN6constrS3353 = new _M0DTPC16result6ResultGOdsE3Err("数值非有限");
+  const _M0MP27mik1e806dxfkit3Ocs15from__extrusionN6constrS3251 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit3OcssE3Err("OCS 挤出方向必须是有限非零向量");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3271 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("离散容差必须是正的有限数字");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3272 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条次数、控制点数或节点数无效（次数上限32，控制点上限4096）");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3273 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条权重数必须为零或等于控制点数");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3274 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条节点必须有限且不递减");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3275 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条没有非空参数域");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3276 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条参数域数值范围过大");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3277 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条需要正的有限权重");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3278 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条需要有限坐标与正的有限权重");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3279 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("节点重复次数超过次数加一");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3280 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("内部重节点使样条断裂，不能连接为单条折线");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3281 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条离散超过深度或点数上限，或遇到数值溢出；未满足指定容差");
+  const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3282 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("样条没有可离散的节点区间");
+  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3283 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆需要有限参数、正容差；短长轴比必须大于0且不超过1");
+  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3284 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆长轴的 XY 投影长度为零");
+  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3285 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆参数跨度超出一周");
+  const _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3286 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("椭圆离散超过65536点上限");
+  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3287 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("离散容差必须是正的有限数字");
+  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3288 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("圆离散需要超过4096段，或半径非有限；未满足指定容差");
+  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3289 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("圆弧参数必须有限");
+  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3290 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("圆弧离散超过4096段上限；未满足指定容差");
+  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3291 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("多段线 bulge 必须有限");
+  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3292 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("多段线圆弧超出数值或4096段上限；未满足指定容差");
+  const _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3293 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("离散结果含非有限坐标或字高");
+  const _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3294 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("离散容差必须是正的有限数字");
+  const _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3295 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("SOLID/TRACE 非零厚度未处理，已跳过轮廓");
+  const _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3296 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("SOLID/TRACE 需要三个或四个完整角点");
+  const _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3297 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("SOLID/TRACE 角点必须有限");
+  const _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3298 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE3Err("SOLID/TRACE 面不平行于 XY 平面，已跳过轮廓");
+  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3300 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("数值字段类型错误；不能用默认零生成几何");
+  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3301 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("非零厚度未重建；原记录保留，轮廓未检查");
+  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3302 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("离散容差必须是正的有限数字");
+  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3303 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("变换后坐标非有限");
+  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3304 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("变换后坐标非有限");
+  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3305 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("变换后坐标非有限");
+  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3306 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("二维多段线包含不一致的顶点 Z；原记录保留");
+  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3307 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("非 R12 椭圆的空间平面未离散；原记录保留");
+  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3308 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("非 R12 空间样条未离散；原记录保留");
+  const _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3309 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err("变换后坐标或字高非有限");
+  const _M0FP27mik1e806dxfkit12layer__stateN5tupleS3365 = { _0: "#808080", _1: "" };
+  const _M0FP27mik1e806dxfkit12layer__stateN5tupleS3366 = { _0: "#808080", _1: "" };
+  const _M0FP27mik1e806dxfkit15group__sectionsN6constrS3351 = "HEADER";
+  const _M0FP37mik1e806dxfkit3web6decodeN6constrS57 = new _M0DTPC16result6ResultGzsE3Err("文件超过64 MiB读取上限");
+  const _M0FP37mik1e806dxfkit3web6decodeN6constrS58 = new _M0DTPC16result6ResultGzsE3Err("没有收到文件内容");
+  const _M0FP37mik1e806dxfkit3web6decodeN6constrS59 = new _M0DTPC16result6ResultGzsE3Err("文件内容解码失败，可能上传时出错了");
   function _M0FPB13consume4__acc(acc, input) {
     const _p = (acc >>> 0) + ((Math.imul(input, -1028477379) | 0) >>> 0) | 0;
     const _p$2 = 17;
     return Math.imul(_p << _p$2 | (_p >>> (32 - _p$2 | 0) | 0), 668265263) | 0;
   }
-  function _M0MPC15array10FixedArray12unsafe__blitGRPB17UnsafeMaybeUninitGyEE(dst, dst_offset, src, src_offset, len) {
+  function _M0MPC15array10FixedArray12unsafe__blitGyE(dst, dst_offset, src, src_offset, len) {
     if (dst === src && dst_offset < src_offset) {
       let _tmp = 0;
       while (true) {
@@ -926,7 +1082,7 @@
       }
     }
   }
-  function _M0MPC15array10FixedArray12unsafe__blitGyE(dst, dst_offset, src, src_offset, len) {
+  function _M0MPC15array10FixedArray12unsafe__blitGRPB17UnsafeMaybeUninitGyEE(dst, dst_offset, src, src_offset, len) {
     if (dst === src && dst_offset < src_offset) {
       let _tmp = 0;
       while (true) {
@@ -1156,6 +1312,22 @@
     }
     return result;
   }
+  function _M0MPB4Iter4nextGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self) {
+    const _func = self.f;
+    const result = _func();
+    const _bind = self.size_hint;
+    if (result.$tag === 1) {
+      if (_bind === undefined) {
+      } else {
+        const _Some = _bind;
+        const _n = _Some;
+        self.size_hint = _n > 0 ? _n - 1 | 0 : _M0MPB4Iter4nextN6constrS9909GRPB5ArrayGRP27mik1e806dxfkit4Vec2EE;
+      }
+    } else {
+      self.size_hint = _M0MPB4Iter4nextN6constrS9910GRPB5ArrayGRP27mik1e806dxfkit4Vec2EE;
+    }
+    return result;
+  }
   function _M0MPC13int3Int18to__string_2einner(self, radix) {
     return _M0FPB19int__to__string__js(self, radix);
   }
@@ -1169,6 +1341,17 @@
       size_hint$2 = _n > 0 ? _n : _M0MPB4Iter3newN6constrS9917GUsRPB4JsonEE;
     }
     return new _M0TPB4IterGUsRPB4JsonEE(f, size_hint$2);
+  }
+  function _M0MPB4Iter3newGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(f, size_hint) {
+    let size_hint$2;
+    if (size_hint === undefined) {
+      size_hint$2 = undefined;
+    } else {
+      const _Some = size_hint;
+      const _n = _Some;
+      size_hint$2 = _n > 0 ? _n : _M0MPB4Iter3newN6constrS9917GRPB5ArrayGRP27mik1e806dxfkit4Vec2EE;
+    }
+    return new _M0TPB4IterGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(f, size_hint$2);
   }
   function _M0MPC15array10FixedArray21clamped__view_2einnerGkE(self, start, end) {
     const len = self.length;
@@ -1417,10 +1600,10 @@
   function _M0MPC15array5Array4pushGyE(self, value) {
     _M0MPB7JSArray4push(self, value);
   }
-  function _M0MPC15array5Array4pushGbE(self, value) {
+  function _M0MPC15array5Array4pushGiE(self, value) {
     _M0MPB7JSArray4push(self, value);
   }
-  function _M0MPC15array5Array4pushGiE(self, value) {
+  function _M0MPC15array5Array4pushGRPB5ArrayGRP27mik1e806dxfkit3TagEE(self, value) {
     _M0MPB7JSArray4push(self, value);
   }
   function _M0MPC15array5Array4pushGdE(self, value) {
@@ -1616,6 +1799,30 @@
     const _bind$4 = undefined;
     return new _M0TPB3MapGsRPB4JsonE(_bind$3, 0, capacity$2, _bind, _bind$2, _bind$4, -1);
   }
+  function _M0FPB8new__mapGsbE(capacity) {
+    const capacity$2 = _M0MPC13int3Int20next__power__of__two(capacity);
+    const _bind = capacity$2 - 1 | 0;
+    const _bind$2 = (Math.imul(capacity$2, 13) | 0) / 16 | 0;
+    const _bind$3 = $make_array_len_and_init(capacity$2, undefined);
+    const _bind$4 = undefined;
+    return new _M0TPB3MapGsbE(_bind$3, 0, capacity$2, _bind, _bind$2, _bind$4, -1);
+  }
+  function _M0FPB8new__mapGlbE(capacity) {
+    const capacity$2 = _M0MPC13int3Int20next__power__of__two(capacity);
+    const _bind = capacity$2 - 1 | 0;
+    const _bind$2 = (Math.imul(capacity$2, 13) | 0) / 16 | 0;
+    const _bind$3 = $make_array_len_and_init(capacity$2, undefined);
+    const _bind$4 = undefined;
+    return new _M0TPB3MapGlbE(_bind$3, 0, capacity$2, _bind, _bind$2, _bind$4, -1);
+  }
+  function _M0FPB8new__mapGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(capacity) {
+    const capacity$2 = _M0MPC13int3Int20next__power__of__two(capacity);
+    const _bind = capacity$2 - 1 | 0;
+    const _bind$2 = (Math.imul(capacity$2, 13) | 0) / 16 | 0;
+    const _bind$3 = $make_array_len_and_init(capacity$2, undefined);
+    const _bind$4 = undefined;
+    return new _M0TPB3MapGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(_bind$3, 0, capacity$2, _bind, _bind$2, _bind$4, -1);
+  }
   function _M0FPB21capacity__for__length(length) {
     let capacity = _M0MPC13int3Int20next__power__of__two(length);
     const _p = capacity;
@@ -1625,6 +1832,66 @@
     return capacity;
   }
   function _M0MPB3Map20add__entry__to__tailGsRPB4JsonE(self, idx, entry) {
+    const _bind = self.tail;
+    if (_bind === -1) {
+      self.head = entry;
+    } else {
+      const _tmp = self.entries;
+      const _p = _bind >>> 0 < _tmp.length ? _tmp[_bind] : $oob();
+      let _tmp$2;
+      if (_p === undefined) {
+        _tmp$2 = $panic();
+      } else {
+        const _p$2 = _p;
+        _tmp$2 = _p$2;
+      }
+      _tmp$2.next = entry;
+    }
+    self.tail = idx;
+    self.entries[idx] = entry;
+    self.size = self.size + 1 | 0;
+  }
+  function _M0MPB3Map20add__entry__to__tailGsbE(self, idx, entry) {
+    const _bind = self.tail;
+    if (_bind === -1) {
+      self.head = entry;
+    } else {
+      const _tmp = self.entries;
+      const _p = _bind >>> 0 < _tmp.length ? _tmp[_bind] : $oob();
+      let _tmp$2;
+      if (_p === undefined) {
+        _tmp$2 = $panic();
+      } else {
+        const _p$2 = _p;
+        _tmp$2 = _p$2;
+      }
+      _tmp$2.next = entry;
+    }
+    self.tail = idx;
+    self.entries[idx] = entry;
+    self.size = self.size + 1 | 0;
+  }
+  function _M0MPB3Map20add__entry__to__tailGlbE(self, idx, entry) {
+    const _bind = self.tail;
+    if (_bind === -1) {
+      self.head = entry;
+    } else {
+      const _tmp = self.entries;
+      const _p = _bind >>> 0 < _tmp.length ? _tmp[_bind] : $oob();
+      let _tmp$2;
+      if (_p === undefined) {
+        _tmp$2 = $panic();
+      } else {
+        const _p$2 = _p;
+        _tmp$2 = _p$2;
+      }
+      _tmp$2.next = entry;
+    }
+    self.tail = idx;
+    self.entries[idx] = entry;
+    self.size = self.size + 1 | 0;
+  }
+  function _M0MPB3Map20add__entry__to__tailGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, idx, entry) {
     const _bind = self.tail;
     if (_bind === -1) {
       self.head = entry;
@@ -1655,6 +1922,39 @@
     }
     self.entries[new_idx] = entry;
   }
+  function _M0MPB3Map10set__entryGsbE(self, entry, new_idx) {
+    const _bind = entry.next;
+    if (_bind === undefined) {
+      self.tail = new_idx;
+    } else {
+      const _Some = _bind;
+      const _next = _Some;
+      _next.prev = new_idx;
+    }
+    self.entries[new_idx] = entry;
+  }
+  function _M0MPB3Map10set__entryGlbE(self, entry, new_idx) {
+    const _bind = entry.next;
+    if (_bind === undefined) {
+      self.tail = new_idx;
+    } else {
+      const _Some = _bind;
+      const _next = _Some;
+      _next.prev = new_idx;
+    }
+    self.entries[new_idx] = entry;
+  }
+  function _M0MPB3Map10set__entryGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, entry, new_idx) {
+    const _bind = entry.next;
+    if (_bind === undefined) {
+      self.tail = new_idx;
+    } else {
+      const _Some = _bind;
+      const _next = _Some;
+      _next.prev = new_idx;
+    }
+    self.entries[new_idx] = entry;
+  }
   function _M0MPB3Map10push__awayGsRPB4JsonE(self, idx, entry) {
     let _tmp = entry.psl + 1 | 0;
     let _tmp$2 = idx + 1 & self.capacity_mask;
@@ -1674,6 +1974,99 @@
         if (psl > _curr_entry.psl) {
           entry$2.psl = psl;
           _M0MPB3Map10set__entryGsRPB4JsonE(self, entry$2, idx$2);
+          _tmp = _curr_entry.psl + 1 | 0;
+          _tmp$2 = idx$2 + 1 & self.capacity_mask;
+          _tmp$3 = _curr_entry;
+          continue;
+        } else {
+          _tmp = psl + 1 | 0;
+          _tmp$2 = idx$2 + 1 & self.capacity_mask;
+          continue;
+        }
+      }
+    }
+  }
+  function _M0MPB3Map10push__awayGsbE(self, idx, entry) {
+    let _tmp = entry.psl + 1 | 0;
+    let _tmp$2 = idx + 1 & self.capacity_mask;
+    let _tmp$3 = entry;
+    while (true) {
+      const psl = _tmp;
+      const idx$2 = _tmp$2;
+      const entry$2 = _tmp$3;
+      const _bind = self.entries[idx$2];
+      if (_bind === undefined) {
+        entry$2.psl = psl;
+        _M0MPB3Map10set__entryGsbE(self, entry$2, idx$2);
+        return;
+      } else {
+        const _Some = _bind;
+        const _curr_entry = _Some;
+        if (psl > _curr_entry.psl) {
+          entry$2.psl = psl;
+          _M0MPB3Map10set__entryGsbE(self, entry$2, idx$2);
+          _tmp = _curr_entry.psl + 1 | 0;
+          _tmp$2 = idx$2 + 1 & self.capacity_mask;
+          _tmp$3 = _curr_entry;
+          continue;
+        } else {
+          _tmp = psl + 1 | 0;
+          _tmp$2 = idx$2 + 1 & self.capacity_mask;
+          continue;
+        }
+      }
+    }
+  }
+  function _M0MPB3Map10push__awayGlbE(self, idx, entry) {
+    let _tmp = entry.psl + 1 | 0;
+    let _tmp$2 = idx + 1 & self.capacity_mask;
+    let _tmp$3 = entry;
+    while (true) {
+      const psl = _tmp;
+      const idx$2 = _tmp$2;
+      const entry$2 = _tmp$3;
+      const _bind = self.entries[idx$2];
+      if (_bind === undefined) {
+        entry$2.psl = psl;
+        _M0MPB3Map10set__entryGlbE(self, entry$2, idx$2);
+        return;
+      } else {
+        const _Some = _bind;
+        const _curr_entry = _Some;
+        if (psl > _curr_entry.psl) {
+          entry$2.psl = psl;
+          _M0MPB3Map10set__entryGlbE(self, entry$2, idx$2);
+          _tmp = _curr_entry.psl + 1 | 0;
+          _tmp$2 = idx$2 + 1 & self.capacity_mask;
+          _tmp$3 = _curr_entry;
+          continue;
+        } else {
+          _tmp = psl + 1 | 0;
+          _tmp$2 = idx$2 + 1 & self.capacity_mask;
+          continue;
+        }
+      }
+    }
+  }
+  function _M0MPB3Map10push__awayGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, idx, entry) {
+    let _tmp = entry.psl + 1 | 0;
+    let _tmp$2 = idx + 1 & self.capacity_mask;
+    let _tmp$3 = entry;
+    while (true) {
+      const psl = _tmp;
+      const idx$2 = _tmp$2;
+      const entry$2 = _tmp$3;
+      const _bind = self.entries[idx$2];
+      if (_bind === undefined) {
+        entry$2.psl = psl;
+        _M0MPB3Map10set__entryGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, entry$2, idx$2);
+        return;
+      } else {
+        const _Some = _bind;
+        const _curr_entry = _Some;
+        if (psl > _curr_entry.psl) {
+          entry$2.psl = psl;
+          _M0MPB3Map10set__entryGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, entry$2, idx$2);
           _tmp = _curr_entry.psl + 1 | 0;
           _tmp$2 = idx$2 + 1 & self.capacity_mask;
           _tmp$3 = _curr_entry;
@@ -1716,6 +2109,96 @@
       }
     }
   }
+  function _M0MPB3Map20rehash__place__entryGsbE(self, outer) {
+    const hash = outer.hash;
+    let _tmp = 0;
+    let _tmp$2 = hash & self.capacity_mask;
+    while (true) {
+      const psl = _tmp;
+      const idx = _tmp$2;
+      const _bind = self.entries[idx];
+      if (_bind === undefined) {
+        outer.psl = psl;
+        outer.prev = self.tail;
+        _M0MPB3Map20add__entry__to__tailGsbE(self, idx, outer);
+        return undefined;
+      } else {
+        const _Some = _bind;
+        const _curr = _Some;
+        if (psl > _curr.psl) {
+          _M0MPB3Map10push__awayGsbE(self, idx, _curr);
+          outer.psl = psl;
+          outer.prev = self.tail;
+          _M0MPB3Map20add__entry__to__tailGsbE(self, idx, outer);
+          return undefined;
+        } else {
+          _tmp = psl + 1 | 0;
+          _tmp$2 = idx + 1 & self.capacity_mask;
+          continue;
+        }
+      }
+    }
+  }
+  function _M0MPB3Map20rehash__place__entryGlbE(self, outer) {
+    const hash = outer.hash;
+    let _tmp = 0;
+    let _tmp$2 = hash & self.capacity_mask;
+    while (true) {
+      const psl = _tmp;
+      const idx = _tmp$2;
+      const _bind = self.entries[idx];
+      if (_bind === undefined) {
+        outer.psl = psl;
+        outer.prev = self.tail;
+        _M0MPB3Map20add__entry__to__tailGlbE(self, idx, outer);
+        return undefined;
+      } else {
+        const _Some = _bind;
+        const _curr = _Some;
+        if (psl > _curr.psl) {
+          _M0MPB3Map10push__awayGlbE(self, idx, _curr);
+          outer.psl = psl;
+          outer.prev = self.tail;
+          _M0MPB3Map20add__entry__to__tailGlbE(self, idx, outer);
+          return undefined;
+        } else {
+          _tmp = psl + 1 | 0;
+          _tmp$2 = idx + 1 & self.capacity_mask;
+          continue;
+        }
+      }
+    }
+  }
+  function _M0MPB3Map20rehash__place__entryGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, outer) {
+    const hash = outer.hash;
+    let _tmp = 0;
+    let _tmp$2 = hash & self.capacity_mask;
+    while (true) {
+      const psl = _tmp;
+      const idx = _tmp$2;
+      const _bind = self.entries[idx];
+      if (_bind === undefined) {
+        outer.psl = psl;
+        outer.prev = self.tail;
+        _M0MPB3Map20add__entry__to__tailGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, idx, outer);
+        return undefined;
+      } else {
+        const _Some = _bind;
+        const _curr = _Some;
+        if (psl > _curr.psl) {
+          _M0MPB3Map10push__awayGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, idx, _curr);
+          outer.psl = psl;
+          outer.prev = self.tail;
+          _M0MPB3Map20add__entry__to__tailGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, idx, outer);
+          return undefined;
+        } else {
+          _tmp = psl + 1 | 0;
+          _tmp$2 = idx + 1 & self.capacity_mask;
+          continue;
+        }
+      }
+    }
+  }
   function _M0MPB3Map4growGsRPB4JsonE(self) {
     const old_head = self.head;
     const new_capacity = self.capacity << 1;
@@ -1738,6 +2221,87 @@
         const next_in_chain = _e.next;
         _e.next = undefined;
         _M0MPB3Map20rehash__place__entryGsRPB4JsonE(self, _e);
+        _tmp = next_in_chain;
+        continue;
+      }
+    }
+  }
+  function _M0MPB3Map4growGsbE(self) {
+    const old_head = self.head;
+    const new_capacity = self.capacity << 1;
+    self.entries = $make_array_len_and_init(new_capacity, undefined);
+    self.capacity = new_capacity;
+    self.capacity_mask = new_capacity - 1 | 0;
+    const _p = self.capacity;
+    self.grow_at = (Math.imul(_p, 13) | 0) / 16 | 0;
+    self.size = 0;
+    self.head = undefined;
+    self.tail = -1;
+    let _tmp = old_head;
+    while (true) {
+      const x = _tmp;
+      if (x === undefined) {
+        return;
+      } else {
+        const _Some = x;
+        const _e = _Some;
+        const next_in_chain = _e.next;
+        _e.next = undefined;
+        _M0MPB3Map20rehash__place__entryGsbE(self, _e);
+        _tmp = next_in_chain;
+        continue;
+      }
+    }
+  }
+  function _M0MPB3Map4growGlbE(self) {
+    const old_head = self.head;
+    const new_capacity = self.capacity << 1;
+    self.entries = $make_array_len_and_init(new_capacity, undefined);
+    self.capacity = new_capacity;
+    self.capacity_mask = new_capacity - 1 | 0;
+    const _p = self.capacity;
+    self.grow_at = (Math.imul(_p, 13) | 0) / 16 | 0;
+    self.size = 0;
+    self.head = undefined;
+    self.tail = -1;
+    let _tmp = old_head;
+    while (true) {
+      const x = _tmp;
+      if (x === undefined) {
+        return;
+      } else {
+        const _Some = x;
+        const _e = _Some;
+        const next_in_chain = _e.next;
+        _e.next = undefined;
+        _M0MPB3Map20rehash__place__entryGlbE(self, _e);
+        _tmp = next_in_chain;
+        continue;
+      }
+    }
+  }
+  function _M0MPB3Map4growGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self) {
+    const old_head = self.head;
+    const new_capacity = self.capacity << 1;
+    self.entries = $make_array_len_and_init(new_capacity, undefined);
+    self.capacity = new_capacity;
+    self.capacity_mask = new_capacity - 1 | 0;
+    const _p = self.capacity;
+    self.grow_at = (Math.imul(_p, 13) | 0) / 16 | 0;
+    self.size = 0;
+    self.head = undefined;
+    self.tail = -1;
+    let _tmp = old_head;
+    while (true) {
+      const x = _tmp;
+      if (x === undefined) {
+        return;
+      } else {
+        const _Some = x;
+        const _e = _Some;
+        const next_in_chain = _e.next;
+        _e.next = undefined;
+        _M0MPB3Map20rehash__place__entryGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, _e);
         _tmp = next_in_chain;
         continue;
       }
@@ -1789,8 +2353,204 @@
       }
     }
   }
+  function _M0MPB3Map15set__with__hashGsbE(self, key, value, hash) {
+    let _tmp = 0;
+    let _tmp$2 = hash & self.capacity_mask;
+    while (true) {
+      const psl = _tmp;
+      const idx = _tmp$2;
+      const _bind = self.entries[idx];
+      if (_bind === undefined) {
+        if (self.size >= self.grow_at) {
+          _M0MPB3Map4growGsbE(self);
+          _tmp = 0;
+          _tmp$2 = hash & self.capacity_mask;
+          continue;
+        }
+        const _bind$2 = self.tail;
+        const _bind$3 = undefined;
+        const entry = new _M0TPB5EntryGsbE(_bind$2, _bind$3, psl, hash, key, value);
+        _M0MPB3Map20add__entry__to__tailGsbE(self, idx, entry);
+        return undefined;
+      } else {
+        const _Some = _bind;
+        const _curr_entry = _Some;
+        if (_curr_entry.hash === hash && _curr_entry.key === key) {
+          _curr_entry.value = value;
+          return undefined;
+        }
+        if (psl > _curr_entry.psl) {
+          if (self.size >= self.grow_at) {
+            _M0MPB3Map4growGsbE(self);
+            _tmp = 0;
+            _tmp$2 = hash & self.capacity_mask;
+            continue;
+          }
+          _M0MPB3Map10push__awayGsbE(self, idx, _curr_entry);
+          const _bind$2 = self.tail;
+          const _bind$3 = undefined;
+          const entry = new _M0TPB5EntryGsbE(_bind$2, _bind$3, psl, hash, key, value);
+          _M0MPB3Map20add__entry__to__tailGsbE(self, idx, entry);
+          return undefined;
+        }
+        _tmp = psl + 1 | 0;
+        _tmp$2 = idx + 1 & self.capacity_mask;
+        continue;
+      }
+    }
+  }
+  function _M0MPB3Map15set__with__hashGsRP27mik1e806dxfkit5BlockE(self, key, value, hash) {
+    let _tmp = 0;
+    let _tmp$2 = hash & self.capacity_mask;
+    while (true) {
+      const psl = _tmp;
+      const idx = _tmp$2;
+      const _bind = self.entries[idx];
+      if (_bind === undefined) {
+        if (self.size >= self.grow_at) {
+          _M0MPB3Map4growGsRPB4JsonE(self);
+          _tmp = 0;
+          _tmp$2 = hash & self.capacity_mask;
+          continue;
+        }
+        const _bind$2 = self.tail;
+        const _bind$3 = undefined;
+        const entry = new _M0TPB5EntryGsRP27mik1e806dxfkit5BlockE(_bind$2, _bind$3, psl, hash, key, value);
+        _M0MPB3Map20add__entry__to__tailGsRPB4JsonE(self, idx, entry);
+        return undefined;
+      } else {
+        const _Some = _bind;
+        const _curr_entry = _Some;
+        if (_curr_entry.hash === hash && _curr_entry.key === key) {
+          _curr_entry.value = value;
+          return undefined;
+        }
+        if (psl > _curr_entry.psl) {
+          if (self.size >= self.grow_at) {
+            _M0MPB3Map4growGsRPB4JsonE(self);
+            _tmp = 0;
+            _tmp$2 = hash & self.capacity_mask;
+            continue;
+          }
+          _M0MPB3Map10push__awayGsRPB4JsonE(self, idx, _curr_entry);
+          const _bind$2 = self.tail;
+          const _bind$3 = undefined;
+          const entry = new _M0TPB5EntryGsRP27mik1e806dxfkit5BlockE(_bind$2, _bind$3, psl, hash, key, value);
+          _M0MPB3Map20add__entry__to__tailGsRPB4JsonE(self, idx, entry);
+          return undefined;
+        }
+        _tmp = psl + 1 | 0;
+        _tmp$2 = idx + 1 & self.capacity_mask;
+        continue;
+      }
+    }
+  }
+  function _M0MPB3Map15set__with__hashGlbE(self, key, value, hash) {
+    let _tmp = 0;
+    let _tmp$2 = hash & self.capacity_mask;
+    while (true) {
+      const psl = _tmp;
+      const idx = _tmp$2;
+      const _bind = self.entries[idx];
+      if (_bind === undefined) {
+        if (self.size >= self.grow_at) {
+          _M0MPB3Map4growGlbE(self);
+          _tmp = 0;
+          _tmp$2 = hash & self.capacity_mask;
+          continue;
+        }
+        const _bind$2 = self.tail;
+        const _bind$3 = undefined;
+        const entry = new _M0TPB5EntryGlbE(_bind$2, _bind$3, psl, hash, key, value);
+        _M0MPB3Map20add__entry__to__tailGlbE(self, idx, entry);
+        return undefined;
+      } else {
+        const _Some = _bind;
+        const _curr_entry = _Some;
+        if (_curr_entry.hash === hash && BigInt.asUintN(64, _curr_entry.key) === BigInt.asUintN(64, key)) {
+          _curr_entry.value = value;
+          return undefined;
+        }
+        if (psl > _curr_entry.psl) {
+          if (self.size >= self.grow_at) {
+            _M0MPB3Map4growGlbE(self);
+            _tmp = 0;
+            _tmp$2 = hash & self.capacity_mask;
+            continue;
+          }
+          _M0MPB3Map10push__awayGlbE(self, idx, _curr_entry);
+          const _bind$2 = self.tail;
+          const _bind$3 = undefined;
+          const entry = new _M0TPB5EntryGlbE(_bind$2, _bind$3, psl, hash, key, value);
+          _M0MPB3Map20add__entry__to__tailGlbE(self, idx, entry);
+          return undefined;
+        }
+        _tmp = psl + 1 | 0;
+        _tmp$2 = idx + 1 & self.capacity_mask;
+        continue;
+      }
+    }
+  }
+  function _M0MPB3Map15set__with__hashGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, key, value, hash) {
+    let _tmp = 0;
+    let _tmp$2 = hash & self.capacity_mask;
+    while (true) {
+      const psl = _tmp;
+      const idx = _tmp$2;
+      const _bind = self.entries[idx];
+      if (_bind === undefined) {
+        if (self.size >= self.grow_at) {
+          _M0MPB3Map4growGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self);
+          _tmp = 0;
+          _tmp$2 = hash & self.capacity_mask;
+          continue;
+        }
+        const _bind$2 = self.tail;
+        const _bind$3 = undefined;
+        const entry = new _M0TPB5EntryGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(_bind$2, _bind$3, psl, hash, key, value);
+        _M0MPB3Map20add__entry__to__tailGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, idx, entry);
+        return undefined;
+      } else {
+        const _Some = _bind;
+        const _curr_entry = _Some;
+        if (_curr_entry.hash === hash && _curr_entry.key === key) {
+          _curr_entry.value = value;
+          return undefined;
+        }
+        if (psl > _curr_entry.psl) {
+          if (self.size >= self.grow_at) {
+            _M0MPB3Map4growGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self);
+            _tmp = 0;
+            _tmp$2 = hash & self.capacity_mask;
+            continue;
+          }
+          _M0MPB3Map10push__awayGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, idx, _curr_entry);
+          const _bind$2 = self.tail;
+          const _bind$3 = undefined;
+          const entry = new _M0TPB5EntryGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(_bind$2, _bind$3, psl, hash, key, value);
+          _M0MPB3Map20add__entry__to__tailGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, idx, entry);
+          return undefined;
+        }
+        _tmp = psl + 1 | 0;
+        _tmp$2 = idx + 1 & self.capacity_mask;
+        continue;
+      }
+    }
+  }
   function _M0MPB3Map3setGsRPB4JsonE(self, key, value) {
     _M0MPB3Map15set__with__hashGsRPB4JsonE(self, key, value, _M0IPC16string6StringPB4Hash4hash(key));
+  }
+  function _M0MPB3Map3setGsbE(self, key, value) {
+    _M0MPB3Map15set__with__hashGsbE(self, key, value, _M0IPC16string6StringPB4Hash4hash(key));
+  }
+  function _M0MPB3Map3setGsRP27mik1e806dxfkit5BlockE(self, key, value) {
+    _M0MPB3Map15set__with__hashGsRP27mik1e806dxfkit5BlockE(self, key, value, _M0IPC16string6StringPB4Hash4hash(key));
+  }
+  function _M0MPB3Map3setGlbE(self, key, value) {
+    _M0MPB3Map15set__with__hashGlbE(self, key, value, _M0IPC15int645Int64PB4Hash4hash(key));
+  }
+  function _M0MPB3Map3setGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, key, value) {
+    _M0MPB3Map15set__with__hashGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, key, value, _M0IPC13int3IntPB4Hash4hash(key));
   }
   function _M0MPB3Map3MapGsRPB4JsonE(arr, capacity) {
     const length = arr.end - arr.start | 0;
@@ -1819,6 +2579,214 @@
     }
     return m;
   }
+  function _M0MPB3Map3MapGsRP27mik1e806dxfkit5BlockE(arr, capacity) {
+    const length = arr.end - arr.start | 0;
+    let capacity$2;
+    if (capacity === undefined) {
+      capacity$2 = length === 0 ? 8 : _M0FPB21capacity__for__length(length);
+    } else {
+      const _Some = capacity;
+      const _capacity = _Some;
+      const _p = _M0FPB21capacity__for__length(length);
+      capacity$2 = _capacity > _p ? _capacity : _p;
+    }
+    const m = _M0FPB8new__mapGsRPB4JsonE(capacity$2);
+    const _bind = arr.end - arr.start | 0;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind) {
+        const e = arr.buf[arr.start + _ | 0];
+        _M0MPB3Map3setGsRP27mik1e806dxfkit5BlockE(m, e._0, e._1);
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return m;
+  }
+  function _M0MPB3Map3MapGsbE(arr, capacity) {
+    const length = arr.end - arr.start | 0;
+    let capacity$2;
+    if (capacity === undefined) {
+      capacity$2 = length === 0 ? 8 : _M0FPB21capacity__for__length(length);
+    } else {
+      const _Some = capacity;
+      const _capacity = _Some;
+      const _p = _M0FPB21capacity__for__length(length);
+      capacity$2 = _capacity > _p ? _capacity : _p;
+    }
+    const m = _M0FPB8new__mapGsbE(capacity$2);
+    const _bind = arr.end - arr.start | 0;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind) {
+        const e = arr.buf[arr.start + _ | 0];
+        _M0MPB3Map3setGsbE(m, e._0, e._1);
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return m;
+  }
+  function _M0MPB3Map3MapGlbE(arr, capacity) {
+    const length = arr.end - arr.start | 0;
+    let capacity$2;
+    if (capacity === undefined) {
+      capacity$2 = length === 0 ? 8 : _M0FPB21capacity__for__length(length);
+    } else {
+      const _Some = capacity;
+      const _capacity = _Some;
+      const _p = _M0FPB21capacity__for__length(length);
+      capacity$2 = _capacity > _p ? _capacity : _p;
+    }
+    const m = _M0FPB8new__mapGlbE(capacity$2);
+    const _bind = arr.end - arr.start | 0;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind) {
+        const e = arr.buf[arr.start + _ | 0];
+        _M0MPB3Map3setGlbE(m, e._0, e._1);
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return m;
+  }
+  function _M0MPB3Map3MapGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(arr, capacity) {
+    const length = arr.end - arr.start | 0;
+    let capacity$2;
+    if (capacity === undefined) {
+      capacity$2 = length === 0 ? 8 : _M0FPB21capacity__for__length(length);
+    } else {
+      const _Some = capacity;
+      const _capacity = _Some;
+      const _p = _M0FPB21capacity__for__length(length);
+      capacity$2 = _capacity > _p ? _capacity : _p;
+    }
+    const m = _M0FPB8new__mapGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(capacity$2);
+    const _bind = arr.end - arr.start | 0;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind) {
+        const e = arr.buf[arr.start + _ | 0];
+        _M0MPB3Map3setGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(m, e._0, e._1);
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return m;
+  }
+  function _M0MPB3Map3getGsRP27mik1e806dxfkit5BlockE(self, key) {
+    const hash = _M0IPC16string6StringPB4Hash4hash(key);
+    let _tmp = 0;
+    let _tmp$2 = hash & self.capacity_mask;
+    while (true) {
+      const i = _tmp;
+      const idx = _tmp$2;
+      const _bind = self.entries[idx];
+      if (_bind === undefined) {
+        return undefined;
+      } else {
+        const _Some = _bind;
+        const _entry = _Some;
+        if (_entry.hash === hash && _entry.key === key) {
+          return _entry.value;
+        }
+        if (i > _entry.psl) {
+          return undefined;
+        }
+        _tmp = i + 1 | 0;
+        _tmp$2 = idx + 1 & self.capacity_mask;
+        continue;
+      }
+    }
+  }
+  function _M0MPB3Map3getGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self, key) {
+    const hash = _M0IPC13int3IntPB4Hash4hash(key);
+    let _tmp = 0;
+    let _tmp$2 = hash & self.capacity_mask;
+    while (true) {
+      const i = _tmp;
+      const idx = _tmp$2;
+      const _bind = self.entries[idx];
+      if (_bind === undefined) {
+        return _M0DTPC16option6OptionGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE4None__;
+      } else {
+        const _Some = _bind;
+        const _entry = _Some;
+        if (_entry.hash === hash && _entry.key === key) {
+          return new _M0DTPC16option6OptionGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE4Some(_entry.value);
+        }
+        if (i > _entry.psl) {
+          return _M0DTPC16option6OptionGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE4None__;
+        }
+        _tmp = i + 1 | 0;
+        _tmp$2 = idx + 1 & self.capacity_mask;
+        continue;
+      }
+    }
+  }
+  function _M0MPB3Map8containsGsRP27mik1e806dxfkit5BlockE(self, key) {
+    const hash = _M0IPC16string6StringPB4Hash4hash(key);
+    let _tmp = 0;
+    let _tmp$2 = hash & self.capacity_mask;
+    while (true) {
+      const i = _tmp;
+      const idx = _tmp$2;
+      const _bind = self.entries[idx];
+      if (_bind === undefined) {
+        return false;
+      } else {
+        const _Some = _bind;
+        const _entry = _Some;
+        if (_entry.hash === hash && _entry.key === key) {
+          return true;
+        }
+        if (i > _entry.psl) {
+          return false;
+        }
+        _tmp = i + 1 | 0;
+        _tmp$2 = idx + 1 & self.capacity_mask;
+        continue;
+      }
+    }
+  }
+  function _M0MPB3Map8containsGsbE(self, key) {
+    const hash = _M0IPC16string6StringPB4Hash4hash(key);
+    let _tmp = 0;
+    let _tmp$2 = hash & self.capacity_mask;
+    while (true) {
+      const i = _tmp;
+      const idx = _tmp$2;
+      const _bind = self.entries[idx];
+      if (_bind === undefined) {
+        return false;
+      } else {
+        const _Some = _bind;
+        const _entry = _Some;
+        if (_entry.hash === hash && _entry.key === key) {
+          return true;
+        }
+        if (i > _entry.psl) {
+          return false;
+        }
+        _tmp = i + 1 | 0;
+        _tmp$2 = idx + 1 & self.capacity_mask;
+        continue;
+      }
+    }
+  }
   function _M0MPB3Map4iterGsRPB4JsonE(self) {
     const curr_entry = new _M0TPB8MutLocalGORPB5EntryGsRPB4JsonEE(self.head);
     const len = self.size;
@@ -1846,6 +2814,32 @@
       return undefined;
     }, len);
   }
+  function _M0MPB3Map6valuesGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(self) {
+    const curr_entry = new _M0TPB8MutLocalGORPB5EntryGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EEE(self.head);
+    const len = self.size;
+    const remaining = new _M0TPB8MutLocalGiE(len);
+    return _M0MPB4Iter3newGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(() => {
+      _L: {
+        if (remaining.val > 0) {
+          const _bind = curr_entry.val;
+          if (_bind === undefined) {
+            break _L;
+          } else {
+            const _Some = _bind;
+            const _x = _Some;
+            const _value = _x.value;
+            const _next = _x.next;
+            curr_entry.val = _next;
+            remaining.val = remaining.val - 1 | 0;
+            return new _M0DTPC16option6OptionGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE4Some(_value);
+          }
+        } else {
+          break _L;
+        }
+      }
+      return _M0DTPC16option6OptionGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE4None__;
+    }, len);
+  }
   function _M0MPC13int3Int8to__char(self) {
     _L: {
       if (self >= 0 && self <= 55295) {
@@ -1859,6 +2853,9 @@
       }
     }
     return self;
+  }
+  function _M0IPC15int645Int64PB4Hash4hash(self) {
+    return _M0IPC16uint646UInt64PB4Hash4hash(self);
   }
   function _M0IPC16string6StringPB4Hash4hash(self) {
     let acc = (_M0FPB4seed >>> 0) + (374761393 >>> 0) | 0;
@@ -1877,6 +2874,18 @@
       }
     }
     return _M0FPB13finalize__acc(acc);
+  }
+  function _M0IPC13int3IntPB4Hash4hash(self) {
+    const acc = (((_M0FPB4seed >>> 0) + (374761393 >>> 0) | 0) >>> 0) + (4 >>> 0) | 0;
+    return _M0FPB13finalize__acc(_M0FPB13consume4__acc(acc, self));
+  }
+  function _M0IPC16uint646UInt64PB4Hash4hash(self) {
+    const acc = (((_M0FPB4seed >>> 0) + (374761393 >>> 0) | 0) >>> 0) + (8 >>> 0) | 0;
+    const low = Number(BigInt.asUintN(32, BigInt.asUintN(64, self & 4294967295n))) | 0;
+    const high = Number(BigInt.asUintN(32, BigInt.asUintN(64, BigInt.asUintN(64, BigInt.asUintN(64, self) >> BigInt(32 & 63)) & 4294967295n))) | 0;
+    const acc$2 = _M0FPB13consume4__acc(acc, low);
+    const acc$3 = _M0FPB13consume4__acc(acc$2, high);
+    return _M0FPB13finalize__acc(acc$3);
   }
   function _M0MPC15array10FixedArray23unsafe__make__and__blitGyE(src, allocate_len, init, src_offset, dst_offset, blit_len) {
     const dst = $makebytes(allocate_len, init);
@@ -1942,6 +2951,9 @@
     const _bind = self;
     return new _M0TPB9ArrayViewGRP27mik1e806dxfkit6RecordE(_bind, lo, lo + count | 0);
   }
+  function _M0MPC15array5Array28unsafe__truncate__to__lengthGyE(self, new_len) {
+    _M0MPB7JSArray11set__length(self, new_len);
+  }
   function _M0MPC15array5Array6appendGRP27mik1e806dxfkit3TagE(self, other) {
     const old_len = self.length;
     const append_len = other.end - other.start | 0;
@@ -1974,10 +2986,6 @@
     const len = self.length;
     return index >= 0 && index < len ? self[index] : $panic();
   }
-  function _M0MPC15array5Array2atGbE(self, index) {
-    const len = self.length;
-    return index >= 0 && index < len ? self[index] : $panic();
-  }
   function _M0MPC15array5Array2atGiE(self, index) {
     const len = self.length;
     return index >= 0 && index < len ? self[index] : $panic();
@@ -1991,12 +2999,24 @@
     arr.buf[arr.start + i | 0] = arr.buf[arr.start + j | 0];
     arr.buf[arr.start + j | 0] = temp;
   }
+  function _M0MPC15array12MutArrayView4swapGiE(arr, i, j) {
+    const temp = arr.buf[arr.start + i | 0];
+    arr.buf[arr.start + i | 0] = arr.buf[arr.start + j | 0];
+    arr.buf[arr.start + j | 0] = temp;
+  }
   function _M0MPC15array12MutArrayView5sliceGRP27mik1e806dxfkit6CutSegE(arr, start, end) {
     const _bind = arr.end - arr.start | 0;
     if (start < 0 || (start > end || end > _bind)) {
       $panic();
     }
     return new _M0TPB12MutArrayViewGRP27mik1e806dxfkit6CutSegE(arr.buf, start + arr.start | 0, end + arr.start | 0);
+  }
+  function _M0MPC15array12MutArrayView5sliceGiE(arr, start, end) {
+    const _bind = arr.end - arr.start | 0;
+    if (start < 0 || (start > end || end > _bind)) {
+      $panic();
+    }
+    return new _M0TPB12MutArrayViewGiE(arr.buf, start + arr.start | 0, end + arr.start | 0);
   }
   function _M0MPC15array5Array3setGUsiEE(self, index, value) {
     const len = self.length;
@@ -2008,7 +3028,7 @@
       return;
     }
   }
-  function _M0MPC15array5Array3setGbE(self, index, value) {
+  function _M0MPC15array5Array3setGiE(self, index, value) {
     const len = self.length;
     if (index >= 0 && index < len) {
       self[index] = value;
@@ -2019,6 +3039,24 @@
     }
   }
   function _M0MPC15array12MutArrayView14rev__in__placeGRP27mik1e806dxfkit6CutSegE(arr) {
+    const len = arr.end - arr.start | 0;
+    const mid_len = len / 2 | 0;
+    let _tmp = 0;
+    while (true) {
+      const i = _tmp;
+      if (i < mid_len) {
+        const j = (len - i | 0) - 1 | 0;
+        const temp = arr.buf[arr.start + i | 0];
+        arr.buf[arr.start + i | 0] = arr.buf[arr.start + j | 0];
+        arr.buf[arr.start + j | 0] = temp;
+        _tmp = i + 1 | 0;
+        continue;
+      } else {
+        return;
+      }
+    }
+  }
+  function _M0MPC15array12MutArrayView14rev__in__placeGiE(arr) {
     const len = arr.end - arr.start | 0;
     const mid_len = len / 2 | 0;
     let _tmp = 0;
@@ -2075,6 +3113,30 @@
       }
     }
   }
+  function _M0FPB23fixed__bubble__sort__byGiE(arr, cmp) {
+    const _bind = arr.end - arr.start | 0;
+    let _tmp = 1;
+    while (true) {
+      const i = _tmp;
+      if (i < _bind) {
+        let _tmp$2 = i;
+        while (true) {
+          const j = _tmp$2;
+          if (j > 0 && cmp(arr.buf[arr.start + (j - 1 | 0) | 0], arr.buf[arr.start + j | 0]) > 0) {
+            _M0MPC15array12MutArrayView4swapGiE(arr, j, j - 1 | 0);
+            _tmp$2 = j - 1 | 0;
+            continue;
+          } else {
+            break;
+          }
+        }
+        _tmp = i + 1 | 0;
+        continue;
+      } else {
+        return;
+      }
+    }
+  }
   function _M0FPB24fixed__choose__pivot__byN7sort__2S444GRP27mik1e806dxfkit6CutSegE(_env, a, b) {
     const arr = _env._2;
     const cmp = _env._1;
@@ -2091,6 +3153,23 @@
     _M0FPB24fixed__choose__pivot__byN7sort__2S444GRP27mik1e806dxfkit6CutSegE(_env, a, b);
     _M0FPB24fixed__choose__pivot__byN7sort__2S444GRP27mik1e806dxfkit6CutSegE(_env, b, c);
     _M0FPB24fixed__choose__pivot__byN7sort__2S444GRP27mik1e806dxfkit6CutSegE(_env, a, b);
+  }
+  function _M0FPB24fixed__choose__pivot__byN7sort__2S444GiE(_env, a, b) {
+    const arr = _env._2;
+    const cmp = _env._1;
+    const swaps = _env._0;
+    if (cmp(arr.buf[arr.start + a | 0], arr.buf[arr.start + b | 0]) > 0) {
+      _M0MPC15array12MutArrayView4swapGiE(arr, a, b);
+      swaps.val = swaps.val + 1 | 0;
+      return;
+    } else {
+      return;
+    }
+  }
+  function _M0FPB24fixed__choose__pivot__byN7sort__3S448GiE(_env, a, b, c) {
+    _M0FPB24fixed__choose__pivot__byN7sort__2S444GiE(_env, a, b);
+    _M0FPB24fixed__choose__pivot__byN7sort__2S444GiE(_env, b, c);
+    _M0FPB24fixed__choose__pivot__byN7sort__2S444GiE(_env, a, b);
   }
   function _M0FPB24fixed__choose__pivot__byGRP27mik1e806dxfkit6CutSegE(arr, cmp) {
     const len = arr.end - arr.start | 0;
@@ -2114,6 +3193,28 @@
       return { _0: b, _1: swaps.val === 0 };
     }
   }
+  function _M0FPB24fixed__choose__pivot__byGiE(arr, cmp) {
+    const len = arr.end - arr.start | 0;
+    const swaps = new _M0TPB8MutLocalGiE(0);
+    const b = Math.imul(len / 4 | 0, 2) | 0;
+    if (len >= 8) {
+      const a = Math.imul(len / 4 | 0, 1) | 0;
+      const c = Math.imul(len / 4 | 0, 3) | 0;
+      const _env = { _0: swaps, _1: cmp, _2: arr };
+      if (len > 50) {
+        _M0FPB24fixed__choose__pivot__byN7sort__3S448GiE(_env, a - 1 | 0, a, a + 1 | 0);
+        _M0FPB24fixed__choose__pivot__byN7sort__3S448GiE(_env, b - 1 | 0, b, b + 1 | 0);
+        _M0FPB24fixed__choose__pivot__byN7sort__3S448GiE(_env, c - 1 | 0, c, c + 1 | 0);
+      }
+      _M0FPB24fixed__choose__pivot__byN7sort__3S448GiE(_env, a, b, c);
+    }
+    if (swaps.val === 12) {
+      _M0MPC15array12MutArrayView14rev__in__placeGiE(arr);
+      return { _0: (len - b | 0) - 1 | 0, _1: true };
+    } else {
+      return { _0: b, _1: swaps.val === 0 };
+    }
+  }
   function _M0FPB21fixed__sift__down__byGRP27mik1e806dxfkit6CutSegE(arr, index, cmp) {
     const len = arr.end - arr.start | 0;
     let _tmp = index;
@@ -2127,6 +3228,27 @@
           return undefined;
         }
         _M0MPC15array12MutArrayView4swapGRP27mik1e806dxfkit6CutSegE(arr, index$2, child$2);
+        _tmp = child$2;
+        _tmp$2 = (Math.imul(child$2, 2) | 0) + 1 | 0;
+        continue;
+      } else {
+        return;
+      }
+    }
+  }
+  function _M0FPB21fixed__sift__down__byGiE(arr, index, cmp) {
+    const len = arr.end - arr.start | 0;
+    let _tmp = index;
+    let _tmp$2 = (Math.imul(index, 2) | 0) + 1 | 0;
+    while (true) {
+      const index$2 = _tmp;
+      const child = _tmp$2;
+      if (child < len) {
+        const child$2 = (child + 1 | 0) < len && cmp(arr.buf[arr.start + child | 0], arr.buf[arr.start + (child + 1 | 0) | 0]) < 0 ? child + 1 | 0 : child;
+        if (cmp(arr.buf[arr.start + index$2 | 0], arr.buf[arr.start + child$2 | 0]) >= 0) {
+          return undefined;
+        }
+        _M0MPC15array12MutArrayView4swapGiE(arr, index$2, child$2);
         _tmp = child$2;
         _tmp$2 = (Math.imul(child$2, 2) | 0) + 1 | 0;
         continue;
@@ -2155,6 +3277,33 @@
       if (i >= 1) {
         _M0MPC15array12MutArrayView4swapGRP27mik1e806dxfkit6CutSegE(arr, 0, i);
         _M0FPB21fixed__sift__down__byGRP27mik1e806dxfkit6CutSegE(_M0MPC15array12MutArrayView5sliceGRP27mik1e806dxfkit6CutSegE(arr, 0, i), 0, cmp);
+        _tmp$2 = i - 1 | 0;
+        continue;
+      } else {
+        return;
+      }
+    }
+  }
+  function _M0FPB21fixed__heap__sort__byGiE(arr, cmp) {
+    const len = arr.end - arr.start | 0;
+    const _bind = len / 2 | 0;
+    let _tmp = _bind - 1 | 0;
+    while (true) {
+      const i = _tmp;
+      if (i >= 0) {
+        _M0FPB21fixed__sift__down__byGiE(arr, i, cmp);
+        _tmp = i - 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    let _tmp$2 = len - 1 | 0;
+    while (true) {
+      const i = _tmp$2;
+      if (i >= 1) {
+        _M0MPC15array12MutArrayView4swapGiE(arr, 0, i);
+        _M0FPB21fixed__sift__down__byGiE(_M0MPC15array12MutArrayView5sliceGiE(arr, 0, i), 0, cmp);
         _tmp$2 = i - 1 | 0;
         continue;
       } else {
@@ -2196,6 +3345,40 @@
       }
     }
   }
+  function _M0FPB20fixed__partition__byGiE(arr, cmp, pivot_index) {
+    _M0MPC15array12MutArrayView4swapGiE(arr, pivot_index, (arr.end - arr.start | 0) - 1 | 0);
+    const pivot = arr.buf[arr.start + ((arr.end - arr.start | 0) - 1 | 0) | 0];
+    const _bind = (arr.end - arr.start | 0) - 1 | 0;
+    let _tmp = 0;
+    let _tmp$2 = 0;
+    let _tmp$3 = true;
+    while (true) {
+      const j = _tmp;
+      const i = _tmp$2;
+      const partitioned = _tmp$3;
+      if (j < _bind) {
+        if (cmp(arr.buf[arr.start + j | 0], pivot) < 0) {
+          if (i !== j) {
+            _M0MPC15array12MutArrayView4swapGiE(arr, i, j);
+            _tmp = j + 1 | 0;
+            _tmp$2 = i + 1 | 0;
+            _tmp$3 = false;
+            continue;
+          } else {
+            _tmp = j + 1 | 0;
+            _tmp$2 = i + 1 | 0;
+            continue;
+          }
+        } else {
+          _tmp = j + 1 | 0;
+          continue;
+        }
+      } else {
+        _M0MPC15array12MutArrayView4swapGiE(arr, i, (arr.end - arr.start | 0) - 1 | 0);
+        return { _0: i, _1: partitioned };
+      }
+    }
+  }
   function _M0FPB28fixed__try__bubble__sort__byGRP27mik1e806dxfkit6CutSegE(arr, cmp) {
     const _bind = arr.end - arr.start | 0;
     let _tmp = 1;
@@ -2212,6 +3395,47 @@
           const sorted$2 = _tmp$4;
           if (j > 0 && cmp(arr.buf[arr.start + (j - 1 | 0) | 0], arr.buf[arr.start + j | 0]) > 0) {
             _M0MPC15array12MutArrayView4swapGRP27mik1e806dxfkit6CutSegE(arr, j, j - 1 | 0);
+            _tmp$3 = j - 1 | 0;
+            _tmp$4 = false;
+            continue;
+          } else {
+            sorted = sorted$2;
+            break;
+          }
+        }
+        if (!sorted) {
+          const tries$2 = tries + 1 | 0;
+          if (tries$2 > 8) {
+            return false;
+          }
+          _tmp = i + 1 | 0;
+          _tmp$2 = tries$2;
+          continue;
+        } else {
+          _tmp = i + 1 | 0;
+          continue;
+        }
+      } else {
+        return true;
+      }
+    }
+  }
+  function _M0FPB28fixed__try__bubble__sort__byGiE(arr, cmp) {
+    const _bind = arr.end - arr.start | 0;
+    let _tmp = 1;
+    let _tmp$2 = 0;
+    while (true) {
+      const i = _tmp;
+      const tries = _tmp$2;
+      if (i < _bind) {
+        let sorted;
+        let _tmp$3 = i;
+        let _tmp$4 = true;
+        while (true) {
+          const j = _tmp$3;
+          const sorted$2 = _tmp$4;
+          if (j > 0 && cmp(arr.buf[arr.start + (j - 1 | 0) | 0], arr.buf[arr.start + j | 0]) > 0) {
+            _M0MPC15array12MutArrayView4swapGiE(arr, j, j - 1 | 0);
             _tmp$3 = j - 1 | 0;
             _tmp$4 = false;
             continue;
@@ -2318,12 +3542,135 @@
       }
     }
   }
+  function _M0FPB22fixed__quick__sort__byGiE(arr, cmp, pred, limit) {
+    let _tmp = limit;
+    let _tmp$2 = arr;
+    let _tmp$3 = pred;
+    let _tmp$4 = true;
+    let _tmp$5 = true;
+    while (true) {
+      const limit$2 = _tmp;
+      const arr$2 = _tmp$2;
+      const pred$2 = _tmp$3;
+      const was_partitioned = _tmp$4;
+      const balanced = _tmp$5;
+      const len = arr$2.end - arr$2.start | 0;
+      if (len <= 16) {
+        if (len >= 2) {
+          _M0FPB23fixed__bubble__sort__byGiE(arr$2, cmp);
+        }
+        return undefined;
+      }
+      if (limit$2 === 0) {
+        _M0FPB21fixed__heap__sort__byGiE(arr$2, cmp);
+        return undefined;
+      }
+      const _bind = _M0FPB24fixed__choose__pivot__byGiE(arr$2, cmp);
+      const _pivot_index = _bind._0;
+      const _likely_sorted = _bind._1;
+      if (was_partitioned && (balanced && _likely_sorted)) {
+        if (_M0FPB28fixed__try__bubble__sort__byGiE(arr$2, cmp)) {
+          return undefined;
+        }
+      }
+      const _bind$2 = _M0FPB20fixed__partition__byGiE(arr$2, cmp, _pivot_index);
+      const _pivot = _bind$2._0;
+      const _partitioned = _bind$2._1;
+      const _p = len - _pivot | 0;
+      const balanced$2 = (_pivot > _p ? _p : _pivot) >= (len / 8 | 0);
+      const limit$3 = !balanced$2 ? limit$2 - 1 | 0 : limit$2;
+      if (pred$2 === undefined) {
+      } else {
+        const _Some = pred$2;
+        const _p$2 = _Some;
+        if (cmp(_p$2, arr$2.buf[arr$2.start + _pivot | 0]) === 0) {
+          let i;
+          let _tmp$6 = _pivot;
+          while (true) {
+            const i$2 = _tmp$6;
+            if (i$2 < len && cmp(_p$2, arr$2.buf[arr$2.start + i$2 | 0]) === 0) {
+              _tmp$6 = i$2 + 1 | 0;
+              continue;
+            } else {
+              i = i$2;
+              break;
+            }
+          }
+          _tmp = limit$3;
+          _tmp$2 = _M0MPC15array12MutArrayView5sliceGiE(arr$2, i, len);
+          _tmp$4 = _partitioned;
+          _tmp$5 = balanced$2;
+          continue;
+        }
+      }
+      const left = _M0MPC15array12MutArrayView5sliceGiE(arr$2, 0, _pivot);
+      const right = _M0MPC15array12MutArrayView5sliceGiE(arr$2, _pivot + 1 | 0, len);
+      if ((left.end - left.start | 0) < (right.end - right.start | 0)) {
+        _M0FPB22fixed__quick__sort__byGiE(left, cmp, pred$2, limit$3);
+        _tmp = limit$3;
+        _tmp$2 = right;
+        _tmp$3 = arr$2.buf[arr$2.start + _pivot | 0];
+        _tmp$4 = _partitioned;
+        _tmp$5 = balanced$2;
+        continue;
+      } else {
+        _M0FPB22fixed__quick__sort__byGiE(right, cmp, arr$2.buf[arr$2.start + _pivot | 0], limit$3);
+        _tmp = limit$3;
+        _tmp$2 = left;
+        _tmp$4 = _partitioned;
+        _tmp$5 = balanced$2;
+        continue;
+      }
+    }
+  }
   function _M0MPC15array12MutArrayView8sort__byGRP27mik1e806dxfkit6CutSegE(self, cmp) {
     _M0FPB22fixed__quick__sort__byGRP27mik1e806dxfkit6CutSegE(self, cmp, undefined, _M0FPB17fixed__get__limit(self.end - self.start | 0));
+  }
+  function _M0MPC15array12MutArrayView8sort__byGiE(self, cmp) {
+    _M0FPB22fixed__quick__sort__byGiE(self, cmp, undefined, _M0FPB17fixed__get__limit(self.end - self.start | 0));
   }
   function _M0MPC15array5Array8sort__byGRP27mik1e806dxfkit6CutSegE(self, cmp) {
     const _bind = self.length;
     _M0MPC15array12MutArrayView8sort__byGRP27mik1e806dxfkit6CutSegE(new _M0TPB12MutArrayViewGRP27mik1e806dxfkit6CutSegE(self, 0, _bind), cmp);
+  }
+  function _M0MPC15array5Array8sort__byGiE(self, cmp) {
+    const _bind = self.length;
+    _M0MPC15array12MutArrayView8sort__byGiE(new _M0TPB12MutArrayViewGiE(self, 0, _bind), cmp);
+  }
+  function _M0MPC15array5Array4makeGiE(len, elem) {
+    const arr = new Array(len);
+    let _tmp = 0;
+    while (true) {
+      const i = _tmp;
+      if (i < len) {
+        arr[i] = elem;
+        _tmp = i + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return arr;
+  }
+  function _M0MPC15array5Array5clearGyE(self) {
+    _M0MPC15array5Array28unsafe__truncate__to__lengthGyE(self, 0);
+  }
+  function _M0MPC15array5Array8containsGiE(self, value) {
+    const _bind = self.length;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind) {
+        const v = self[_];
+        if (v === value) {
+          return true;
+        }
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        return false;
+      }
+    }
   }
   function _M0MPC15array5Array8containsGsE(self, value) {
     const _bind = self.length;
@@ -4934,8 +6281,17 @@
   function _M0MP27mik1e806dxfkit4Vec33new(x, y, z) {
     return new _M0TP27mik1e806dxfkit4Vec3(x, y, z);
   }
+  function _M0FP27mik1e806dxfkit13scaled__hypot(x, y) {
+    const m = _M0MPC16double6Double3max(Math.abs(x), Math.abs(y));
+    if (m === 0 || !_M0FP27mik1e806dxfkit14finite__number(m)) {
+      return m;
+    }
+    const a = x / m;
+    const b = y / m;
+    return m * Math.sqrt(a * a + b * b);
+  }
   function _M0MP27mik1e806dxfkit4Vec36length(self) {
-    return Math.sqrt(self.x * self.x + self.y * self.y + self.z * self.z);
+    return _M0FP27mik1e806dxfkit13scaled__hypot(_M0FP27mik1e806dxfkit13scaled__hypot(self.x, self.y), self.z);
   }
   function _M0MP27mik1e806dxfkit4Vec39normalize(self) {
     const len = _M0MP27mik1e806dxfkit4Vec36length(self);
@@ -4944,7 +6300,7 @@
   function _M0MP27mik1e806dxfkit3Ocs15from__extrusion(normal) {
     const m = _M0MPC16double6Double3max(_M0MPC16double6Double3max(Math.abs(normal.x), Math.abs(normal.y)), Math.abs(normal.z));
     if (!_M0FP27mik1e806dxfkit7finite3(normal) || (!_M0FP27mik1e806dxfkit14finite__number(m) || m === 0)) {
-      return _M0MP27mik1e806dxfkit3Ocs15from__extrusionN6constrS2993;
+      return _M0MP27mik1e806dxfkit3Ocs15from__extrusionN6constrS3251;
     }
     const n = _M0MP27mik1e806dxfkit4Vec39normalize(_M0MP27mik1e806dxfkit4Vec33new(normal.x / m, normal.y / m, normal.z / m));
     const helper = Math.abs(n.x) < 0.015625 && Math.abs(n.y) < 0.015625 ? _M0MP27mik1e806dxfkit4Vec33new(0, 1, 0) : _M0MP27mik1e806dxfkit4Vec33new(0, 0, 1);
@@ -5049,6 +6405,149 @@
   function _M0FP27mik1e806dxfkit11record__ocs(record) {
     return _M0MP27mik1e806dxfkit3Ocs15from__extrusion(_M0MP27mik1e806dxfkit4Vec33new(_M0MP27mik1e806dxfkit6Record11get__double(record, 210, 0), _M0MP27mik1e806dxfkit6Record11get__double(record, 220, 0), _M0MP27mik1e806dxfkit6Record11get__double(record, 230, 1)));
   }
+  function _M0FP27mik1e806dxfkit10in__ranges(code, ranges) {
+    const _bind = ranges.length;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind) {
+        const r = ranges[_];
+        if (code >= r._0 && code <= r._1) {
+          return true;
+        }
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return false;
+  }
+  function _M0FP27mik1e806dxfkit10code__type(code) {
+    return _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS3252, _M0FP27mik1e806dxfkit10code__typeN5tupleS3253, _M0FP27mik1e806dxfkit10code__typeN5tupleS3254, _M0FP27mik1e806dxfkit10code__typeN5tupleS3255, _M0FP27mik1e806dxfkit10code__typeN5tupleS3256, _M0FP27mik1e806dxfkit10code__typeN5tupleS3257]) ? 1 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS3258, _M0FP27mik1e806dxfkit10code__typeN5tupleS3259, _M0FP27mik1e806dxfkit10code__typeN5tupleS3260, _M0FP27mik1e806dxfkit10code__typeN5tupleS3261]) ? 2 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS3262]) ? 3 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS3263, _M0FP27mik1e806dxfkit10code__typeN5tupleS3264, _M0FP27mik1e806dxfkit10code__typeN5tupleS3265, _M0FP27mik1e806dxfkit10code__typeN5tupleS3266, _M0FP27mik1e806dxfkit10code__typeN5tupleS3267]) ? 4 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS3268]) ? 5 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS3269, _M0FP27mik1e806dxfkit10code__typeN5tupleS3270]) ? 6 : 0;
+  }
+  function _M0FP27mik1e806dxfkit20valid__numeric__tags(record) {
+    const groups = [record.common];
+    const _bind = record.subclasses;
+    const _bind$2 = _bind.length;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind$2) {
+        const sc = _bind[_];
+        _M0MPC15array5Array4pushGRPB5ArrayGRP27mik1e806dxfkit3TagEE(groups, sc.tags);
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    const _bind$3 = groups.length;
+    let _tmp$2 = 0;
+    while (true) {
+      const _ = _tmp$2;
+      if (_ < _bind$3) {
+        const tags = groups[_];
+        const _bind$4 = tags.length;
+        let _tmp$3 = 0;
+        while (true) {
+          const _$2 = _tmp$3;
+          if (_$2 < _bind$4) {
+            const tag = tags[_$2];
+            _L: {
+              _L$2: {
+                const _bind$5 = _M0FP27mik1e806dxfkit10code__type(tag.code);
+                const _bind$6 = tag.value;
+                switch (_bind$5) {
+                  case 4: {
+                    switch (_bind$6.$tag) {
+                      case 4: {
+                        const _F64 = _bind$6;
+                        const _v = _F64._0;
+                        if (!_M0FP27mik1e806dxfkit14finite__number(_v)) {
+                          return false;
+                        }
+                        break;
+                      }
+                      case 1: {
+                        break;
+                      }
+                      case 2: {
+                        break;
+                      }
+                      case 3: {
+                        break;
+                      }
+                      default: {
+                        break _L$2;
+                      }
+                    }
+                    break;
+                  }
+                  case 1: {
+                    switch (_bind$6.$tag) {
+                      case 1: {
+                        break;
+                      }
+                      case 2: {
+                        break;
+                      }
+                      default: {
+                        break _L$2;
+                      }
+                    }
+                    break;
+                  }
+                  case 2: {
+                    switch (_bind$6.$tag) {
+                      case 1: {
+                        break;
+                      }
+                      case 2: {
+                        break;
+                      }
+                      default: {
+                        break _L$2;
+                      }
+                    }
+                    break;
+                  }
+                  case 3: {
+                    if (_bind$6.$tag === 3) {
+                    } else {
+                      break _L$2;
+                    }
+                    break;
+                  }
+                  case 5: {
+                    if (_bind$6.$tag === 5) {
+                    } else {
+                      break _L$2;
+                    }
+                    break;
+                  }
+                  case 0: {
+                    break;
+                  }
+                }
+                break _L;
+              }
+              return false;
+            }
+            _tmp$3 = _$2 + 1 | 0;
+            continue;
+          } else {
+            break;
+          }
+        }
+        _tmp$2 = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return true;
+  }
   function _M0FP27mik1e806dxfkit16normalize__angle(rad) {
     let a = _M0IPC16double6DoublePB3Mod3mod(rad, 6.2831853071795862);
     if (a < 0) {
@@ -5066,12 +6565,14 @@
   function _M0MP27mik1e806dxfkit4Vec25angle(self) {
     return _M0FPC14math5atan2(self.y, self.x);
   }
+  function _M0MP27mik1e806dxfkit4Vec26length(self) {
+    return _M0FP27mik1e806dxfkit13scaled__hypot(self.x, self.y);
+  }
   function _M0MP27mik1e806dxfkit4Vec23sub(self, other) {
     return new _M0TP27mik1e806dxfkit4Vec2(self.x - other.x, self.y - other.y);
   }
   function _M0MP27mik1e806dxfkit4Vec28distance(self, other) {
-    const _p = _M0MP27mik1e806dxfkit4Vec23sub(self, other);
-    return Math.sqrt(_p.x * _p.x + _p.y * _p.y);
+    return _M0MP27mik1e806dxfkit4Vec26length(_M0MP27mik1e806dxfkit4Vec23sub(self, other));
   }
   function _M0MP27mik1e806dxfkit4Vec23new(x, y) {
     return new _M0TP27mik1e806dxfkit4Vec2(x, y);
@@ -5176,12 +6677,13 @@
   }
   function _M0FP27mik1e806dxfkit17dist__to__segment(p, a, b) {
     const ab = _M0MP27mik1e806dxfkit4Vec23sub(b, a);
-    const len2 = ab.x * ab.x + ab.y * ab.y;
-    if (len2 === 0) {
+    const len = _M0MP27mik1e806dxfkit4Vec26length(ab);
+    if (len === 0) {
       return _M0MP27mik1e806dxfkit4Vec28distance(p, a);
     }
+    const unit = _M0MP27mik1e806dxfkit4Vec23new(ab.x / len, ab.y / len);
     const _p = _M0MP27mik1e806dxfkit4Vec23sub(p, a);
-    let t = (_p.x * ab.x + _p.y * ab.y) / len2;
+    let t = (_p.x * unit.x + _p.y * unit.y) / len;
     if (t < 0) {
       t = 0;
     }
@@ -5285,20 +6787,20 @@
   function _M0FP27mik1e806dxfkit23spline__points__checked(degree, knots, control_points, weights, tol) {
     const count = control_points.length;
     if (!_M0FP27mik1e806dxfkit19positive__tolerance(tol)) {
-      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2994;
+      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3271;
     }
     if (degree < 1 || (degree > 32 || (count <= degree || (count > 4096 || knots.length !== ((count + degree | 0) + 1 | 0))))) {
-      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2995;
+      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3272;
     }
     if (weights.length !== 0 && weights.length !== count) {
-      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2996;
+      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3273;
     }
     let _tmp = 0;
     while (true) {
       const i = _tmp;
       if (i < knots.length) {
         if (!_M0FP27mik1e806dxfkit14finite__number(_M0MPC15array5Array2atGdE(knots, i)) || i > 0 && _M0MPC15array5Array2atGdE(knots, i) < _M0MPC15array5Array2atGdE(knots, i - 1 | 0)) {
-          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2997;
+          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3274;
         }
         _tmp = i + 1 | 0;
         continue;
@@ -5309,20 +6811,39 @@
     const start = _M0MPC15array5Array2atGdE(knots, degree);
     const end = _M0MPC15array5Array2atGdE(knots, count);
     if (end <= start) {
-      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2998;
+      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3275;
     }
-    let ctrl = [];
+    if (!_M0FP27mik1e806dxfkit14finite__number(end - start)) {
+      return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3276;
+    }
+    let weight_scale = 0;
     let _tmp$2 = 0;
     while (true) {
       const i = _tmp$2;
       if (i < count) {
+        const weight = _M0FP27mik1e806dxfkit10weight__at(weights, i);
+        if (!_M0FP27mik1e806dxfkit14finite__number(weight) || weight <= 0) {
+          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3277;
+        }
+        weight_scale = _M0MPC16double6Double3max(weight_scale, weight);
+        _tmp$2 = i + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    let ctrl = [];
+    let _tmp$3 = 0;
+    while (true) {
+      const i = _tmp$3;
+      if (i < count) {
         const p = _M0MPC15array5Array2atGRPB4JsonE(control_points, i);
-        const w = _M0FP27mik1e806dxfkit10weight__at(weights, i);
-        if (!_M0FP27mik1e806dxfkit14finite__number(p.x) || (!_M0FP27mik1e806dxfkit14finite__number(p.y) || (!_M0FP27mik1e806dxfkit14finite__number(p.z) || (!_M0FP27mik1e806dxfkit14finite__number(w) || (w <= 0 || (!_M0FP27mik1e806dxfkit14finite__number(p.x * w) || !_M0FP27mik1e806dxfkit14finite__number(p.y * w))))))) {
-          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS2999;
+        const w = _M0FP27mik1e806dxfkit10weight__at(weights, i) / weight_scale;
+        if (!_M0FP27mik1e806dxfkit14finite__number(p.x) || (!_M0FP27mik1e806dxfkit14finite__number(p.y) || (!_M0FP27mik1e806dxfkit14finite__number(p.z) || (!_M0FP27mik1e806dxfkit14finite__number(w) || (w < 1e-100 || (!_M0FP27mik1e806dxfkit14finite__number(p.x * w) || !_M0FP27mik1e806dxfkit14finite__number(p.y * w))))))) {
+          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3278;
         }
         _M0MPC15array5Array4pushGRPC14json10WriteFrameE(ctrl, _M0MP27mik1e806dxfkit4Vec33new(p.x * w, p.y * w, w));
-        _tmp$2 = i + 1 | 0;
+        _tmp$3 = i + 1 | 0;
         continue;
       } else {
         break;
@@ -5330,15 +6851,15 @@
     }
     const breaks = [];
     const _bind = knots.length;
-    let _tmp$3 = 0;
+    let _tmp$4 = 0;
     while (true) {
-      const _ = _tmp$3;
+      const _ = _tmp$4;
       if (_ < _bind) {
         const u = knots[_];
         if (u >= start && (u <= end && (breaks.length === 0 || _M0MPC15array5Array2atGdE(breaks, breaks.length - 1 | 0) !== u))) {
           _M0MPC15array5Array4pushGdE(breaks, u);
         }
-        _tmp$3 = _ + 1 | 0;
+        _tmp$4 = _ + 1 | 0;
         continue;
       } else {
         break;
@@ -5346,33 +6867,33 @@
     }
     let refined = _M0MPC15array5Array4copyGdE(knots);
     const _bind$2 = breaks.length;
-    let _tmp$4 = 0;
+    let _tmp$5 = 0;
     while (true) {
-      const _ = _tmp$4;
+      const _ = _tmp$5;
       if (_ < _bind$2) {
         const u = breaks[_];
         let multiplicity = 0;
         const _bind$3 = refined;
         const _bind$4 = _bind$3.length;
-        let _tmp$5 = 0;
+        let _tmp$6 = 0;
         while (true) {
-          const _$2 = _tmp$5;
+          const _$2 = _tmp$6;
           if (_$2 < _bind$4) {
             const v = _bind$3[_$2];
             if (u === v) {
               multiplicity = multiplicity + 1 | 0;
             }
-            _tmp$5 = _$2 + 1 | 0;
+            _tmp$6 = _$2 + 1 | 0;
             continue;
           } else {
             break;
           }
         }
         if (multiplicity > (degree + 1 | 0)) {
-          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3000;
+          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3279;
         }
         if (u > start && (u < end && multiplicity > degree)) {
-          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3001;
+          return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3280;
         }
         while (true) {
           if (multiplicity < degree) {
@@ -5387,28 +6908,28 @@
             break;
           }
         }
-        _tmp$4 = _ + 1 | 0;
+        _tmp$5 = _ + 1 | 0;
         continue;
       } else {
         break;
       }
     }
     const out = [];
-    let _tmp$5 = degree;
+    let _tmp$6 = degree;
     while (true) {
-      const k = _tmp$5;
+      const k = _tmp$6;
       if (k < ctrl.length) {
         _L: {
           if (_M0MPC15array5Array2atGdE(refined, k) < start || (_M0MPC15array5Array2atGdE(refined, k + 1 | 0) > end || _M0MPC15array5Array2atGdE(refined, k + 1 | 0) <= _M0MPC15array5Array2atGdE(refined, k))) {
             break _L;
           }
           const segment = [];
-          let _tmp$6 = k - degree | 0;
+          let _tmp$7 = k - degree | 0;
           while (true) {
-            const i = _tmp$6;
+            const i = _tmp$7;
             if (i <= k) {
               _M0MPC15array5Array4pushGRPC14json10WriteFrameE(segment, _M0MPC15array5Array2atGRPB4JsonE(ctrl, i));
-              _tmp$6 = i + 1 | 0;
+              _tmp$7 = i + 1 | 0;
               continue;
             } else {
               break;
@@ -5418,34 +6939,34 @@
             _M0MPC15array5Array4pushGRPC14json10WriteFrameE(out, _M0FP27mik1e806dxfkit10project__h(_M0MPC15array5Array2atGRPB4JsonE(segment, 0)));
           }
           if (!_M0FP27mik1e806dxfkit14sample__bezier(segment, tol, 16, out)) {
-            return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3002;
+            return _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3281;
           }
           break _L;
         }
-        _tmp$5 = k + 1 | 0;
+        _tmp$6 = k + 1 | 0;
         continue;
       } else {
         break;
       }
     }
-    return out.length === 0 ? _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3003 : new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE2Ok(out);
+    return out.length === 0 ? _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3282 : new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE2Ok(out);
   }
   function _M0MP27mik1e806dxfkit4Vec32xy(self) {
     return new _M0TP27mik1e806dxfkit4Vec2(self.x, self.y);
   }
   function _M0FP27mik1e806dxfkit24ellipse__points__checked(center, major, ratio, start_param, end_param, tol) {
     if (!_M0FP27mik1e806dxfkit19positive__tolerance(tol) || (!_M0FP27mik1e806dxfkit14finite__number(start_param) || (!_M0FP27mik1e806dxfkit14finite__number(end_param) || (!_M0FP27mik1e806dxfkit14finite__number(ratio) || (ratio <= 0 || ratio > 1))))) {
-      return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3004;
+      return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3283;
     }
     const c = _M0MP27mik1e806dxfkit4Vec32xy(center);
     const m = _M0MP27mik1e806dxfkit4Vec32xy(major);
     const n = _M0MP27mik1e806dxfkit4Vec23new(-m.y * ratio, m.x * ratio);
-    if (Math.sqrt(m.x * m.x + m.y * m.y) === 0) {
-      return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3005;
+    if (_M0MP27mik1e806dxfkit4Vec26length(m) === 0) {
+      return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3284;
     }
     const span = _M0FP27mik1e806dxfkit13ellipse__span(start_param, end_param);
     if (!_M0FP27mik1e806dxfkit14finite__number(span) || span > 6.2831853071805863) {
-      return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3006;
+      return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3285;
     }
     let segments = _M0MPC16double6Double7to__int(span / 1.5707963267948966);
     if ((segments + 0) * 1.5707963267948966 < span) {
@@ -5488,7 +7009,7 @@
           }
         }
         if (out.length > 65536) {
-          return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3007;
+          return _M0FP27mik1e806dxfkit24ellipse__points__checkedN6constrS3286;
         }
         _tmp = i + 1 | 0;
         continue;
@@ -5785,14 +7306,14 @@
   }
   function _M0MP27mik1e806dxfkit8Geometry16flatten__checked(self, tol) {
     if (!_M0FP27mik1e806dxfkit19positive__tolerance(tol)) {
-      return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3008;
+      return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3287;
     }
     switch (self.$tag) {
       case 2: {
         const _Circle = self;
         const _radius = _Circle._1;
         if (!_M0FP27mik1e806dxfkit14finite__number(_radius) || _M0FP27mik1e806dxfkit18arc__cap__exceeded(_radius, 6.2831853071795862, tol)) {
-          return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3009;
+          return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3288;
         }
         break;
       }
@@ -5802,10 +7323,10 @@
         const _start_angle = _Arc._2;
         const _end_angle = _Arc._3;
         if (!_M0FP27mik1e806dxfkit14finite__number(_radius$2) || (!_M0FP27mik1e806dxfkit14finite__number(_start_angle) || !_M0FP27mik1e806dxfkit14finite__number(_end_angle))) {
-          return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3010;
+          return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3289;
         }
         if (_M0FP27mik1e806dxfkit18arc__cap__exceeded(_radius$2, _M0FP27mik1e806dxfkit10arc__sweep(_start_angle, _end_angle), tol)) {
-          return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3011;
+          return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3290;
         }
         break;
       }
@@ -5821,12 +7342,12 @@
             const a = _M0MPC15array5Array2atGRPB4JsonE(_vertices, i);
             const b = _M0MPC15array5Array2atGRPB4JsonE(_vertices, (i + 1 | 0) % _vertices.length | 0);
             if (!_M0FP27mik1e806dxfkit14finite__number(a.bulge)) {
-              return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3012;
+              return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3291;
             }
             if (a.bulge !== 0 && _M0MP27mik1e806dxfkit4Vec28distance(_M0MP27mik1e806dxfkit4Vec32xy(a.at), _M0MP27mik1e806dxfkit4Vec32xy(b.at)) > 0) {
               const arc = _M0FP27mik1e806dxfkit16arc__from__bulge(_M0MP27mik1e806dxfkit4Vec32xy(a.at), _M0MP27mik1e806dxfkit4Vec32xy(b.at), a.bulge);
               if (!_M0FP27mik1e806dxfkit14finite__number(arc.radius) || _M0FP27mik1e806dxfkit18arc__cap__exceeded(arc.radius, _M0FP27mik1e806dxfkit11angle__span(arc.start_angle, arc.end_angle), tol)) {
-                return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3013;
+                return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3292;
               }
             }
             _tmp = i + 1 | 0;
@@ -5882,13 +7403,13 @@
       }
     }
     if (!_M0FP27mik1e806dxfkit16flat__is__finite(flat)) {
-      return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3014;
+      return _M0MP27mik1e806dxfkit8Geometry16flatten__checkedN6constrS3293;
     }
     return new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE2Ok(flat);
   }
   function _M0MP27mik1e806dxfkit6Entity23flatten__local__checked(self, tol) {
     if (!_M0FP27mik1e806dxfkit19positive__tolerance(tol)) {
-      return _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3015;
+      return _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3294;
     }
     _L: {
       const _bind = self.geom;
@@ -5898,10 +7419,10 @@
         if (self.common.kind === "SOLID" || self.common.kind === "TRACE") {
           const record = self.common.record;
           if (_M0MP27mik1e806dxfkit6Record11get__double(record, 39, 0) !== 0) {
-            return _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3016;
+            return _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3295;
           }
           if (_corners.length !== 3 && _corners.length !== 4) {
-            return _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3017;
+            return _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3296;
           }
           const _bind$2 = _corners.length;
           let _tmp = 0;
@@ -5910,10 +7431,10 @@
             if (_ < _bind$2) {
               const p = _corners[_];
               if (!_M0FP27mik1e806dxfkit14finite__number(p.x) || (!_M0FP27mik1e806dxfkit14finite__number(p.y) || !_M0FP27mik1e806dxfkit14finite__number(p.z))) {
-                return _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3018;
+                return _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3297;
               }
               if (p.z !== _M0MPC15array5Array2atGRPB4JsonE(_corners, 0).z) {
-                return _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3019;
+                return _M0MP27mik1e806dxfkit6Entity23flatten__local__checkedN6constrS3298;
               }
               _tmp = _ + 1 | 0;
               continue;
@@ -5952,8 +7473,14 @@
     return new _M0TP27mik1e806dxfkit10Transform3(_M0MP27mik1e806dxfkit10Transform36vector(self, inner.x), _M0MP27mik1e806dxfkit10Transform36vector(self, inner.y), _M0MP27mik1e806dxfkit10Transform36vector(self, inner.z), _M0MP27mik1e806dxfkit10Transform35apply(self, inner.origin));
   }
   function _M0FP27mik1e806dxfkit19entity__world__flat(e, tol, parent) {
+    if (!_M0FP27mik1e806dxfkit20valid__numeric__tags(e.common.record)) {
+      return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3300;
+    }
+    if (_M0MP27mik1e806dxfkit6Record11get__double(e.common.record, 39, 0) !== 0) {
+      return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3301;
+    }
     if (!_M0FP27mik1e806dxfkit19positive__tolerance(tol)) {
-      return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3021;
+      return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3302;
     }
     const kind = e.common.kind;
     const uses_ocs = _M0MPC15array5Array8containsGsE(["CIRCLE", "ARC", "SOLID", "TRACE", "TEXT", "ATTRIB", "ATTDEF", "LWPOLYLINE", "POLYLINE"], kind);
@@ -5969,7 +7496,7 @@
         const _msg = _Err._0;
         return new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE3Err(_msg);
       }
-      transform = _M0MP27mik1e806dxfkit10Transform37compose(parent, new _M0TP27mik1e806dxfkit10Transform3(o.x_axis, o.y_axis, o.normal, _M0MP27mik1e806dxfkit4Vec34zeroN6recordS3020));
+      transform = _M0MP27mik1e806dxfkit10Transform37compose(parent, new _M0TP27mik1e806dxfkit10Transform3(o.x_axis, o.y_axis, o.normal, _M0MP27mik1e806dxfkit4Vec34zeroN6recordS3299));
     } else {
       transform = parent;
     }
@@ -5982,7 +7509,7 @@
         const a = _M0MP27mik1e806dxfkit10Transform35apply(transform, _start);
         const b = _M0MP27mik1e806dxfkit10Transform35apply(transform, _end);
         if (!_M0FP27mik1e806dxfkit7finite3(a) || !_M0FP27mik1e806dxfkit7finite3(b)) {
-          return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3022;
+          return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3303;
         }
         return new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE2Ok(new _M0DTP27mik1e806dxfkit9WorldFlat8Outline3([a, b], false));
       }
@@ -5991,7 +7518,7 @@
         const _at = _Point._0;
         const p = _M0MP27mik1e806dxfkit10Transform35apply(transform, _at);
         if (!_M0FP27mik1e806dxfkit7finite3(p)) {
-          return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3023;
+          return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3304;
         }
         return new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE2Ok(new _M0DTP27mik1e806dxfkit9WorldFlat4Dot3(p));
       }
@@ -6040,7 +7567,7 @@
             _tmp$2 = _p$3;
           }
           if (!_tmp$2) {
-            return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3024;
+            return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3305;
           }
           return new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE2Ok(new _M0DTP27mik1e806dxfkit9WorldFlat5Face3(out));
         }
@@ -6101,7 +7628,7 @@
               _tmp = _p;
             }
             if (_tmp) {
-              return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3025;
+              return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3306;
             }
             z = z$2;
             break;
@@ -6117,7 +7644,7 @@
             const _center$3 = _Ellipse._0;
             const _major = _Ellipse._1;
             if (_major.z !== 0 || (_M0MP27mik1e806dxfkit6Record11get__double(e.common.record, 210, 0) !== 0 || (_M0MP27mik1e806dxfkit6Record11get__double(e.common.record, 220, 0) !== 0 || _M0MP27mik1e806dxfkit6Record11get__double(e.common.record, 230, 1) !== 1))) {
-              return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3026;
+              return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3307;
             }
             z = _center$3.z;
             break;
@@ -6152,7 +7679,7 @@
               _tmp$2 = _p$2;
             }
             if (_tmp$2) {
-              return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3027;
+              return _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3308;
             }
             z = z$3;
             break;
@@ -6264,7 +7791,7 @@
         valid = true;
       }
     }
-    return valid ? new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE2Ok(f) : _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3028;
+    return valid ? new _M0DTPC16result6ResultGRP27mik1e806dxfkit9WorldFlatsE2Ok(f) : _M0FP27mik1e806dxfkit19entity__world__flatN6constrS3309;
   }
   function _M0FP27mik1e806dxfkit13world__to__xy(flat, tol) {
     _L: {
@@ -6299,7 +7826,7 @@
             _tmp = _p;
           }
           if (_tmp) {
-            return _M0FP27mik1e806dxfkit13world__to__xyN6constrS3029;
+            return _M0FP27mik1e806dxfkit13world__to__xyN6constrS3310;
           }
           const _p$2 = new Array(_points.length);
           const _p$3 = _points.length;
@@ -6320,14 +7847,14 @@
         case 1: {
           const _Dot3 = flat;
           const _at = _Dot3._0;
-          return Math.abs(_at.z) > tol ? _M0FP27mik1e806dxfkit13world__to__xyN6constrS3030 : new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE2Ok(new _M0DTP27mik1e806dxfkit4Flat3Dot(_M0MP27mik1e806dxfkit4Vec32xy(_at)));
+          return Math.abs(_at.z) > tol ? _M0FP27mik1e806dxfkit13world__to__xyN6constrS3311 : new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE2Ok(new _M0DTP27mik1e806dxfkit4Flat3Dot(_M0MP27mik1e806dxfkit4Vec32xy(_at)));
         }
         case 2: {
           const _Label3 = flat;
           const _at$2 = _Label3._0;
           const _height = _Label3._1;
           const _value = _Label3._2;
-          return Math.abs(_at$2.z) > tol ? _M0FP27mik1e806dxfkit13world__to__xyN6constrS3031 : new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE2Ok(new _M0DTP27mik1e806dxfkit4Flat5Label(_M0MP27mik1e806dxfkit4Vec32xy(_at$2), _height, _value));
+          return Math.abs(_at$2.z) > tol ? _M0FP27mik1e806dxfkit13world__to__xyN6constrS3312 : new _M0DTPC16result6ResultGRP27mik1e806dxfkit4FlatsE2Ok(new _M0DTP27mik1e806dxfkit4Flat5Label(_M0MP27mik1e806dxfkit4Vec32xy(_at$2), _height, _value));
         }
         case 3: {
           break _L;
@@ -6349,7 +7876,7 @@
     return new _M0TP27mik1e806dxfkit5Aabb2(new _M0TP27mik1e806dxfkit4Vec2(_M0MPC16double6Double3min(self.min.x, p.x), _M0MPC16double6Double3min(self.min.y, p.y)), new _M0TP27mik1e806dxfkit4Vec2(_M0MPC16double6Double3max(self.max.x, p.x), _M0MPC16double6Double3max(self.max.y, p.y)));
   }
   function _M0MP27mik1e806dxfkit5Aabb24size(self) {
-    return self.min.x > self.max.x || self.min.y > self.max.y ? _M0MP27mik1e806dxfkit4Vec24zeroN6recordS3032 : _M0MP27mik1e806dxfkit4Vec23sub(self.max, self.min);
+    return self.min.x > self.max.x || self.min.y > self.max.y ? _M0MP27mik1e806dxfkit4Vec24zeroN6recordS3313 : _M0MP27mik1e806dxfkit4Vec23sub(self.max, self.min);
   }
   function _M0MP27mik1e806dxfkit8TagValue10as__string(self) {
     if (self.$tag === 0) {
@@ -6393,27 +7920,6 @@
   }
   function _M0MP27mik1e806dxfkit3Tag3new(code, value) {
     return new _M0TP27mik1e806dxfkit3Tag(code, value);
-  }
-  function _M0FP27mik1e806dxfkit10in__ranges(code, ranges) {
-    const _bind = ranges.length;
-    let _tmp = 0;
-    while (true) {
-      const _ = _tmp;
-      if (_ < _bind) {
-        const r = ranges[_];
-        if (code >= r._0 && code <= r._1) {
-          return true;
-        }
-        _tmp = _ + 1 | 0;
-        continue;
-      } else {
-        break;
-      }
-    }
-    return false;
-  }
-  function _M0FP27mik1e806dxfkit10code__type(code) {
-    return _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS3039, _M0FP27mik1e806dxfkit10code__typeN5tupleS3040, _M0FP27mik1e806dxfkit10code__typeN5tupleS3041, _M0FP27mik1e806dxfkit10code__typeN5tupleS3042, _M0FP27mik1e806dxfkit10code__typeN5tupleS3043, _M0FP27mik1e806dxfkit10code__typeN5tupleS3044]) ? 1 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS3045, _M0FP27mik1e806dxfkit10code__typeN5tupleS3046, _M0FP27mik1e806dxfkit10code__typeN5tupleS3047, _M0FP27mik1e806dxfkit10code__typeN5tupleS3048]) ? 2 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS3049]) ? 3 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS3050, _M0FP27mik1e806dxfkit10code__typeN5tupleS3051, _M0FP27mik1e806dxfkit10code__typeN5tupleS3052, _M0FP27mik1e806dxfkit10code__typeN5tupleS3053, _M0FP27mik1e806dxfkit10code__typeN5tupleS3054]) ? 4 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS3055]) ? 5 : _M0FP27mik1e806dxfkit10in__ranges(code, [_M0FP27mik1e806dxfkit10code__typeN5tupleS3056, _M0FP27mik1e806dxfkit10code__typeN5tupleS3057]) ? 6 : 0;
   }
   function _M0MP27mik1e806dxfkit5Layer24is__enabled__for__checks(self) {
     return !(self.color < 0) && !self.frozen;
@@ -6473,7 +7979,7 @@
     }
   }
   function _M0FP27mik1e806dxfkit12parse__layer(record) {
-    const _bind = _M0MP27mik1e806dxfkit6Record7get__in(record, _M0FP27mik1e806dxfkit12parse__layerN3subS1086, 70);
+    const _bind = _M0MP27mik1e806dxfkit6Record7get__in(record, _M0FP27mik1e806dxfkit12parse__layerN3subS1178, 70);
     let flags;
     if (_bind === undefined) {
       flags = 0;
@@ -6483,7 +7989,7 @@
       flags = _M0MP27mik1e806dxfkit8TagValue7as__int(_t.value);
     }
     const _tmp = _M0MP27mik1e806dxfkit6Record11get__string(record, 2);
-    const _bind$2 = _M0MP27mik1e806dxfkit6Record7get__in(record, _M0FP27mik1e806dxfkit12parse__layerN3subS1086, 62);
+    const _bind$2 = _M0MP27mik1e806dxfkit6Record7get__in(record, _M0FP27mik1e806dxfkit12parse__layerN3subS1178, 62);
     let _tmp$2;
     if (_bind$2 === undefined) {
       _tmp$2 = 7;
@@ -6493,7 +7999,7 @@
       _tmp$2 = _M0MP27mik1e806dxfkit8TagValue7as__int(_t.value);
     }
     const _tmp$3 = _tmp$2;
-    const _bind$3 = _M0MP27mik1e806dxfkit6Record7get__in(record, _M0FP27mik1e806dxfkit12parse__layerN3subS1086, 6);
+    const _bind$3 = _M0MP27mik1e806dxfkit6Record7get__in(record, _M0FP27mik1e806dxfkit12parse__layerN3subS1178, 6);
     let _tmp$4;
     if (_bind$3 === undefined) {
       _tmp$4 = "CONTINUOUS";
@@ -6745,7 +8251,7 @@
           }
           current = _M0MP27mik1e806dxfkit6Record11get__string(record, 2);
           current_records = [];
-          if (_M0IPC16option6OptionPB2Eq5equalGsE(current, _M0FP27mik1e806dxfkit15group__sectionsN6constrS3089)) {
+          if (_M0IPC16option6OptionPB2Eq5equalGsE(current, _M0FP27mik1e806dxfkit15group__sectionsN6constrS3351)) {
             _M0MPC15array5Array4pushGRPC14json10WriteFrameE(current_records, record);
           }
         } else {
@@ -6861,19 +8367,416 @@
     }
     return out;
   }
-  function _M0FP27mik1e806dxfkit14build__drawing(scan) {
+  function _M0FP27mik1e806dxfkit27validate__record__structure(records, warnings) {
+    let section = "";
+    let table = false;
+    let block = false;
+    let sequence = "";
+    let eof = false;
+    const _bind = records.length;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind) {
+        const r = records[_];
+        if (warnings.length >= 1000) {
+          _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "结构诊断达到资源上限；检查不完整");
+          break;
+        }
+        if (r.kind === "SECTION") {
+          const _p = section;
+          const _p$2 = "";
+          if (!(_p === _p$2)) {
+            _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "SECTION 嵌套，读取结构不完整");
+          }
+          section = r.section;
+          if (section === "") {
+            _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "SECTION 缺少段名");
+          }
+        } else {
+          if (r.kind === "ENDSEC" || r.kind === "EOF") {
+            if (table) {
+              _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "TABLE 缺少 ENDTAB");
+              table = false;
+            }
+            if (block) {
+              _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "BLOCK 缺少 ENDBLK");
+              block = false;
+            }
+            const _p = sequence;
+            const _p$2 = "";
+            if (!(_p === _p$2)) {
+              const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(14);
+              _M0MPB13StringBuilder13write__objectGsE(_string_builder, sequence);
+              _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 缺少 SEQEND");
+              _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, _string_builder.val);
+              sequence = "";
+            }
+            if (r.kind === "ENDSEC") {
+              if (section === "") {
+                _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "ENDSEC 没有对应 SECTION");
+              }
+              section = "";
+            } else {
+              const _p$3 = section;
+              const _p$4 = "";
+              if (!(_p$3 === _p$4)) {
+                _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "EOF 前缺少 ENDSEC");
+              }
+              eof = true;
+            }
+          } else {
+            if (section === "") {
+              let _tmp$2;
+              if (r.kind === "") {
+                const _p = r.tags;
+                let _tmp$3;
+                let _p$2;
+                _L: {
+                  _L$2: {
+                    const _p$3 = _p.length;
+                    let _tmp$4 = 0;
+                    while (true) {
+                      const _p$4 = _tmp$4;
+                      if (_p$4 < _p$3) {
+                        const _p$5 = _p[_p$4];
+                        if (!(_p$5.code === 999)) {
+                          _p$2 = false;
+                          break _L$2;
+                        }
+                        _tmp$4 = _p$4 + 1 | 0;
+                        continue;
+                      } else {
+                        break;
+                      }
+                    }
+                    _tmp$3 = true;
+                    break _L;
+                  }
+                  _tmp$3 = _p$2;
+                }
+                _tmp$2 = _tmp$3;
+              } else {
+                _tmp$2 = false;
+              }
+              if (!_tmp$2) {
+                const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(38);
+                _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "段外记录 ");
+                _M0MPB13StringBuilder13write__objectGsE(_string_builder, r.kind);
+                _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 已保留，结构无效");
+                _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, _string_builder.val);
+              }
+            } else {
+              const child = sequence === "POLYLINE" && r.kind === "VERTEX" || (sequence === "INSERT/ATTRIB" && r.kind === "ATTRIB" || r.kind === "SEQEND");
+              let _tmp$2;
+              const _p = sequence;
+              const _p$2 = "";
+              if (!(_p === _p$2)) {
+                _tmp$2 = !child;
+              } else {
+                _tmp$2 = false;
+              }
+              if (_tmp$2) {
+                const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(64);
+                _M0MPB13StringBuilder13write__objectGsE(_string_builder, sequence);
+                _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 缺少 SEQEND，遇到 ");
+                _M0MPB13StringBuilder13write__objectGsE(_string_builder, r.kind);
+                _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 时结束恢复；读取结构不完整");
+                _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, _string_builder.val);
+                sequence = "";
+              }
+              let _tmp$3;
+              if (r.kind === "VERTEX") {
+                const _p$3 = sequence;
+                const _p$4 = "POLYLINE";
+                _tmp$3 = !(_p$3 === _p$4);
+              } else {
+                _tmp$3 = false;
+              }
+              if (_tmp$3) {
+                _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "VERTEX 没有所属 POLYLINE 序列；记录已保留");
+              }
+              let _tmp$4;
+              if (r.kind === "ATTRIB") {
+                const _p$3 = sequence;
+                const _p$4 = "INSERT/ATTRIB";
+                _tmp$4 = !(_p$3 === _p$4);
+              } else {
+                _tmp$4 = false;
+              }
+              if (_tmp$4) {
+                _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "ATTRIB 没有所属 INSERT 属性序列；记录已保留");
+              }
+              let _tmp$5;
+              if (r.kind === "TABLE" || r.kind === "ENDTAB") {
+                const _p$3 = section;
+                const _p$4 = "TABLES";
+                _tmp$5 = !(_p$3 === _p$4);
+              } else {
+                _tmp$5 = false;
+              }
+              if (_tmp$5) {
+                const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(44);
+                _M0MPB13StringBuilder13write__objectGsE(_string_builder, r.kind);
+                _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 所在段必须是 TABLES；记录已保留");
+                _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, _string_builder.val);
+              }
+              let _tmp$6;
+              if (r.kind === "BLOCK" || r.kind === "ENDBLK") {
+                const _p$3 = section;
+                const _p$4 = "BLOCKS";
+                _tmp$6 = !(_p$3 === _p$4);
+              } else {
+                _tmp$6 = false;
+              }
+              if (_tmp$6) {
+                const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(44);
+                _M0MPB13StringBuilder13write__objectGsE(_string_builder, r.kind);
+                _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 所在段必须是 BLOCKS；记录已保留");
+                _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, _string_builder.val);
+              }
+              let _tmp$7;
+              if (section === "TABLES") {
+                let _tmp$8;
+                if (!table) {
+                  let _tmp$9;
+                  const _p$3 = r.kind;
+                  const _p$4 = "TABLE";
+                  if (!(_p$3 === _p$4)) {
+                    const _p$5 = r.kind;
+                    const _p$6 = "ENDTAB";
+                    _tmp$9 = !(_p$5 === _p$6);
+                  } else {
+                    _tmp$9 = false;
+                  }
+                  _tmp$8 = _tmp$9;
+                } else {
+                  _tmp$8 = false;
+                }
+                _tmp$7 = _tmp$8;
+              } else {
+                _tmp$7 = false;
+              }
+              if (_tmp$7) {
+                const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(44);
+                _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "表项 ");
+                _M0MPB13StringBuilder13write__objectGsE(_string_builder, r.kind);
+                _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 没有所属 TABLE；记录已保留");
+                _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, _string_builder.val);
+              }
+              let _tmp$8;
+              if (section === "BLOCKS") {
+                let _tmp$9;
+                if (!block) {
+                  let _tmp$10;
+                  const _p$3 = r.kind;
+                  const _p$4 = "BLOCK";
+                  if (!(_p$3 === _p$4)) {
+                    const _p$5 = r.kind;
+                    const _p$6 = "ENDBLK";
+                    _tmp$10 = !(_p$5 === _p$6);
+                  } else {
+                    _tmp$10 = false;
+                  }
+                  _tmp$9 = _tmp$10;
+                } else {
+                  _tmp$9 = false;
+                }
+                _tmp$8 = _tmp$9;
+              } else {
+                _tmp$8 = false;
+              }
+              if (_tmp$8) {
+                const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(44);
+                _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "实体 ");
+                _M0MPB13StringBuilder13write__objectGsE(_string_builder, r.kind);
+                _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 没有所属 BLOCK；记录已保留");
+                _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, _string_builder.val);
+              }
+              const _bind$2 = r.kind;
+              switch (_bind$2) {
+                case "TABLE": {
+                  if (table) {
+                    _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "TABLE 嵌套或缺少 ENDTAB");
+                  }
+                  table = true;
+                  break;
+                }
+                case "ENDTAB": {
+                  if (!table) {
+                    _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "ENDTAB 没有对应 TABLE");
+                  }
+                  table = false;
+                  break;
+                }
+                case "BLOCK": {
+                  if (block) {
+                    _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "BLOCK 嵌套或缺少 ENDBLK");
+                  }
+                  block = true;
+                  break;
+                }
+                case "ENDBLK": {
+                  if (!block) {
+                    _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "ENDBLK 没有对应 BLOCK");
+                  }
+                  block = false;
+                  break;
+                }
+                case "POLYLINE": {
+                  const _p$3 = sequence;
+                  const _p$4 = "";
+                  if (!(_p$3 === _p$4)) {
+                    const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(14);
+                    _M0MPB13StringBuilder13write__objectGsE(_string_builder, sequence);
+                    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 缺少 SEQEND");
+                    _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, _string_builder.val);
+                  }
+                  sequence = "POLYLINE";
+                  break;
+                }
+                case "INSERT": {
+                  const _bind$3 = r.tags;
+                  const _bind$4 = _bind$3.length;
+                  let _tmp$9 = 0;
+                  while (true) {
+                    const _$2 = _tmp$9;
+                    if (_$2 < _bind$4) {
+                      const t = _bind$3[_$2];
+                      if (t.code === 66 && _M0MP27mik1e806dxfkit8TagValue7as__int(t.value) === 1) {
+                        sequence = "INSERT/ATTRIB";
+                      }
+                      _tmp$9 = _$2 + 1 | 0;
+                      continue;
+                    } else {
+                      break;
+                    }
+                  }
+                  break;
+                }
+                case "SEQEND": {
+                  if (sequence === "") {
+                    _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "SEQEND 没有对应序列");
+                  }
+                  sequence = "";
+                  break;
+                }
+              }
+            }
+          }
+        }
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    if (!eof) {
+      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "缺少 EOF；读取结构不完整");
+      return;
+    } else {
+      return;
+    }
+  }
+  function _M0FP27mik1e806dxfkit19build__drawing__raw(scan, raw) {
+    const _bind = scan.tags;
+    const _bind$2 = _bind.length;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind$2) {
+        const tag = _bind[_];
+        const _bind$3 = tag.value;
+        if (_bind$3.$tag === 0) {
+          const _Str = _bind$3;
+          const _text = _Str._0;
+          const identifier = _M0MPC15array5Array8containsGiE([0, 2, 5, 6, 8, 100, 105], tag.code);
+          if (identifier && _text.length > 256 || _text.length > 65536) {
+            return new _M0TP27mik1e806dxfkit7Drawing("", [], ["语义字段文本达到资源上限；原始tag保留，检查不完整"]);
+          }
+        }
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
     const records = _M0FP27mik1e806dxfkit14split__records(scan.tags);
     const warnings = _M0MPC15array5Array4copyGsE(scan.warnings);
     const sections = _M0FP27mik1e806dxfkit15group__sections(records, warnings);
-    const _bind = _M0FP27mik1e806dxfkit17find__header__var(sections, "$ACADVER");
+    _M0FP27mik1e806dxfkit27validate__record__structure(raw, warnings);
+    const _bind$3 = _M0FP27mik1e806dxfkit17find__header__var(sections, "$ACADVER");
     let version;
-    if (_bind === undefined) {
+    if (_bind$3 === undefined) {
       version = "";
     } else {
-      const _Some = _bind;
+      const _Some = _bind$3;
       version = _Some;
     }
     return new _M0TP27mik1e806dxfkit7Drawing(version, sections, warnings);
+  }
+  function _M0FP27mik1e806dxfkit18raw__section__name(tags) {
+    const _bind = tags.length;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind) {
+        const t = tags[_];
+        if (t.code === 2) {
+          return _M0MP27mik1e806dxfkit8TagValue10as__string(t.value);
+        }
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return "";
+  }
+  function _M0FP27mik1e806dxfkit12raw__records(tags) {
+    const records = [];
+    let section = "";
+    let pending = [];
+    let kind = "";
+    const _bind = tags.length;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind) {
+        const tag = tags[_];
+        if (tag.code === 0 && pending.length > 0) {
+          if (kind === "SECTION") {
+            section = _M0FP27mik1e806dxfkit18raw__section__name(pending);
+          }
+          _M0MPC15array5Array4pushGRPC14json10WriteFrameE(records, new _M0TP27mik1e806dxfkit9RawRecord(section, kind, pending));
+          if (kind === "ENDSEC") {
+            section = "";
+          }
+          pending = [];
+        }
+        if (tag.code === 0) {
+          kind = _M0MP27mik1e806dxfkit8TagValue10as__string(tag.value);
+        }
+        _M0MPC15array5Array4pushGRPC14json10WriteFrameE(pending, tag);
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    if (pending.length > 0) {
+      if (kind === "SECTION") {
+        section = _M0FP27mik1e806dxfkit18raw__section__name(pending);
+      }
+      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(records, new _M0TP27mik1e806dxfkit9RawRecord(section, kind, pending));
+    }
+    return records;
+  }
+  function _M0FP27mik1e806dxfkit14build__drawing(scan) {
+    if (scan.tags.length > _M0MP27mik1e806dxfkit10ReadLimits7defaultN6recordS3352.max_tags) {
+      return new _M0TP27mik1e806dxfkit7Drawing("", [], ["手工TagScan超过tag资源上限；检查不完整"]);
+    }
+    return _M0FP27mik1e806dxfkit19build__drawing__raw(scan, _M0FP27mik1e806dxfkit12raw__records(scan.tags));
   }
   function _M0MP27mik1e806dxfkit7Drawing7section(self, name) {
     const _bind = self.sections;
@@ -6894,47 +8797,107 @@
     }
     return undefined;
   }
-  function _M0MP27mik1e806dxfkit9TagStream3new() {
-    const empty = [];
-    return new _M0TP27mik1e806dxfkit9TagStream(_M0MPC15bytes5Bytes11from__array(new _M0TPB9ArrayViewGyE(empty, 0, empty.length)), 0, undefined, [], undefined, false, false);
+  function _M0MP27mik1e806dxfkit6Record11try__double(self, code) {
+    const _bind = _M0MP27mik1e806dxfkit6Record3get(self, code);
+    if (_bind === undefined) {
+      return new _M0DTPC16result6ResultGOdsE2Ok(_M0DTPC16option6OptionGdE4None__);
+    } else {
+      const _Some = _bind;
+      const _t = _Some;
+      let v;
+      _L: {
+        const _bind$2 = _t.value;
+        switch (_bind$2.$tag) {
+          case 4: {
+            const _F64 = _bind$2;
+            const _v = _F64._0;
+            return _M0FP27mik1e806dxfkit14finite__number(_v) ? new _M0DTPC16result6ResultGOdsE2Ok(new _M0DTPC16option6OptionGdE4Some(_v)) : _M0MP27mik1e806dxfkit6Record11try__doubleN6constrS3353;
+          }
+          case 1: {
+            const _I16 = _bind$2;
+            const _v$2 = _I16._0;
+            v = _v$2;
+            break _L;
+          }
+          case 2: {
+            const _I32 = _bind$2;
+            const _v$3 = _I32._0;
+            v = _v$3;
+            break _L;
+          }
+          case 3: {
+            const _I64 = _bind$2;
+            const _v$4 = _I64._0;
+            return new _M0DTPC16result6ResultGOdsE2Ok(new _M0DTPC16option6OptionGdE4Some($f64_convert_i64(BigInt.asIntN(64, _v$4))));
+          }
+          default: {
+            const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(26);
+            _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "组码 ");
+            _M0MPB13StringBuilder13write__objectGiE(_string_builder, code);
+            _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 类型不是数值");
+            return new _M0DTPC16result6ResultGOdsE3Err(_string_builder.val);
+          }
+        }
+      }
+      return new _M0DTPC16result6ResultGOdsE2Ok(new _M0DTPC16option6OptionGdE4Some(v + 0));
+    }
   }
-  function _M0FP27mik1e806dxfkit13concat__bytes(a, b) {
-    if (a.length === 0) {
-      return b;
-    }
-    if (b.length === 0) {
-      return a;
-    }
-    const out = [];
-    let _tmp = 0;
-    while (true) {
-      const i = _tmp;
-      if (i < a.length) {
-        _M0MPC15array5Array4pushGyE(out, i >>> 0 < a.length ? a[i] : $oob());
-        _tmp = i + 1 | 0;
-        continue;
+  function _M0MP27mik1e806dxfkit6Record15require__double(self, code) {
+    const _bind = _M0MP27mik1e806dxfkit6Record11try__double(self, code);
+    if (_bind.$tag === 1) {
+      const _Ok = _bind;
+      const _x = _Ok._0;
+      if (_x.$tag === 1) {
+        const _Some = _x;
+        const _value = _Some._0;
+        return new _M0DTPC16result6ResultGdsE2Ok(_value);
       } else {
-        break;
+        const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(19);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "缺少必填组码 ");
+        _M0MPB13StringBuilder13write__objectGiE(_string_builder, code);
+        return new _M0DTPC16result6ResultGdsE3Err(_string_builder.val);
       }
+    } else {
+      const _Err = _bind;
+      const _msg = _Err._0;
+      return new _M0DTPC16result6ResultGdsE3Err(_msg);
     }
-    let _tmp$2 = 0;
-    while (true) {
-      const i = _tmp$2;
-      if (i < b.length) {
-        _M0MPC15array5Array4pushGyE(out, i >>> 0 < b.length ? b[i] : $oob());
-        _tmp$2 = i + 1 | 0;
-        continue;
-      } else {
-        break;
-      }
+  }
+  function _M0MP27mik1e806dxfkit9TagStream11stop__limit(self, reason) {
+    if (self.limited) {
+      return undefined;
     }
-    return _M0MPC15bytes5Bytes11from__array(new _M0TPB9ArrayViewGyE(out, 0, out.length));
+    self.limited = true;
+    self.line = [];
+    const _p = self.limits.max_warnings;
+    const _p$2 = 1;
+    const cap = _p > _p$2 ? _p : _p$2;
+    if (self.warn.length >= cap) {
+      _M0MPC15array5Array3popGRPC14json10WriteFrameE(self.warn);
+    }
+    _M0MPC15array5Array4pushGRPC14json10WriteFrameE(self.warn, `读取资源上限：${reason}；读取/检查不完整`);
+  }
+  function _M0MP27mik1e806dxfkit9TagStream12with__limits(limits) {
+    const stream = new _M0TP27mik1e806dxfkit9TagStream([], [], 0, undefined, [], undefined, false, false, false, limits, 0, 0, 0, false);
+    if (limits.max_file_bytes <= 0 || (limits.max_line_bytes <= 0 || (limits.max_tags <= 0 || (limits.max_records <= 0 || (limits.max_warnings <= 0 || limits.max_string_bytes <= 0))))) {
+      _M0MP27mik1e806dxfkit9TagStream11stop__limit(stream, "读取预算必须为正整数");
+    }
+    return stream;
+  }
+  function _M0MP27mik1e806dxfkit9TagStream7warning(self, message) {
+    if (self.warn.length >= self.limits.max_warnings) {
+      _M0MP27mik1e806dxfkit9TagStream11stop__limit(self, "警告数量");
+      return;
+    } else {
+      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(self.warn, message);
+      return;
+    }
   }
   function _M0FP27mik1e806dxfkit21parse__codepage__name(name) {
     if (name === "ANSI_1252") {
       return _M0DTP27mik1e806dxfkit8Encoding6Cp1252__;
     } else {
-      if (_M0MPC16string6String11has__prefix(name, new _M0TPC16string10StringView(_M0FP27mik1e806dxfkit21parse__codepage__nameN7_2abindS1830, 0, _M0FP27mik1e806dxfkit21parse__codepage__nameN7_2abindS1830.length))) {
+      if (_M0MPC16string6String11has__prefix(name, new _M0TPC16string10StringView(_M0FP27mik1e806dxfkit21parse__codepage__nameN7_2abindS2050, 0, _M0FP27mik1e806dxfkit21parse__codepage__nameN7_2abindS2050.length))) {
         const digits = _M0MPC16string10StringView9to__owned(_M0MPC16string6String21clamped__view_2einner(name, 5, undefined));
         let n;
         let _try_err;
@@ -7163,49 +9126,6 @@
       }
     }
   }
-  function _M0MP27mik1e806dxfkit9TagStream16choose__encoding(self) {
-    const enc = _M0FP27mik1e806dxfkit16decide__encoding(self.buffer);
-    self.enc = enc;
-    if (_M0MP27mik1e806dxfkit8Encoding12is__fallback(enc)) {
-      const _tmp = self.warn;
-      const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(55);
-      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "未支持的");
-      _M0MPB13StringBuilder13write__objectGsE(_string_builder, _M0MP27mik1e806dxfkit8Encoding11to__display(enc));
-      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "按Latin-1降级解码；文字可能失真");
-      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp, _string_builder.val);
-      return;
-    } else {
-      return;
-    }
-  }
-  function _M0FP27mik1e806dxfkit22advance__past__newline(data, at) {
-    let i = at;
-    let _tmp;
-    if (i < data.length) {
-      const _tmp$2 = i;
-      const _p = _tmp$2 >>> 0 < data.length ? data[_tmp$2] : $oob();
-      const _p$2 = 13;
-      _tmp = _p === _p$2;
-    } else {
-      _tmp = false;
-    }
-    if (_tmp) {
-      i = i + 1 | 0;
-    }
-    let _tmp$2;
-    if (i < data.length) {
-      const _tmp$3 = i;
-      const _p = _tmp$3 >>> 0 < data.length ? data[_tmp$3] : $oob();
-      const _p$2 = 10;
-      _tmp$2 = _p === _p$2;
-    } else {
-      _tmp$2 = false;
-    }
-    if (_tmp$2) {
-      i = i + 1 | 0;
-    }
-    return i;
-  }
   function _M0FP27mik1e806dxfkit12cp1252__high(b) {
     const table = [8364, 129, 8218, 402, 8222, 8230, 8224, 8225, 710, 8240, 352, 8249, 338, 141, 381, 143, 144, 8216, 8217, 8220, 8221, 8226, 8211, 8212, 732, 8482, 353, 8250, 339, 157, 382, 376];
     const idx = b - 128 | 0;
@@ -7258,32 +9178,6 @@
         return _M0FP27mik1e806dxfkit14decode__latin1(data);
       }
     }
-  }
-  function _M0FP27mik1e806dxfkit9line__end(data, from) {
-    let i = from;
-    while (true) {
-      let _tmp;
-      if (i < data.length) {
-        let _tmp$2;
-        const _tmp$3 = i;
-        if ((_tmp$3 >>> 0 < data.length ? data[_tmp$3] : $oob()) !== 10) {
-          const _tmp$4 = i;
-          _tmp$2 = (_tmp$4 >>> 0 < data.length ? data[_tmp$4] : $oob()) !== 13;
-        } else {
-          _tmp$2 = false;
-        }
-        _tmp = _tmp$2;
-      } else {
-        _tmp = false;
-      }
-      if (_tmp) {
-        i = i + 1 | 0;
-        continue;
-      } else {
-        break;
-      }
-    }
-    return i;
   }
   function _M0FP27mik1e806dxfkit15line__is__blank(data, from, to) {
     let _tmp = from;
@@ -7427,10 +9321,10 @@
                 }
                 break _L$4;
               }
-              return _M0FP27mik1e806dxfkit12parse__valueN6constrS3092;
+              return _M0FP27mik1e806dxfkit12parse__valueN6constrS3356;
             }
             if (!_M0FP27mik1e806dxfkit14finite__number(value)) {
-              return _M0FP27mik1e806dxfkit12parse__valueN6constrS3093;
+              return _M0FP27mik1e806dxfkit12parse__valueN6constrS3357;
             }
             return new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(new _M0DTP27mik1e806dxfkit8TagValue3F64(value));
           }
@@ -7456,12 +9350,12 @@
                 }
                 break _L$5;
               }
-              return _M0FP27mik1e806dxfkit12parse__valueN6constrS3094;
+              return _M0FP27mik1e806dxfkit12parse__valueN6constrS3358;
             }
             return new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(new _M0DTP27mik1e806dxfkit8TagValue3I64(value$2));
           }
           case 5: {
-            return text === "0" ? _M0FP27mik1e806dxfkit12parse__valueN6constrS3096 : text === "1" ? _M0FP27mik1e806dxfkit12parse__valueN6constrS3098 : _M0FP27mik1e806dxfkit12parse__valueN6constrS3099;
+            return text === "0" ? _M0FP27mik1e806dxfkit12parse__valueN6constrS3360 : text === "1" ? _M0FP27mik1e806dxfkit12parse__valueN6constrS3362 : _M0FP27mik1e806dxfkit12parse__valueN6constrS3363;
           }
           case 0: {
             break _L$2;
@@ -7486,7 +9380,7 @@
           }
           break _L$4;
         }
-        return _M0FP27mik1e806dxfkit12parse__valueN6constrS3090;
+        return _M0FP27mik1e806dxfkit12parse__valueN6constrS3354;
       }
       if (kind === 1) {
         _L$5: {
@@ -7500,7 +9394,7 @@
             }
             break _L$5;
           }
-          return _M0FP27mik1e806dxfkit12parse__valueN6constrS3091;
+          return _M0FP27mik1e806dxfkit12parse__valueN6constrS3355;
         }
       }
       let _tmp;
@@ -7534,139 +9428,206 @@
     }
     return sb.val;
   }
-  function _M0MP27mik1e806dxfkit9TagStream14consume__lines(self, out) {
-    const data = self.buffer;
+  function _M0MP27mik1e806dxfkit9TagStream13consume__line(self, out) {
+    const _bind = self.line;
+    const data = _M0MPC15bytes5Bytes11from__array(new _M0TPB9ArrayViewGyE(_bind, 0, _bind.length));
+    self.line = [];
+    self.line_no = self.line_no + 1 | 0;
     const n = data.length;
-    let pos = 0;
-    let done = false;
-    while (true) {
-      if (pos < n && !done) {
-        const e = _M0FP27mik1e806dxfkit9line__end(data, pos);
-        if (e >= n && !self.finished) {
-          break;
-        }
-        let _tmp;
-        if (e < n) {
-          let _tmp$2;
-          const _p = e >>> 0 < data.length ? data[e] : $oob();
-          const _p$2 = 13;
-          if (_p === _p$2) {
-            _tmp$2 = (e + 1 | 0) >= n && !self.finished;
-          } else {
-            _tmp$2 = false;
-          }
-          _tmp = _tmp$2;
+    const _bind$2 = self.pending;
+    if (_bind$2 === undefined) {
+      const _bind$3 = _M0FP27mik1e806dxfkit18parse__group__code(data, 0, n);
+      if (_bind$3 === undefined) {
+        if (!_M0FP27mik1e806dxfkit15line__is__blank(data, 0, n)) {
+          const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(83);
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "第 ");
+          _M0MPB13StringBuilder13write__objectGiE(_string_builder, self.line_no);
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 行：这一行应该是组码，但读不出整数（内容：");
+          _M0MPB13StringBuilder13write__objectGsE(_string_builder, _M0FP27mik1e806dxfkit7preview(data, 0, n));
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "），已跳过");
+          _M0MP27mik1e806dxfkit9TagStream7warning(self, _string_builder.val);
+          return;
         } else {
-          _tmp = false;
+          return;
         }
-        if (_tmp) {
-          break;
-        }
-        const start = pos;
-        pos = _M0FP27mik1e806dxfkit22advance__past__newline(data, e);
-        self.line_no = self.line_no + 1 | 0;
-        const _bind = self.pending;
-        if (_bind === undefined) {
-          const _bind$2 = _M0FP27mik1e806dxfkit18parse__group__code(data, start, e);
-          if (_bind$2 === undefined) {
-            if (_M0FP27mik1e806dxfkit15line__is__blank(data, start, e)) {
-            } else {
-              const _tmp$2 = self.warn;
-              const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(59);
-              _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "第 ");
-              _M0MPB13StringBuilder13write__objectGiE(_string_builder, self.line_no);
-              _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 行：这一行应该是组码，但读不出整数（");
-              const _tmp$3 = _string_builder.val;
-              const _string_builder$2 = _M0MPB13StringBuilder21StringBuilder_2einner(24);
-              _M0IPB13StringBuilderPB6Logger13write__string(_string_builder$2, "内容：");
-              _M0MPB13StringBuilder13write__objectGsE(_string_builder$2, _M0FP27mik1e806dxfkit7preview(data, start, e));
-              _M0IPB13StringBuilderPB6Logger13write__string(_string_builder$2, "），已跳过");
-              _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp$2, `${_tmp$3}${_string_builder$2.val}`);
-            }
-          } else {
-            const _Some = _bind$2;
-            const _code = _Some;
-            self.pending = _code;
-          }
-        } else {
-          const _Some = _bind;
-          const _code = _Some;
-          const _p = self.enc;
-          let _tmp$2;
-          if (_p === undefined) {
-            _tmp$2 = $panic();
-          } else {
-            const _p$2 = _p;
-            _tmp$2 = _p$2;
-          }
-          const _bind$2 = _M0FP27mik1e806dxfkit12parse__value(_code, data, start, e, _tmp$2);
-          let value;
-          if (_bind$2.$tag === 1) {
-            const _Ok = _bind$2;
-            value = _Ok._0;
-          } else {
-            const _Err = _bind$2;
-            const _msg = _Err._0;
-            const _tmp$3 = self.warn;
-            const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(54);
-            _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "第");
-            _M0MPB13StringBuilder13write__objectGiE(_string_builder, self.line_no);
-            _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "行组码");
-            _M0MPB13StringBuilder13write__objectGiE(_string_builder, _code);
-            _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "：");
-            _M0MPB13StringBuilder13write__objectGsE(_string_builder, _msg);
-            _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "；保留原文，几何结果需复核");
-            _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp$3, _string_builder.val);
-            const _tmp$4 = _M0FP27mik1e806dxfkit12slice__range(data, start, e);
-            const _p$2 = self.enc;
-            let _tmp$5;
-            if (_p$2 === undefined) {
-              _tmp$5 = $panic();
-            } else {
-              const _p$3 = _p$2;
-              _tmp$5 = _p$3;
-            }
-            value = new _M0DTP27mik1e806dxfkit8TagValue3Str(_M0FP27mik1e806dxfkit12decode__text(_tmp$4, _tmp$5));
-          }
-          _M0MPC15array5Array4pushGRPC14json10WriteFrameE(out, _M0MP27mik1e806dxfkit3Tag3new(_code, value));
-          self.pending = undefined;
-          if (_code === 0 && _M0MP27mik1e806dxfkit8TagValue10as__string(value) === "EOF") {
-            self.eof_seen = true;
-            done = true;
-          }
-        }
-        continue;
       } else {
-        break;
+        const _Some = _bind$3;
+        const _code = _Some;
+        self.pending = _code;
+        return;
       }
-    }
-    if (done) {
-      const empty = [];
-      self.buffer = _M0MPC15bytes5Bytes11from__array(new _M0TPB9ArrayViewGyE(empty, 0, empty.length));
-      return;
     } else {
-      if (pos > 0) {
-        self.buffer = _M0FP27mik1e806dxfkit12slice__range(data, pos, n);
+      const _Some = _bind$2;
+      const _code = _Some;
+      if (self.tags >= self.limits.max_tags || _code === 0 && self.records >= self.limits.max_records) {
+        _M0MP27mik1e806dxfkit9TagStream11stop__limit(self, "tag 或记录数量");
+        return undefined;
+      }
+      _L: {
+        _L$2: {
+          const _bind$3 = _M0FP27mik1e806dxfkit10code__type(_code);
+          if (_bind$3 === 0) {
+            break _L$2;
+          } else {
+            const _bind$4 = _M0FP27mik1e806dxfkit10code__type(_code);
+            if (_bind$4 === 6) {
+              break _L$2;
+            }
+          }
+          break _L;
+        }
+        if (n > self.limits.max_string_bytes) {
+          _M0MP27mik1e806dxfkit9TagStream11stop__limit(self, "字符串字节数");
+          return undefined;
+        }
+      }
+      const _p = self.enc;
+      let _tmp;
+      if (_p === undefined) {
+        _tmp = $panic();
+      } else {
+        const _p$2 = _p;
+        _tmp = _p$2;
+      }
+      const _bind$3 = _M0FP27mik1e806dxfkit12parse__value(_code, data, 0, n, _tmp);
+      let value;
+      if (_bind$3.$tag === 1) {
+        const _Ok = _bind$3;
+        value = _Ok._0;
+      } else {
+        const _Err = _bind$3;
+        const _msg = _Err._0;
+        const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(54);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "第");
+        _M0MPB13StringBuilder13write__objectGiE(_string_builder, self.line_no);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "行组码");
+        _M0MPB13StringBuilder13write__objectGiE(_string_builder, _code);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "：");
+        _M0MPB13StringBuilder13write__objectGsE(_string_builder, _msg);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "；保留原文，几何结果需复核");
+        _M0MP27mik1e806dxfkit9TagStream7warning(self, _string_builder.val);
+        const _p$2 = self.enc;
+        let _tmp$2;
+        if (_p$2 === undefined) {
+          _tmp$2 = $panic();
+        } else {
+          const _p$3 = _p$2;
+          _tmp$2 = _p$3;
+        }
+        value = new _M0DTP27mik1e806dxfkit8TagValue3Str(_M0FP27mik1e806dxfkit12decode__text(data, _tmp$2));
+      }
+      if (self.limited) {
+        return undefined;
+      }
+      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(out, _M0MP27mik1e806dxfkit3Tag3new(_code, value));
+      self.tags = self.tags + 1 | 0;
+      if (_code === 0) {
+        self.records = self.records + 1 | 0;
+      }
+      self.pending = undefined;
+      if (_code === 0 && _M0MP27mik1e806dxfkit8TagValue10as__string(value) === "EOF") {
+        self.eof_seen = true;
         return;
       } else {
         return;
       }
     }
   }
+  function _M0MP27mik1e806dxfkit9TagStream13consume__byte(self, byte, out) {
+    if (self.skip_lf) {
+      self.skip_lf = false;
+      const _p = 10;
+      if (byte === _p) {
+        return undefined;
+      }
+    }
+    let _tmp;
+    const _p = 13;
+    if (byte === _p) {
+      _tmp = true;
+    } else {
+      const _p$2 = 10;
+      _tmp = byte === _p$2;
+    }
+    if (_tmp) {
+      const _p$2 = 13;
+      self.skip_lf = byte === _p$2;
+      _M0MP27mik1e806dxfkit9TagStream13consume__line(self, out);
+      return;
+    } else {
+      if (self.line.length >= self.limits.max_line_bytes) {
+        _M0MP27mik1e806dxfkit9TagStream11stop__limit(self, "单行字节数");
+        return;
+      } else {
+        _M0MPC15array5Array4pushGyE(self.line, byte);
+        return;
+      }
+    }
+  }
+  function _M0MP27mik1e806dxfkit9TagStream16choose__encoding(self, out) {
+    const _bind = self.prefix;
+    const enc = _M0FP27mik1e806dxfkit16decide__encoding(_M0MPC15bytes5Bytes11from__array(new _M0TPB9ArrayViewGyE(_bind, 0, _bind.length)));
+    self.enc = enc;
+    if (_M0MP27mik1e806dxfkit8Encoding12is__fallback(enc)) {
+      const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(55);
+      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "未支持的");
+      _M0MPB13StringBuilder13write__objectGsE(_string_builder, _M0MP27mik1e806dxfkit8Encoding11to__display(enc));
+      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "按Latin-1降级解码；文字可能失真");
+      _M0MP27mik1e806dxfkit9TagStream7warning(self, _string_builder.val);
+    }
+    const _bind$2 = self.prefix;
+    const _bind$3 = _bind$2.length;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind$3) {
+        const byte = _bind$2[_];
+        if (self.eof_seen || self.limited) {
+          break;
+        }
+        _M0MP27mik1e806dxfkit9TagStream13consume__byte(self, byte, out);
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    _M0MPC15array5Array5clearGyE(self.prefix);
+  }
   function _M0MP27mik1e806dxfkit9TagStream4feed(self, chunk) {
     const out = [];
-    if (self.finished || self.eof_seen) {
+    if (self.finished || (self.eof_seen || self.limited)) {
       return out;
     }
-    self.buffer = _M0FP27mik1e806dxfkit13concat__bytes(self.buffer, chunk);
-    const _bind = self.enc;
-    if (_bind === undefined) {
-      if (self.buffer.length < 1024) {
-        return out;
-      }
-      _M0MP27mik1e806dxfkit9TagStream16choose__encoding(self);
+    if (chunk.length > (self.limits.max_file_bytes - self.bytes | 0)) {
+      _M0MP27mik1e806dxfkit9TagStream11stop__limit(self, "文件字节数");
+      return out;
     }
-    _M0MP27mik1e806dxfkit9TagStream14consume__lines(self, out);
+    self.bytes = self.bytes + chunk.length | 0;
+    const _bind = chunk.length;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind) {
+        const byte = chunk[_];
+        if (self.eof_seen || self.limited) {
+          break;
+        }
+        const _bind$2 = self.enc;
+        if (_bind$2 === undefined) {
+          _M0MPC15array5Array4pushGyE(self.prefix, byte);
+          if (self.prefix.length === 1024) {
+            _M0MP27mik1e806dxfkit9TagStream16choose__encoding(self, out);
+          }
+        } else {
+          _M0MP27mik1e806dxfkit9TagStream13consume__byte(self, byte, out);
+        }
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
     return out;
   }
   function _M0MP27mik1e806dxfkit9TagStream6finish(self) {
@@ -7675,33 +9636,36 @@
       return out;
     }
     self.finished = true;
-    if (self.eof_seen) {
-      return out;
-    }
     const _bind = self.enc;
     if (_bind === undefined) {
-      _M0MP27mik1e806dxfkit9TagStream16choose__encoding(self);
+      _M0MP27mik1e806dxfkit9TagStream16choose__encoding(self, out);
     }
-    _M0MP27mik1e806dxfkit9TagStream14consume__lines(self, out);
-    const _bind$2 = self.pending;
-    if (_bind$2 === undefined) {
-    } else {
-      const _Some = _bind$2;
-      const _code = _Some;
-      const _tmp = self.warn;
-      const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(89);
-      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "文件在最后一行截断了：组码 ");
-      _M0MPB13StringBuilder13write__objectGiE(_string_builder, _code);
-      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 后面没有值（可能是文件被切断了）");
-      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp, _string_builder.val);
+    if (self.eof_seen || self.limited) {
+      return out;
+    }
+    if (self.line.length > 0) {
+      _M0MP27mik1e806dxfkit9TagStream13consume__line(self, out);
+    }
+    if (!self.limited) {
+      const _bind$2 = self.pending;
+      if (_bind$2 === undefined) {
+      } else {
+        const _Some = _bind$2;
+        const _code = _Some;
+        const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(89);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "文件在最后一行截断了：组码 ");
+        _M0MPB13StringBuilder13write__objectGiE(_string_builder, _code);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 后面没有值（可能是文件被切断了）");
+        _M0MP27mik1e806dxfkit9TagStream7warning(self, _string_builder.val);
+      }
     }
     return out;
   }
   function _M0MP27mik1e806dxfkit9TagStream8warnings(self) {
     return _M0MPC15array5Array4copyGsE(self.warn);
   }
-  function _M0FP27mik1e806dxfkit10scan__tags(data) {
-    const stream = _M0MP27mik1e806dxfkit9TagStream3new();
+  function _M0FP27mik1e806dxfkit24scan__tags__with__limits(data, limits) {
+    const stream = _M0MP27mik1e806dxfkit9TagStream12with__limits(limits);
     const tags = _M0MP27mik1e806dxfkit9TagStream4feed(stream, data);
     const _bind = _M0MP27mik1e806dxfkit9TagStream6finish(stream);
     _M0MPC15array5Array6appendGRP27mik1e806dxfkit3TagE(tags, new _M0TPB9ArrayViewGRP27mik1e806dxfkit3TagE(_bind, 0, _bind.length));
@@ -7716,8 +9680,16 @@
     }
     return new _M0TP27mik1e806dxfkit7TagScan(tags, _tmp, _tmp$2);
   }
+  function _M0FP27mik1e806dxfkit10scan__tags(data) {
+    return _M0FP27mik1e806dxfkit24scan__tags__with__limits(data, _M0MP27mik1e806dxfkit10ReadLimits7defaultN6recordS3352);
+  }
   function _M0FP27mik1e806dxfkit13expand__visit(ctx) {
     if (ctx.stopped) {
+      return false;
+    }
+    if (ctx.warnings.length >= 1000) {
+      ctx.stopped = true;
+      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(ctx.warnings, "展开诊断达到资源上限；检查不完整");
       return false;
     }
     if (ctx.visits >= ctx.limits.max_visits) {
@@ -7737,7 +9709,7 @@
     const _bind = _M0MP27mik1e806dxfkit3Ocs7to__wcs(ocs, _M0MP27mik1e806dxfkit4Vec33new(c * scale.x, s * scale.x, 0));
     const _bind$2 = _M0MP27mik1e806dxfkit3Ocs7to__wcs(ocs, _M0MP27mik1e806dxfkit4Vec33new(-s * scale.y, c * scale.y, 0));
     const _bind$3 = _M0MP27mik1e806dxfkit3Ocs7to__wcs(ocs, _M0MP27mik1e806dxfkit4Vec33new(0, 0, scale.z));
-    const _bind$4 = _M0MP27mik1e806dxfkit4Vec34zeroN6recordS3020;
+    const _bind$4 = _M0MP27mik1e806dxfkit4Vec34zeroN6recordS3299;
     const t = new _M0TP27mik1e806dxfkit10Transform3(_bind, _bind$2, _bind$3, _bind$4);
     const grid = _M0MP27mik1e806dxfkit4Vec33new(c * offset.x - s * offset.y, s * offset.x + c * offset.y, 0);
     return new _M0TP27mik1e806dxfkit10Transform3(_bind, _bind$2, _bind$3, _M0MP27mik1e806dxfkit4Vec33sub(_M0MP27mik1e806dxfkit3Ocs7to__wcs(ocs, _M0FP27mik1e806dxfkit4add3(at, grid)), _M0MP27mik1e806dxfkit10Transform36vector(t, base)));
@@ -7824,106 +9796,98 @@
         _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp$2, _string_builder.val);
         return undefined;
       }
-      let found = undefined;
-      const _bind$3 = ctx.blocks;
-      const _bind$4 = _bind$3.length;
-      let _tmp$2 = 0;
-      while (true) {
-        const _ = _tmp$2;
-        if (_ < _bind$4) {
-          const b = _bind$3[_];
-          if (b.name === _block) {
-            found = b;
-          }
-          _tmp$2 = _ + 1 | 0;
-          continue;
-        } else {
-          break;
-        }
+      if (_M0MPB3Map8containsGsbE(ctx.duplicates, _block)) {
+        const _tmp$2 = ctx.warnings;
+        const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(66);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "块名「");
+        _M0MPB13StringBuilder13write__objectGsE(_string_builder, _block);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "」重复，引用含歧义；未展开，检查不完整");
+        _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp$2, _string_builder.val);
+        return undefined;
       }
-      const _bind$5 = found;
+      const _bind$3 = _M0MPB3Map3getGsRP27mik1e806dxfkit5BlockE(ctx.blocks, _block);
       let b;
-      if (_bind$5 === undefined) {
-        const _tmp$3 = ctx.warnings;
+      if (_bind$3 === undefined) {
+        const _tmp$2 = ctx.warnings;
         const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(42);
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "引用了不存在的块「");
         _M0MPB13StringBuilder13write__objectGsE(_string_builder, _block);
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "」，已跳过");
-        _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp$3, _string_builder.val);
+        _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp$2, _string_builder.val);
         return undefined;
       } else {
-        const _Some = _bind$5;
+        const _Some = _bind$3;
         b = _Some;
       }
       if (!_M0FP27mik1e806dxfkit7finite3(b.base)) {
-        const _tmp$3 = ctx.warnings;
+        const _tmp$2 = ctx.warnings;
         const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(36);
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "块「");
         _M0MPB13StringBuilder13write__objectGsE(_string_builder, _block);
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "」基点非有限；未展开");
-        _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp$3, _string_builder.val);
+        _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp$2, _string_builder.val);
         return undefined;
       }
       if (_M0MP27mik1e806dxfkit6Record8get__int(r, 66, 0) === 1) {
-        const _tmp$3 = ctx.warnings;
+        const _tmp$2 = ctx.warnings;
         const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(101);
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "INSERT ");
         _M0MPB13StringBuilder13write__objectGsE(_string_builder, e.common.handle);
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整");
-        _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp$3, _string_builder.val);
+        _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp$2, _string_builder.val);
       }
-      let _tmp$3;
+      let _tmp$2;
       let _p$2;
       _L: {
         _L$2: {
           const _p$3 = path.length;
-          let _tmp$4 = 0;
+          let _tmp$3 = 0;
           while (true) {
-            const _p$4 = _tmp$4;
+            const _p$4 = _tmp$3;
             if (_p$4 < _p$3) {
               const _p$5 = path[_p$4];
               if (_p$5.block === _block) {
                 _p$2 = true;
                 break _L$2;
               }
-              _tmp$4 = _p$4 + 1 | 0;
+              _tmp$3 = _p$4 + 1 | 0;
               continue;
             } else {
               break;
             }
           }
-          _tmp$3 = false;
+          _tmp$2 = false;
           break _L;
         }
-        _tmp$3 = _p$2;
+        _tmp$2 = _p$2;
       }
-      if (_tmp$3) {
-        const _tmp$4 = ctx.warnings;
+      if (_tmp$2) {
+        const _tmp$3 = ctx.warnings;
         const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(77);
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "INSERT ");
         _M0MPB13StringBuilder13write__objectGsE(_string_builder, e.common.handle);
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 的块「");
         _M0MPB13StringBuilder13write__objectGsE(_string_builder, _block);
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "」在展开链上重复出现（循环引用），已截断");
-        _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp$4, _string_builder.val);
+        _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp$3, _string_builder.val);
         return undefined;
       }
       if (path.length >= 8) {
-        const _tmp$4 = ctx.warnings;
+        const _tmp$3 = ctx.warnings;
         const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(39);
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "块嵌套超过 8 层（");
         _M0MPB13StringBuilder13write__objectGsE(_string_builder, _block);
         _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "），已截断");
-        _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp$4, _string_builder.val);
+        _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_tmp$3, _string_builder.val);
         return undefined;
       }
-      let _tmp$4 = 0;
+      let _tmp$3 = 0;
       while (true) {
-        const row = _tmp$4;
+        const row = _tmp$3;
         if (row < rows && !ctx.stopped) {
-          let _tmp$5 = 0;
+          let _tmp$4 = 0;
           while (true) {
-            const col = _tmp$5;
+            const col = _tmp$4;
             if (col < columns && !ctx.stopped) {
               if (!_M0FP27mik1e806dxfkit13expand__visit(ctx)) {
                 break;
@@ -7931,30 +9895,30 @@
               const cell = _M0FP27mik1e806dxfkit18insert__transform3(_at, b.base, _scale, _rotation, _M0MP27mik1e806dxfkit4Vec33new((col + 0) * dx, (row + 0) * dy, 0), ocs);
               const current = _M0MPC15array5Array4copyGsE(path);
               _M0MPC15array5Array4pushGRPC14json10WriteFrameE(current, new _M0TP27mik1e806dxfkit14InsertInstance(e.common.handle, _block, row, col));
-              const _bind$6 = b.entities;
-              const _bind$7 = _bind$6.length;
-              let _tmp$6 = 0;
+              const _bind$4 = b.entities;
+              const _bind$5 = _bind$4.length;
+              let _tmp$5 = 0;
               while (true) {
-                const _ = _tmp$6;
-                if (_ < _bind$7) {
-                  const inner = _bind$6[_];
+                const _ = _tmp$5;
+                if (_ < _bind$5) {
+                  const inner = _bind$4[_];
                   if (ctx.stopped) {
                     break;
                   }
                   _M0FP27mik1e806dxfkit21expand__entity__world(inner, ctx, _M0MP27mik1e806dxfkit10Transform37compose(xform, cell), layer, current, out);
-                  _tmp$6 = _ + 1 | 0;
+                  _tmp$5 = _ + 1 | 0;
                   continue;
                 } else {
                   break;
                 }
               }
-              _tmp$5 = col + 1 | 0;
+              _tmp$4 = col + 1 | 0;
               continue;
             } else {
               break;
             }
           }
-          _tmp$4 = row + 1 | 0;
+          _tmp$3 = row + 1 | 0;
           continue;
         } else {
           return;
@@ -8084,16 +10048,23 @@
     return sb.val;
   }
   function _M0FP27mik1e806dxfkit10number__of(record, code) {
-    const _bind = _M0MP27mik1e806dxfkit6Record3get(record, code);
-    if (_bind === undefined) {
-      return _M0DTPC16option6OptionGdE4None__;
+    const _bind = _M0MP27mik1e806dxfkit6Record15require__double(record, code);
+    if (_bind.$tag === 1) {
+      const _Ok = _bind;
+      const _value = _Ok._0;
+      return new _M0DTPC16option6OptionGdE4Some(_value);
     } else {
-      const _Some = _bind;
-      const _t = _Some;
-      return new _M0DTPC16option6OptionGdE4Some(_M0MP27mik1e806dxfkit8TagValue10as__double(_t.value));
+      return _M0DTPC16option6OptionGdE4None__;
     }
   }
   function _M0FP27mik1e806dxfkit22warn__polyline__extent(record, codes, warnings) {
+    if (_M0MP27mik1e806dxfkit6Record11get__double(record, 39, 0) !== 0) {
+      const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(61);
+      _M0MPB13StringBuilder13write__objectGsE(_string_builder, record.kind);
+      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 非零厚度未重建；原始记录保留，轮廓未检查");
+      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, _string_builder.val);
+      return undefined;
+    }
     const _bind = codes.length;
     let _tmp = 0;
     while (true) {
@@ -8408,25 +10379,36 @@
     return new _M0DTP27mik1e806dxfkit8Geometry6Spline(degree, knots, control, weights);
   }
   function _M0MP27mik1e806dxfkit6Record5point(self, n) {
-    const _bind = _M0MP27mik1e806dxfkit6Record3get(self, 10 + n | 0);
+    const _bind = _M0MP27mik1e806dxfkit6Record15require__double(self, 10 + n | 0);
     let x;
-    if (_bind === undefined) {
-      return undefined;
+    if (_bind.$tag === 1) {
+      const _Ok = _bind;
+      x = _Ok._0;
     } else {
-      const _Some = _bind;
-      const _t = _Some;
-      x = _M0MP27mik1e806dxfkit8TagValue10as__double(_t.value);
+      return undefined;
     }
-    const _bind$2 = _M0MP27mik1e806dxfkit6Record3get(self, 20 + n | 0);
+    const _bind$2 = _M0MP27mik1e806dxfkit6Record15require__double(self, 20 + n | 0);
     let y;
-    if (_bind$2 === undefined) {
-      return undefined;
+    if (_bind$2.$tag === 1) {
+      const _Ok = _bind$2;
+      y = _Ok._0;
     } else {
-      const _Some = _bind$2;
-      const _t = _Some;
-      y = _M0MP27mik1e806dxfkit8TagValue10as__double(_t.value);
+      return undefined;
     }
-    const z = _M0MP27mik1e806dxfkit6Record11get__double(self, 30 + n | 0, 0);
+    const _bind$3 = _M0MP27mik1e806dxfkit6Record11try__double(self, 30 + n | 0);
+    let z;
+    if (_bind$3.$tag === 1) {
+      const _Ok = _bind$3;
+      const _x = _Ok._0;
+      if (_x.$tag === 1) {
+        const _Some = _x;
+        z = _Some._0;
+      } else {
+        z = 0;
+      }
+    } else {
+      return undefined;
+    }
     return _M0MP27mik1e806dxfkit4Vec33new(x, y, z);
   }
   function _M0FP27mik1e806dxfkit13parse__entity(record, warnings) {
@@ -8775,6 +10757,10 @@
       const _ = _tmp;
       if (_ < _bind) {
         const vr = vertex_records.buf[vertex_records.start + _ | 0];
+        if (!_M0FP27mik1e806dxfkit20valid__numeric__tags(vr)) {
+          _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "POLYLINE 顶点数值类型错误；保留记录，不生成猜测几何");
+          return new _M0TP27mik1e806dxfkit6Entity(_M0FP27mik1e806dxfkit10common__of(record), _M0DTP27mik1e806dxfkit8Geometry7Unknown__);
+        }
         const _bind$2 = [40, 41];
         const _bind$3 = _bind$2.length;
         let _tmp$2 = 0;
@@ -8872,11 +10858,24 @@
     let i = 0;
     while (true) {
       if (i < (records.end - records.start | 0)) {
+        if (warnings.length >= 1000) {
+          _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, "实体解码诊断达到资源上限；剩余记录未解码，检查不完整");
+          break;
+        }
         const _bind = i;
         if (_bind < 0 || _bind >= (records.end - records.start | 0)) {
           $panic();
         }
         const record = records.buf[records.start + _bind | 0];
+        if (!_M0FP27mik1e806dxfkit20valid__numeric__tags(record)) {
+          const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(64);
+          _M0MPB13StringBuilder13write__objectGsE(_string_builder, record.kind);
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 数值字段类型错误；保留记录，不生成猜测几何");
+          _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, _string_builder.val);
+          _M0MPC15array5Array4pushGRPC14json10WriteFrameE(entities, new _M0TP27mik1e806dxfkit6Entity(_M0FP27mik1e806dxfkit10common__of(record), _M0DTP27mik1e806dxfkit8Geometry7Unknown__));
+          i = i + 1 | 0;
+          continue;
+        }
         if (record.kind === "POLYLINE") {
           let j = i + 1 | 0;
           while (true) {
@@ -9007,7 +11006,7 @@
             _M0MPB13StringBuilder13write__objectGsE(_string_builder, name);
             _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "」缺基点（10/20），按原点处理");
             _M0MPC15array5Array4pushGRPC14json10WriteFrameE(warnings, _string_builder.val);
-            base = _M0MP27mik1e806dxfkit4Vec34zeroN6recordS3020;
+            base = _M0MP27mik1e806dxfkit4Vec34zeroN6recordS3299;
           } else {
             const _Some = _bind;
             base = _Some;
@@ -9057,7 +11056,7 @@
     }
   }
   function _M0MP27mik1e806dxfkit10Transform38identity() {
-    return new _M0TP27mik1e806dxfkit10Transform3(_M0MP27mik1e806dxfkit4Vec33new(1, 0, 0), _M0MP27mik1e806dxfkit4Vec33new(0, 1, 0), _M0MP27mik1e806dxfkit4Vec33new(0, 0, 1), _M0MP27mik1e806dxfkit4Vec34zeroN6recordS3020);
+    return new _M0TP27mik1e806dxfkit10Transform3(_M0MP27mik1e806dxfkit4Vec33new(1, 0, 0), _M0MP27mik1e806dxfkit4Vec33new(0, 1, 0), _M0MP27mik1e806dxfkit4Vec33new(0, 0, 1), _M0MP27mik1e806dxfkit4Vec34zeroN6recordS3299);
   }
   function _M0MP27mik1e806dxfkit7Drawing27expand__world__with__limits(self, tol, limits) {
     if (!_M0FP27mik1e806dxfkit19positive__tolerance(tol)) {
@@ -9073,20 +11072,42 @@
     _M0MPC15array5Array6appendGRP27mik1e806dxfkit3TagE(warnings, new _M0TPB9ArrayViewGsE(_bind, 0, _bind.length));
     const _bind$2 = blocks.warnings;
     _M0MPC15array5Array6appendGRP27mik1e806dxfkit3TagE(warnings, new _M0TPB9ArrayViewGsE(_bind$2, 0, _bind$2.length));
-    const ctx = new _M0TP27mik1e806dxfkit9ExpandCtx(blocks.blocks, tol, warnings, limits, 0, 0, false);
-    const placed = [];
-    const _bind$3 = es.entities;
-    const _bind$4 = _bind$3.length;
+    const _bind$3 = [];
+    const index = _M0MPB3Map3MapGsRP27mik1e806dxfkit5BlockE(new _M0TPB9ArrayViewGUsRP27mik1e806dxfkit5BlockEE(_bind$3, 0, 0), undefined);
+    const _bind$4 = [];
+    const duplicates = _M0MPB3Map3MapGsbE(new _M0TPB9ArrayViewGUsbEE(_bind$4, 0, 0), undefined);
+    const _bind$5 = blocks.blocks;
+    const _bind$6 = _bind$5.length;
     let _tmp = 0;
     while (true) {
       const _ = _tmp;
-      if (_ < _bind$4) {
-        const e = _bind$3[_];
+      if (_ < _bind$6) {
+        const block = _bind$5[_];
+        if (_M0MPB3Map8containsGsRP27mik1e806dxfkit5BlockE(index, block.name)) {
+          _M0MPB3Map3setGsbE(duplicates, block.name, true);
+        } else {
+          _M0MPB3Map3setGsRP27mik1e806dxfkit5BlockE(index, block.name, block);
+        }
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    const ctx = new _M0TP27mik1e806dxfkit9ExpandCtx(index, duplicates, tol, warnings, limits, 0, 0, false);
+    const placed = [];
+    const _bind$7 = es.entities;
+    const _bind$8 = _bind$7.length;
+    let _tmp$2 = 0;
+    while (true) {
+      const _ = _tmp$2;
+      if (_ < _bind$8) {
+        const e = _bind$7[_];
         if (ctx.stopped) {
           break;
         }
         _M0FP27mik1e806dxfkit21expand__entity__world(e, ctx, _M0MP27mik1e806dxfkit10Transform38identity(), "", [], placed);
-        _tmp = _ + 1 | 0;
+        _tmp$2 = _ + 1 | 0;
         continue;
       } else {
         break;
@@ -9137,7 +11158,7 @@
               break;
             }
           }
-          const instances = _M0MPC15array5Array4joinGsE(_p$2, new _M0TPC16string10StringView(_M0MP27mik1e806dxfkit7Drawing20expand__with__limitsN7_2abindS2411, 0, _M0MP27mik1e806dxfkit7Drawing20expand__with__limitsN7_2abindS2411.length));
+          const instances = _M0MPC15array5Array4joinGsE(_p$2, new _M0TPC16string10StringView(_M0MP27mik1e806dxfkit7Drawing20expand__with__limitsN7_2abindS2629, 0, _M0MP27mik1e806dxfkit7Drawing20expand__with__limitsN7_2abindS2629.length));
           const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(89);
           const _p$4 = p.entity;
           _M0MPB13StringBuilder13write__objectGsE(_string_builder, _p$4.common.kind);
@@ -9164,7 +11185,7 @@
     return new _M0TP27mik1e806dxfkit9Expansion(placed, warnings);
   }
   function _M0MP27mik1e806dxfkit7Drawing6expand(self, tol) {
-    return _M0MP27mik1e806dxfkit7Drawing20expand__with__limits(self, tol, _M0FP27mik1e806dxfkit17expansion__limitsN6recordS3100);
+    return _M0MP27mik1e806dxfkit7Drawing20expand__with__limits(self, tol, _M0FP27mik1e806dxfkit17expansion__limitsN6recordS3364);
   }
   function _M0FP27mik1e806dxfkit3fmt(v) {
     return String(v);
@@ -9224,13 +11245,13 @@
   }
   function _M0FP27mik1e806dxfkit12layer__state(tables, layer) {
     if (tables === undefined) {
-      return _M0FP27mik1e806dxfkit12layer__stateN5tupleS3102;
+      return _M0FP27mik1e806dxfkit12layer__stateN5tupleS3366;
     } else {
       const _Some = tables;
       const _t = _Some;
       const _bind = _M0MP27mik1e806dxfkit6Tables5layer(_t, layer);
       if (_bind === undefined) {
-        return _M0FP27mik1e806dxfkit12layer__stateN5tupleS3101;
+        return _M0FP27mik1e806dxfkit12layer__stateN5tupleS3365;
       } else {
         const _Some$2 = _bind;
         const _l = _Some$2;
@@ -9238,6 +11259,89 @@
         return !_M0MP27mik1e806dxfkit5Layer24is__enabled__for__checks(_l) ? { _0: color, _1: " opacity=\"0.25\"" } : { _0: color, _1: "" };
       }
     }
+  }
+  function _M0FP27mik1e806dxfkit12safe__scalar(x) {
+    return x === 0 || Math.abs(x) >= 1e-100 && Math.abs(x) <= 1e+100;
+  }
+  function _M0FP27mik1e806dxfkit8safe__xy(p) {
+    return _M0FP27mik1e806dxfkit14finite__number(p.x) && (_M0FP27mik1e806dxfkit14finite__number(p.y) && (_M0FP27mik1e806dxfkit12safe__scalar(p.x) && _M0FP27mik1e806dxfkit12safe__scalar(p.y)));
+  }
+  function _M0FP27mik1e806dxfkit18preview__range__ok(exp) {
+    let count = 0;
+    let text = 0;
+    const _bind = exp.placed;
+    const _bind$2 = _bind.length;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind$2) {
+        const placed = _bind[_];
+        const _bind$3 = placed.flat;
+        switch (_bind$3.$tag) {
+          case 0: {
+            const _Outline = _bind$3;
+            const _points = _Outline._0;
+            count = count + _points.length | 0;
+            let _tmp$2;
+            let _p;
+            _L: {
+              _L$2: {
+                const _p$2 = _points.length;
+                let _tmp$3 = 0;
+                while (true) {
+                  const _p$3 = _tmp$3;
+                  if (_p$3 < _p$2) {
+                    const _p$4 = _points[_p$3];
+                    if (!_M0FP27mik1e806dxfkit8safe__xy(_p$4)) {
+                      _p = false;
+                      break _L$2;
+                    }
+                    _tmp$3 = _p$3 + 1 | 0;
+                    continue;
+                  } else {
+                    break;
+                  }
+                }
+                _tmp$2 = true;
+                break _L;
+              }
+              _tmp$2 = _p;
+            }
+            if (!_tmp$2) {
+              return false;
+            }
+            break;
+          }
+          case 1: {
+            const _Dot = _bind$3;
+            const _at = _Dot._0;
+            if (!_M0FP27mik1e806dxfkit8safe__xy(_at)) {
+              return false;
+            }
+            break;
+          }
+          case 2: {
+            const _Label = _bind$3;
+            const _at$2 = _Label._0;
+            const _height = _Label._1;
+            const _value = _Label._2;
+            text = text + _value.length | 0;
+            if (!_M0FP27mik1e806dxfkit8safe__xy(_at$2) || (!_M0FP27mik1e806dxfkit14finite__number(_height) || !_M0FP27mik1e806dxfkit12safe__scalar(_height))) {
+              return false;
+            }
+            break;
+          }
+        }
+        if (count > 200000 || text > 65536) {
+          return false;
+        }
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return true;
   }
   function _M0FP27mik1e806dxfkit11xml__escape(s) {
     const sb = _M0MPB13StringBuilder21StringBuilder_2einner(0);
@@ -9305,7 +11409,10 @@
     return sb.val;
   }
   function _M0MP27mik1e806dxfkit7Drawing20svg__from__expansion(self, exp) {
-    let box = _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3035;
+    if (!_M0FP27mik1e806dxfkit18preview__range__ok(exp)) {
+      return "";
+    }
+    let box = _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3316;
     const _bind = exp.placed;
     const _bind$2 = _bind.length;
     let _tmp = 0;
@@ -9362,8 +11469,37 @@
     const vy = -(box.max.y + margin);
     const vw = size.x + margin * 2;
     const vh = size.y + margin * 2;
-    const height = 800 * vh / vw;
-    const diag = Math.sqrt(vw * vw + vh * vh);
+    const height = 800 * (vh / vw);
+    const diag = _M0FP27mik1e806dxfkit13scaled__hypot(vw, vh);
+    const _p$2 = [vx, vy, vw, vh, height, diag];
+    let _tmp$2;
+    let _p$3;
+    _L: {
+      _L$2: {
+        const _p$4 = _p$2.length;
+        let _tmp$3 = 0;
+        while (true) {
+          const _p$5 = _tmp$3;
+          if (_p$5 < _p$4) {
+            const _p$6 = _p$2[_p$5];
+            if (!_M0FP27mik1e806dxfkit14finite__number(_p$6)) {
+              _p$3 = false;
+              break _L$2;
+            }
+            _tmp$3 = _p$5 + 1 | 0;
+            continue;
+          } else {
+            break;
+          }
+        }
+        _tmp$2 = true;
+        break _L;
+      }
+      _tmp$2 = _p$3;
+    }
+    if (!_tmp$2) {
+      return "";
+    }
     const stroke = diag / 400;
     const _bind$3 = _M0MP27mik1e806dxfkit7Drawing7section(self, "TABLES");
     let tables;
@@ -9402,9 +11538,9 @@
     _M0IPB13StringBuilderPB6Logger13write__string(sb, "<g transform=\"scale(1,-1)\">\n");
     const _bind$4 = exp.placed;
     const _bind$5 = _bind$4.length;
-    let _tmp$2 = 0;
+    let _tmp$3 = 0;
     while (true) {
-      const _ = _tmp$2;
+      const _ = _tmp$3;
       if (_ < _bind$5) {
         const p = _bind$4[_];
         const _bind$6 = _M0FP27mik1e806dxfkit12layer__state(tables, p.layer);
@@ -9458,14 +11594,14 @@
             const _at$2 = _Label._0;
             const _height = _Label._1;
             const _value = _Label._2;
-            let _tmp$3;
-            const _p$2 = "";
-            if (!(_value === _p$2)) {
-              _tmp$3 = _height > 0;
+            let _tmp$4;
+            const _p$4 = "";
+            if (!(_value === _p$4)) {
+              _tmp$4 = _height > 0;
             } else {
-              _tmp$3 = false;
+              _tmp$4 = false;
             }
-            if (_tmp$3) {
+            if (_tmp$4) {
               const _string_builder$4 = _M0MPB13StringBuilder21StringBuilder_2einner(84);
               _M0IPB13StringBuilderPB6Logger13write__string(_string_builder$4, "<text x=\"0\" y=\"0\" transform=\"translate(");
               _M0MPB13StringBuilder13write__objectGsE(_string_builder$4, _M0FP27mik1e806dxfkit3fmt(_at$2.x));
@@ -9485,7 +11621,7 @@
             break;
           }
         }
-        _tmp$2 = _ + 1 | 0;
+        _tmp$3 = _ + 1 | 0;
         continue;
       } else {
         break;
@@ -9657,177 +11793,13 @@
       return _M0FP27mik1e806dxfkit10unit__name(_M0MP27mik1e806dxfkit6Header8insunits(_M0FP27mik1e806dxfkit13parse__header(_section)));
     }
   }
-  function _M0MP27mik1e806dxfkit6Report5count(self, severity) {
-    let n = 0;
-    const _bind = self.findings;
-    const _bind$2 = _bind.length;
-    let _tmp = 0;
-    while (true) {
-      const _ = _tmp;
-      if (_ < _bind$2) {
-        const f = _bind[_];
-        const _bind$3 = f.severity;
-        let hit;
-        switch (_bind$3) {
-          case 0: {
-            if (severity === 0) {
-              hit = true;
-            } else {
-              hit = false;
-            }
-            break;
-          }
-          case 1: {
-            if (severity === 1) {
-              hit = true;
-            } else {
-              hit = false;
-            }
-            break;
-          }
-          default: {
-            if (severity === 2) {
-              hit = true;
-            } else {
-              hit = false;
-            }
-          }
-        }
-        if (hit) {
-          n = n + 1 | 0;
-        }
-        _tmp = _ + 1 | 0;
-        continue;
-      } else {
-        break;
-      }
+  function _M0MP27mik1e806dxfkit9CheckWork5spend(self) {
+    if (self.remaining <= 0) {
+      self.stopped = true;
+      return false;
     }
-    return n;
-  }
-  function _M0MP27mik1e806dxfkit6Report23has__incomplete__checks(self) {
-    const _p = self.findings;
-    const _p$2 = _p.length;
-    let _tmp = 0;
-    while (true) {
-      const _p$3 = _tmp;
-      if (_p$3 < _p$2) {
-        const _p$4 = _p[_p$3];
-        const _p$5 = _p$4.check;
-        let _tmp$2;
-        switch (_p$5) {
-          case "解析": {
-            _tmp$2 = true;
-            break;
-          }
-          case "检查覆盖": {
-            _tmp$2 = true;
-            break;
-          }
-          case "文字未转曲线": {
-            _tmp$2 = true;
-            break;
-          }
-          case "参数": {
-            _tmp$2 = true;
-            break;
-          }
-          default: {
-            _tmp$2 = false;
-          }
-        }
-        if (_tmp$2) {
-          return true;
-        }
-        _tmp = _p$3 + 1 | 0;
-        continue;
-      } else {
-        break;
-      }
-    }
-    return false;
-  }
-  function _M0MP27mik1e806dxfkit6Report7verdict(self) {
-    const fatal = _M0MP27mik1e806dxfkit6Report5count(self, 2);
-    let summary;
-    if (fatal > 0) {
-      const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(65);
-      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "本次检查发现 ");
-      _M0MPB13StringBuilder13write__objectGiE(_string_builder, fatal);
-      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 个严重问题，请修正并复核图纸。");
-      summary = _string_builder.val;
-    } else {
-      const warn = _M0MP27mik1e806dxfkit6Report5count(self, 1);
-      if (warn > 0) {
-        const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(65);
-        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "本次检查发现 ");
-        _M0MPB13StringBuilder13write__objectGiE(_string_builder, warn);
-        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 个警告，请复核图纸与加工条件。");
-        summary = _string_builder.val;
-      } else {
-        summary = "本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。";
-      }
-    }
-    if (_M0MP27mik1e806dxfkit6Report23has__incomplete__checks(self)) {
-      const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(72);
-      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "检查不完整：存在未解析、未转换或未能检查的内容。");
-      _M0MPB13StringBuilder13write__objectGsE(_string_builder, summary);
-      return _string_builder.val;
-    } else {
-      return summary;
-    }
-  }
-  function _M0FP27mik1e806dxfkit15severity__label(sev) {
-    switch (sev) {
-      case 0: {
-        return "提示";
-      }
-      case 1: {
-        return "警告";
-      }
-      default: {
-        return "致命";
-      }
-    }
-  }
-  function _M0MP27mik1e806dxfkit6Report8to__text(self) {
-    const sb = _M0MPB13StringBuilder21StringBuilder_2einner(0);
-    if (self.findings.length === 0) {
-      _M0IPB13StringBuilderPB6Logger13write__string(sb, "（没有发现）\n");
-    } else {
-      const _bind = self.findings;
-      const _bind$2 = _bind.length;
-      let _tmp = 0;
-      while (true) {
-        const _ = _tmp;
-        if (_ < _bind$2) {
-          const f = _bind[_];
-          const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(7);
-          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "[");
-          _M0MPB13StringBuilder13write__objectGsE(_string_builder, _M0FP27mik1e806dxfkit15severity__label(f.severity));
-          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "] [");
-          _M0MPB13StringBuilder13write__objectGsE(_string_builder, f.check);
-          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "] ");
-          _M0MPB13StringBuilder13write__objectGsE(_string_builder, f.message);
-          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "\n");
-          _M0IPB13StringBuilderPB6Logger13write__string(sb, _string_builder.val);
-          _tmp = _ + 1 | 0;
-          continue;
-        } else {
-          break;
-        }
-      }
-    }
-    const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(30);
-    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "致命 ");
-    _M0MPB13StringBuilder13write__objectGiE(_string_builder, _M0MP27mik1e806dxfkit6Report5count(self, 2));
-    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " · 警告 ");
-    _M0MPB13StringBuilder13write__objectGiE(_string_builder, _M0MP27mik1e806dxfkit6Report5count(self, 1));
-    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " · 提示 ");
-    _M0MPB13StringBuilder13write__objectGiE(_string_builder, _M0MP27mik1e806dxfkit6Report5count(self, 0));
-    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "\n");
-    _M0IPB13StringBuilderPB6Logger13write__string(sb, _string_builder.val);
-    _M0IPB13StringBuilderPB6Logger13write__string(sb, _M0MP27mik1e806dxfkit6Report7verdict(self));
-    return sb.val;
+    self.remaining = self.remaining - 1 | 0;
+    return true;
   }
   function _M0FP27mik1e806dxfkit4bump(counts, key) {
     let i = 0;
@@ -9845,6 +11817,213 @@
     }
     _M0MPC15array5Array4pushGRPC14json10WriteFrameE(counts, { _0: key, _1: 1 });
   }
+  function _M0FP27mik1e806dxfkit14topology__root(parent, i) {
+    let root = i;
+    while (true) {
+      if (_M0MPC15array5Array2atGiE(parent, root) !== root) {
+        root = _M0MPC15array5Array2atGiE(parent, root);
+        continue;
+      } else {
+        break;
+      }
+    }
+    let n = i;
+    while (true) {
+      if (_M0MPC15array5Array2atGiE(parent, n) !== n) {
+        const next = _M0MPC15array5Array2atGiE(parent, n);
+        _M0MPC15array5Array3setGiE(parent, n, root);
+        n = next;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return root;
+  }
+  function _M0FP27mik1e806dxfkit15topology__union(parent, a, b) {
+    const x = _M0FP27mik1e806dxfkit14topology__root(parent, a);
+    const y = _M0FP27mik1e806dxfkit14topology__root(parent, b);
+    if (x !== y) {
+      _M0MPC15array5Array3setGiE(parent, x, y);
+      return;
+    } else {
+      return;
+    }
+  }
+  function _M0FP27mik1e806dxfkit18endpoint__topology(edges, tol, work) {
+    const points = [];
+    const _bind = edges.length;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind) {
+        const edge = edges[_];
+        _M0MPC15array5Array4pushGRPC14json10WriteFrameE(points, edge._0);
+        _M0MPC15array5Array4pushGRPC14json10WriteFrameE(points, edge._1);
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    const _p = points.length;
+    let parent;
+    if (_p <= 0) {
+      parent = [];
+    } else {
+      const _p$2 = new Array(_p);
+      let _tmp$2 = 0;
+      while (true) {
+        const _p$3 = _tmp$2;
+        if (_p$3 < _p) {
+          _p$2[_p$3] = _p$3;
+          _tmp$2 = _p$3 + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      parent = _p$2;
+    }
+    const _p$2 = points.length;
+    let order;
+    if (_p$2 <= 0) {
+      order = [];
+    } else {
+      const _p$3 = new Array(_p$2);
+      let _tmp$2 = 0;
+      while (true) {
+        const _p$4 = _tmp$2;
+        if (_p$4 < _p$2) {
+          _p$3[_p$4] = _p$4;
+          _tmp$2 = _p$4 + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      order = _p$3;
+    }
+    _M0MPC15array5Array8sort__byGiE(order, (a, b) => _M0MPC15array5Array2atGRPB4JsonE(points, a).x < _M0MPC15array5Array2atGRPB4JsonE(points, b).x ? -1 : _M0MPC15array5Array2atGRPB4JsonE(points, a).x > _M0MPC15array5Array2atGRPB4JsonE(points, b).x ? 1 : 0);
+    let _tmp$2 = 0;
+    while (true) {
+      const at = _tmp$2;
+      if (at < order.length) {
+        const i = _M0MPC15array5Array2atGiE(order, at);
+        let next = at + 1 | 0;
+        while (true) {
+          if (next < order.length && _M0MPC15array5Array2atGRPB4JsonE(points, _M0MPC15array5Array2atGiE(order, next)).x - _M0MPC15array5Array2atGRPB4JsonE(points, i).x <= tol) {
+            if (!_M0MP27mik1e806dxfkit9CheckWork5spend(work)) {
+              return { _0: 0, _1: 0, _2: _M0MP27mik1e806dxfkit4Vec24zeroN6recordS3313, _3: false };
+            }
+            const j = _M0MPC15array5Array2atGiE(order, next);
+            if (_M0MP27mik1e806dxfkit4Vec28distance(_M0MPC15array5Array2atGRPB4JsonE(points, i), _M0MPC15array5Array2atGRPB4JsonE(points, j)) <= tol) {
+              _M0FP27mik1e806dxfkit15topology__union(parent, i, j);
+            }
+            next = next + 1 | 0;
+            continue;
+          } else {
+            break;
+          }
+        }
+        _tmp$2 = at + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    const degree = _M0MPC15array5Array4makeGiE(points.length, 0);
+    let _tmp$3 = 0;
+    while (true) {
+      const i = _tmp$3;
+      if (i < points.length) {
+        const _index_2 = _M0FP27mik1e806dxfkit14topology__root(parent, i);
+        _M0MPC15array5Array3setGiE(degree, _index_2, _M0MPC15array5Array2atGiE(degree, _index_2) + 1 | 0);
+        _tmp$3 = i + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    const _p$3 = points.length;
+    let components;
+    if (_p$3 <= 0) {
+      components = [];
+    } else {
+      const _p$4 = new Array(_p$3);
+      let _tmp$4 = 0;
+      while (true) {
+        const _p$5 = _tmp$4;
+        if (_p$5 < _p$3) {
+          _p$4[_p$5] = _p$5;
+          _tmp$4 = _p$5 + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      components = _p$4;
+    }
+    let _tmp$4 = 0;
+    while (true) {
+      const i = _tmp$4;
+      if (i < edges.length) {
+        _M0FP27mik1e806dxfkit15topology__union(components, _M0FP27mik1e806dxfkit14topology__root(parent, Math.imul(i, 2) | 0), _M0FP27mik1e806dxfkit14topology__root(parent, (Math.imul(i, 2) | 0) + 1 | 0));
+        _tmp$4 = i + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    const _bind$2 = [];
+    const ends = _M0MPB3Map3MapGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(new _M0TPB9ArrayViewGUiRPB5ArrayGRP27mik1e806dxfkit4Vec2EEE(_bind$2, 0, 0), undefined);
+    let branched = false;
+    let _tmp$5 = 0;
+    while (true) {
+      const i = _tmp$5;
+      if (i < points.length) {
+        if (_M0MPC15array5Array2atGiE(degree, i) > 0 && _M0MPC15array5Array2atGiE(degree, i) !== 2) {
+          if (_M0MPC15array5Array2atGiE(degree, i) > 2) {
+            branched = true;
+          }
+          const component = _M0FP27mik1e806dxfkit14topology__root(components, i);
+          const _bind$3 = _M0MPB3Map3getGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(ends, component);
+          if (_bind$3.$tag === 1) {
+            const _Some = _bind$3;
+            const _group = _Some._0;
+            _M0MPC15array5Array4pushGRPC14json10WriteFrameE(_group, _M0MPC15array5Array2atGRPB4JsonE(points, i));
+          } else {
+            _M0MPB3Map3setGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(ends, component, [_M0MPC15array5Array2atGRPB4JsonE(points, i)]);
+          }
+        }
+        _tmp$5 = i + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    let worst = 0;
+    let at = _M0MP27mik1e806dxfkit4Vec24zeroN6recordS3313;
+    const _it = _M0MPB3Map6valuesGiRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(ends);
+    while (true) {
+      const _bind$3 = _M0MPB4Iter4nextGRPB5ArrayGRP27mik1e806dxfkit4Vec2EE(_it);
+      if (_bind$3.$tag === 1) {
+        const _Some = _bind$3;
+        const _group = _Some._0;
+        if (_group.length >= 2) {
+          const gap = _M0MP27mik1e806dxfkit4Vec28distance(_M0MPC15array5Array2atGRPB4JsonE(_group, 0), _M0MPC15array5Array2atGRPB4JsonE(_group, 1));
+          if (gap > worst) {
+            worst = gap;
+            at = _M0MPC15array5Array2atGRPB4JsonE(_group, 0);
+          }
+        }
+        continue;
+      } else {
+        break;
+      }
+    }
+    return { _0: ends.size, _1: worst, _2: at, _3: branched };
+  }
   function _M0FP27mik1e806dxfkit16is__uncut__layer(tables, name) {
     if (tables === undefined) {
       return false;
@@ -9861,98 +12040,7 @@
       }
     }
   }
-  function _M0FP27mik1e806dxfkit12open__chains(edges, tol) {
-    const used = [];
-    const _bind = edges.length;
-    let _tmp = 0;
-    while (true) {
-      const _ = _tmp;
-      if (_ < _bind) {
-        _M0MPC15array5Array4pushGbE(used, false);
-        _tmp = _ + 1 | 0;
-        continue;
-      } else {
-        break;
-      }
-    }
-    let open = 0;
-    let worst = 0;
-    let at = _M0MP27mik1e806dxfkit4Vec24zeroN6recordS3032;
-    let i = 0;
-    while (true) {
-      if (i < edges.length) {
-        if (_M0MPC15array5Array2atGbE(used, i)) {
-          i = i + 1 | 0;
-          continue;
-        }
-        _M0MPC15array5Array3setGbE(used, i, true);
-        let head = _M0MPC15array5Array2atGRPB4JsonE(edges, i)._0;
-        let tail = _M0MPC15array5Array2atGRPB4JsonE(edges, i)._1;
-        let grew = true;
-        while (true) {
-          if (grew) {
-            grew = false;
-            let j = 0;
-            while (true) {
-              if (j < edges.length) {
-                if (_M0MPC15array5Array2atGbE(used, j)) {
-                  j = j + 1 | 0;
-                  continue;
-                }
-                const _bind$2 = _M0MPC15array5Array2atGRPB4JsonE(edges, j);
-                const _a = _bind$2._0;
-                const _b = _bind$2._1;
-                if (_M0MP27mik1e806dxfkit4Vec28distance(tail, _a) <= tol) {
-                  tail = _b;
-                  _M0MPC15array5Array3setGbE(used, j, true);
-                  grew = true;
-                } else {
-                  if (_M0MP27mik1e806dxfkit4Vec28distance(tail, _b) <= tol) {
-                    tail = _a;
-                    _M0MPC15array5Array3setGbE(used, j, true);
-                    grew = true;
-                  } else {
-                    if (_M0MP27mik1e806dxfkit4Vec28distance(head, _a) <= tol) {
-                      head = _b;
-                      _M0MPC15array5Array3setGbE(used, j, true);
-                      grew = true;
-                    } else {
-                      if (_M0MP27mik1e806dxfkit4Vec28distance(head, _b) <= tol) {
-                        head = _a;
-                        _M0MPC15array5Array3setGbE(used, j, true);
-                        grew = true;
-                      }
-                    }
-                  }
-                }
-                j = j + 1 | 0;
-                continue;
-              } else {
-                break;
-              }
-            }
-            continue;
-          } else {
-            break;
-          }
-        }
-        const gap = _M0MP27mik1e806dxfkit4Vec28distance(head, tail);
-        if (gap > tol) {
-          open = open + 1 | 0;
-          if (gap > worst) {
-            worst = gap;
-            at = head;
-          }
-        }
-        i = i + 1 | 0;
-        continue;
-      } else {
-        break;
-      }
-    }
-    return { _0: open, _1: worst, _2: at };
-  }
-  function _M0FP27mik1e806dxfkit14check__closure(placed, tables, tol, findings) {
+  function _M0FP27mik1e806dxfkit14check__closure(placed, tables, tol, findings, work) {
     const names = [];
     const _bind = placed.length;
     let _tmp = 0;
@@ -10035,17 +12123,31 @@
             break;
           }
         }
-        const _bind$4 = _M0FP27mik1e806dxfkit12open__chains(edges, tol);
+        const _bind$4 = _M0FP27mik1e806dxfkit18endpoint__topology(edges, tol, work);
         const _open_count = _bind$4._0;
         const _worst_gap = _bind$4._1;
         const _at = _bind$4._2;
+        const _branched = _bind$4._3;
+        if (work.stopped) {
+          return undefined;
+        }
+        if (_branched) {
+          const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(75);
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "图层「");
+          _M0MPB13StringBuilder13write__objectGsE(_string_builder, layer);
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "」存在分叉或多重端点连接；不能视为普通闭合环");
+          _M0MPC15array5Array4pushGRPC14json10WriteFrameE(findings, new _M0TP27mik1e806dxfkit7Finding("轮廓连接", 1, _string_builder.val));
+        }
         if (_open_count > 0) {
-          const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(161);
+          const description = _branched ? "非简单闭合环的连通分量（开放或分叉）" : "轮廓没闭合";
+          const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(152);
           _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "图层「");
           _M0MPB13StringBuilder13write__objectGsE(_string_builder, layer);
           _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "」上有 ");
           _M0MPB13StringBuilder13write__objectGiE(_string_builder, _open_count);
-          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 处轮廓没闭合——最宽的缝 ");
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 处");
+          _M0MPB13StringBuilder13write__objectGsE(_string_builder, description);
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "——端点间距样本 ");
           _M0MPB13StringBuilder13write__objectGdE(_string_builder, _worst_gap);
           _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "（(");
           _M0MPB13StringBuilder13write__objectGdE(_string_builder, _at.x);
@@ -10108,7 +12210,7 @@
   }
   function _M0FP27mik1e806dxfkit15overlap__length(a1, a2, b1, b2, tol) {
     const dir = _M0MP27mik1e806dxfkit4Vec23sub(a2, a1);
-    const len = Math.sqrt(dir.x * dir.x + dir.y * dir.y);
+    const len = _M0MP27mik1e806dxfkit4Vec26length(dir);
     if (len <= tol) {
       return 0;
     }
@@ -10183,7 +12285,7 @@
     }
     _M0MPC15array5Array4pushGiE(ids, v);
   }
-  function _M0FP27mik1e806dxfkit16check__crossings(placed, tables, tol, findings) {
+  function _M0FP27mik1e806dxfkit16check__crossings(placed, tables, tol, findings, work) {
     const layers = [];
     const _bind = placed.length;
     let _tmp = 0;
@@ -10222,7 +12324,7 @@
           const self_crossed = [];
           let dup_pairs = 0;
           let dup_len = 0;
-          let dup_at = _M0MP27mik1e806dxfkit4Vec24zeroN6recordS3032;
+          let dup_at = _M0MP27mik1e806dxfkit4Vec24zeroN6recordS3313;
           let dup_has = false;
           let i = 0;
           while (true) {
@@ -10231,6 +12333,9 @@
               let j = i + 1 | 0;
               while (true) {
                 if (j < segs.length && _M0MPC15array5Array2atGRPB4JsonE(segs, j).min_x <= s.max_x + tol) {
+                  if (!_M0MP27mik1e806dxfkit9CheckWork5spend(work)) {
+                    return undefined;
+                  }
                   const t = _M0MPC15array5Array2atGRPB4JsonE(segs, j);
                   if (!(t.min_y > s.max_y + tol || s.min_y > t.max_y + tol)) {
                     if (!(s.owner === t.owner && _M0FP27mik1e806dxfkit14adjacent__segs(s, t))) {
@@ -10515,26 +12620,6 @@
       }
     }
   }
-  function _M0FP27mik1e806dxfkit18push__unique__pair(pairs, a, b) {
-    const x = a < b ? a : b;
-    const y = a < b ? b : a;
-    const _bind = pairs.length;
-    let _tmp = 0;
-    while (true) {
-      const _ = _tmp;
-      if (_ < _bind) {
-        const p = pairs[_];
-        if (p._0 === x && p._1 === y) {
-          return undefined;
-        }
-        _tmp = _ + 1 | 0;
-        continue;
-      } else {
-        break;
-      }
-    }
-    _M0MPC15array5Array4pushGRPC14json10WriteFrameE(pairs, { _0: x, _1: y });
-  }
   function _M0FP27mik1e806dxfkit11on__segment(a, b, p) {
     return p.x >= _M0MPC16double6Double3min(a.x, b.x) && (p.x <= _M0MPC16double6Double3max(a.x, b.x) && (p.y >= _M0MPC16double6Double3min(a.y, b.y) && p.y <= _M0MPC16double6Double3max(a.y, b.y)));
   }
@@ -10570,7 +12655,7 @@
     const d4 = _M0FP27mik1e806dxfkit17dist__to__segment(b2, a1, a2);
     return _M0MPC16double6Double3min(_M0MPC16double6Double3min(_M0MPC16double6Double3min(d1, d2), d3), d4);
   }
-  function _M0FP27mik1e806dxfkit15check__min__gap(placed, tables, opt, findings) {
+  function _M0FP27mik1e806dxfkit15check__min__gap(placed, tables, opt, findings, work) {
     if (opt.min_gap <= 0) {
       return undefined;
     }
@@ -10610,9 +12695,10 @@
             break _L;
           }
           _M0MPC15array5Array8sort__byGRP27mik1e806dxfkit6CutSegE(segs, (s1, s2) => s1.min_x < s2.min_x ? -1 : s1.min_x > s2.min_x ? 1 : 0);
-          const near = [];
+          const _bind$3 = [];
+          const near = _M0MPB3Map3MapGlbE(new _M0TPB9ArrayViewGUlbEE(_bind$3, 0, 0), undefined);
           let worst = opt.min_gap;
-          let at = _M0MP27mik1e806dxfkit4Vec24zeroN6recordS3032;
+          let at = _M0MP27mik1e806dxfkit4Vec24zeroN6recordS3313;
           let i = 0;
           while (true) {
             if (i < segs.length) {
@@ -10620,13 +12706,22 @@
               let j = i + 1 | 0;
               while (true) {
                 if (j < segs.length && _M0MPC15array5Array2atGRPB4JsonE(segs, j).min_x <= s.max_x + opt.min_gap) {
+                  if (!_M0MP27mik1e806dxfkit9CheckWork5spend(work)) {
+                    return undefined;
+                  }
                   const t = _M0MPC15array5Array2atGRPB4JsonE(segs, j);
                   if (s.owner !== t.owner && !(t.min_y > s.max_y + opt.min_gap || s.min_y > t.max_y + opt.min_gap)) {
                     const touching = _M0MP27mik1e806dxfkit4Vec28distance(s.a, t.a) <= tol || (_M0MP27mik1e806dxfkit4Vec28distance(s.a, t.b) <= tol || (_M0MP27mik1e806dxfkit4Vec28distance(s.b, t.a) <= tol || _M0MP27mik1e806dxfkit4Vec28distance(s.b, t.b) <= tol));
                     if (!touching) {
                       const gap = _M0FP27mik1e806dxfkit12segment__gap(s.a, s.b, t.a, t.b);
                       if (gap < opt.min_gap) {
-                        _M0FP27mik1e806dxfkit18push__unique__pair(near, s.owner, t.owner);
+                        const _p = s.owner;
+                        const _p$2 = t.owner;
+                        const a = BigInt.asUintN(64, BigInt(_p < _p$2 ? _p : _p$2));
+                        const _p$3 = s.owner;
+                        const _p$4 = t.owner;
+                        const b = BigInt.asUintN(64, BigInt(_p$3 > _p$4 ? _p$3 : _p$4));
+                        _M0MPB3Map3setGlbE(near, BigInt.asUintN(64, BigInt.asUintN(64, a << BigInt(32 & 63)) | b), true);
                         if (gap < worst) {
                           worst = gap;
                           at = s.a;
@@ -10646,12 +12741,12 @@
               break;
             }
           }
-          if (near.length > 0) {
+          if (near.size > 0) {
             const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(140);
             _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "图层「");
             _M0MPB13StringBuilder13write__objectGsE(_string_builder, layer);
             _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "」有 ");
-            _M0MPB13StringBuilder13write__objectGiE(_string_builder, near.length);
+            _M0MPB13StringBuilder13write__objectGiE(_string_builder, near.size);
             _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 对实体轮廓距离低于阈值——折线最小距离 ");
             _M0MPB13StringBuilder13write__objectGdE(_string_builder, worst);
             _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "（(");
@@ -10731,11 +12826,11 @@
       }
     }
   }
-  function _M0MP27mik1e806dxfkit7Drawing16check__expansion(self, opt, exp) {
+  function _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einner(self, opt, exp, budget) {
     const tol = opt.tol;
     const findings = [];
     if (!_M0FP27mik1e806dxfkit19positive__tolerance(tol) || (!_M0FP27mik1e806dxfkit14finite__number(opt.min_gap) || opt.min_gap < 0)) {
-      return new _M0TP27mik1e806dxfkit6Report([_M0MP27mik1e806dxfkit7Drawing16check__expansionN6recordS3123]);
+      return new _M0TP27mik1e806dxfkit6Report([_M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3388]);
     }
     const _bind = exp.warnings;
     const _bind$2 = _bind.length;
@@ -10750,6 +12845,10 @@
       } else {
         break;
       }
+    }
+    if (!_M0FP27mik1e806dxfkit18preview__range__ok(exp) || (tol < 1e-100 || (tol > 1e+100 || opt.min_gap > 1e+100))) {
+      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(findings, _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3389);
+      return new _M0TP27mik1e806dxfkit6Report(findings);
     }
     const unsupported = [];
     let outlines = 0;
@@ -10840,7 +12939,7 @@
       }
     }
     if (outlines === 0) {
-      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(findings, _M0MP27mik1e806dxfkit7Drawing16check__expansionN6recordS3124);
+      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(findings, _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3390);
     }
     const _bind$6 = exp.placed;
     const _bind$7 = _bind$6.length;
@@ -10867,27 +12966,222 @@
       tables = _M0FP27mik1e806dxfkit13parse__tables(_t);
     }
     _M0FP27mik1e806dxfkit13check__layers(tables, exp.placed, findings);
-    _M0FP27mik1e806dxfkit14check__closure(exp.placed, tables, tol, findings);
-    _M0FP27mik1e806dxfkit16check__crossings(exp.placed, tables, tol, findings);
-    _M0FP27mik1e806dxfkit15check__min__gap(exp.placed, tables, opt, findings);
+    const work = new _M0TP27mik1e806dxfkit9CheckWork(budget.max_candidates, budget.max_candidates <= 0);
+    if (!work.stopped) {
+      _M0FP27mik1e806dxfkit14check__closure(exp.placed, tables, tol, findings, work);
+    }
+    if (!work.stopped) {
+      _M0FP27mik1e806dxfkit16check__crossings(exp.placed, tables, tol, findings, work);
+    }
+    if (!work.stopped) {
+      _M0FP27mik1e806dxfkit15check__min__gap(exp.placed, tables, opt, findings, work);
+    }
+    if (work.stopped) {
+      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(findings, _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3391);
+    }
     return new _M0TP27mik1e806dxfkit6Report(findings);
+  }
+  function _M0MP27mik1e806dxfkit7Drawing16check__expansion(self, opt, exp, budget$46$opt) {
+    let budget;
+    if (budget$46$opt === undefined) {
+      budget = _M0MP27mik1e806dxfkit14GeometryBudget7defaultN6recordS3387;
+    } else {
+      const _Some = budget$46$opt;
+      budget = _Some;
+    }
+    return _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einner(self, opt, exp, budget);
+  }
+  function _M0MP27mik1e806dxfkit6Report5count(self, severity) {
+    let n = 0;
+    const _bind = self.findings;
+    const _bind$2 = _bind.length;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind$2) {
+        const f = _bind[_];
+        const _bind$3 = f.severity;
+        let hit;
+        switch (_bind$3) {
+          case 0: {
+            if (severity === 0) {
+              hit = true;
+            } else {
+              hit = false;
+            }
+            break;
+          }
+          case 1: {
+            if (severity === 1) {
+              hit = true;
+            } else {
+              hit = false;
+            }
+            break;
+          }
+          default: {
+            if (severity === 2) {
+              hit = true;
+            } else {
+              hit = false;
+            }
+          }
+        }
+        if (hit) {
+          n = n + 1 | 0;
+        }
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return n;
+  }
+  function _M0MP27mik1e806dxfkit6Report23has__incomplete__checks(self) {
+    const _p = self.findings;
+    const _p$2 = _p.length;
+    let _tmp = 0;
+    while (true) {
+      const _p$3 = _tmp;
+      if (_p$3 < _p$2) {
+        const _p$4 = _p[_p$3];
+        const _p$5 = _p$4.check;
+        let _tmp$2;
+        switch (_p$5) {
+          case "解析": {
+            _tmp$2 = true;
+            break;
+          }
+          case "检查覆盖": {
+            _tmp$2 = true;
+            break;
+          }
+          case "文字未转曲线": {
+            _tmp$2 = true;
+            break;
+          }
+          case "参数": {
+            _tmp$2 = true;
+            break;
+          }
+          default: {
+            _tmp$2 = false;
+          }
+        }
+        if (_tmp$2) {
+          return true;
+        }
+        _tmp = _p$3 + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return false;
+  }
+  function _M0MP27mik1e806dxfkit6Report7verdict(self) {
+    const fatal = _M0MP27mik1e806dxfkit6Report5count(self, 2);
+    let summary;
+    if (fatal > 0) {
+      const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(65);
+      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "本次检查发现 ");
+      _M0MPB13StringBuilder13write__objectGiE(_string_builder, fatal);
+      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 个严重问题，请修正并复核图纸。");
+      summary = _string_builder.val;
+    } else {
+      const warn = _M0MP27mik1e806dxfkit6Report5count(self, 1);
+      if (warn > 0) {
+        const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(65);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "本次检查发现 ");
+        _M0MPB13StringBuilder13write__objectGiE(_string_builder, warn);
+        _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " 个警告，请复核图纸与加工条件。");
+        summary = _string_builder.val;
+      } else {
+        summary = "本次已覆盖的检查项没发现问题；不构成可加工保证，请确认单位、材料、刀具和工艺。";
+      }
+    }
+    if (_M0MP27mik1e806dxfkit6Report23has__incomplete__checks(self)) {
+      const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(72);
+      _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "检查不完整：存在未解析、未转换或未能检查的内容。");
+      _M0MPB13StringBuilder13write__objectGsE(_string_builder, summary);
+      return _string_builder.val;
+    } else {
+      return summary;
+    }
+  }
+  function _M0FP27mik1e806dxfkit15severity__label(sev) {
+    switch (sev) {
+      case 0: {
+        return "提示";
+      }
+      case 1: {
+        return "警告";
+      }
+      default: {
+        return "致命";
+      }
+    }
+  }
+  function _M0MP27mik1e806dxfkit6Report8to__text(self) {
+    const sb = _M0MPB13StringBuilder21StringBuilder_2einner(0);
+    if (self.findings.length === 0) {
+      _M0IPB13StringBuilderPB6Logger13write__string(sb, "（没有发现）\n");
+    } else {
+      const _bind = self.findings;
+      const _bind$2 = _bind.length;
+      let _tmp = 0;
+      while (true) {
+        const _ = _tmp;
+        if (_ < _bind$2) {
+          const f = _bind[_];
+          const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(7);
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "[");
+          _M0MPB13StringBuilder13write__objectGsE(_string_builder, _M0FP27mik1e806dxfkit15severity__label(f.severity));
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "] [");
+          _M0MPB13StringBuilder13write__objectGsE(_string_builder, f.check);
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "] ");
+          _M0MPB13StringBuilder13write__objectGsE(_string_builder, f.message);
+          _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "\n");
+          _M0IPB13StringBuilderPB6Logger13write__string(sb, _string_builder.val);
+          _tmp = _ + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+    }
+    const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(30);
+    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "致命 ");
+    _M0MPB13StringBuilder13write__objectGiE(_string_builder, _M0MP27mik1e806dxfkit6Report5count(self, 2));
+    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " · 警告 ");
+    _M0MPB13StringBuilder13write__objectGiE(_string_builder, _M0MP27mik1e806dxfkit6Report5count(self, 1));
+    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " · 提示 ");
+    _M0MPB13StringBuilder13write__objectGiE(_string_builder, _M0MP27mik1e806dxfkit6Report5count(self, 0));
+    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "\n");
+    _M0IPB13StringBuilderPB6Logger13write__string(sb, _string_builder.val);
+    _M0IPB13StringBuilderPB6Logger13write__string(sb, _M0MP27mik1e806dxfkit6Report7verdict(self));
+    return sb.val;
   }
   function _M0MP27mik1e806dxfkit7Drawing5check(self, opt) {
     if (!_M0FP27mik1e806dxfkit19positive__tolerance(opt.tol) || (!_M0FP27mik1e806dxfkit14finite__number(opt.min_gap) || opt.min_gap < 0)) {
-      return _M0MP27mik1e806dxfkit7Drawing16check__expansion(self, opt, new _M0TP27mik1e806dxfkit9Expansion([], []));
+      return _M0MP27mik1e806dxfkit7Drawing16check__expansion(self, opt, new _M0TP27mik1e806dxfkit9Expansion([], []), undefined);
     }
-    return _M0MP27mik1e806dxfkit7Drawing16check__expansion(self, opt, _M0MP27mik1e806dxfkit7Drawing6expand(self, opt.tol));
+    return _M0MP27mik1e806dxfkit7Drawing16check__expansion(self, opt, _M0MP27mik1e806dxfkit7Drawing6expand(self, opt.tol), undefined);
   }
   function _M0MP27mik1e806dxfkit7Drawing7analyze(self, opt) {
     if (!_M0FP27mik1e806dxfkit19positive__tolerance(opt.tol) || (!_M0FP27mik1e806dxfkit14finite__number(opt.min_gap) || opt.min_gap < 0)) {
       return new _M0TP27mik1e806dxfkit15DrawingAnalysis(_M0MP27mik1e806dxfkit7Drawing5check(self, opt), "", _M0MP27mik1e806dxfkit7Drawing21declared__unit__label(self));
     }
     const expansion = _M0MP27mik1e806dxfkit7Drawing6expand(self, opt.tol);
-    return new _M0TP27mik1e806dxfkit15DrawingAnalysis(_M0MP27mik1e806dxfkit7Drawing16check__expansion(self, opt, expansion), _M0MP27mik1e806dxfkit7Drawing20svg__from__expansion(self, expansion), _M0MP27mik1e806dxfkit7Drawing21declared__unit__label(self));
+    return new _M0TP27mik1e806dxfkit15DrawingAnalysis(_M0MP27mik1e806dxfkit7Drawing16check__expansion(self, opt, expansion, undefined), _M0MP27mik1e806dxfkit7Drawing20svg__from__expansion(self, expansion), _M0MP27mik1e806dxfkit7Drawing21declared__unit__label(self));
   }
   function _M0FP37mik1e806dxfkit3web6decode(file_base64) {
+    if (file_base64.length > 89478488) {
+      return _M0FP37mik1e806dxfkit3web6decodeN6constrS57;
+    }
     if (file_base64.length === 0) {
-      return _M0FP37mik1e806dxfkit3web6decodeN6constrS56;
+      return _M0FP37mik1e806dxfkit3web6decodeN6constrS58;
     }
     let _try_err;
     _L: {
@@ -10903,7 +13197,7 @@
       }
       return new _M0DTPC16result6ResultGzsE2Ok(_tmp);
     }
-    return _M0FP37mik1e806dxfkit3web6decodeN6constrS57;
+    return _M0FP37mik1e806dxfkit3web6decodeN6constrS59;
   }
   function _M0FP37mik1e806dxfkit3web7analyze(file_base64, min_gap, tol) {
     const _bind = _M0FP37mik1e806dxfkit3web6decode(file_base64);
@@ -10926,6 +13220,7 @@
     }
     const drawing = _M0FP27mik1e806dxfkit14build__drawing(_M0FP27mik1e806dxfkit10scan__tags(data));
     const result = _M0MP27mik1e806dxfkit7Drawing7analyze(drawing, new _M0TP27mik1e806dxfkit12CheckOptions(tol, min_gap));
+    const error = result.svg === "" ? "SVG未生成：参数、数值或预览资源超出安全范围；请查看报告" : "";
     const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(76);
     _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "单位声明：");
     _M0MPB13StringBuilder13write__objectGsE(_string_builder, result.unit);
@@ -10934,12 +13229,11 @@
     const _tmp = { _0: "report", _1: new _M0DTPB4Json6String(report) };
     const _p = result.svg;
     const _tmp$2 = { _0: "svg", _1: new _M0DTPB4Json6String(_p) };
-    const _p$2 = "";
-    const _tmp$3 = { _0: "error", _1: new _M0DTPB4Json6String(_p$2) };
-    const _p$3 = result.unit;
-    const _bind$2 = [_tmp, _tmp$2, _tmp$3, { _0: "unit", _1: new _M0DTPB4Json6String(_p$3) }];
-    const _p$4 = _M0MPB3Map3MapGsRPB4JsonE(new _M0TPB9ArrayViewGUsRPB4JsonEE(_bind$2, 0, 4), undefined);
-    return _M0MPC14json4Json17stringify_2einner(new _M0DTPB4Json6Object(_p$4), false, 0, undefined);
+    const _tmp$3 = { _0: "error", _1: new _M0DTPB4Json6String(error) };
+    const _p$2 = result.unit;
+    const _bind$2 = [_tmp, _tmp$2, _tmp$3, { _0: "unit", _1: new _M0DTPB4Json6String(_p$2) }];
+    const _p$3 = _M0MPB3Map3MapGsRPB4JsonE(new _M0TPB9ArrayViewGUsRPB4JsonEE(_bind$2, 0, 4), undefined);
+    return _M0MPC14json4Json17stringify_2einner(new _M0DTPB4Json6Object(_p$3), false, 0, undefined);
   }
   function _M0FP37mik1e806dxfkit3web5check(file_base64, min_gap) {
     const _bind = _M0FP37mik1e806dxfkit3web6decode(file_base64);

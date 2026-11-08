@@ -3,6 +3,10 @@
 本项目自己的代码是 Apache-2.0（见 [LICENSE](LICENSE)）。下面这些内容来自别处，
 按各自的许可证使用。
 
+项目Apache-2.0不将第三方语料或代码重新授权。来源按实际用途区分：第1节为测试语料，第2节为格式/公式与实现移植参考，第3节为构建/运行依赖；浏览器携带的core代码另带上游LICENSE和NOTICE。`tag.mbt`类型区间与`flatten.mbt`的bulge移植保留ezdxf来源及MIT全文，不笼统宣称全部算法独立原创。新增材料应固定上游提交、路径、blob、日期与本地哈希；历史47份文件的上游提交未知，不猜测补写。
+
+维护门禁将浏览器分发的core LICENSE/NOTICE与固定编译器SDK实际文件按LF规范化后比较，变更工具链须重新核对。x/async的固定版本及来源由`reproduction.json`与依赖图核对；这不是全面供应链/CVE安全审计。贡献与授权规则见[CONTRIBUTING](CONTRIBUTING.md)。
+
 ---
 
 ## 1. DXF 测试语料

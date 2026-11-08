@@ -18,6 +18,7 @@ assert(!revision.dirty||process.argv.includes('--allow-dirty'),'Cannot package a
 for(const [file,digest] of Object.entries(manifest.sha256))
   assert.equal(createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex'),digest,`Asset changed: ${file}`);
 const files={'web/index.html':'index.html','web/style.css':'style.css','web/app.js':'app.js',
+  'web/worker.js':'worker.js',
   'web/dist/web.js':'dist/web.js','web/dist/release.json':'dist/release.json',
   'docs/submission.md':'docs/submission.md','COMPARISON.md':'COMPARISON.md',
   'docs/ecosystem-sources.json':'docs/ecosystem-sources.json',
@@ -34,7 +35,7 @@ for(const file of fs.readdirSync(path.join(root,'docs/submission-evidence')))
 for(const file of Object.keys(manifest.sha256))
   if(file.startsWith('docs/submission-evidence/')) assert(files[file],`Evidence not packaged: ${file}`);
   else if(file.startsWith('examples/')) files[file]=file;
-  else if(['README.md','README.mbt.md','output/pdf/dxfkit-submission-one-page.pdf'].includes(file)) files[file]=file;
+  else if(['README.md','README.mbt.md','SECURITY.md','CONTRIBUTING.md','output/pdf/dxfkit-submission-one-page.pdf'].includes(file)) files[file]=file;
 for(const file of fs.readdirSync(path.join(root,'web/licenses'))) files[`web/licenses/${file}`]=`licenses/${file}`;
 for(const [from,to] of Object.entries(files)) {
   const target=path.join(root,'_site',to);

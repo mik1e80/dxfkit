@@ -55,7 +55,7 @@ try{
     }catch(e){results.push({id:c.id,input_dxf:c.text,actual,passed:false,error:e.message});console.log('FAIL '+c.id+': '+e.message);}
   }
 }finally{assert(path.dirname(path.resolve(work))===temp&&path.basename(work).startsWith('dxfkit-review-'));fs.rmSync(work,{recursive:true,force:true});}
-const report={suite:'dxfkit-review-cases',checked_on:'2026-10-27',platform:process.platform,node:process.versions.node,
+const report={suite:'dxfkit-review-cases',checked_on:'2026-11-07',platform:process.platform,node:process.versions.node,
   bundle_sha256:createHash('sha256').update(source).digest('hex'),passed:results.filter(r=>r.passed).length,total:results.length,cases:results};
 const index=process.argv.indexOf('--report');if(index>=0){assert(process.argv[index+1]);fs.writeFileSync(path.resolve(process.argv[index+1]),JSON.stringify(report,null,2)+'\n');}
 console.log(`${report.passed}/${report.total} review cases passed`);if(report.passed!==report.total)process.exitCode=1;

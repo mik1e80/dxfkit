@@ -236,11 +236,12 @@ fn append_segment_points(
 /// 点到线段（不是直线）的距离。自适应细分的判据用得上。
 fn dist_to_segment(p : Vec2, a : Vec2, b : Vec2) -> Double {
   let ab = b.sub(a)
-  let len2 = ab.dot(ab)
-  if len2 == 0.0 {
+  let len = ab.length()
+  if len == 0.0 {
     return p.distance(a)
   }
-  let mut t = p.sub(a).dot(ab) / len2
+  let unit = Vec2::new(ab.x / len, ab.y / len)
+  let mut t = p.sub(a).dot(unit) / len
   if t < 0.0 {
     t = 0.0
   }

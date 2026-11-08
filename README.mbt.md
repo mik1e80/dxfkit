@@ -4,6 +4,12 @@
 
 ## 当前 main：R12 读取和 WCS
 
+当前开发版默认启用`ReadLimits::default()`；可用`scan_tags_with_limits`、`read_document_with_limits`或`TagStream::with_limits`指定读取预算。超限保留部分扫描结果及明确警告，不可当完整文件；流式调用者见`is_limited()`应停止喂入。
+
+结构诊断现由`build_drawing`统一附到`Drawing.warnings`，因此`check`、`check_with_limits`与`analyze`均会报告。`Drawing::check_with_budget(opt, GeometryBudget)`给拓扑/相交/净距设置共享候选访问预算；展开预算独立，`CheckOptions`旧字段保持兼容。`Record::try_double/try_int`以`Ok(None)`表示缺失、`Err`表示类型错误；`require_*`也拒绝缺失，宽松`get_*`/`as_*`仅供旧调用方兼容。`try_int`接收I16/I32，不静默截断浮点/64位值。
+
+新业务使用`Entity::flatten_checked`取得错误原因；`Geometry::flatten_checked`为无实体坐标语义的局部入口。旧`flatten`和`spline_points`的回退结果不应用作完整检查证据。文字标签的字高为面积尺度近似，旋转/镜像/剪切、宽高和字形未忠实渲染；ATTRIB/ATTDEF完整布局与阵列复制未完成。XY数值域、各阶段预算及共用容差边界见[SECURITY](SECURITY.md)。
+
 ```moonbit nocheck
 ///|
 test "R12 document and WCS API" {

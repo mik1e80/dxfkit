@@ -370,6 +370,11 @@ test "语料加工检查：锚点" {
     fatal = fatal + r.count(@dxfkit.Fatal)
     warn = warn + r.count(@dxfkit.Warn)
     info = info + r.count(@dxfkit.Info)
+    let branch_source = path.has_suffix("images.dxf") ||
+      path.has_suffix("insert_bricscad_level_1.dxf") ||
+      path.has_suffix("uncommon.dxf") ||
+      path.has_suffix("wipeout_door.dxf")
+    assert_eq(r.findings.any(f => f.check == "轮廓连接"), branch_source)
     if path.has_suffix("multi_insert_with_attribs.dxf") {
       assert_false(r.findings.any(f => f.check == "自相交"))
       assert_true(r.to_text().contains("25 处轮廓没闭合"))
@@ -404,7 +409,8 @@ test "语料加工检查：锚点" {
     }
   }
   assert_eq(fatal, 1)
-  assert_eq(warn, 153)
+  // Four endpoint graphs contain branches formerly hidden by greedy chaining.
+  assert_eq(warn, 157)
   assert_eq(info, 1)
 }
 

@@ -8,7 +8,7 @@ const hash=s=>createHash('sha256').update(s).digest('hex');
 const cases=[
   {id:'normal-plate',file:'examples/plate.dxf',gap:0.5,exit:0,polygons:5,required:['单位声明 毫米'],forbidden:['检查不完整','[最小间隙]','[重复切割]','[轮廓闭合]','[退化几何]','[自相交]']},
   {id:'problem-paths',file:'examples/issues.dxf',exit:1,required:['[警告] [重复切割]','[致命] [退化几何]','半径是负数（-1）'],forbidden:['检查不完整']},
-  {id:'open-contour',file:'examples/evidence/open-contour.dxf',exit:1,required:['[警告] [轮廓闭合]','最宽的缝 10'],forbidden:['检查不完整','[重复切割]','[退化几何]']},
+  {id:'open-contour',file:'examples/evidence/open-contour.dxf',exit:1,required:['[警告] [轮廓闭合]','端点间距样本 10'],forbidden:['检查不完整','[重复切割]','[退化几何]']},
   {id:'insufficient-gap',file:'examples/plate.dxf',gap:8,exit:1,required:['[警告] [最小间隙]','4 对实体','折线最小距离 7（'],forbidden:['检查不完整','[自相交]','[重复切割]']},
   {id:'unsupported-and-ocs',file:'examples/coverage-limits.dxf',exit:1,required:['检查不完整','HATCH','DIMENSION','RAY'],forbidden:['未转换 OCS']},
   {id:'damaged-vertices',file:'examples/completeness-mixed.dxf',exit:1,required:['检查不完整','LWPOLYLINE','POLYLINE','SPLINE','RAY'],forbidden:['未转换 OCS'],polygons:2},
@@ -112,7 +112,7 @@ for(const c of cases){
     artifacts:{report:artifact(c.id+'.txt',report.text),svg:artifact(c.id+'.svg',svg.text)},passed:true});
   console.log('PASS evidence '+c.id);
 }
-const record={schema:1,checked_on:'2026-10-27',scope:'Current R12-upgrade CLI regression cases; not complete independent truth for the 47 third-party drawings',
+const record={schema:1,checked_on:'2026-11-07',scope:'Current R12-upgrade CLI regression cases; not complete independent truth for the 47 third-party drawings',
   historical_geometry_baseline_commit:'1a8185925e2c038039e6f57f32c69421e833d437',
   oracle:{kind:'independent Node analytic formulas; no production geometry helpers or ezdxf runtime',script:'scripts/verify-submission-evidence.cjs',script_sha256_lf:hash(lf(fs.readFileSync(__filename,'utf8'))),numeric_display_significant_digits:12},
   pinned_profile:JSON.parse(fs.readFileSync(path.join(root,'reproduction.json'),'utf8')),passed:results.length,total:cases.length,cases:results};

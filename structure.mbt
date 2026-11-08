@@ -190,9 +190,39 @@ pub fn Record::all_of(self : Record, code : Int) -> Array[Tag] {
 /// 比「抛异常什么都没读出来」有用得多——真实世界的 DXF 大量来自第三方
 /// 导出器，损坏的文件比想象中多。
 pub fn build_drawing(scan : TagScan) -> Drawing {
+  if scan.tags.length() > ReadLimits::default().max_tags {
+    return {
+      version: "",
+      sections: [],
+      warnings: ["手工TagScan超过tag资源上限；检查不完整"],
+    }
+  }
+  build_drawing_raw(scan, raw_records(scan.tags))
+}
+
+///|
+fn build_drawing_raw(scan : TagScan, raw : Array[RawRecord]) -> Drawing {
+  for tag in scan.tags {
+    match tag.value {
+      Str(text) => {
+        let identifier = [0, 2, 5, 6, 8, 100, 105].contains(tag.code)
+        if (identifier && text.length() > 256) || text.length() > 65536 {
+          return {
+            version: "",
+            sections: [],
+            warnings: [
+              "语义字段文本达到资源上限；原始tag保留，检查不完整",
+            ],
+          }
+        }
+      }
+      _ => ()
+    }
+  }
   let records = split_records(scan.tags)
   let warnings = scan.warnings.copy()
   let sections = group_sections(records, warnings)
+  validate_record_structure(raw, warnings)
   let version = match find_header_var(sections, "$ACADVER") {
     Some(v) => v
     None => ""

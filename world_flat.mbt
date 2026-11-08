@@ -4,6 +4,12 @@ fn entity_world_flat(
   tol : Double,
   parent : Transform3,
 ) -> Result[WorldFlat, String] {
+  if !valid_numeric_tags(e.common.record) {
+    return Err("数值字段类型错误；不能用默认零生成几何")
+  }
+  if e.common.record.get_double(39, 0.0) != 0.0 {
+    return Err("非零厚度未重建；原记录保留，轮廓未检查")
+  }
   if !positive_tolerance(tol) {
     return Err("离散容差必须是正的有限数字")
   }

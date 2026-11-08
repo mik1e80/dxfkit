@@ -80,45 +80,123 @@ const COVERAGE_SAMPLE_TEXT = [
 
 // ── 跑一次检查 ──────────────────────────────────────────────────────────
 
+const MAX_FILE_BYTES = 16 * 1024 * 1024;
+const ANALYSIS_TIMEOUT_MS = 15000;
 let currentBase64 = "";
+let currentFile = null;
 let currentName = "";
+let generation = 0;
+let activeWorker = null;
+let activeReader = null;
+let activeTimer = null;
+let settleActive = null;
 
-function runCheck(base64, name) {
-  currentBase64 = base64;
+function stopTask() {
+  generation++;
+  if (activeTimer !== null) clearTimeout(activeTimer);
+  activeTimer = null;
+  if (activeWorker) activeWorker.terminate();
+  activeWorker = null;
+  if (activeReader && activeReader.readyState === 1) activeReader.abort();
+  activeReader = null;
+  if (settleActive) settleActive(false);
+  settleActive = null;
+}
+
+function showError(message) {
+  document.getElementById("report").textContent = message;
+  document.getElementById("preview").replaceChildren();
+}
+
+function startAnalysis(payload, name) {
+  stopTask();
+  const id = generation;
   currentName = name;
   document.getElementById("status").textContent = name;
-
-  // 报告用 textContent：报告里可能带图纸原文（文字内容、图层名），
-  // 那是不受信任的内容，拼进 HTML 等于开注入口子
+  document.getElementById("preview").replaceChildren();
   const rawGap = document.getElementById("min-gap").value;
   const minGap = Number(rawGap);
   if (rawGap.trim() === "" || !Number.isFinite(minGap) || minGap < 0) {
-    document.getElementById("report").textContent = "最小净距必须是非负有限数字；0 表示不检查净距。";
-    document.getElementById("preview").replaceChildren();
-    return;
+    showError("最小净距必须是非负有限数字；0 表示不检查净距。");
+    return Promise.resolve(false);
   }
-  const result = JSON.parse(analyze(base64, minGap, 0.05));
-  document.getElementById("report").textContent = result.report;
-  const svgText = result.svg;
-  const preview = document.getElementById("preview");
-  if (svgText !== "") {
-    preview.innerHTML = svgText;
-  } else {
-    preview.textContent = result.error;
+  if (typeof Worker !== "function") {
+    showError("当前浏览器无法启动后台检查，请使用支持 Web Worker 的浏览器。");
+    return Promise.resolve(false);
   }
+  document.getElementById("report").textContent = "正在检查；可取消或选择另一文件。";
+  return new Promise(resolve => {
+    settleActive = resolve;
+    const finish = (result, error) => {
+      if (id !== generation) return;
+      if (error) showError(error);
+      else if (!result || typeof result !== "object" || Array.isArray(result) ||
+        !["report", "svg", "error", "unit"].every(k => typeof result[k] === "string") ||
+        (result.svg !== "" && !result.svg.startsWith("<svg"))) {
+        showError("检查器返回了无效结果，请重试。");
+      } else {
+        document.getElementById("report").textContent = result.report;
+        const preview = document.getElementById("preview");
+        if (result.svg) preview.innerHTML = result.svg;
+        else preview.textContent = result.error;
+      }
+      settleActive = null;
+      stopTask();
+      resolve(!error);
+    };
+    try {
+      activeWorker = new Worker("worker.js");
+      activeWorker.onmessage = event => {
+        if (id === generation && event.data && event.data.id === id)
+          finish(event.data.result, event.data.error);
+      };
+      activeWorker.onerror = () => finish(null, "后台检查失败，请检查输入后重试。");
+      activeWorker.onmessageerror = () => finish(null, "检查结果无法传回，请重试。");
+      activeTimer = setTimeout(() => finish(null, "检查超过15秒，任务已终止；请拆分图纸后重试。"), ANALYSIS_TIMEOUT_MS);
+      const message = {id, ...payload, minGap, tol:0.05};
+      activeWorker.postMessage(message, payload.bytes ? [payload.bytes] : []);
+    } catch (_) {
+      finish(null, "无法启动后台检查，请重试。");
+    }
+  });
+}
+
+function runCheck(base64, name) {
+  currentBase64 = base64;
+  currentFile = null;
+  if (base64.length > Math.ceil(MAX_FILE_BYTES / 3) * 4) {
+    stopTask(); showError("网页文件上限为16 MiB，请使用本地工具检查较大图纸。");
+    return Promise.resolve(false);
+  }
+  return startAnalysis({base64}, name);
 }
 
 function readFile(file) {
+  stopTask();
+  currentBase64 = "";
+  currentFile = null;
+  currentName = "";
+  if (!Number.isFinite(file.size) || file.size < 0 || file.size > MAX_FILE_BYTES) {
+    showError("网页文件上限为16 MiB，请使用本地工具检查较大图纸。");
+    return;
+  }
+  currentFile = file;
+  const id = generation;
   const reader = new FileReader();
+  activeReader = reader;
   reader.onload = () => {
-    runCheck(bytesToBase64(new Uint8Array(reader.result)), file.name);
+    if (id !== generation) return;
+    activeReader = null;
+    if (!(reader.result instanceof ArrayBuffer) || reader.result.byteLength > MAX_FILE_BYTES) {
+      showError("文件内容超出读取范围。"); return;
+    }
+    startAnalysis({bytes:reader.result}, file.name);
   };
   reader.onerror = () => {
-    currentBase64 = "";
-    currentName = "";
-    document.getElementById("report").textContent = "无法读取这个文件，请重新选择。";
-    document.getElementById("preview").replaceChildren();
+    if (id !== generation) return;
+    stopTask(); showError("无法读取这个文件，请重新选择。");
   };
+  reader.onabort = () => {};
   reader.readAsArrayBuffer(file);
 }
 
@@ -134,20 +212,21 @@ document.getElementById("file").addEventListener("change", (event) => {
 });
 
 document.getElementById("sample").addEventListener("click", () => {
-  runCheck(textToBase64(SAMPLE_TEXT), "内置样例.dxf");
+  return runCheck(textToBase64(SAMPLE_TEXT), "内置样例.dxf");
 });
 
 document.getElementById("sample-normal").addEventListener("click", () => {
-  runCheck(textToBase64(NORMAL_SAMPLE_TEXT), "正常轮廓.dxf");
+  return runCheck(textToBase64(NORMAL_SAMPLE_TEXT), "正常轮廓.dxf");
 });
 
 document.getElementById("sample-coverage").addEventListener("click", () => {
-  runCheck(textToBase64(COVERAGE_SAMPLE_TEXT), "未覆盖内容.dxf");
+  return runCheck(textToBase64(COVERAGE_SAMPLE_TEXT), "未覆盖内容.dxf");
 });
 
 // 改了净距阈值就拿同一张图重跑
 document.getElementById("min-gap").addEventListener("change", () => {
-  if (currentBase64) runCheck(currentBase64, currentName);
+  if (currentFile) return readFile(currentFile);
+  if (currentBase64) return runCheck(currentBase64, currentName);
 });
 
 // 整页都能拖
@@ -168,6 +247,10 @@ document.body.addEventListener("drop", (event) => {
 
 // `index.html?sample=1` 直接跑内置样例——分享给别人的链接、
 // 无头浏览器自检都用它
+document.getElementById("cancel").addEventListener("click", () => {
+  stopTask(); showError("检查已取消。");
+});
+
 if (location.search.includes("sample=normal")) {
   runCheck(textToBase64(NORMAL_SAMPLE_TEXT), "正常轮廓.dxf");
 } else if (location.search.includes("sample=coverage")) {

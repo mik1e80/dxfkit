@@ -17,6 +17,14 @@ try{
  const tree=JSON.parse(run('moon',['tree','--json']));
  result.dependencies=Object.fromEntries(tree.modules.filter(m=>m.source.kind==='registry').map(m=>[m.name,m.version]));
  assert.deepEqual(result.dependencies,profile.dependencies,'Resolved dependencies differ from fixed profile');
+ const sdk=process.env.MOON_HOME||path.join(require('node:os').homedir(),'.moon');
+ result.license_sha256_lf={};
+ for(const name of ['LICENSE','NOTICE']) {
+   const upstream=lf(fs.readFileSync(path.join(sdk,'lib/core',name),'utf8'));
+   const bundled=lf(fs.readFileSync(path.join(root,'web/licenses',`moonbit-core.${name}`),'utf8'));
+   assert.equal(bundled,upstream,`Bundled core ${name} differs from the pinned compiler runtime`);
+   result.license_sha256_lf[name]=createHash('sha256').update(bundled).digest('hex');
+ }
  const actual=lf(fs.readFileSync(snapshot,'utf8'));
  assert.equal(actual,expected,'Public API changed: review git diff -- pkg.generated.mbti and document compatibility before committing the new snapshot');
  result.api_sha256=createHash('sha256').update(actual).digest('hex');result.passed=true;
