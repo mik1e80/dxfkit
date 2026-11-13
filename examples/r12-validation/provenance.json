@@ -1,0 +1,174 @@
+{
+  "schema": "dxfkit-r12-model-provenance-v1",
+  "recorded_on": "2026-11-13",
+  "origin": "project-authored parametric ASCII AC1009 fixtures; not CAD application exports",
+  "author": "dxfkit project",
+  "license": "Apache-2.0",
+  "generator": "scripts/generate-r12-fixtures.mbtx",
+  "verification": "scripts/record-r12-validation.mbtx",
+  "full_r12_certification": false,
+  "models": [
+    {
+      "file": "models/01-array-2x3.dxf",
+      "sha256": "886ca67a8bae2442ee898862a866d6e7a8457f9531628c2925993760ec6ecc12",
+      "acadver": "AC1009",
+      "purpose": "2 columns x 3 rows, spacing 7/9; six instances",
+      "design_truth": {
+        "block_base": [
+          1,
+          2,
+          3
+        ],
+        "line_start": [
+          1,
+          2,
+          3
+        ],
+        "line_endpoint_delta": [
+          1,
+          0,
+          1
+        ],
+        "expected_instances": 6,
+        "world_coordinates_reference": "actual/01-array-2x3-world.tsv",
+        "reference_role": "saved actual coordinates; expected arithmetic lives in verification script, not this TSV"
+      },
+      "license": "Apache-2.0"
+    },
+    {
+      "file": "models/02-scaled-array.dxf",
+      "sha256": "4a46e794ad33d5643fd96e83e247baa7722a50fff5387e6542423c7f1c2d2e46",
+      "acadver": "AC1009",
+      "purpose": "scale 2; 2x2, spacing 10/20 unscaled; four instances",
+      "design_truth": {
+        "block_base": [
+          1,
+          2,
+          3
+        ],
+        "line_start": [
+          1,
+          2,
+          3
+        ],
+        "line_endpoint_delta": [
+          1,
+          0,
+          1
+        ],
+        "expected_instances": 4,
+        "world_coordinates_reference": "actual/02-scaled-array-world.tsv",
+        "reference_role": "saved actual coordinates; expected arithmetic lives in verification script, not this TSV"
+      },
+      "license": "Apache-2.0"
+    },
+    {
+      "file": "models/03-rotated-array.dxf",
+      "sha256": "6ffe6c93194614eab01cf547c847431b6788bd516c8e353c6a6adfb9d8f983fa",
+      "acadver": "AC1009",
+      "purpose": "rotation 90deg; scale 2/3; 2x2 spacing 10/20; four instances",
+      "design_truth": {
+        "block_base": [
+          1,
+          2,
+          3
+        ],
+        "line_start": [
+          1,
+          2,
+          3
+        ],
+        "line_endpoint_delta": [
+          1,
+          0,
+          1
+        ],
+        "expected_instances": 4,
+        "world_coordinates_reference": "actual/03-rotated-array-world.tsv",
+        "reference_role": "saved actual coordinates; expected arithmetic lives in verification script, not this TSV"
+      },
+      "license": "Apache-2.0"
+    },
+    {
+      "file": "models/04-base-xyz.dxf",
+      "sha256": "9bc398285a0104f38c8e5b39e761815c8d305047d410f89d5943c959a2cb721b",
+      "acadver": "AC1009",
+      "purpose": "base (1,2,3), insertion (4,5,6), scale (2,3,4); two instances",
+      "design_truth": {
+        "block_base": [
+          1,
+          2,
+          3
+        ],
+        "line_start": [
+          1,
+          2,
+          3
+        ],
+        "line_endpoint_delta": [
+          1,
+          0,
+          1
+        ],
+        "expected_instances": 2,
+        "world_coordinates_reference": "actual/04-base-xyz-world.tsv",
+        "reference_role": "saved actual coordinates; expected arithmetic lives in verification script, not this TSV"
+      },
+      "license": "Apache-2.0"
+    },
+    {
+      "file": "models/05-nested-array.dxf",
+      "sha256": "8336f0d43a2ee2525beff3e4bf1ed4da0f1820dd687a7cafbac53581b86973e3",
+      "acadver": "AC1009",
+      "purpose": "nested 2-column inner and 2-row outer; four instances",
+      "design_truth": {
+        "block_base": [
+          1,
+          2,
+          3
+        ],
+        "line_start": [
+          1,
+          2,
+          3
+        ],
+        "line_endpoint_delta": [
+          1,
+          0,
+          1
+        ],
+        "expected_instances": 4,
+        "world_coordinates_reference": "actual/05-nested-array-world.tsv",
+        "reference_role": "saved actual coordinates; expected arithmetic lives in verification script, not this TSV"
+      },
+      "license": "Apache-2.0"
+    },
+    {
+      "file": "models/06-ocs-array.dxf",
+      "sha256": "21d23ff740c34b8bf8a7930b36f88d586ec7fbb775e3b6c715c5b2598c45e7cd",
+      "acadver": "AC1009",
+      "purpose": "normal (1,0,0), two-column array; two instances",
+      "design_truth": {
+        "block_base": [
+          1,
+          2,
+          3
+        ],
+        "line_start": [
+          1,
+          2,
+          3
+        ],
+        "line_endpoint_delta": [
+          1,
+          0,
+          1
+        ],
+        "expected_instances": 2,
+        "world_coordinates_reference": "actual/06-ocs-array-world.tsv",
+        "reference_role": "saved actual coordinates; expected arithmetic lives in verification script, not this TSV"
+      },
+      "license": "Apache-2.0"
+    }
+  ]
+}

@@ -34,7 +34,7 @@ for(const file of fs.readdirSync(path.join(root,'docs/submission-evidence')))
     files[`docs/submission-evidence/${file}`]=`docs/submission-evidence/${file}`;
 for(const file of Object.keys(manifest.sha256))
   if(file.startsWith('docs/submission-evidence/')) assert(files[file],`Evidence not packaged: ${file}`);
-  else if(file.startsWith('examples/')) files[file]=file;
+  else if(file.startsWith('examples/')||file==='testdata/ezdxf/MANIFEST.json') files[file]=file;
   else if(['README.md','README.mbt.md','SECURITY.md','CONTRIBUTING.md','output/pdf/dxfkit-submission-one-page.pdf'].includes(file)) files[file]=file;
 for(const file of fs.readdirSync(path.join(root,'web/licenses'))) files[`web/licenses/${file}`]=`licenses/${file}`;
 for(const [from,to] of Object.entries(files)) {

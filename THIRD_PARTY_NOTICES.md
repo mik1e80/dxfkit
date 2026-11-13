@@ -11,6 +11,8 @@
 
 ## 1. DXF 测试语料
 
+[逐文件来源及许可清单](testdata/ezdxf/MANIFEST.json)记录47个原始文件的本地SHA-256、来源路径、MIT和首次导入日期；未知的历史上游commit/blob保持null。六个自建AC1009模型另见[专用许可](examples/r12-validation/LICENSE.md)及[来源清单](examples/r12-validation/provenance.json)，不混用第三方MIT身份。
+
 **位置**：`testdata/ezdxf/`（47 个 `.dxf` 文件）
 
 **来源**：[mozman/ezdxf](https://github.com/mozman/ezdxf) 的 `examples_dxf/` 目录。

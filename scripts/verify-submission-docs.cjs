@@ -1,7 +1,7 @@
 // Lightweight checks only: document targets, current API wording, About data and PDF envelope.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
-const docs=['SECURITY.md','CONTRIBUTING.md','docs/security-20261107.md','README.md','README.mbt.md','COMPARISON.md','docs/submission.md','docs/resubmission-evidence.md','docs/verification-guide.md','docs/delivery-verification.md','docs/review-cases.md','docs/r12-profile.md','docs/resubmission-20261027.md','docs/review-response.md','examples/r12-validation/README.md','examples/r12-validation/EXTERNAL.md','examples/model-validation/README.md','examples/model-validation/SUMMARY.md','docs/r2-submission-20261022.md'];
+const docs=['docs/advisor-20261113.md','examples/r12-validation/LICENSE.md','SECURITY.md','CONTRIBUTING.md','docs/security-20261107.md','README.md','README.mbt.md','COMPARISON.md','docs/submission.md','docs/resubmission-evidence.md','docs/verification-guide.md','docs/delivery-verification.md','docs/review-cases.md','docs/r12-profile.md','docs/resubmission-20261027.md','docs/review-response.md','examples/r12-validation/README.md','examples/r12-validation/EXTERNAL.md','examples/model-validation/README.md','examples/model-validation/SUMMARY.md','docs/r2-submission-20261022.md'];
 let links=0;
 for(const file of docs){
   const text=fs.readFileSync(path.join(root,file),'utf8');
@@ -44,3 +44,23 @@ for(const row of capabilities.entities){
 }
 for(const kind of ['LINE','INSERT','ATTRIB','SHAPE','SPLINE'])assert(kinds.has(kind));
 assert(fs.existsSync(path.join(root,'web/worker.js')));
+const sha256=bytes=>require('node:crypto').createHash('sha256').update(bytes).digest('hex');
+const external=JSON.parse(fs.readFileSync(path.join(root,'testdata/ezdxf/MANIFEST.json'),'utf8'));
+const own=JSON.parse(fs.readFileSync(path.join(root,'examples/r12-validation/provenance.json'),'utf8'));
+const externalFiles=fs.readdirSync(path.join(root,'testdata/ezdxf')).filter(f=>f.endsWith('.dxf')).sort();
+assert.deepEqual(external.files.map(f=>f.local_file).sort(),externalFiles);
+assert.equal(external.files.length,47);
+for(const entry of external.files){
+ assert.equal(entry.upstream_commit,null);assert.equal(entry.upstream_blob_sha,null);
+ assert.equal(entry.license,'MIT');
+ assert.equal(entry.local_sha256,sha256(fs.readFileSync(path.join(root,'testdata/ezdxf',entry.local_file))));
+}
+assert.equal(own.license,'Apache-2.0');
+const ownFiles=fs.readdirSync(path.join(root,'examples/r12-validation/models')).filter(f=>f.endsWith('.dxf')).map(f=>'models/'+f).sort();
+assert.deepEqual(own.models.map(f=>f.file).sort(),ownFiles);assert.equal(ownFiles.length,6);
+for(const entry of own.models){
+ const bytes=fs.readFileSync(path.join(root,'examples/r12-validation',entry.file));
+ assert.equal(entry.sha256,sha256(bytes));assert.equal(entry.license,'Apache-2.0');
+ assert(bytes.toString('ascii').includes('AC1009'));
+}
+console.log('PASS: 47 external and 6 project-authored provenance entries, paths, licenses and raw SHA-256');

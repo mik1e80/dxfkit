@@ -16,7 +16,7 @@ const assets=['web/index.html','web/style.css','web/app.js','web/worker.js','web
   'README.md','README.mbt.md','SECURITY.md','CONTRIBUTING.md','docs/security-20261107.md','docs/capabilities.json','docs/verification-guide.md','output/pdf/dxfkit-submission-one-page.pdf',
   ...descendants('examples/model-validation'),
   ...descendants('examples/r12-validation'),
-  'docs/r12-profile.md','docs/resubmission-20261027.md',
+  'docs/advisor-20261113.md','testdata/ezdxf/MANIFEST.json','docs/r12-profile.md','docs/resubmission-20261027.md',
   ...descendants('examples/advisor-boundaries'),...descendants('examples/independent-fields'),
   'docs/advisor-review-20261022.md',
   'docs/r2-submission-20261022.md',
