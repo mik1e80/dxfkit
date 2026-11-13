@@ -1,0 +1,119 @@
+{
+  "schema": "dxfkit-actual-cad-r12-v1",
+  "exported_on": "2026-11-13",
+  "application": "FreeCAD 1.1.3",
+  "application_build": "145529fe741292ff0b3977a01195bf0247425794",
+  "mode": "FreeCADCmd -c; existing native FCStd opened and native Import exporter invoked",
+  "exporter": "Import.writeDXFObject",
+  "version_argument": 12,
+  "use_polyline_override": false,
+  "option_source": "User parameter:DXFKitCADR12",
+  "actual_acadver": "AC1009",
+  "gui_used": false,
+  "manual_visual_cad_review": false,
+  "raw_dxf_modified_after_export": false,
+  "license": "Apache-2.0",
+  "software_provenance": "../cad-exports/provenance.json",
+  "not_covered": [
+    "independent exporter implementation",
+    "MINSERT export",
+    "nondefault OCS export",
+    "complete R12 semantics",
+    "glyphs and encodings"
+  ],
+  "sources": [
+    {
+      "file": "../cad-exports/sources/01-freecad-four-hole-plate.FCStd",
+      "sha256": "bfe2960b332cfcd5226c052aa16ba3e6533c0e6a175e4052beccf1035887e252"
+    },
+    {
+      "file": "../cad-exports/sources/02-freecad-offset-ellipse.FCStd",
+      "sha256": "f0033032b59b6263b9153ac4177dd281a1a99a8f1f4bb787bcfb5210225a7569"
+    }
+  ],
+  "exports": [
+    {
+      "file": "models/01-four-hole-plate.dxf",
+      "sha256": "8401d7661db7d0db95c73f45e31ab7a47b1f4be77c1c69423049d47a9986e8c3",
+      "acadver": "AC1009",
+      "native_source": "../cad-exports/sources/01-freecad-four-hole-plate.FCStd",
+      "selection": "doc.Objects",
+      "expected_strict_exit": 0
+    },
+    {
+      "file": "models/02-rectangle.dxf",
+      "sha256": "cc6f9716f60b56c9d72ab7178b16aa1d7ffe2c8b171d2159dae9f721b0d2a571",
+      "acadver": "AC1009",
+      "native_source": "../cad-exports/sources/01-freecad-four-hole-plate.FCStd",
+      "selection": "[doc.Objects[0]]",
+      "expected_strict_exit": 0
+    },
+    {
+      "file": "models/03-offset-ellipse.dxf",
+      "sha256": "1729b327e4e4ca2747911f45b132bd61377d19980d416ff0489540fffd98e99d",
+      "acadver": "AC1009",
+      "native_source": "../cad-exports/sources/02-freecad-offset-ellipse.FCStd",
+      "selection": "doc.Objects",
+      "expected_strict_exit": 1
+    }
+  ],
+  "truth": {
+    "rectangle": {
+      "bounds": [
+        0,
+        0,
+        100,
+        60
+      ],
+      "perimeter": 320,
+      "area": 6000,
+      "edges": 4
+    },
+    "holes": {
+      "centers": [
+        [
+          10,
+          10
+        ],
+        [
+          90,
+          10
+        ],
+        [
+          90,
+          50
+        ],
+        [
+          10,
+          50
+        ]
+      ],
+      "radius": 3
+    },
+    "native_ellipse": {
+      "center": [
+        10,
+        20
+      ],
+      "radii": [
+        10,
+        5
+      ],
+      "bounds": [
+        0,
+        15,
+        20,
+        25
+      ],
+      "closed": true
+    },
+    "exported_ellipse": {
+      "kind": "POLYLINE",
+      "vertices": 10,
+      "closed": false,
+      "endpoint_gap": 3.3159601403025523,
+      "role": "exporter limitation detected, not a valid closed ellipse"
+    }
+  },
+  "unit": "native design mm; exported INSUNITS unspecified; library retains unspecified"
+}

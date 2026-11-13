@@ -42,6 +42,8 @@ moon run cli svg examples/plate.dxf > plate.svg
 
 ## 模型与正确性证据
 
+新增[FreeCAD原生R12导出](examples/cad-r12/README.md)：两份正常图和一份开放椭圆导出反例，均声明AC1009。该证据覆盖一个CAD应用的实际导出路径，不代表完整R12兼容。
+
 | 证据 | 可确认的内容 |
 | --- | --- |
 | [六份 AC1009 模型](examples/r12-validation/README.md) | 行列、缩放、旋转、XYZ 基点、嵌套与 OCS；22实例、132个坐标分量对照 |

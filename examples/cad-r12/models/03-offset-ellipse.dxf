@@ -1,0 +1,506 @@
+999
+FreeCAD v1.1 20260725 (Git shallow)
+  0
+SECTION
+  2
+HEADER
+  9
+$ACADVER
+  1
+AC1009
+  9
+$DWGCODEPAGE
+  3
+ANSI_1252
+  9
+$TEXTSTYLE
+  7
+STANDARD
+  9
+$DIMSTYLE
+  2
+STANDARD
+  9
+$DIMTXSTY
+  7
+STANDARD
+  9
+$CMLSTYLE
+  2
+STANDARD
+  9
+$HANDLING
+ 70
+0
+  0
+ENDSEC
+  0
+SECTION
+  2
+TABLES
+  0
+TABLE
+  2
+VPORT
+  5
+20
+ 70
+    1
+  0
+ENDTAB
+  0
+TABLE
+  2
+LTYPE
+  5
+22
+ 70
+     1
+  0
+LTYPE
+  5
+23
+  2
+BYLAYER
+ 70
+     0
+  3
+NORMAL
+ 72
+    65
+ 73
+1
+ 40
+1
+  0
+ENDTAB
+  0
+TABLE
+  2
+STYLE
+  5
+24
+ 70
+   1
+  0
+STYLE
+  5
+26
+  2
+STANDARD
+  3
+txt
+ 70
+   0
+ 40
+   0
+ 41
+   1
+ 50
+   0
+ 71
+   0
+ 42
+   1
+  4
+
+  0
+ENDTAB
+  0
+TABLE
+  2
+LAYER
+  5
+A11
+ 70
+3
+  0
+LAYER
+  5
+A12
+  2
+0
+ 70
+   0
+ 62
+   7
+  6
+CONTINUOUS
+  0
+LAYER
+  5
+A13
+  2
+none
+ 70
+    0
+ 62
+    7
+  6
+CONTINUOUS
+  0
+LAYER
+  5
+A14
+  2
+Contour0
+ 70
+    0
+ 62
+    7
+  6
+CONTINUOUS
+  0
+ENDTAB
+  0
+TABLE
+  2
+VIEW
+  5
+50
+ 70
+   0
+  0
+ENDTAB
+  0
+TABLE
+  2
+UCS
+  5
+51
+ 70
+   0
+  0
+ENDTAB
+  0
+TABLE
+  2
+APPID
+  5
+52
+ 70
+   3
+  0
+APPID
+  5
+53
+  2
+ACAD
+ 70
+   0
+  0
+APPID
+  5
+54
+  2
+FreeCAD
+ 70
+    0
+  0
+ENDTAB
+  0
+TABLE
+  2
+DIMSTYLE
+  5
+55
+ 70
+   2
+  0
+DIMSTYLE
+105
+56
+  2
+STANDARD
+ 70
+   0
+  3
+0
+  4
+0
+  5
+0
+  6
+0
+  7
+0
+ 40
+   1
+ 41
+0.18
+ 42
+0.0625
+ 43
+0.38
+ 44
+0.18
+ 45
+0.0
+ 46
+0.0
+ 47
+0.0
+ 48
+0
+140
+0.18
+141
+0.09
+142
+0.0
+143
+25.4
+144
+1.0
+145
+0.0
+146
+1.0
+147
+0.09
+ 71
+   0
+ 72
+   0
+ 73
+   1
+ 74
+   1
+ 75
+   0
+ 76
+   0
+ 77
+   0
+ 78
+   0
+170
+   0
+171
+   2
+172
+   0
+173
+   0
+174
+   0
+175
+   0
+176
+   0
+177
+   0
+178
+   0
+  0
+ENDTAB
+  0
+ENDSEC
+  0
+SECTION
+  2
+BLOCKS
+  0
+BLOCK
+  5
+A01
+  8
+0
+  2
+*MODEL_SPACE
+ 70
+   0
+ 10
+0
+ 20
+0
+ 30
+0
+  3
+*MODEL_SPACE
+  1
+ 
+  0
+ENDBLK
+  5
+A02
+  8
+0
+  0
+BLOCK
+  5
+A03
+  8
+0
+  2
+*PAPER_SPACE
+ 70
+   0
+ 10
+0
+ 20
+0
+ 30
+0
+  3
+*PAPER_SPACE
+  1
+ 
+  0
+ENDBLK
+  5
+A04
+  8
+0
+  0
+ENDSEC
+  0
+SECTION
+  2
+ENTITIES
+  0
+POLYLINE
+  5
+A05
+  8
+Contour0
+ 66
+     1
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 70
+0
+  0
+VERTEX
+  5
+A06
+  8
+Contour0
+ 10
+20.000000000
+ 20
+20.000000000
+ 30
+0.000000000
+  0
+VERTEX
+  5
+A07
+  8
+Contour0
+ 10
+16.916860520
+ 20
+23.610991572
+ 30
+0.000000000
+  0
+VERTEX
+  5
+A08
+  8
+Contour0
+ 10
+12.106564996
+ 20
+24.887800730
+ 30
+0.000000000
+  0
+VERTEX
+  5
+A09
+  8
+Contour0
+ 10
+7.120994358
+ 20
+24.788301539
+ 30
+0.000000000
+  0
+VERTEX
+  5
+A0A
+  8
+Contour0
+ 10
+2.394970926
+ 20
+23.246672634
+ 30
+0.000000000
+  0
+VERTEX
+  5
+A0B
+  8
+Contour0
+ 10
+0.118312033
+ 20
+19.233148822
+ 30
+0.000000000
+  0
+VERTEX
+  5
+A0C
+  8
+Contour0
+ 10
+3.797114831
+ 20
+16.078131326
+ 30
+0.000000000
+  0
+VERTEX
+  5
+A0D
+  8
+Contour0
+ 10
+8.669310860
+ 20
+15.044466063
+ 30
+0.000000000
+  0
+VERTEX
+  5
+A0E
+  8
+Contour0
+ 10
+13.646455946
+ 20
+15.344268075
+ 30
+0.000000000
+  0
+VERTEX
+  5
+A0F
+  8
+Contour0
+ 10
+18.256730140
+ 20
+17.179255090
+ 30
+0.000000000
+  0
+SEQEND
+  5
+A10
+  8
+Contour0
+  0
+ENDSEC
+  0
+EOF

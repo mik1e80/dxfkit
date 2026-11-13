@@ -1,7 +1,7 @@
 // Lightweight checks only: document targets, current API wording, About data and PDF envelope.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
-const docs=['docs/advisor-20261113.md','examples/r12-validation/LICENSE.md','SECURITY.md','CONTRIBUTING.md','docs/security-20261107.md','README.md','README.mbt.md','COMPARISON.md','docs/submission.md','docs/resubmission-evidence.md','docs/verification-guide.md','docs/delivery-verification.md','docs/review-cases.md','docs/r12-profile.md','docs/resubmission-20261027.md','docs/review-response.md','examples/r12-validation/README.md','examples/r12-validation/EXTERNAL.md','examples/model-validation/README.md','examples/model-validation/SUMMARY.md','docs/r2-submission-20261022.md'];
+const docs=['examples/cad-r12/README.md','docs/advisor-20261113.md','examples/r12-validation/LICENSE.md','SECURITY.md','CONTRIBUTING.md','docs/security-20261107.md','README.md','README.mbt.md','COMPARISON.md','docs/submission.md','docs/resubmission-evidence.md','docs/verification-guide.md','docs/delivery-verification.md','docs/review-cases.md','docs/r12-profile.md','docs/resubmission-20261027.md','docs/review-response.md','examples/r12-validation/README.md','examples/r12-validation/EXTERNAL.md','examples/model-validation/README.md','examples/model-validation/SUMMARY.md','docs/r2-submission-20261022.md'];
 let links=0;
 for(const file of docs){
   const text=fs.readFileSync(path.join(root,file),'utf8');
@@ -64,3 +64,14 @@ for(const entry of own.models){
  assert(bytes.toString('ascii').includes('AC1009'));
 }
 console.log('PASS: 47 external and 6 project-authored provenance entries, paths, licenses and raw SHA-256');
+const cad=JSON.parse(fs.readFileSync(path.join(root,'examples/cad-r12/provenance.json'),'utf8'));
+assert.equal(cad.version_argument,12);assert.equal(cad.actual_acadver,'AC1009');
+assert.equal(cad.raw_dxf_modified_after_export,false);
+assert.equal(cad.exports.length,3);assert.equal(cad.sources.length,2);
+for(const entry of [...cad.sources,...cad.exports]){
+ const bytes=fs.readFileSync(path.join(root,'examples/cad-r12',entry.file));
+ assert.equal(sha256(bytes),entry.sha256,'CAD input changed: '+entry.file);
+ if(entry.acadver)assert(bytes.toString('ascii').includes('AC1009'));
+}
+assert.deepEqual(cad.exports.map(e=>e.expected_strict_exit),[0,0,1]);
+console.log('PASS: three native CAD R12 exports and two native sources retain their raw hashes; negative case retained');

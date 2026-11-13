@@ -1,0 +1,46 @@
+{
+  "suite": "FreeCAD-native-R12",
+  "passed": 3,
+  "total": 3,
+  "cases": [
+    {
+      "model": "01-four-hole-plate",
+      "version": "AC1009",
+      "entities": 8,
+      "sampled_vertices": 348,
+      "max_equation_error": 6.661338147750939e-15,
+      "incomplete": false,
+      "warnings": 0,
+      "expected_strict_exit": 0,
+      "native_closed_ellipse_became_open_polyline": false,
+      "unit": "未指定",
+      "passed": true
+    },
+    {
+      "model": "02-rectangle",
+      "version": "AC1009",
+      "entities": 4,
+      "sampled_vertices": 0,
+      "max_equation_error": 0,
+      "incomplete": false,
+      "warnings": 0,
+      "expected_strict_exit": 0,
+      "native_closed_ellipse_became_open_polyline": false,
+      "unit": "未指定",
+      "passed": true
+    },
+    {
+      "model": "03-offset-ellipse",
+      "version": "AC1009",
+      "entities": 1,
+      "sampled_vertices": 10,
+      "max_equation_error": 1.464521837135635e-10,
+      "incomplete": false,
+      "warnings": 1,
+      "expected_strict_exit": 1,
+      "native_closed_ellipse_became_open_polyline": true,
+      "unit": "未指定",
+      "passed": true
+    }
+  ]
+}

@@ -15,7 +15,7 @@ function descendants(rel) {
 const assets=['web/index.html','web/style.css','web/app.js','web/worker.js','web/dist/web.js','docs/submission.md',
   'README.md','README.mbt.md','SECURITY.md','CONTRIBUTING.md','docs/security-20261107.md','docs/capabilities.json','docs/verification-guide.md','output/pdf/dxfkit-submission-one-page.pdf',
   ...descendants('examples/model-validation'),
-  ...descendants('examples/r12-validation'),
+  ...descendants('examples/r12-validation'),...descendants('examples/cad-r12'),
   'docs/advisor-20261113.md','testdata/ezdxf/MANIFEST.json','docs/r12-profile.md','docs/resubmission-20261027.md',
   ...descendants('examples/advisor-boundaries'),...descendants('examples/independent-fields'),
   'docs/advisor-review-20261022.md',

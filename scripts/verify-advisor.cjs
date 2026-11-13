@@ -16,6 +16,7 @@ try{
   execute('node',['cli/smoke.cjs']);
   execute('moon',['test','r12_world_wbtest.mbt','r12_read_test.mbt','r12_structure_test.mbt','checker_array_contacts_wbtest.mbt','insert_ocs_wbtest.mbt','review_cases_wbtest.mbt','completeness_wbtest.mbt','delivery_regression_wbtest.mbt','expand_wbtest.mbt','advisor_boundary_wbtest.mbt','geometry_accuracy_wbtest.mbt','geometry_regression_wbtest.mbt','checker_accuracy_wbtest.mbt','preview_wbtest.mbt','--target','wasm','--deny-warn']);
   execute('moon',['run','examples/r12-validation/external']);
+  execute('moon',['run','examples/cad-r12/runner','--deny-warn']);
   for(const script of ['scripts/verify-corpus-records.cjs','examples/advisor-boundaries/verify.cjs','examples/independent-fields/verify.cjs','examples/model-validation/verify.cjs','scripts/verify-submission-evidence.cjs','scripts/verify-submission-docs.cjs'])execute('node',[script]);
   execute('node',['scripts/build-web.cjs',...(allowDirty?['--allow-dirty']:[])]);
   execute('node',['web/smoke.cjs']);
