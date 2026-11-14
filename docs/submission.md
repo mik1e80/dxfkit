@@ -1,5 +1,7 @@
 # dxfkit 项目说明（2026-10-27 R12 修订）
 
+本文保留主赛重新申报背景；八月黑客松使用[独立 Markdown 说明](august-hackathon.md)，不要混用活动材料要求。本文的测试描述以当轮证据为准，后续新增见该说明和证据链接。
+
 **名称：** MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库。
 **项目方向：** 工业软件基础库／开发者工具；[GitHub源码](https://github.com/mik1e80/dxfkit)。
 **当前身份：** main中的未发布0.2.0开发版；本文、[一页PDF](../output/pdf/dxfkit-submission-one-page.pdf)、代码及本轮证据随同一提交保存，精确SHA见该提交CI。历史r2与已发布0.1.1分别保留，不作为当前R12全量验收证明。

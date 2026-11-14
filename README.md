@@ -4,6 +4,8 @@
 
 [接口与迁移](README.mbt.md) · [R12 范围矩阵](docs/r12-profile.md) · [本轮修改与证据](docs/resubmission-20261027.md) · [一页项目说明](output/pdf/dxfkit-submission-one-page.pdf)
 
+参加八月黑客松请查看[Markdown 项目说明与待确认事项](docs/august-hackathon.md)，其中区分已有基础、新增成果和后续交付。报名期限及补交资格仍待确认；主赛退回响应与 PDF 不作为该活动的通用报名要求。
+
 处理外部图纸前请查看[安全使用边界](SECURITY.md)与[11月7日整改记录](docs/security-20261107.md)。当前源码加入读取/几何预算、统一结构警告、分叉连接诊断和网页Worker；已发布0.1.1及历史Pages不含这些新增防护。[机器能力矩阵](docs/capabilities.json)分别描述记录、字段、几何与检查状态。
 
 ## 能做什么
