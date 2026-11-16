@@ -28,6 +28,8 @@ README改为当前维护身份，保留0.2.0未发布、0.1.1已发布、历史r
 | `node scripts/verify-submission-docs.cjs` | 22文档链接、47外部/6自建来源与哈希、3份R12导出及2份原生源文件哈希通过 |
 | `moon run scripts/verify-maintenance-docs.mbtx --deny-warn` | 8份维护文档、79个本地链接通过；脚本固定async 0.22.1以适配项目SDK |
 
+首次远程定向CI中，120项R12/几何相关回归与既有安全/CLI步骤通过，随后因语料审计的源码指纹尚未刷新而停止。本轮已重放`node scripts/verify-corpus-records.cjs --write`：相关14项通过，47份输入及全部观察结果未改变，仅新增/更新4个源码文件哈希；不通过改几何预期消除失败。最终CI结果以修正后的同提交运行记录为准。
+
 ## 无时间表的后续完成条件
 
 | 优先级/方向 | 当前状态 | 下一项可验收成果 |
