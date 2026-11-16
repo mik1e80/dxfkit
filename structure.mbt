@@ -309,6 +309,9 @@ fn group_sections(
   let mut current_records : Array[Record] = []
 
   for record in records {
+    if diagnostic_budget_exhausted(warnings) {
+      return sections
+    }
     if record.kind == "SECTION" {
       // 上一个段没关就又开了新的——尽力而为：把上一个收掉
       match current {

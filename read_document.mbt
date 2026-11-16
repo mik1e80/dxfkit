@@ -29,8 +29,9 @@ pub(all) struct ReadDocument {
 }
 
 ///|
-/// Read an ASCII DXF without discarding unrecognized fields or record types.
+/// Preserve unrecognized fields and record types within the scanning budgets.
 /// `source` also retains comments, formatting and bytes after EOF that the scanner ignores.
+/// A budget-limited records prefix must not be treated as the complete file.
 pub fn read_document(source : Bytes) -> ReadDocument {
   read_document_with_limits(source, ReadLimits::default())
 }

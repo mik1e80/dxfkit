@@ -89,8 +89,8 @@ pub(all) enum Geometry {
   ///
   /// 箭头、界线、文字都画在匿名块（`*D1` 之类）里。**标注放错图层
   /// 是加工图纸的经典事故**（轮廓图层上睡着一条标注），所以它必须
-  /// 是解码出来的实体，而不是 `Unknown`。老版本（R12）没有匿名块，
-  /// `block` 是空串。
+  /// 是解码出来的实体，而不是 `Unknown`。`block` 保存输入提供的块名；
+  /// 空串表示没有取到该字段，不能据此判断某个DXF版本不存在标注块。
   Dimension(at~ : Vec3, block~ : String, measurement~ : Double)
   /// 样条曲线（SPLINE）：次数、节点向量、控制点、权重。
   ///
@@ -529,6 +529,9 @@ fn parse_lwpolyline(record : Record, warnings : Array[String]) -> Geometry? {
   let mut pending_x : Double? = None
   let mut damaged = false
   for t in subclass_tags(record, "AcDbPolyline") {
+    if diagnostic_budget_exhausted(warnings) {
+      return Some(Unknown)
+    }
     match t.code {
       10 => {
         if pending_x is Some(_) {
@@ -633,6 +636,9 @@ fn parse_spline(record : Record, warnings : Array[String]) -> Geometry {
   let mut py : Double? = None
   let mut damaged = false
   for t in subclass_tags(record, "AcDbSpline") {
+    if diagnostic_budget_exhausted(warnings) {
+      return Unknown
+    }
     match t.code {
       40 => knots.push(t.value.as_double())
       41 => weights.push(t.value.as_double())
@@ -772,6 +778,9 @@ fn parse_polyline_entity(
   let vertices : Array[PolyVertex] = []
   let mut damaged = false
   for index, vr in vertex_records {
+    if diagnostic_budget_exhausted(warnings) {
+      return Some({ common, geom: Unknown, })
+    }
     if vr.get_int(70, 0) != 0 {
       warnings.push(
         "POLYLINE 顶点 \{index + 1} 带拟合或空间标志；保留记录，轮廓未检查",
@@ -1040,7 +1049,7 @@ fn parse_entity(record : Record, warnings : Array[String]) -> Entity? {
             common,
             geom: Dimension(
               at~,
-              // R12 的标注没有匿名块，缺块名不算坏记录
+              // 保留提供的块名；此选择性入口不校验完整标注关联语义。
               block=record.get_string(2),
               measurement=record.get_double(42, 0.0),
             ),
