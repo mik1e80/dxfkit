@@ -2,9 +2,9 @@
 
 把 ASCII DXF 转为可访问的原始记录、实体字段、WCS XYZ、受支持的二维轮廓、诊断和 SVG，供其他 MoonBit 程序、CLI 和浏览器使用。当前 main 为 **未发布的 0.2.0 开发版**，以 AC1009 为 R12 记录读取配置；其他版本按已实现能力尽力读取。
 
-[接口与迁移](README.mbt.md) · [R12 范围矩阵](docs/r12-profile.md) · [本轮修改与证据](docs/resubmission-20261027.md) · [一页项目说明](output/pdf/dxfkit-submission-one-page.pdf)
+[接口与迁移](README.mbt.md) · [R12 范围矩阵](docs/r12-profile.md) · [维护状态与验证](docs/maintenance-20261116.md) · [许可与模型来源](docs/licensing.md)
 
-参加八月黑客松请查看[Markdown 项目说明与待确认事项](docs/august-hackathon.md)，其中区分已有基础、新增成果和后续交付。报名期限及补交资格仍待确认；主赛退回响应与 PDF 不作为该活动的通用报名要求。
+维护状态（2026-11-16）：据参赛者反馈，项目已通过报名初审，现围绕既有方向持续维护；这不表示当前开发版已通过最终验收。[八月黑客松说明](docs/august-hackathon.md)保留已有基础、新增成果及后续交付的区分，本仓库不代操作报名系统。
 
 处理外部图纸前请查看[安全使用边界](SECURITY.md)与[11月7日整改记录](docs/security-20261107.md)。当前源码加入读取/几何预算、统一结构警告、分叉连接诊断和网页Worker；已发布0.1.1及历史Pages不含这些新增防护。[机器能力矩阵](docs/capabilities.json)分别描述记录、字段、几何与检查状态。
 
@@ -12,7 +12,7 @@
 
 旧代码页范围：当前原生解码为UTF-8/CP1252；ANSI_936（GBK）、932、949、950等仅保留源字节并按Latin-1降级，报告会提示，不能视为完整中文/多字节文本兼容。编码声明仅探测前1024字节。[本轮核对](docs/advisor-20261113.md)列明已完成项与真实R12 CAD导出、全量验收等待办。
 
-- `read_document` 保留源字节和有序组码记录，诊断段、表、块和子实体序列结构；读取诊断与几何检查分开。
+- `read_document` 保留源字节与扫描预算范围内的有序组码记录，诊断段、表、块和子实体序列结构；读取诊断与几何检查分开。
 - 按实体坐标规则转换 OCS→WCS，保留 XYZ；展开 INSERT 的全部行列、三维基点、缩放、旋转和最多八层嵌套，保留实例来源。
 - 离散七类既有核心轮廓及受限 SOLID/TRACE；对落在 WCS Z=0 检查平面的几何辅助检查闭合、自交、重复、退化和指定净距，输出报告和 SVG。
 - 未重建语义、关联属性布局、非检查平面、损坏输入及资源截断明确报告不完整；`--strict` 将警告作为失败。
@@ -46,6 +46,8 @@ moon run cli svg examples/plate.dxf > plate.svg
 
 新增[FreeCAD原生R12导出](examples/cad-r12/README.md)：两份正常图和一份开放椭圆导出反例，均声明AC1009。该证据覆盖一个CAD应用的实际导出路径，不代表完整R12兼容。
 
+[模型许可与验证索引](docs/testing.md)统一列明各组模型的来源、许可、预期依据和实际验证层次；原始字节保留受读取预算约束，截断后的记录不能当作完整输入。
+
 | 证据 | 可确认的内容 |
 | --- | --- |
 | [六份 AC1009 模型](examples/r12-validation/README.md) | 行列、缩放、旋转、XYZ 基点、嵌套与 OCS；22实例、132个坐标分量对照 |
@@ -62,6 +64,8 @@ MoonBit 已有 DXF 读写模块及相邻几何、STEP、G-code、位图轮廓和
 
 日常使用必要的定向检查，不运行整仓库四后端全量：
 
+本次维护的最小回归为 `moon test maintenance_security_test.mbt security_test.mbt security_wbtest.mbt stream_wbtest.mbt --target wasm --deny-warn`；首次修改解析逻辑时另做相关类型检查与模型消费验证。更广的既有定向集入口为：
+
 ```sh
 node scripts/verify-advisor.cjs
 ```
@@ -72,8 +76,8 @@ node scripts/verify-advisor.cjs
 
 [当前项目说明](docs/submission.md) · [退回意见响应](docs/review-response.md) · [证据索引](docs/resubmission-evidence.md) · [材料导航](docs/verification-guide.md) · [路线图](docs/roadmap.md)
 
-当前材料描述0.2.0开发候选，是否接受这一明确范围由主办方评审判断，不写成已审核通过。Gitlink同步地址仍须参赛者另行核对；本仓库修改不代表已操作报名系统或更新报名表。
+当前材料描述0.2.0开发候选；初审状态来自参赛者反馈，不代替当前源码的功能验证或最终验收。主赛退回响应及一页PDF保留其原修订背景，当前维护变化见上方维护记录；本仓库修改不代表已更新报名表。
 
 ## 许可
 
-采用 [Apache-2.0](LICENSE)。上游资料、ezdxf语料及工具、依赖的参考关系与完整许可见[第三方声明](THIRD_PARTY_NOTICES.md)。问题反馈请附源码SHA、工具链、最小输入、预期依据和实际报告，提交到 [Issues](https://github.com/mik1e80/dxfkit/issues)。
+项目自身代码、文档和自建模型采用 [Apache-2.0](LICENSE)，第三方内容按其各自许可证分发，见[许可适用范围](docs/licensing.md)和[第三方声明](THIRD_PARTY_NOTICES.md)。功能边界不是额外许可限制，也不构成加工保证。问题反馈请附源码SHA、工具链、可分发最小输入、预期依据和实际报告，提交到 [Issues](https://github.com/mik1e80/dxfkit/issues)；敏感漏洞按[安全报告方式](SECURITY.md)处理。

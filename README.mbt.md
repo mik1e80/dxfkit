@@ -10,6 +10,8 @@
 
 新业务使用`Entity::flatten_checked`取得错误原因；`Geometry::flatten_checked`为无实体坐标语义的局部入口。旧`flatten`和`spline_points`的回退结果不应用作完整检查证据。文字标签的字高为面积尺度近似，旋转/镜像/剪切、宽高和字形未忠实渲染；ATTRIB/ATTDEF完整布局与阵列复制未完成。XY数值域、各阶段预算及共用容差边界见[SECURITY](SECURITY.md)。
 
+单条多段线/样条内部或段分组达到诊断预算时会停止派生解析，并明确报告不完整；原始source/records仍保留其对应视图，不把恢复出的几何当完整验证。详细资源和模型边界见[维护记录](docs/maintenance-20261116.md)、[兼容性](docs/compatibility.md)及[模型验证层次](docs/testing.md)。
+
 ```moonbit nocheck
 ///|
 test "R12 document and WCS API" {

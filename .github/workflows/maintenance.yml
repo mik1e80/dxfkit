@@ -3,9 +3,9 @@ name: 格式与公开接口检查
 on:
   push:
     branches: [main]
-    paths: ['**/*.mbt', '**/moon.pkg', 'pkg.generated.mbti', '.gitignore', '.gitattributes', 'scripts/verify-maintenance.cjs', '.github/workflows/maintenance.yml']
+    paths: ['**/*.mbt', '**/*.md', '**/*.mbtx', '**/moon.pkg', 'pkg.generated.mbti', '.gitignore', '.gitattributes', 'scripts/verify-maintenance.cjs', '.github/workflows/maintenance.yml']
   pull_request:
-    paths: ['**/*.mbt', '**/moon.pkg', 'pkg.generated.mbti', '.gitignore', '.gitattributes', 'scripts/verify-maintenance.cjs', '.github/workflows/maintenance.yml']
+    paths: ['**/*.mbt', '**/*.md', '**/*.mbtx', '**/moon.pkg', 'pkg.generated.mbti', '.gitignore', '.gitattributes', 'scripts/verify-maintenance.cjs', '.github/workflows/maintenance.yml']
   workflow_dispatch:
 
 permissions:
@@ -27,6 +27,10 @@ jobs:
         run: |
           moon update
           node scripts/verify-maintenance.cjs
+      - name: 诊断洪泛回归与维护文档链接（非全量）
+        run: |
+          moon test maintenance_security_test.mbt --target wasm --deny-warn
+          moon run scripts/verify-maintenance-docs.mbtx
       - name: 保存轻量验证记录
         if: always()
         uses: actions/upload-artifact@v6

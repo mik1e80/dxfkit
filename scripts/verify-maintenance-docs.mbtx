@@ -1,0 +1,37 @@
+import {
+  "moonbitlang/async@0.22.1",
+  "moonbitlang/async@0.22.1/fs",
+}
+
+///|
+async fn main {
+  // Check the maintenance documents without running geometry or release suites.
+  let documents = [
+    ("README.md", "."),
+    ("docs/august-hackathon.md", "docs"),
+    ("docs/licensing.md", "docs"),
+    ("docs/testing.md", "docs"),
+    ("docs/compatibility.md", "docs"),
+    ("docs/resource-limits.md", "docs"),
+    ("docs/r12-conformance-matrix.md", "docs"),
+    ("docs/maintenance-20261116.md", "docs"),
+  ]
+  let mut links = 0
+  for entry in documents {
+    let (file, base) = entry
+    let text = @fs.read_file(file).text()
+    let parts = text.split("](").to_array()
+    for part in parts[1:] {
+      let target = part.split(")").to_array()[0]
+        .split("#").to_array()[0].to_owned()
+      if target == "" || target.contains(":") {
+        continue
+      }
+      guard @fs.exists(base + "/" + target) else {
+        fail("\{file}: missing local link \{target}")
+      }
+      links += 1
+    }
+  }
+  println("PASS: \{documents.length()} maintenance documents, \{links} local links; no full suite")
+}
