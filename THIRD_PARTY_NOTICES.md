@@ -95,6 +95,10 @@ ezdxf 的版权与完整 MIT 条款已在上一节保留，随项目分发。
 | `moonbitlang/async` | 分块读文件及可选验证脚本的文件/子进程接口 | `cli/` 的 `stats` 与 `.mbtx` 开发脚本；核心库不使用 | Apache-2.0 |
 
 
+## 4. ANSI_936 编码映射
+
+ANSI_936 解码器使用 [WHATWG 固定提交的双字节映射索引](https://github.com/whatwg/encoding/blob/be17ac5c49881336538acfc7b40dba3c8009144b/index-gb18030.txt)。索引 SHA-256 为 `746b3c55f1a8ec4b90b451f384437a17fd37cd51cd668456a28071a758d10784`。运行 `moon run scripts/generate-gbk-table.mbtx <index-file>` 可重新生成 MoonBit 映射表。版权与适用于纳入源码部分的 BSD-3-Clause 条款见[上游完整许可](web/licenses/whatwg-encoding.LICENSE)。网页打包携带该许可。
+
 ## 浏览器分发补充
 
 网页包含 MoonBit core 编译代码；完整上游许可及附带声明保存在 web/licenses/moonbit-core.LICENSE 和 web/licenses/moonbit-core.NOTICE，构建时随站点复制，保留其中第三方来源及免责声明。网页界面和示例模型由本项目编写。

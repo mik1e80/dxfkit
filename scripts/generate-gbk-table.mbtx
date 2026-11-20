@@ -1,0 +1,53 @@
+import {
+  "moonbitlang/async@0.22.1",
+  "moonbitlang/async@0.22.1/fs",
+  "moonbitlang/core/env",
+  "moonbitlang/core/string",
+}
+
+///|
+async fn main {
+  let args = @env.args()
+  guard args.length() == 2 else { fail("pass the pinned WHATWG index file") }
+  let source = @fs.read_file(args[1]).text()
+  guard source.contains("ff1c9a923b5d24f9761b3a2de2c0f07b395f9f6f36519508944de4f0415be81c") else {
+    fail("unexpected index identity")
+  }
+  let table : Array[Char] = []
+  for line in source.split("\n") {
+    let fields = line.split("\t").to_array()
+    if fields.length() < 3 {
+      continue
+    }
+    let pointer = @string.parse_int(fields[0].trim())
+    guard pointer == table.length() else { fail("unexpected pointer order") }
+    let hex = fields[1].to_owned()
+    let mut value = 0
+    for c in hex[2:] {
+      let n = c.to_int()
+      let digit = if n >= 48 && n <= 57 { n - 48 } else { n - 55 }
+      guard digit >= 0 && digit < 16 else { fail("invalid hex digit") }
+      value = value * 16 + digit
+    }
+    guard value >= 128 && value <= 0xFFFF && value != 0x2028 && value != 0x2029 else {
+      fail("unexpected scalar in mapping")
+    }
+    guard value.to_char() is Some(c) else { fail("invalid Unicode scalar") }
+    table.push(c)
+  }
+  guard table.length() == 23940 else { fail("unexpected mapping size") }
+  let out = StringBuilder()
+  out.write_string("// Generated from the WHATWG Encoding index-gb18030.txt two-byte table.\n")
+  out.write_string("// Copyright WHATWG (Apple, Google, Mozilla, Microsoft).\n")
+  out.write_string("// BSD-3-Clause for incorporation into source. See web/licenses/whatwg-encoding.LICENSE.\n\n")
+  out.write_string("///|\nlet gbk_rows : FixedArray[String] = [\n")
+  for row in 0..<126 {
+    out.write_string("  \"")
+    for col in 0..<190 {
+      out.write_char(table[row * 190 + col])
+    }
+    out.write_string("\",\n")
+  }
+  out.write_string("]\n")
+  @fs.write_file("gbk_table.mbt", out.to_string())
+}

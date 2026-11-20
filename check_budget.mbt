@@ -74,10 +74,14 @@ fn endpoint_topology(
   }
   let parent = Array::makei(points.length(), i => i)
   let order = Array::makei(points.length(), i => i)
+  // A vertical column would otherwise visit every pair, even when the
+  // vertical separation makes a contact impossible.
+  let vertical = points.length() > 0 && points.all(p => p.x == points[0].x)
+  let key = (i : Int) => if vertical { points[i].y } else { points[i].x }
   order.sort_by((a, b) => {
-    if points[a].x < points[b].x {
+    if key(a) < key(b) {
       -1
-    } else if points[a].x > points[b].x {
+    } else if key(a) > key(b) {
       1
     } else {
       0
@@ -86,7 +90,7 @@ fn endpoint_topology(
   for at = 0; at < order.length(); at = at + 1 {
     let i = order[at]
     let mut next = at + 1
-    while next < order.length() && points[order[next]].x - points[i].x <= tol {
+    while next < order.length() && key(order[next]) - key(i) <= tol {
       if !work.spend() {
         return (0, 0.0, Vec2::zero(), false)
       }

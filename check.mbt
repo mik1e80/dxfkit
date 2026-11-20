@@ -259,10 +259,11 @@ fn Drawing::check_expansion(
     check_closure(exp.placed, tables, tol, findings, work)
   }
   if !work.stopped {
-    check_crossings(exp.placed, tables, tol, findings, work)
-  }
-  if !work.stopped {
-    check_min_gap(exp.placed, tables, opt, findings, work)
+    let segments = index_layer_segments(exp.placed, tables)
+    check_crossings(segments, tol, findings, work)
+    if !work.stopped {
+      check_min_gap(segments, opt, findings, work)
+    }
   }
   if work.stopped {
     findings.push({
@@ -437,41 +438,24 @@ fn check_closure(
   findings : Array[Finding],
   work : CheckWork,
 ) -> Unit {
-  // 这层有没有按本工具图层筛选约定参与检查的开放折线
+  let by_layer : Map[String, Array[(Vec2, Vec2)]] = Map([])
   let names : Array[String] = []
   for p in placed {
-    let open = match p.flat {
-      Outline(closed~, ..) => !closed
-      _ => false
-    }
-    if !open || is_uncut_layer(tables, p.layer) {
-      continue
-    }
-    let mut seen = false
-    for n in names {
-      if n == p.layer {
-        seen = true
+    if p.flat is Outline(points~, closed=false) &&
+      points.length() >= 2 &&
+      !is_uncut_layer(tables, p.layer) {
+      let edge = (points[0], points[points.length() - 1])
+      match by_layer.get(p.layer) {
+        Some(edges) => edges.push(edge)
+        None => {
+          by_layer[p.layer] = [edge]
+          names.push(p.layer)
+        }
       }
-    }
-    if !seen {
-      names.push(p.layer)
     }
   }
   for layer in names {
-    // 这一层的开放折线，每条只留两个端点（中间的点不影响串链）
-    let edges : Array[(Vec2, Vec2)] = []
-    for p in placed {
-      if p.layer != layer {
-        continue
-      }
-      match p.flat {
-        Outline(points~, closed~) =>
-          if !closed && points.length() >= 2 {
-            edges.push((points[0], points[points.length() - 1]))
-          }
-        _ => ()
-      }
-    }
+    let edges = by_layer[layer]
     let (open_count, worst_gap, at, branched) = endpoint_topology(
       edges, tol, work,
     )
@@ -534,38 +518,16 @@ priv struct CutSeg {
 /// - 相邻段不参与（正常折线的相邻段本来就首尾相接）。
 /// - 只在会被切到的图层上查，和闭合检查一个口径。
 fn check_crossings(
-  placed : Array[Placed],
-  tables : Tables?,
+  layers : Array[(String, Array[CutSeg])],
   tol : Double,
   findings : Array[Finding],
   work : CheckWork,
 ) -> Unit {
-  let layers : Array[String] = []
-  for p in placed {
-    let is_outline = match p.flat {
-      Outline(..) => true
-      _ => false
-    }
-    if is_outline && !is_uncut_layer(tables, p.layer) {
-      push_unique(layers, p.layer)
-    }
-  }
-  for layer in layers {
-    let segs = layer_segments(placed, layer)
+  for (layer, segs) in layers {
     if segs.length() < 2 {
       continue
     }
-    // 按 min_x 排序后扫掠
-    segs.sort_by(fn(s1, s2) {
-      if s1.min_x < s2.min_x {
-        -1
-      } else if s1.min_x > s2.min_x {
-        1
-      } else {
-        0
-      }
-    })
-    let self_crossed : Array[Int] = []
+    let self_crossed : Map[Int, Bool] = Map([])
     let mut dup_pairs = 0
     let mut dup_len = 0.0
     let mut dup_at = Vec2::zero()
@@ -583,7 +545,7 @@ fn check_crossings(
         if !(t.min_y > s.max_y + tol || s.min_y > t.max_y + tol) {
           if !(s.owner == t.owner && adjacent_segs(s, t)) {
             if s.owner == t.owner && proper_cross(s.a, s.b, t.a, t.b, tol) {
-              push_unique_int(self_crossed, s.owner)
+              self_crossed[s.owner] = true
             }
             let over = overlap_length(s.a, s.b, t.a, t.b, tol)
             if over > tol {
@@ -618,44 +580,58 @@ fn check_crossings(
 }
 
 ///|
-/// 收集一个图层里所有可切轮廓的线段。
-fn layer_segments(placed : Array[Placed], layer : String) -> Array[CutSeg] {
-  let segs : Array[CutSeg] = []
-  let mut pi = 0
-  while pi < placed.length() {
-    let p = placed[pi]
-    if p.layer == layer {
-      match p.flat {
-        Outline(points~, closed~) => {
-          let n = points.length()
-          if n >= 2 {
-            let count = if closed { n } else { n - 1 }
-            let mut i = 0
-            while i < count {
-              let a = points[i]
-              let b = points[(i + 1) % n]
-              segs.push({
-                a,
-                b,
-                min_x: a.x.min(b.x),
-                max_x: a.x.max(b.x),
-                min_y: a.y.min(b.y),
-                max_y: a.y.max(b.y),
-                owner: pi,
-                seg: i,
-                count,
-                closed,
-              })
-              i = i + 1
-            }
-          }
-        }
-        _ => ()
+/// Build one index shared by self-intersection, overlap, and clearance.
+fn index_layer_segments(
+  placed : Array[Placed],
+  tables : Tables?,
+) -> Array[(String, Array[CutSeg])] {
+  let index : Map[String, Array[CutSeg]] = Map([])
+  let layers : Array[(String, Array[CutSeg])] = []
+  for owner, p in placed {
+    guard p.flat is Outline(points~, closed~) else { continue }
+    let n = points.length()
+    if n < 2 || is_uncut_layer(tables, p.layer) {
+      continue
+    }
+    let segs = match index.get(p.layer) {
+      Some(segs) => segs
+      None => {
+        let segs : Array[CutSeg] = []
+        index[p.layer] = segs
+        layers.push((p.layer, segs))
+        segs
       }
     }
-    pi = pi + 1
+    let count = if closed { n } else { n - 1 }
+    for i in 0..<count {
+      let a = points[i]
+      let b = points[(i + 1) % n]
+      segs.push({
+        a,
+        b,
+        min_x: a.x.min(b.x),
+        max_x: a.x.max(b.x),
+        min_y: a.y.min(b.y),
+        max_y: a.y.max(b.y),
+        owner,
+        seg: i,
+        count,
+        closed,
+      })
+    }
   }
-  segs
+  for (_, segs) in layers {
+    segs.sort_by((a, b) => {
+      if a.min_x < b.min_x {
+        -1
+      } else if a.min_x > b.min_x {
+        1
+      } else {
+        0
+      }
+    })
+  }
+  layers
 }
 
 ///|
@@ -753,8 +729,7 @@ fn overlap_length(
 ///|
 /// 最小间隙检查。`min_gap` 为 0 时不查（见 `CheckOptions`）。
 fn check_min_gap(
-  placed : Array[Placed],
-  tables : Tables?,
+  layers : Array[(String, Array[CutSeg])],
   opt : CheckOptions,
   findings : Array[Finding],
   work : CheckWork,
@@ -763,30 +738,10 @@ fn check_min_gap(
     return
   }
   let tol = opt.tol
-  let layers : Array[String] = []
-  for p in placed {
-    let is_outline = match p.flat {
-      Outline(..) => true
-      _ => false
-    }
-    if is_outline && !is_uncut_layer(tables, p.layer) {
-      push_unique(layers, p.layer)
-    }
-  }
-  for layer in layers {
-    let segs = layer_segments(placed, layer)
+  for (layer, segs) in layers {
     if segs.length() < 2 {
       continue
     }
-    segs.sort_by(fn(s1, s2) {
-      if s1.min_x < s2.min_x {
-        -1
-      } else if s1.min_x > s2.min_x {
-        1
-      } else {
-        0
-      }
-    })
     let near : Map[Int64, Bool] = Map([])
     let mut worst = opt.min_gap
     let mut at = Vec2::zero()
@@ -881,26 +836,6 @@ fn on_segment(a : Vec2, b : Vec2, p : Vec2) -> Bool {
   p.x <= a.x.max(b.x) &&
   p.y >= a.y.min(b.y) &&
   p.y <= a.y.max(b.y)
-}
-
-///|
-fn push_unique(names : Array[String], v : String) -> Unit {
-  for n in names {
-    if n == v {
-      return
-    }
-  }
-  names.push(v)
-}
-
-///|
-fn push_unique_int(ids : Array[Int], v : Int) -> Unit {
-  for n in ids {
-    if n == v {
-      return
-    }
-  }
-  ids.push(v)
 }
 
 ///|

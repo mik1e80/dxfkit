@@ -26,8 +26,23 @@ pub fn Drawing::to_svg(self : Drawing, tol : Double) -> String {
 
 ///|
 fn Drawing::svg_from_expansion(self : Drawing, exp : Expansion) -> String {
+  match self.render_svg(exp, default_svg_bytes) {
+    Ok(svg) => svg
+    Err(_) => ""
+  }
+}
+
+///|
+fn Drawing::render_svg(
+  self : Drawing,
+  exp : Expansion,
+  max_bytes : Int,
+) -> Result[String, SvgError] {
+  if max_bytes <= 0 {
+    return Err(SvgByteLimit)
+  }
   if !preview_range_ok(exp) {
-    return ""
+    return Err(InvalidPreviewGeometry)
   }
   // 世界坐标的范围（只看画得出来的几何；纯文字的图纸会落到空盒）
   let mut box = Aabb2::empty()
@@ -42,8 +57,16 @@ fn Drawing::svg_from_expansion(self : Drawing, exp : Expansion) -> String {
       Empty => ()
     }
   }
+  let sb : SvgWriter = {
+    data: StringBuilder(),
+    remaining: max_bytes,
+    limited: false,
+  }
   if box.is_empty() {
-    return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"600\" viewBox=\"0 0 800 600\"></svg>"
+    sb.write_string(
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"600\" viewBox=\"0 0 800 600\"></svg>",
+    )
+    return sb.result()
   }
   let size = box.size()
   let margin = size.x.max(size.y).max(1.0) * 0.02
@@ -54,14 +77,13 @@ fn Drawing::svg_from_expansion(self : Drawing, exp : Expansion) -> String {
   let height = 800.0 * (vh / vw)
   let diag = scaled_hypot(vw, vh)
   if ![vx, vy, vw, vh, height, diag].all(finite_number) {
-    return ""
+    return Err(InvalidPreviewGeometry)
   }
   let stroke = diag / 400.0
   let tables = match self.section("TABLES") {
     Some(t) => Some(parse_tables(t))
     None => None
   }
-  let sb = StringBuilder()
   sb.write_string(
     "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"\{fmt(height)}\" viewBox=\"\{fmt(vx)} \{fmt(vy)} \{fmt(vw)} \{fmt(vh)}\">\n",
   )
@@ -70,14 +92,18 @@ fn Drawing::svg_from_expansion(self : Drawing, exp : Expansion) -> String {
   )
   sb.write_string("<g transform=\"scale(1,-1)\">\n")
   for p in exp.placed {
+    if sb.limited {
+      break
+    }
     let (color, dim) = layer_state(tables, p.layer)
     match p.flat {
       Outline(points~, closed~) =>
         if points.length() >= 2 {
-          let pts = fmt_points(points)
           let tag = if closed { "polygon" } else { "polyline" }
+          sb.write_string("<\{tag} points=\"")
+          write_svg_points(sb, points)
           sb.write_string(
-            "<\{tag} points=\"\{pts}\" fill=\"none\" stroke=\"\{color}\" stroke-width=\"\{fmt(stroke)}\"\{dim}/>\n",
+            "\" fill=\"none\" stroke=\"\{color}\" stroke-width=\"\{fmt(stroke)}\"\{dim}/>\n",
           )
         }
       Dot(at~) =>
@@ -94,7 +120,7 @@ fn Drawing::svg_from_expansion(self : Drawing, exp : Expansion) -> String {
     }
   }
   sb.write_string("</g>\n</svg>\n")
-  sb.to_string()
+  sb.result()
 }
 
 ///|
@@ -148,7 +174,16 @@ fn xml_escape(s : String) -> String {
       '<' => sb.write_string("&lt;")
       '>' => sb.write_string("&gt;")
       '"' => sb.write_string("&quot;")
-      _ => sb.write_string("\{c}")
+      _ => {
+        let cp = c.to_int()
+        if (cp < 0x20 && cp != 9 && cp != 10 && cp != 13) ||
+          cp == 0xFFFE ||
+          cp == 0xFFFF {
+          sb.write_char('\u{FFFD}')
+        } else {
+          sb.write_char(c)
+        }
+      }
     }
   }
   sb.to_string()
@@ -163,10 +198,9 @@ fn fmt(v : Double) -> String {
 
 ///|
 /// 点列 → `points` 属性值。
-fn fmt_points(points : Array[Vec2]) -> String {
-  let sb = StringBuilder()
+fn write_svg_points(sb : SvgWriter, points : Array[Vec2]) -> Unit {
   let mut i = 0
-  while i < points.length() {
+  while i < points.length() && !sb.limited {
     if i > 0 {
       sb.write_string(" ")
     }
@@ -175,5 +209,4 @@ fn fmt_points(points : Array[Vec2]) -> String {
     sb.write_string(fmt(points[i].y))
     i = i + 1
   }
-  sb.to_string()
 }

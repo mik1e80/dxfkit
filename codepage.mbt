@@ -18,7 +18,7 @@ pub(all) enum Encoding {
   Utf8
   /// Windows 西欧代码页。和 Latin-1 的区别在 0x80-0x9F 这一段
   Cp1252
-  /// 其它代码页。目前只认得编号，不认表——解码时会降级并报警告
+  /// Legacy code page number. ANSI_936 has a built-in two-byte decoder.
   Other(Int)
 }
 
@@ -27,29 +27,16 @@ pub(all) enum Encoding {
 ///
 /// 仅探测前1024字节；声明不在这个范围时会使用回退编码。
 pub fn decide_encoding(data : Bytes) -> Encoding {
-  let version = scan_header_string(data, "$ACADVER")
-  match version {
-    Some(v) =>
-      // 版本号形如 `AC1027`，字典序比较和数值序一致
-      if v >= "AC1021" {
-        Utf8
-      } else {
-        codepage_from_header(data)
-      }
-    None =>
-      // 连版本都读不到，多半不是 DXF 或文件坏了。
-      // 按最保守的方式处理，让上层去报「这不是 DXF」
-      Cp1252
+  if utf8_bom(data) {
+    return Utf8
   }
-}
-
-///|
-/// 从 `$DWGCODEPAGE` 读出代码页。
-fn codepage_from_header(data : Bytes) -> Encoding {
-  let name = scan_header_string(data, "$DWGCODEPAGE")
-  match name {
-    Some(n) => parse_codepage_name(n)
-    None => Cp1252
+  let (version, codepage) = probe_header_encoding(data)
+  if version >= "AC1021" {
+    Utf8
+  } else if version == "" || codepage == "" {
+    Cp1252
+  } else {
+    parse_codepage_name(codepage)
   }
 }
 
@@ -85,62 +72,71 @@ fn code_point_to_char(c : Int) -> Char {
 }
 
 ///|
-/// 在文件开头的 HEADER 段里找一个变量的值。
-///
-/// **直接在字节上找，不解码**——因为要解码就得先知道编码，而这里正是在
-/// 决定用什么编码。HEADER 变量名和版本号都是纯 ASCII，按字节比就够了。
-fn scan_header_string(data : Bytes, var_name : String) -> String? {
-  let limit = if data.length() < 1024 { data.length() } else { 1024 }
-  let needle = var_name
-  let mut i = 0
-  while i + needle.length() + 2 < limit {
-    if bytes_match_at(data, i, needle) {
-      // 格式是：9 / $ACADVER / 1 / AC1027（或 3 / ANSI_1252）
-      // 所以变量名之后要找下一行的值
-      return Some(read_ascii_value_after(data, i + needle.length(), limit))
+/// Match complete tag pairs within the HEADER segment. Comments and values
+/// in later segments cannot be mistaken for encoding declarations.
+fn probe_header_encoding(data : Bytes) -> (String, String) {
+  let limit = data.length().min(1024)
+  let mut offset = 0
+  let mut group : Int? = None
+  let mut awaiting_section = false
+  let mut in_header = false
+  let mut variable = ""
+  let mut version = ""
+  let mut codepage = ""
+  while offset < limit {
+    let start = offset
+    while offset < limit && data[offset] != b'\n' && data[offset] != b'\r' {
+      offset += 1
     }
-    i = i + 1
+    if offset == limit {
+      break
+    }
+    let stop = offset
+    offset += 1
+    if data[stop] == b'\r' && offset < limit && data[offset] == b'\n' {
+      offset += 1
+    }
+    match group {
+      None => group = parse_group_code(data, start, stop)
+      Some(code) => {
+        group = None
+        if code == 999 {
+          continue
+        }
+        let (from, to) = trim_ascii_range(data, start, stop)
+        let value = bytes_to_ascii(data, from, to)
+        if code == 0 {
+          if in_header {
+            break
+          }
+          awaiting_section = value == "SECTION"
+        } else if code == 2 && awaiting_section {
+          in_header = value == "HEADER"
+          awaiting_section = false
+        } else if in_header {
+          if code == 9 {
+            variable = value
+          } else {
+            if variable == "$ACADVER" && code == 1 && version == "" {
+              version = value
+            } else if variable == "$DWGCODEPAGE" && code == 3 && codepage == "" {
+              codepage = value
+            }
+            variable = ""
+          }
+        }
+      }
+    }
   }
-  None
+  (version, codepage)
 }
 
 ///|
-/// `data[at..]` 是不是以 `s` 开头。
-fn bytes_match_at(data : Bytes, at : Int, s : String) -> Bool {
-  if at + s.length() > data.length() {
-    return false
-  }
-  for k = 0; k < s.length(); k = k + 1 {
-    if data[at + k].to_int() != s.code_unit_at(k).to_int() {
-      return false
-    }
-  }
-  true
-}
-
-///|
-/// 从变量名之后读出那个变量的值。
-///
-/// 走法是：跳过 `\r`/`\n` 和紧随其后的组码行（`1` 或 `3`），再取一行。
-fn read_ascii_value_after(data : Bytes, from : Int, limit : Int) -> String {
-  let mut i = from
-  // 跳过行尾
-  while i < limit && (data[i] == b'\r' || data[i] == b'\n') {
-    i = i + 1
-  }
-  // 跳过组码那一行
-  while i < limit && data[i] != b'\r' && data[i] != b'\n' {
-    i = i + 1
-  }
-  while i < limit && (data[i] == b'\r' || data[i] == b'\n') {
-    i = i + 1
-  }
-  // 读值那一行
-  let start = i
-  while i < limit && data[i] != b'\r' && data[i] != b'\n' {
-    i = i + 1
-  }
-  bytes_to_ascii(data, start, i)
+fn utf8_bom(data : Bytes) -> Bool {
+  data.length() >= 3 &&
+  data[0] == b'\xEF' &&
+  data[1] == b'\xBB' &&
+  data[2] == b'\xBF'
 }
 
 ///|
@@ -169,6 +165,7 @@ pub fn decode_text(data : Bytes, enc : Encoding) -> String {
   match enc {
     Utf8 => @utf8.decode_lossy(data)
     Cp1252 => decode_cp1252(data)
+    Other(936) => decode_gbk(data).0
     Other(_) => decode_latin1(data)
   }
 }
@@ -177,6 +174,7 @@ pub fn decode_text(data : Bytes, enc : Encoding) -> String {
 /// 这个编码是不是只能降级处理。
 pub fn Encoding::is_fallback(self : Encoding) -> Bool {
   match self {
+    Other(936) => false
     Other(_) => true
     _ => false
   }
@@ -188,6 +186,7 @@ pub fn Encoding::to_display(self : Encoding) -> String {
   match self {
     Utf8 => "UTF-8"
     Cp1252 => "CP1252（西欧）"
+    Other(936) => "ANSI_936（GBK）"
     Other(n) => "代码页 \{n}"
   }
 }

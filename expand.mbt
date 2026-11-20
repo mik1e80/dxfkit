@@ -316,7 +316,11 @@ pub fn Drawing::expand_with_limits(
   tol : Double,
   limits : ExpandLimits,
 ) -> Expansion {
-  let world = self.expand_world_with_limits(tol, limits)
+  project_expansion(self.expand_world_with_limits(tol, limits), tol)
+}
+
+///|
+fn project_expansion(world : WorldExpansion, tol : Double) -> Expansion {
   let warnings = world.warnings.copy()
   let placed : Array[Placed] = []
   for p in world.placed {

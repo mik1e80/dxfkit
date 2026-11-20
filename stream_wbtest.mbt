@@ -49,6 +49,39 @@ fn assert_same_tags(actual : Array[Tag], expected : Array[Tag]) -> Unit raise {
 }
 
 ///|
+test "seeded record and line-ending variations keep stream and batch equal" {
+  let mut seed = 6473
+  for trial in 0..<36 {
+    let input = StringBuilder()
+    let newline = ["\n", "\r\n", "\r"][trial % 3]
+    for line in ["0", "SECTION", "2", "ENTITIES"] {
+      input.write_string(line + newline)
+    }
+    for _ in 0..<120 {
+      seed = (seed * 31 + 17) % 65521
+      let pair = [
+          ("0", "LINE"),
+          ("10", "7.25"),
+          ("20", "bad"),
+          ("11", "-1"),
+          ("", ""),
+          ("invalid code", ""),
+          ("999", "test"),
+        ][seed % 7]
+      input.write_string(pair.0 + newline + pair.1 + newline)
+    }
+    input.write_string(
+      "0" + newline + "ENDSEC" + newline + "0" + newline + "EOF",
+    )
+    let bytes = @utf8.encode(input.to_string())
+    let scan = scan_tags(bytes)
+    assert_same_tags(streamed_tags(bytes, seed % 47 + 1), scan.tags)
+    assert_true(scan.tags.length() <= 125)
+    assert_true(scan.warnings.length() <= 120)
+  }
+}
+
+///|
 test "逐字节喂入和整份扫描等价（CRLF 全部被劈开）" {
   // 全文用 CRLF：逐字节喂入时每个「\r\n」都落在块边界上，
   // 缓冲逻辑必须把它们重新拼起来

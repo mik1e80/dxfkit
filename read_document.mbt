@@ -43,6 +43,29 @@ pub fn read_document_with_limits(
   limits : ReadLimits,
 ) -> ReadDocument {
   let scan = scan_tags_with_limits(source, limits)
+  document_from_scan(source, scan)
+}
+
+///|
+/// Read using a trusted callback for unsupported legacy string values.
+pub fn read_document_with_legacy_decoder(
+  source : Bytes,
+  limits : ReadLimits,
+  decoder : (Int, Bytes) -> String?,
+) -> ReadDocument {
+  let stream = TagStream::with_legacy_decoder(limits, decoder)
+  let tags = stream.feed(source)
+  tags.append(stream.finish())
+  let scan : TagScan = {
+    tags,
+    warnings: stream.warnings(),
+    encoding: stream.encoding().unwrap(),
+  }
+  document_from_scan(source, scan)
+}
+
+///|
+fn document_from_scan(source : Bytes, scan : TagScan) -> ReadDocument {
   let records = raw_records(scan.tags)
   let drawing = build_drawing_raw(scan, records)
   let profile = if drawing.version == "AC1009" { R12 } else { BestEffort }

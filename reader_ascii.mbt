@@ -160,6 +160,12 @@ fn parse_value(
     return Ok(Str(decode_text(slice_range(data, from, to), encoding)))
   }
   let (start, stop) = trim_ascii_range(data, from, to)
+  for i in start..<stop {
+    let byte = data[i].to_int()
+    if byte == 0 || byte >= 128 {
+      return Err("数值字段包含非 ASCII 字节或 NUL")
+    }
+  }
   let text = bytes_to_ascii(data, start, stop)
   match kind {
     F64 => {

@@ -35,6 +35,7 @@ pub(all) struct TagStream {
   priv mut eof_seen : Bool
   priv mut skip_lf : Bool
   priv limits : ReadLimits
+  priv decoder : ((Int, Bytes) -> String?)?
   priv mut bytes : Int
   priv mut tags : Int
   priv mut records : Int
@@ -48,6 +49,24 @@ pub fn TagStream::new() -> TagStream {
 
 ///|
 pub fn TagStream::with_limits(limits : ReadLimits) -> TagStream {
+  make_tag_stream(limits, None)
+}
+
+///|
+/// The callback only receives unsupported legacy string values. Returning None
+/// preserves the fallback and emits a warning; the callback is trusted code.
+pub fn TagStream::with_legacy_decoder(
+  limits : ReadLimits,
+  decoder : (Int, Bytes) -> String?,
+) -> TagStream {
+  make_tag_stream(limits, Some(decoder))
+}
+
+///|
+fn make_tag_stream(
+  limits : ReadLimits,
+  decoder : ((Int, Bytes) -> String?)?,
+) -> TagStream {
   let stream : TagStream = {
     prefix: [],
     line: [],
@@ -59,6 +78,7 @@ pub fn TagStream::with_limits(limits : ReadLimits) -> TagStream {
     eof_seen: false,
     skip_lf: false,
     limits,
+    decoder,
     bytes: 0,
     tags: 0,
     records: 0,
@@ -174,7 +194,7 @@ pub fn TagStream::encoding(self : TagStream) -> Encoding? {
 fn TagStream::choose_encoding(self : TagStream, out : Array[Tag]) -> Unit {
   let enc = decide_encoding(Bytes::from_array(self.prefix))
   self.enc = Some(enc)
-  if enc.is_fallback() {
+  if enc.is_fallback() && self.decoder is None {
     self.warning(
       "未支持的\{enc.to_display()}按Latin-1降级解码；文字可能失真",
     )
@@ -216,9 +236,10 @@ fn TagStream::consume_line(self : TagStream, out : Array[Tag]) -> Unit {
   self.line = []
   self.line_no += 1
   let n = data.length()
+  let start = if self.line_no == 1 && utf8_bom(data) { 3 } else { 0 }
   match self.pending {
     None =>
-      match parse_group_code(data, 0, n) {
+      match parse_group_code(data, start, n) {
         Some(code) => self.pending = Some(code)
         None =>
           if !line_is_blank(data, 0, n) {
@@ -238,13 +259,42 @@ fn TagStream::consume_line(self : TagStream, out : Array[Tag]) -> Unit {
         self.stop_limit("字符串字节数")
         return
       }
-      let value = match parse_value(code, data, 0, n, self.enc.unwrap()) {
+      let enc = self.enc.unwrap()
+      let parsed = if code_type(code) is Str && enc is Other(936) {
+        let (decoded, valid) = decode_gbk(data)
+        if !valid {
+          self.warning(
+            "第\{self.line_no}行组码\{code}：ANSI_936 字节序列无效；已用替代字符，检查不完整",
+          )
+        }
+        Ok(TagValue::Str(decoded))
+      } else if code_type(code) is Str &&
+        enc is Other(page) &&
+        self.decoder is Some(decode) {
+        match decode(page, data) {
+          Some(value) => {
+            if @utf8.encode(value).length() > self.limits.max_string_bytes {
+              self.stop_limit("自定义解码后的字符串字节数")
+              return
+            }
+            Ok(TagValue::Str(value))
+          }
+          None => Err("自定义代码页解码未完成；按Latin-1降级")
+        }
+      } else if code_type(code) is Str && enc is Utf8 {
+        Ok(TagValue::Str(@utf8.decode(data[:], ignore_bom=true))) catch {
+          _ => Err("UTF-8 字节序列无效")
+        }
+      } else {
+        parse_value(code, data, 0, n, enc)
+      }
+      let value = match parsed {
         Ok(value) => value
         Err(msg) => {
           self.warning(
             "第\{self.line_no}行组码\{code}：\{msg}；保留原文，几何结果需复核",
           )
-          Str(decode_text(data, self.enc.unwrap()))
+          Str(decode_text(data, enc))
         }
       }
       if self.limited {

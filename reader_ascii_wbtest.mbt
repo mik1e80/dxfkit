@@ -188,8 +188,8 @@ test "老版本没写代码页时退回 CP1252" {
 
 ///|
 test "认不出的代码页降级但不静默" {
-  // 降级成 Latin-1 是有损的（GBK 会变乱码），所以必须让调用方能知道
-  assert_true(Encoding::Other(936).is_fallback())
+  assert_true(Encoding::Other(932).is_fallback())
+  assert_false(Encoding::Other(936).is_fallback())
   assert_false(Encoding::Utf8.is_fallback())
   assert_false(Encoding::Cp1252.is_fallback())
 }
