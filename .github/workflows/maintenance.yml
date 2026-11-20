@@ -15,8 +15,8 @@ jobs:
   maintenance:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '24.19.0'
       - name: 安装固定 MoonBit
@@ -29,11 +29,11 @@ jobs:
           node scripts/verify-maintenance.cjs
       - name: 诊断洪泛回归与维护文档链接（非全量）
         run: |
-          moon test maintenance_security_test.mbt --target wasm --deny-warn
-          moon run scripts/verify-maintenance-docs.mbtx
+          moon test maintenance_security_test.mbt maintenance_foundation_test.mbt topology_sweep_wbtest.mbt --target wasm --deny-warn
+          moon run scripts/verify-maintenance-docs.mbtx --deny-warn
       - name: 保存轻量验证记录
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: maintenance-${{ github.sha }}
           path: |

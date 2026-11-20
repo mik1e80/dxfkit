@@ -1,0 +1,12 @@
+import FreeCAD as App
+import Import
+import Part
+
+# Run from the repository root in FreeCAD 1.1.3.
+doc = App.newDocument("SpatialCircle")
+circle = doc.addObject("Part::Feature", "TiltedCircle")
+circle.Shape = Part.Circle(App.Vector(3, 4, 5), App.Vector(0, 0.6, 0.8), 2).toShape()
+doc.recompute()
+doc.saveAs("examples/cad-ocs/spatial-circle.FCStd")
+Import.writeDXFObject(doc.Objects, "examples/cad-ocs/spatial-circle.dxf", 12, False, "User parameter:DXFKitCADR12")
+App.closeDocument(doc.Name)

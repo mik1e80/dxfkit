@@ -15,6 +15,10 @@ async fn main {
     ("docs/resource-limits.md", "docs"),
     ("docs/r12-conformance-matrix.md", "docs"),
     ("docs/maintenance-20261116.md", "docs"),
+    ("docs/maintenance-20261120.md", "docs"),
+    ("docs/release-process.md", "docs"),
+    ("examples/performance/README.md", "examples/performance"),
+    ("examples/cad-ocs/README.md", "examples/cad-ocs"),
   ]
   let mut links = 0
   for entry in documents {

@@ -1,0 +1,9 @@
+import {
+  "mik1e80/dxfkit",
+  "moonbitlang/async",
+  "moonbitlang/core/encoding/utf8",
+}
+
+supported_targets = "-all+wasm+native"
+
+pkgtype(kind: "executable")

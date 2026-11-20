@@ -24,3 +24,6 @@ examples/r12-validation/** text eol=lf
 examples/cad-exports/** -text
 examples/cad-r12/models/** -text
 examples/cad-r12/actual/** text eol=lf
+web/licenses/whatwg-encoding.LICENSE -text
+examples/cad-ocs/spatial-circle.dxf -text
+examples/cad-ocs/spatial-circle.FCStd -text

@@ -3,7 +3,10 @@
   "version":"0.2.0-unpublished",
   "baseline":"AC1009 record profile; not complete R12 semantic certification",
   "read_boundary":"within ReadLimits; source caller-owned; exhaustion incomplete",
-  "check_plane":"WCS abs(z)<=CheckOptions.tol; shared plane/endpoint/flatten tolerance",
+  "check_plane":"WCS Z=0; CheckOptions shares tolerance; CheckTolerances can separate curve/plane/comparison",
+  "text_encoding":"UTF-8, CP1252, ANSI_936 two-byte GBK; trusted callback for unsupported pages",
+  "r12_field_audit":"selected single-valued fields and local INSERT references",
+  "svg_max_output_bytes":33554432,
   "entities":[
     {"kinds":["LINE","POINT"],"r12":true,"raw":"preserved","fields":"subset","geometry":"WCS XYZ","check":"LINE XY outlines; POINT metadata"},
     {"kinds":["CIRCLE","ARC"],"r12":true,"raw":"preserved","fields":"subset","geometry":"OCS to WCS checked sampling","check":"applicable XY outlines"},

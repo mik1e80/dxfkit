@@ -4,6 +4,14 @@
 
 ## 当前 main：R12 读取和 WCS
 
+`Report::status()` 区分完成、完成且有发现、检查不完整和参数错误。`Finding::diagnostic()` 提供稳定类别、级别和消息，`InputOrExpansion` 汇总既有输入和展开警告。
+
+`ReadDocument::read_status()` 报告无扫描结果、带警告或读取完成。`ReadDocument::diagnostics()` 将扫描警告和其余读取/结构/配置警告按阶段归类，避免常规路径重复报告扫描警告。
+
+`Drawing::check_with_tolerances({ curve, plane, comparison }, min_gap)` 分开指定离散、WCS 平面及几何比较容差。`Drawing::check_with_budgets()` 同时接收展开和候选预算。`Drawing::svg_with_limit(tol, max_bytes)` 超限返回 `SvgByteLimit`，默认限额为 32 MiB UTF-8。
+
+`ReadDocument::audit_r12_fields()` 对部分常用实体返回原始记录下标、组码和问题类别。`complete` 表示声明范围内的审计执行完毕，审计结果见 `findings`。`read_document_with_legacy_decoder` 和 `TagStream::with_legacy_decoder` 接收可信同步回调，为未内置的旧代码页提供字符串解码。回调返回 `None` 后扫描器会保留降级文本并告警。
+
 当前开发版默认启用`ReadLimits::default()`；可用`scan_tags_with_limits`、`read_document_with_limits`或`TagStream::with_limits`指定读取预算。超限保留部分扫描结果及明确警告，不可当完整文件；流式调用者见`is_limited()`应停止喂入。
 
 结构诊断现由`build_drawing`统一附到`Drawing.warnings`，因此`check`、`check_with_limits`与`analyze`均会报告。`Drawing::check_with_budget(opt, GeometryBudget)`给拓扑/相交/净距设置共享候选访问预算；展开预算独立，`CheckOptions`旧字段保持兼容。`Record::try_double/try_int`以`Ok(None)`表示缺失、`Err`表示类型错误；`require_*`也拒绝缺失，宽松`get_*`/`as_*`仅供旧调用方兼容。`try_int`接收I16/I32，不静默截断浮点/64位值。

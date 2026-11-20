@@ -9,6 +9,7 @@
 | ezdxf类型区间、bulge等移植/核对参考 | 按第三方声明区分实现移植和格式/数学参考；相关MIT声明继续保留 | 原始来源及涉及文件，不将参考关系写成全部算法原创 |
 | 自建参数模型、R12模型、原生CAD源及导出 | Apache-2.0；是项目自建，不是客户或第三方生产图纸 | [模型索引](testing.md)、生成/导出设置、设计依据、已有哈希清单 |
 | MoonBit Core编译代码 | 按固定SDK所附许可与NOTICE | [Core许可](../web/licenses/moonbit-core.LICENSE)、[NOTICE](../web/licenses/moonbit-core.NOTICE)，网站构建携带副本 |
+| WHATWG 双字节编码索引 | 纳入源码的映射数据采用 BSD-3-Clause | [上游许可证](../web/licenses/whatwg-encoding.LICENSE)随浏览器产物分发，生成来源见[第三方声明](../THIRD_PARTY_NOTICES.md) |
 | moonbitlang/x、moonbitlang/async | 按依赖自身Apache-2.0许可，固定版本见[复现配置](../reproduction.json) | 包来源、版本及原有版权；不宣称项目拥有依赖版权 |
 | FreeCAD/OpenSCAD、编译器、其他开发工具 | 仅记录实际使用的外部工具；不把工具本身改为项目许可证 | 工具版本、下载来源和导出设置；本仓库不分发CAD应用二进制 |
 

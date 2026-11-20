@@ -19,8 +19,8 @@ jobs:
   ci:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '24.19.0'
       - name: 安装固定版本MoonBit
@@ -33,9 +33,23 @@ jobs:
       - name: 手动完整验收（仅按需运行）
         if: github.event.inputs.validation == 'full'
         run: node scripts/verify-reproduction.cjs --fresh
+      - name: 在独立进程核对大图资源边界
+        if: github.event.inputs.validation != 'full'
+        run: |
+          moon build examples/performance --target native --release --frozen --deny-warn
+          benchmark=_build/native/release/build/examples/performance/performance.exe
+          if [ ! -x "$benchmark" ]; then benchmark=${benchmark%.exe}; fi
+          ulimit -v 1048576
+          timeout --kill-after=5s 45s /usr/bin/time -f 'peak_rss_kib=%M' "$benchmark" > _build/resource-benchmark.txt 2>&1
+          cat _build/resource-benchmark.txt
+      - name: 重放实际 CAD 空间圆反例
+        if: github.event.inputs.validation != 'full'
+        run: |
+          sha256sum --check examples/cad-ocs/SHA256SUMS
+          moon run examples/cad-ocs/runner --deny-warn
       - name: 保存同提交验证记录
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: verification-${{ github.sha }}
           path: |
@@ -43,6 +57,7 @@ jobs:
             _build/maintenance.json
             _build/model-validation.json
             _build/submission-evidence.json
+            _build/resource-benchmark.txt
             web/dist/release.json
             output/pdf/dxfkit-submission-one-page.pdf
             docs/corpus-validation.json
@@ -51,7 +66,7 @@ jobs:
             examples/r12-validation/external-actual
       - name: 上传完整验收后的同提交站点
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && github.event.inputs.validation == 'full'
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
         with:
           path: _site
 
@@ -69,6 +84,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/configure-pages@v6
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
       - id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
