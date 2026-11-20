@@ -6,6 +6,9 @@ test "SVG byte cap returns an explicit error without partial output" {
     ),
   )
   let svg = doc.drawing.to_svg(0.01)
+  assert_true(
+    doc.drawing.svg_with_limit(0.0, 1024) is Err(@dxfkit.InvalidPreviewGeometry),
+  )
   assert_true(svg.contains("中文&lt;&amp;"))
   let bytes = @utf8.encode(svg).length()
   assert_true(

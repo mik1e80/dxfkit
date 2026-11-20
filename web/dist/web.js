@@ -1078,8 +1078,8 @@
   const _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3597 = new _M0TP27mik1e806dxfkit4Vec2(-1e+308, -1e+308);
   const _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3598 = new _M0TP27mik1e806dxfkit5Aabb2(_M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3596, _M0MP27mik1e806dxfkit5Aabb25emptyN6recordS3597);
   const _M0FP27mik1e806dxfkit17expansion__limitsN6recordS3608 = new _M0TP27mik1e806dxfkit12ExpandLimits(10000, 200000, 100000);
-  const _M0MP27mik1e806dxfkit10ReadLimits7defaultN6recordS3642 = new _M0TP27mik1e806dxfkit10ReadLimits(67108864, 1048576, 1000000, 200000, 1000, 1048576);
-  const _M0MP27mik1e806dxfkit14GeometryBudget7defaultN6recordS3656 = new _M0TP27mik1e806dxfkit14GeometryBudget(1000000);
+  const _M0MP27mik1e806dxfkit10ReadLimits7defaultN6recordS3644 = new _M0TP27mik1e806dxfkit10ReadLimits(67108864, 1048576, 1000000, 200000, 1000, 1048576);
+  const _M0MP27mik1e806dxfkit14GeometryBudget7defaultN6recordS3658 = new _M0TP27mik1e806dxfkit14GeometryBudget(1000000);
   const _M0FP27mik1e806dxfkit10code__typeN5tupleS3534 = { _0: 60, _1: 79 };
   const _M0FP27mik1e806dxfkit10code__typeN5tupleS3535 = { _0: 170, _1: 179 };
   const _M0FP27mik1e806dxfkit10code__typeN5tupleS3536 = { _0: 270, _1: 289 };
@@ -1101,24 +1101,24 @@
   const _M0FP27mik1e806dxfkit10code__typeN5tupleS3552 = { _0: 1004, _1: 1004 };
   const _M0FPC28internal7strconv17check__underscoreN25_2atransition__table__222S230 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 5, 5, 5, 5, 5, 0, 1, 2, 5];
   const _M0FPC28internal7strconv15parse__inf__nanN25_2atransition__table__304S312 = [14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 3, 4, 14, 14, 14, 14, 14, 14, 14, 7, 14, 14, 14, 14, 5, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 6, 14, 14, 14, 0, 14, 14, 14, 14, 14, 14, 14, 14, 14, 8, 14, 14, 14, 14, 14, 1, 14, 14, 9, 14, 14, 14, 14, 14, 14, 14, 14, 10, 14, 14, 14, 14, 14, 14, 11, 14, 14, 14, 14, 14, 14, 14, 14, 14, 12, 14, 14, 14, 14, 14, 14, 14, 14, 13, 14, 1, 14, 14, 14, 14, 14, 14, 14];
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3643 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("数值字段包含非 ASCII 字节或 NUL");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3644 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效整数或超出32位范围");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3645 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("数值超出16位范围");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3646 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效浮点数");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3647 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("数值必须有限");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3648 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效64位整数");
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3649 = new _M0DTP27mik1e806dxfkit8TagValue4Bool(false);
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3650 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(_M0FP27mik1e806dxfkit12parse__valueN6constrS3649);
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3651 = new _M0DTP27mik1e806dxfkit8TagValue4Bool(true);
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3645 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("数值字段包含非 ASCII 字节或 NUL");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3646 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效整数或超出32位范围");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3647 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("数值超出16位范围");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3648 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效浮点数");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3649 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("数值必须有限");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3650 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("不是有效64位整数");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3651 = new _M0DTP27mik1e806dxfkit8TagValue4Bool(false);
   const _M0FP27mik1e806dxfkit12parse__valueN6constrS3652 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(_M0FP27mik1e806dxfkit12parse__valueN6constrS3651);
-  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3653 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("布尔数值必须为0或1");
-  const _M0MP27mik1e806dxfkit9TagStream13consume__lineN6constrS3654 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("UTF-8 字节序列无效");
-  const _M0MP27mik1e806dxfkit9TagStream13consume__lineN6constrS3655 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("自定义代码页解码未完成；按Latin-1降级");
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3653 = new _M0DTP27mik1e806dxfkit8TagValue4Bool(true);
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3654 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(_M0FP27mik1e806dxfkit12parse__valueN6constrS3653);
+  const _M0FP27mik1e806dxfkit12parse__valueN6constrS3655 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("布尔数值必须为0或1");
+  const _M0MP27mik1e806dxfkit9TagStream13consume__lineN6constrS3656 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("UTF-8 字节序列无效");
+  const _M0MP27mik1e806dxfkit9TagStream13consume__lineN6constrS3657 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE3Err("自定义代码页解码未完成；按Latin-1降级");
   const _M0FPB4seed = _M0FPB12random__seed();
-  const _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3657 = new _M0TP27mik1e806dxfkit7Finding("参数", 2, "容差必须是正的有限数字，最小净距必须是非负有限数字");
-  const _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3658 = new _M0TP27mik1e806dxfkit7Finding("检查覆盖", 1, "几何数值或预览资源超出安全范围；XY检查与SVG未完成");
-  const _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3659 = new _M0TP27mik1e806dxfkit7Finding("检查覆盖", 1, "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据");
-  const _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3660 = new _M0TP27mik1e806dxfkit7Finding("检查覆盖", 1, "几何候选对达到资源上限；后续拓扑/相交/净距检查未完成");
+  const _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3659 = new _M0TP27mik1e806dxfkit7Finding("参数", 2, "容差必须是正的有限数字，最小净距必须是非负有限数字");
+  const _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3660 = new _M0TP27mik1e806dxfkit7Finding("检查覆盖", 1, "几何数值或预览资源超出安全范围；XY检查与SVG未完成");
+  const _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3661 = new _M0TP27mik1e806dxfkit7Finding("检查覆盖", 1, "没有可检查的二维轮廓；空文件、文字或未支持实体不能作为检查通过的依据");
+  const _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3662 = new _M0TP27mik1e806dxfkit7Finding("检查覆盖", 1, "几何候选对达到资源上限；后续拓扑/相交/净距检查未完成");
   const _M0MP27mik1e806dxfkit6Record11try__doubleN6constrS3609 = new _M0DTPC16result6ResultGOdsE3Err("数值非有限");
   const _M0MP27mik1e806dxfkit3Ocs15from__extrusionN6constrS3533 = new _M0DTPC16result6ResultGRP27mik1e806dxfkit3OcssE3Err("OCS 挤出方向必须是有限非零向量");
   const _M0FP27mik1e806dxfkit23spline__points__checkedN6constrS3553 = new _M0DTPC16result6ResultGRPB5ArrayGRP27mik1e806dxfkit4Vec2EsE3Err("离散容差必须是正的有限数字");
@@ -1168,7 +1168,7 @@
   const _M0MP27mik1e806dxfkit7Drawing11render__svgN6constrS3613 = new _M0DTPC16result6ResultGsRP27mik1e806dxfkit8SvgErrorE3Err(1);
   const _M0MP27mik1e806dxfkit7Drawing11render__svgN6constrS3614 = new _M0DTPC16result6ResultGsRP27mik1e806dxfkit8SvgErrorE3Err(0);
   const _M0MP27mik1e806dxfkit7Drawing11render__svgN6constrS3615 = new _M0DTPC16result6ResultGsRP27mik1e806dxfkit8SvgErrorE3Err(0);
-  const _M0FP27mik1e806dxfkit15group__sectionsN6constrS3641 = "HEADER";
+  const _M0FP27mik1e806dxfkit15group__sectionsN6constrS3643 = "HEADER";
   const _M0FP37mik1e806dxfkit3web6decodeN6constrS57 = new _M0DTPC16result6ResultGzsE3Err("文件超过64 MiB读取上限");
   const _M0FP37mik1e806dxfkit3web6decodeN6constrS58 = new _M0DTPC16result6ResultGzsE3Err("没有收到文件内容");
   const _M0FP37mik1e806dxfkit3web6decodeN6constrS59 = new _M0DTPC16result6ResultGzsE3Err("文件内容解码失败，可能上传时出错了");
@@ -11530,7 +11530,7 @@
           }
           current = _M0MP27mik1e806dxfkit6Record11get__string(record, 2);
           current_records = [];
-          if (_M0IPC16option6OptionPB2Eq5equalGsE(current, _M0FP27mik1e806dxfkit15group__sectionsN6constrS3641)) {
+          if (_M0IPC16option6OptionPB2Eq5equalGsE(current, _M0FP27mik1e806dxfkit15group__sectionsN6constrS3643)) {
             _M0MPC15array5Array4pushGRPC14json10WriteFrameE(current_records, record);
           }
         } else {
@@ -12052,7 +12052,7 @@
     return records;
   }
   function _M0FP27mik1e806dxfkit14build__drawing(scan) {
-    if (scan.tags.length > _M0MP27mik1e806dxfkit10ReadLimits7defaultN6recordS3642.max_tags) {
+    if (scan.tags.length > _M0MP27mik1e806dxfkit10ReadLimits7defaultN6recordS3644.max_tags) {
       return new _M0TP27mik1e806dxfkit7Drawing("", [], ["手工TagScan超过tag资源上限；检查不完整"]);
     }
     return _M0FP27mik1e806dxfkit19build__drawing__raw(scan, _M0FP27mik1e806dxfkit12raw__records(scan.tags));
@@ -12545,7 +12545,7 @@
       if (i < _stop) {
         const byte = i >>> 0 < data.length ? data[i] : $oob();
         if (byte === 0 || byte >= 128) {
-          return _M0FP27mik1e806dxfkit12parse__valueN6constrS3643;
+          return _M0FP27mik1e806dxfkit12parse__valueN6constrS3645;
         }
         _tmp = i + 1 | 0;
         continue;
@@ -12573,10 +12573,10 @@
                 }
                 break _L$4;
               }
-              return _M0FP27mik1e806dxfkit12parse__valueN6constrS3646;
+              return _M0FP27mik1e806dxfkit12parse__valueN6constrS3648;
             }
             if (!_M0FP27mik1e806dxfkit14finite__number(value)) {
-              return _M0FP27mik1e806dxfkit12parse__valueN6constrS3647;
+              return _M0FP27mik1e806dxfkit12parse__valueN6constrS3649;
             }
             return new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(new _M0DTP27mik1e806dxfkit8TagValue3F64(value));
           }
@@ -12602,12 +12602,12 @@
                 }
                 break _L$5;
               }
-              return _M0FP27mik1e806dxfkit12parse__valueN6constrS3648;
+              return _M0FP27mik1e806dxfkit12parse__valueN6constrS3650;
             }
             return new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(new _M0DTP27mik1e806dxfkit8TagValue3I64(value$2));
           }
           case 5: {
-            return text === "0" ? _M0FP27mik1e806dxfkit12parse__valueN6constrS3650 : text === "1" ? _M0FP27mik1e806dxfkit12parse__valueN6constrS3652 : _M0FP27mik1e806dxfkit12parse__valueN6constrS3653;
+            return text === "0" ? _M0FP27mik1e806dxfkit12parse__valueN6constrS3652 : text === "1" ? _M0FP27mik1e806dxfkit12parse__valueN6constrS3654 : _M0FP27mik1e806dxfkit12parse__valueN6constrS3655;
           }
           case 0: {
             break _L$2;
@@ -12632,7 +12632,7 @@
           }
           break _L$4;
         }
-        return _M0FP27mik1e806dxfkit12parse__valueN6constrS3644;
+        return _M0FP27mik1e806dxfkit12parse__valueN6constrS3646;
       }
       if (kind === 1) {
         _L$5: {
@@ -12646,7 +12646,7 @@
             }
             break _L$5;
           }
-          return _M0FP27mik1e806dxfkit12parse__valueN6constrS3645;
+          return _M0FP27mik1e806dxfkit12parse__valueN6constrS3647;
         }
       }
       let _tmp$2;
@@ -12796,7 +12796,7 @@
                   const _decode = _Some$2;
                   const _bind$5 = _decode(_page, data);
                   if (_bind$5 === undefined) {
-                    parsed = _M0MP27mik1e806dxfkit9TagStream13consume__lineN6constrS3655;
+                    parsed = _M0MP27mik1e806dxfkit9TagStream13consume__lineN6constrS3657;
                   } else {
                     const _Some$3 = _bind$5;
                     const _value = _Some$3;
@@ -12836,7 +12836,7 @@
                       parsed = new _M0DTPC16result6ResultGRP27mik1e806dxfkit8TagValuesE2Ok(new _M0DTP27mik1e806dxfkit8TagValue3Str(_tmp));
                       break _L$8;
                     }
-                    parsed = _M0MP27mik1e806dxfkit9TagStream13consume__lineN6constrS3654;
+                    parsed = _M0MP27mik1e806dxfkit9TagStream13consume__lineN6constrS3656;
                   }
                 } else {
                   break _L$7;
@@ -14086,7 +14086,7 @@
     const tol = opt.tol;
     const findings = [];
     if (!_M0FP27mik1e806dxfkit19positive__tolerance(tol) || (!_M0FP27mik1e806dxfkit14finite__number(opt.min_gap) || opt.min_gap < 0)) {
-      return new _M0TP27mik1e806dxfkit6Report([_M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3657]);
+      return new _M0TP27mik1e806dxfkit6Report([_M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3659]);
     }
     const _bind = exp.warnings;
     const _bind$2 = _bind.length;
@@ -14103,7 +14103,7 @@
       }
     }
     if (!_M0FP27mik1e806dxfkit18preview__range__ok(exp) || (tol < 1e-100 || (tol > 1e+100 || opt.min_gap > 1e+100))) {
-      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(findings, _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3658);
+      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(findings, _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3660);
       return new _M0TP27mik1e806dxfkit6Report(findings);
     }
     const unsupported = [];
@@ -14195,7 +14195,7 @@
       }
     }
     if (outlines === 0) {
-      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(findings, _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3659);
+      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(findings, _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3661);
     }
     const _bind$6 = exp.placed;
     const _bind$7 = _bind$6.length;
@@ -14234,14 +14234,14 @@
       }
     }
     if (work.stopped) {
-      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(findings, _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3660);
+      _M0MPC15array5Array4pushGRPC14json10WriteFrameE(findings, _M0MP27mik1e806dxfkit7Drawing24check__expansion_2einnerN6recordS3662);
     }
     return new _M0TP27mik1e806dxfkit6Report(findings);
   }
   function _M0MP27mik1e806dxfkit7Drawing16check__expansion(self, opt, exp, budget$46$opt) {
     let budget;
     if (budget$46$opt === undefined) {
-      budget = _M0MP27mik1e806dxfkit14GeometryBudget7defaultN6recordS3656;
+      budget = _M0MP27mik1e806dxfkit14GeometryBudget7defaultN6recordS3658;
     } else {
       const _Some = budget$46$opt;
       budget = _Some;
@@ -14271,7 +14271,7 @@
     return new _M0TP27mik1e806dxfkit7TagScan(tags, _tmp, _tmp$2);
   }
   function _M0FP27mik1e806dxfkit10scan__tags(data) {
-    return _M0FP27mik1e806dxfkit24scan__tags__with__limits(data, _M0MP27mik1e806dxfkit10ReadLimits7defaultN6recordS3642);
+    return _M0FP27mik1e806dxfkit24scan__tags__with__limits(data, _M0MP27mik1e806dxfkit10ReadLimits7defaultN6recordS3644);
   }
   function _M0MP27mik1e806dxfkit7Drawing20svg__from__expansion(self, exp) {
     const _bind = _M0MP27mik1e806dxfkit7Drawing11render__svg(self, exp, 33554432);

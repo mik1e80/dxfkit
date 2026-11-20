@@ -11,6 +11,12 @@ pub fn Drawing::svg_with_limit(
   tol : Double,
   max_bytes : Int,
 ) -> Result[String, SvgError] {
+  if !positive_tolerance(tol) {
+    return Err(InvalidPreviewGeometry)
+  }
+  if max_bytes <= 0 {
+    return Err(SvgByteLimit)
+  }
   self.render_svg(self.expand(tol), max_bytes)
 }
 
