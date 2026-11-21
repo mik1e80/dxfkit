@@ -32,6 +32,10 @@ pub fn is_pointer_code(Int) -> Bool
 
 pub fn is_xdata_code(Int) -> Bool
 
+pub fn load_r12_shx(Bytes) -> Result[R12ShxFont, String]
+
+pub fn load_r12_truetype(Bytes) -> Result[R12TrueType, String]
+
 pub fn normalize_angle(Double) -> Double
 
 pub fn parse_blocks(Section) -> Blocks
@@ -375,6 +379,12 @@ pub(all) struct R12Dimension {
   text : String?
 }
 
+pub(all) struct R12DimensionAnchor {
+  slot : R12DimensionSlot
+  handle : String
+  point : R12FeaturePoint
+}
+
 pub(all) struct R12DimensionArc {
   center : Vec3
   start : Vec3
@@ -382,11 +392,24 @@ pub(all) struct R12DimensionArc {
   sweep : Double
 }
 
+pub(all) struct R12DimensionBinding {
+  dimension_handle : String
+  anchors : Array[R12DimensionAnchor]
+}
+
 pub(all) struct R12DimensionPicture {
   block_record : Int
   style_record : R12Link
   overrides : Array[R12DimStyleOverride]
   world : WorldExpansion
+}
+
+pub(all) enum R12DimensionSlot {
+  DefinitionPoint
+  ExtensionStart
+  ExtensionEnd
+  PickOrVertex
+  ArcPoint
 }
 
 pub(all) struct R12DimensionUpdate {
@@ -410,6 +433,15 @@ pub(all) enum R12EntitySemantics {
   FaceEdges(corners~ : Array[Vec3], invisible_mask~ : Int)
   AttributeDefinition(data~ : R12Attribute, block_record~ : Int?)
   Attribute(data~ : R12Attribute, insert_record~ : Int?, definition~ : R12Link)
+}
+
+pub(all) enum R12FeaturePoint {
+  FeatureStart
+  FeatureEnd
+  FeatureMidpoint
+  FeatureCenter
+  FeatureLocation
+  FeatureAngle(Double)
 }
 
 pub(all) struct R12FieldAudit {
@@ -447,6 +479,7 @@ pub struct R12FittedMesh {
   closed_m : Bool
   closed_n : Bool
 }
+pub fn R12FittedMesh::compare_refit(Self, Double, max_points? : Int) -> Result[R12MeshComparison, String]
 pub fn R12FittedMesh::quad(Self, Int, Int) -> (Vec3, Vec3, Vec3, Vec3)?
 pub fn R12FittedMesh::refit(Self, Int, Int, max_points? : Int) -> Result[Self, String]
 
@@ -475,6 +508,13 @@ pub(all) enum R12Link {
   Ambiguous
 }
 
+pub(all) struct R12MeshComparison {
+  distances : Array[Double]
+  max_error : Double
+  worst_index : Int
+  outside_tolerance : Int
+}
+
 pub(all) enum R12MeshFit {
   QuadraticBSpline
   CubicBSpline
@@ -496,6 +536,36 @@ pub(all) struct R12SemanticReport {
   findings : Array[R12SemanticFinding]
   complete : Bool
 }
+
+pub struct R12ShxFont {
+  // private fields
+}
+pub fn R12ShxFont::glyph_run(Self, String, map? : (Char) -> Int, max_work? : Int) -> Result[R12GlyphRun, String]
+
+pub(all) struct R12StyledDimension {
+  dimension_lines : Array[(Vec3, Vec3)]
+  extension_lines : Array[(Vec3, Vec3)]
+  arrows : Array[(Vec3, Vec3, Vec3)]
+  ticks : Array[(Vec3, Vec3)]
+  arc : R12DimensionArc?
+  label : String?
+  text_at : Vec3
+  text_height : Double
+  dimension_color : Int
+  extension_color : Int
+  text_color : Int
+}
+
+pub struct R12TrueType {
+  glyphs : Int
+  horizontal_metrics : Int
+  long_offsets : Bool
+  cap : Double
+  ascent : Double
+  descent : Double
+  // private fields
+}
+pub fn R12TrueType::glyph_run(Self, String, tol? : Double, max_work? : Int) -> Result[R12GlyphRun, String]
 
 pub(all) struct R12ViewportView {
   target : Vec3
@@ -542,6 +612,8 @@ pub fn ReadDocument::r12_cell_attributes(Self, Int, Int, Int) -> Result[Array[R1
 pub fn ReadDocument::r12_dimension_picture(Self, Int, Double, limits? : ExpandLimits) -> Result[R12DimensionPicture, String]
 pub fn ReadDocument::r12_layout_attribute(Self, R12CellAttribute, (R12FontStyle, String) -> R12GlyphRun?, max_points? : Int) -> Result[R12GlyphLayout, String]
 pub fn ReadDocument::r12_recompute_dimension(Self, Int, Double, definition? : R12Dimension, precision? : Int) -> Result[R12DimensionUpdate, String]
+pub fn ReadDocument::r12_refresh_bound_dimension(Self, R12DimensionBinding, Double, precision? : Int) -> Result[R12DimensionUpdate, String]
+pub fn ReadDocument::r12_render_dimension(Self, Int, R12DimensionUpdate, label_width? : Double) -> Result[R12StyledDimension, String]
 pub fn ReadDocument::r12_semantics(Self) -> R12SemanticReport
 pub fn ReadDocument::read_status(Self) -> ReadStatus
 

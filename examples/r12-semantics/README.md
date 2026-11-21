@@ -21,3 +21,17 @@
 开放 Bézier 方向使用单一张量积参数区间。采样网格由调用方指定，闭合方向不重复起点。组码 75 标出曲面类型，生成的样点以本库结点约定为准。属性需要调用方提供字体整形、度量以及带孔的轮廓或开路径。本库负责 R12 排版和仿射放置，支持的字形集合由提供器决定。标注重算输出量值、十进制标签、基本线和圆弧，支持选定样式项 `DIMLFAC`、`DIMRND`、`DIMZIN` 和 `DIMPOST`。箭头造型、容差格式、自动挪让、编辑目标绑定及外部字体解码未覆盖。
 
 曲面类型和标注定义点参考 [Autodesk PEDIT 曲面说明](https://help.autodesk.com/cloudhelp/2027/ENG/AutoCAD-Core/files/GUID-88A3C094-3001-439D-8AE8-6F57412AFE70.htm)与 [R12 DXF Reference](https://forums.autodesk.com/autodesk/attachments/autodesk/autocad-lt-forum-en/25135/1/DXF%20Reference.pdf)。
+
+## 字体解码、动态标注及逐点对照
+
+| 案例 | 验证结果与边界 |
+| --- | --- |
+| [TrueType](fixture.ttf)、[传统 SHX](fixture.shx)、[Unicode SHX](fixture-unicode.shx) | 项目自建字体原件按 Apache-2.0 分发。验证 TrueType 的二次轮廓中点、平移复合字形和前进宽度，以及两种 SHX 签名、16 位子字形、递归超限与截断。字形字节可直接用于属性排版。 |
+| [编辑绑定与样式](bound-style.dxf) | 句柄 A0 的线段端点从 10 改到 14 后，D1 的标注重算为 14。验证句柄缺失和重复、文字高度、颜色、间隙、箭头及延伸线抑制。 |
+| [逐点误差](mesh-compare.dxf) | 9 个 M-major WCS 点中，仅中心点人为加入 0.125 偏差。比较器返回 9 个误差、最大误差 0.125、索引 4、超差数 1。此案例为自建数值真值。 |
+
+字体读入有字节、递归和工作预算。TrueType 范围为单 sfnt、水平度量、Unicode cmap 4/12、简单二次轮廓与 XY 偏移复合字形。SHX 支持传统和 Unicode 横排笔画。BIGFONT、点对点复合附件、CFF、指令 hinting、GSUB/GPOS、复杂字形整形不在当前字节解码范围。[OpenType 格式](https://learn.microsoft.com/en-us/typography/opentype/spec/glyf) · [SHX 笔画定义](https://help.autodesk.com/cloudhelp/2024/ENU/AutoCAD-Customization/files/GUID-06832147-16BE-4A66-A6D0-3ADF98DC8228.htm) · [SHX 容器布局参考](https://github.com/mozman/ezdxf/blob/v1.4.4/src/ezdxf/fonts/shapefile.py)
+
+关联由编辑器保存，R12 DXF 可缺少与源实体的连结，库不从相同坐标猜测对象。重渲染支持默认闭合箭头或短划、ACI 颜色、延伸线偏移和抑制、直线标签间隙及文字高度。自定义箭头块、容差与替代单位、自动挪让等样式仍应读取已存图块或交给上层绘制。[Autodesk 的 R12 降版限制](https://help.autodesk.com/cloudhelp/2022/ENU/AutoCAD-Core/files/GUID-C36C0AF2-6925-4E7F-BDAD-F57897D837B2.htm)
+
+**旧版 CAD 样本未取得。** 当前真实 CAD 案例与第三方语料中，没有经核实从旧版 CAD 原生导出且同时保留拟合控制框和样点的 AC1009 文件。真实对照需记录软件版本、原件来源和许可、采样网格尺寸与闭合位，再以 `compare_refit()` 记录逐点 WCS 误差。现代程序仅写出 AC1009 版本号不构成旧版 CAD 的验证。

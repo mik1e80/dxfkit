@@ -28,3 +28,5 @@ web/licenses/whatwg-encoding.LICENSE -text
 examples/cad-ocs/*.dxf -text -whitespace
 examples/cad-ocs/*.FCStd -text
 examples/cad-ocs/SHA256SUMS text eol=lf
+examples/r12-semantics/*.ttf binary
+examples/r12-semantics/*.shx binary

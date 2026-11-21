@@ -179,4 +179,7 @@ fn main raise {
   rebuild_mesh_cases()
   rebuild_glyph_case()
   rebuild_dimension_cases()
+  font_decoders()
+  bound_style_cases()
+  refit_comparison_case()
 }

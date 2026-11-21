@@ -18,7 +18,7 @@
 - 离散七类既有核心轮廓及受限 SOLID/TRACE；对落在 WCS Z=0 检查平面的几何辅助检查闭合、自交、重复、退化和指定净距，输出报告和 SVG。
 - 未重建语义、关联属性布局、非检查平面、损坏输入及资源截断明确报告不完整；`--strict` 将警告作为失败。
 
-`ReadDocument::r12_semantics()` 读取空间 POLYLINE/网格拓扑、3DFACE 隐边、SHAPE 位置、VIEWPORT/MVIEW、DIMENSION 定义点与标注块，以及 INSERT 属性序列。本版还读取拟合网格的控制框和已存样点，支持按单元放置阵列属性，并可单独展开保存的标注图块。新增从控制框重拟合曲面、基于字体提供器的属性字形排版，以及从定义点重算七类标注的数值、标签和基本图元。字体文件解码、旧 CAD 采样逐点复刻、编辑对象自动绑定和完整标注样式渲染仍有限制。HATCH、ELLIPSE、SPLINE、LWPOLYLINE 按非 R12 扩展处理。详见[读取终点与分层矩阵](docs/r12-profile.md)。
+`ReadDocument::r12_semantics()` 读取空间 POLYLINE/网格拓扑、3DFACE 隐边、SHAPE 位置、VIEWPORT/MVIEW、DIMENSION 定义点与标注块，以及 INSERT 属性序列。本版还读取拟合网格的控制框和已存样点，支持按单元放置阵列属性，并可单独展开保存的标注图块。新增从控制框重拟合曲面、基于字体提供器的属性字形排版，以及从定义点重算七类标注的数值、标签和基本图元。字体字节入口新增 SHX 笔画和 TrueType 二次轮廓解码。编辑器可记录句柄绑定，随后自动重算并生成常用 DIMSTYLE 图元。旧版 CAD 曲面逐点对照仍缺原始导出。HATCH、ELLIPSE、SPLINE、LWPOLYLINE 按非 R12 扩展处理。详见[读取终点与分层矩阵](docs/r12-profile.md)。
 
 ## 快速运行
 
