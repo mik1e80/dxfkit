@@ -18,7 +18,7 @@
 - 离散七类既有核心轮廓及受限 SOLID/TRACE；对落在 WCS Z=0 检查平面的几何辅助检查闭合、自交、重复、退化和指定净距，输出报告和 SVG。
 - 未重建语义、关联属性布局、非检查平面、损坏输入及资源截断明确报告不完整；`--strict` 将警告作为失败。
 
-`ReadDocument::r12_semantics()` 读取空间 POLYLINE/网格拓扑、3DFACE 隐边、SHAPE 位置、VIEWPORT/MVIEW、DIMENSION 定义点与标注块，以及 INSERT 属性序列。本版还读取拟合网格的控制框和已存样点，支持按单元放置阵列属性，并可单独展开保存的标注图块。完整字段符合性、外部资源、字形生成、从控制框重拟合及自动标注重算仍未覆盖。HATCH、ELLIPSE、SPLINE、LWPOLYLINE 按非 R12 扩展处理。详见[读取终点与分层矩阵](docs/r12-profile.md)。
+`ReadDocument::r12_semantics()` 读取空间 POLYLINE/网格拓扑、3DFACE 隐边、SHAPE 位置、VIEWPORT/MVIEW、DIMENSION 定义点与标注块，以及 INSERT 属性序列。本版还读取拟合网格的控制框和已存样点，支持按单元放置阵列属性，并可单独展开保存的标注图块。新增从控制框重拟合曲面、基于字体提供器的属性字形排版，以及从定义点重算七类标注的数值、标签和基本图元。字体文件解码、旧 CAD 采样逐点复刻、编辑对象自动绑定和完整标注样式渲染仍有限制。HATCH、ELLIPSE、SPLINE、LWPOLYLINE 按非 R12 扩展处理。详见[读取终点与分层矩阵](docs/r12-profile.md)。
 
 ## 快速运行
 
@@ -52,7 +52,7 @@ moon run cli svg examples/plate.dxf > plate.svg
 | 证据 | 可确认的内容 |
 | --- | --- |
 | [六份 AC1009 模型](examples/r12-validation/README.md) | 行列、缩放、旋转、XYZ 基点、嵌套与 OCS；22实例、132个坐标分量对照 |
-| [R12 拟合网格、阵列属性及标注](examples/r12-semantics/README.md) | 自建模型核对闭合接缝、属性锚点/对齐点、标注图块与样式引用 |
+| [R12 拟合网格、阵列属性及标注](examples/r12-semantics/README.md) | 自建模型核对闭合接缝、重拟合解析值、属性字形坐标和七类标注重算 |
 | [真实 CAD 的 OCS 与阵列](examples/cad-ocs/README.md) | NotoCAD 倾斜圆保留非默认法向，FreeCAD 导出反例省略法向。QCAD dxflib 保留 6 个 INSERT 单元并通过 36 个坐标分量断言 |
 | [第三方阵列专项](examples/r12-validation/EXTERNAL.md) | 25个FLAG的100个WCS顶点、25个圆采样；独立格式审计与解析数学对照分开记录 |
 | [十类参数模型](examples/model-validation/README.md) | 正常板、孔、弧、椭圆、bulge、样条、块、图层、错误和覆盖限制；[实际总结](examples/model-validation/SUMMARY.md) |

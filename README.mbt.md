@@ -16,7 +16,10 @@
 
 - `FittedMesh` 分开给出控制框和已存 WCS 样点。`quad(m,n)` 返回样点格四角，按闭合方向接缝。只有控制框的输入仍可读取，曲面采样为空。
 - `r12_cell_attributes(insert_record, row, column)` 按零起始行列查询一个单元。已存 ATTRIB 的位置只加网格偏移，常量 ATTDEF 使用含块基点的完整实例变换。结果附记录下标、锚点、对齐点与文字基向量，坐标位于该 INSERT 所在空间。
-- `r12_dimension_picture(record_index, tol)` 返回保存的标注图块、DIMSTYLE 记录关联、ACAD/DSTYLE 覆盖及已放置的图元。支持组 12 偏移和图块里的嵌套箭头，不参与二维轮廓检查。三个案例见[独立消费验证](examples/r12-semantics/README.md)。
+- `r12_dimension_picture(record_index, tol)` 返回保存的标注图块、DIMSTYLE 记录关联、ACAD/DSTYLE 覆盖及已放置的图元。支持组 12 偏移和图块里的嵌套箭头，不参与二维轮廓检查。相关案例见[独立消费验证](examples/r12-semantics/README.md)。
+- `R12FittedMesh::refit(m,n)` 按明确的结点和闭合约定生成 WCS 样点，返回可继续调用 `quad()` 的网格，原样点保持可用。
+- `r12_layout_attribute(cell, shape)` 接收经调用方字体整形的单行字形路径。库处理居中、基线与垂直对齐、Fit/Aligned、倾斜、镜像及所在空间的仿射变换。字体文件名只随 STYLE 传给回调。
+- `r12_recompute_dimension(record, tol, definition=edited)` 由当前定义点重算量值、十进制标签和基本线/弧。距离单位沿用原图，角度量值为弧度，显示标签使用度。返回结果可供应用更新自己的标注图层。
 
 当前开发版默认启用`ReadLimits::default()`；可用`scan_tags_with_limits`、`read_document_with_limits`或`TagStream::with_limits`指定读取预算。超限保留部分扫描结果及明确警告，不可当完整文件；流式调用者见`is_limited()`应停止喂入。
 
@@ -158,7 +161,7 @@ CLI `stats` 分块读文件、统计 tag、段、版本、编码，不保存全�
 
 ## 暂未实现
 
-二进制DXF、文件写回、通用编辑、全部R12必填字段和引用约束验证、完整HATCH边界、标注自动重算和完整属性排版、通用三维几何检查、字体转轮廓、刀路生成和参数化草图约束求解。OCS/WCS 与 INSERT 行列几何已实现，不再列作全未支持；受限实体和适用平面见矩阵。
+二进制DXF、文件写回、通用编辑、全部R12必填字段和引用约束验证、完整HATCH边界、完整 CAD 标注样式渲染、实体编辑自动绑定和内置 SHX/TTF 字体解码、通用三维几何检查、从字体文件直接提取字形、刀路生成和参数化草图约束求解。OCS/WCS 与 INSERT 行列几何已实现，不再列作全未支持；受限实体和适用平面见矩阵。
 
 ## 来源
 

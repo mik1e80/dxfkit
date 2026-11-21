@@ -176,4 +176,7 @@ fn main raise {
   mesh()
   attributes()
   dimension()
+  rebuild_mesh_cases()
+  rebuild_glyph_case()
+  rebuild_dimension_cases()
 }

@@ -2,6 +2,7 @@
 
 ## 0.2.0 开发版（2026-11-21）
 
+- 新增控制框曲面重拟合、基于字体提供器的属性排版，以及七类标注的量值、标签和基本线弧重算。
 - 增加拟合网格控制框及已存采样面读取、INSERT 逐单元属性位置，以及标注图块、DIMSTYLE 和 DSTYLE 覆盖读取。见[三个 R12 语义案例](examples/r12-semantics/README.md)。
 
 - 增加 R12 空间多段线/网格、3DFACE 隐边、SHAPE、VIEWPORT MVIEW、DIMENSION 和属性关联的类型化读取。

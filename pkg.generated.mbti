@@ -375,11 +375,27 @@ pub(all) struct R12Dimension {
   text : String?
 }
 
+pub(all) struct R12DimensionArc {
+  center : Vec3
+  start : Vec3
+  normal : Vec3
+  sweep : Double
+}
+
 pub(all) struct R12DimensionPicture {
   block_record : Int
   style_record : R12Link
   overrides : Array[R12DimStyleOverride]
   world : WorldExpansion
+}
+
+pub(all) struct R12DimensionUpdate {
+  value : Double
+  angular : Bool
+  label : String?
+  text_at : Vec3
+  lines : Array[(Vec3, Vec3)]
+  arc : R12DimensionArc?
 }
 
 pub(all) enum R12EntitySemantics {
@@ -432,6 +448,26 @@ pub struct R12FittedMesh {
   closed_n : Bool
 }
 pub fn R12FittedMesh::quad(Self, Int, Int) -> (Vec3, Vec3, Vec3, Vec3)?
+pub fn R12FittedMesh::refit(Self, Int, Int, max_points? : Int) -> Result[Self, String]
+
+pub(all) struct R12FontStyle {
+  name : String
+  font_file : String
+  big_font_file : String
+  flags : Int
+}
+
+pub(all) struct R12GlyphLayout {
+  visible : Bool
+  paths : Array[Array[Vec3]]
+}
+
+pub(all) struct R12GlyphRun {
+  paths : Array[Array[Vec2]]
+  advance : Double
+  ascent : Double
+  descent : Double
+}
 
 pub(all) enum R12Link {
   Resolved(Int)
@@ -504,6 +540,8 @@ pub fn ReadDocument::audit_r12_fields(Self) -> R12FieldAudit
 pub fn ReadDocument::diagnostics(Self) -> Array[Diagnostic]
 pub fn ReadDocument::r12_cell_attributes(Self, Int, Int, Int) -> Result[Array[R12CellAttribute], String]
 pub fn ReadDocument::r12_dimension_picture(Self, Int, Double, limits? : ExpandLimits) -> Result[R12DimensionPicture, String]
+pub fn ReadDocument::r12_layout_attribute(Self, R12CellAttribute, (R12FontStyle, String) -> R12GlyphRun?, max_points? : Int) -> Result[R12GlyphLayout, String]
+pub fn ReadDocument::r12_recompute_dimension(Self, Int, Double, definition? : R12Dimension, precision? : Int) -> Result[R12DimensionUpdate, String]
 pub fn ReadDocument::r12_semantics(Self) -> R12SemanticReport
 pub fn ReadDocument::read_status(Self) -> ReadStatus
 

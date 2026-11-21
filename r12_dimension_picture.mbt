@@ -102,7 +102,7 @@ fn r12_dimension_picture_impl(
   }
   {
     block_record: block,
-    style_record: r12_dimension_style(doc.records, dim.style),
+    style_record: r12_table_link(doc.records, "DIMSTYLE", dim.style),
     overrides,
     world,
   }
@@ -156,7 +156,11 @@ fn r12_position_picture(
 }
 
 ///|
-fn r12_dimension_style(records : Array[RawRecord], name : String) -> R12Link {
+fn r12_table_link(
+  records : Array[RawRecord],
+  table : String,
+  name : String,
+) -> R12Link {
   let mut in_styles = false
   let mut result : R12Link = Missing
   let key = name.to_upper()
@@ -164,10 +168,8 @@ fn r12_dimension_style(records : Array[RawRecord], name : String) -> R12Link {
     if r.section != "TABLES" || r.kind == "ENDTAB" {
       in_styles = false
     } else if r.kind == "TABLE" {
-      in_styles = r12_raw_name(r).to_upper() == "DIMSTYLE"
-    } else if in_styles &&
-      r.kind == "DIMSTYLE" &&
-      r12_raw_name(r).to_upper() == key {
+      in_styles = r12_raw_name(r).to_upper() == table
+    } else if in_styles && r.kind == table && r12_raw_name(r).to_upper() == key {
       if result is Resolved(_) {
         return Ambiguous
       }
