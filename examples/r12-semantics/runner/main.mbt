@@ -173,6 +173,15 @@ fn dimension() -> Unit raise {
 
 ///|
 fn main raise {
+  let args = @env.args()
+  if args.length() == 4 && args[1] == "shape" {
+    inspect_shaping(args[2], args[3])
+    return
+  }
+  if args.length() == 4 && args[1] == "compare-mesh" {
+    inspect_mesh_refit(args[2], args[3])
+    return
+  }
   mesh()
   attributes()
   dimension()
@@ -180,6 +189,8 @@ fn main raise {
   rebuild_glyph_case()
   rebuild_dimension_cases()
   font_decoders()
+  advanced_fonts()
   bound_style_cases()
+  styled_dimensions()
   refit_comparison_case()
 }

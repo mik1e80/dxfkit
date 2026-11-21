@@ -5,6 +5,7 @@ pub(all) struct R12StyledDimension {
   extension_lines : Array[(Vec3, Vec3)]
   arrows : Array[(Vec3, Vec3, Vec3)]
   ticks : Array[(Vec3, Vec3)]
+  custom_arrows : Array[WorldPlaced]
   arc : R12DimensionArc?
   label : String?
   text_at : Vec3
@@ -16,7 +17,7 @@ pub(all) struct R12StyledDimension {
 
 ///|
 /// Style the latest recomputation without changing the drawing. A supplied
-/// label width cuts a gap in a straight dimension line.
+/// label width cuts a gap or moves text and arrows on short linear spans.
 pub fn ReadDocument::r12_render_dimension(
   self : ReadDocument,
   record_index : Int,
@@ -66,14 +67,6 @@ fn r12_render_dim(
     }
     r12_header_dimension_value(doc.records, header)
   }
-  // Preserve the saved picture for layouts that need external arrow blocks.
-  for field in [(5, "$DIMBLK"), (6, "$DIMBLK1"), (7, "$DIMBLK2")] {
-    match get(field.0, field.1) {
-      None | Some(Str("")) => ()
-      _ =>
-        raise InvalidSemantic("自定义箭头块请使用已存标注图块")
-    }
-  }
   let scale = r12_label_real(get(40, "$DIMSCALE"), 1.0)
   let arrow = r12_label_real(get(41, "$DIMASZ"), 2.5) * scale
   let ext_offset = r12_label_real(get(42, "$DIMEXO"), 0.625) * scale
@@ -103,10 +96,29 @@ fn r12_render_dim(
     read_integer(76, "$DIMSE2") != 0,
   ]
   let normal = r12_extrusion(raw).normal
+  let separate = read_integer(173, "$DIMSAH") != 0
+  let force_inside = read_integer(174, "$DIMTIX") != 0
+  let arrow_name = fn(i : Int) raise R12SemanticError {
+    let name = if separate {
+      if i == 0 {
+        get(6, "$DIMBLK1")
+      } else {
+        get(7, "$DIMBLK2")
+      }
+    } else {
+      get(5, "$DIMBLK")
+    }
+    match name {
+      None => ""
+      Some(Str(s)) => s
+      _ => raise InvalidSemantic("标注箭头图块名类型无效")
+    }
+  }
   let lines : Array[(Vec3, Vec3)] = []
   let extension_lines : Array[(Vec3, Vec3)] = []
   let tips : Array[(Vec3, Vec3)] = []
   let kind = dim.flags & 15
+  let mut text_at = update.text_at
   let extensions = if kind <= 1 { 2 } else { 0 }
   guard update.lines.length() >= extensions &&
     update.lines.length() <= 3 &&
@@ -133,14 +145,45 @@ fn r12_render_dim(
         )
       }
     } else {
+      let text_fits = label_width + 2.0 * gap <= length
+      let move_text = kind <= 1 &&
+        update.label is Some(_) &&
+        label_width > 0.0 &&
+        !text_fits &&
+        !force_inside
+      let arrow_depth = if tick > 0.0 { tick * 0.5 } else { arrow }
+      let arrows_out = kind <= 1 &&
+        length <
+        2.0 * arrow_depth +
+        (if update.label is Some(_) && label_width > 0.0 && !move_text {
+          label_width + 2.0 * gap
+        } else {
+          0.0
+        })
+      let left = if arrows_out { scale3(direction, -1.0) } else { direction }
       if i == extensions && (kind <= 1 || kind == 3) {
-        tips.push((line.0, direction))
+        tips.push((line.0, left))
       }
       if i == extensions && (kind <= 1 || kind == 3 || kind == 4) {
-        tips.push((line.1, scale3(direction, -1.0)))
+        tips.push((line.1, scale3(left, -1.0)))
       }
-      if kind <= 1 && update.label is Some(_) && label_width > 0.0 {
-        let offset = update.text_at.sub(line.0).dot(direction)
+      if arrows_out && read_integer(175, "$DIMSOXD") == 0 {
+        lines.push((add3(line.0, scale3(left, arrow_depth)), line.0))
+        lines.push((line.1, add3(line.1, scale3(left, -arrow_depth))))
+      }
+      if move_text {
+        text_at = add3(
+          line.1,
+          scale3(
+            direction,
+            label_width * 0.5 +
+            gap +
+            (if arrows_out { arrow_depth } else { 0.0 }),
+          ),
+        )
+      }
+      if kind <= 1 && update.label is Some(_) && label_width > 0.0 && !move_text {
+        let offset = text_at.sub(line.0).dot(direction)
         let low = (offset - label_width * 0.5 - gap).max(0.0).min(length)
         let high = (offset + label_width * 0.5 + gap).min(length).max(0.0)
         if low > 0.0 {
@@ -175,18 +218,25 @@ fn r12_render_dim(
   }
   let arrows = []
   let ticks = []
-  for tip in tips {
+  let custom_arrows = []
+  for i, tip in tips {
     let side = normal.cross(tip.1).normalize()
     if tick > 0.0 {
       let d = scale3(add3(side, tip.1).normalize(), tick * 0.5)
       ticks.push((tip.0.sub(d), add3(tip.0, d)))
     } else if arrow > 0.0 {
+      let name = arrow_name(i)
+      if name != "" {
+        custom_arrows.append(r12_custom_arrow(doc, name, tip, normal, arrow))
+        continue
+      }
       let wide = scale3(side, arrow / 6.0)
       let base = add3(tip.0, scale3(tip.1, arrow))
       arrows.push((tip.0, add3(base, wide), base.sub(wide)))
     }
   }
-  guard lines.all(l => finite3(l.0) && finite3(l.1)) &&
+  guard finite3(text_at) &&
+    lines.all(l => finite3(l.0) && finite3(l.1)) &&
     extension_lines.all(l => finite3(l.0) && finite3(l.1)) &&
     ticks.all(l => finite3(l.0) && finite3(l.1)) &&
     arrows.all(a => finite3(a.0) && finite3(a.1) && finite3(a.2)) else {
@@ -197,9 +247,10 @@ fn r12_render_dim(
     extension_lines,
     arrows,
     ticks,
+    custom_arrows,
     arc: update.arc,
     label: update.label,
-    text_at: update.text_at,
+    text_at,
     text_height: height,
     dimension_color,
     extension_color,

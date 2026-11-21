@@ -329,13 +329,31 @@ fn R12TrueType::contours(
     let flags = glyph.u16(pos)
     let component = glyph.u16(pos + 2)
     pos += 4
-    guard (flags & 2) != 0 else {
-      raise InvalidFont("复合字形使用点对点附件，当前不支持")
-    }
+    let xy = (flags & 2) != 0
     let words = (flags & 1) != 0
-    let x = if words { glyph.i16(pos) } else { glyph.i8(pos) }
-    let y = if words { glyph.i16(pos + 2) } else { glyph.i8(pos + 1) }
+    let arg = fn(at : Int) raise FontError {
+      if words {
+        if xy {
+          glyph.i16(at)
+        } else {
+          glyph.u16(at)
+        }
+      } else if xy {
+        glyph.i8(at)
+      } else {
+        glyph.u8(at)
+      }
+    }
+    let x = arg(pos)
+    let y = arg(pos + (if words { 2 } else { 1 }))
     pos += if words { 4 } else { 2 }
+    let transforms = flags & 200
+    guard transforms == 0 ||
+      transforms == 8 ||
+      transforms == 64 ||
+      transforms == 128 else {
+      raise InvalidFont("复合字形同时设置了互斥的变换标志")
+    }
     let mut a = 1.0
     let mut b = 0.0
     let mut c = 0.0
@@ -355,20 +373,30 @@ fn R12TrueType::contours(
       d = a
       pos += 2
     }
-    let tx = x.to_double()
-    let ty = y.to_double()
-    let (tx, ty) = if (flags & 2048) != 0 {
-      (a * tx + c * ty, b * tx + d * ty)
-    } else {
-      (tx, ty)
+    let components = self.contours(component, depth + 1, budget)
+    let transform = fn(p : Vec2) {
+      Vec2::new(a * p.x + c * p.y, b * p.x + d * p.y)
     }
-    for contour in self.contours(component, depth + 1, budget) {
+    let offset = if xy {
+      guard (flags & 6144) != 6144 else {
+        raise InvalidFont("复合字形同时设置了互斥的偏移标志")
+      }
+      let raw = Vec2::new(x.to_double(), y.to_double())
+      // The output uses unhinted design coordinates, without a pixel grid.
+      if (flags & 2048) != 0 {
+        transform(raw)
+      } else {
+        raw
+      }
+    } else {
+      let parent = ttf_outline_point(output, x, budget)
+      let child = ttf_outline_point(components, y, budget)
+      parent.sub(transform(child))
+    }
+    for contour in components {
       budget.take(contour.length())
       output.push(
-        contour.map(p => {
-          on: p.on,
-          p: Vec2::new(a * p.p.x + c * p.p.y + tx, b * p.p.x + d * p.p.y + ty),
-        }),
+        contour.map(p => { on: p.on, p: transform(p.p).add(offset), }),
       )
     }
     if (flags & 32) == 0 {

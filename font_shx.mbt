@@ -1,10 +1,12 @@
 ///|
-/// Decoder for legacy AutoCAD-86 shapes 1.0/1.1 stroke fonts.
+/// Decoder for AutoCAD-86 SHX stroke fonts.
 pub struct R12ShxFont {
   priv symbols : Map[Int, FontBytes]
   priv above : Double
   priv below : Double
   priv unicode : Bool
+  priv big_width : Double?
+  priv big_extended : Bool
 }
 
 ///|
@@ -28,6 +30,9 @@ fn shx_after_name(record : FontBytes) -> Int raise FontError {
 fn shx_load(file : FontBytes) -> R12ShxFont raise FontError {
   if file.ascii_at(0, "AutoCAD-86 unifont 1.0") {
     return shx_unicode(file)
+  }
+  if file.ascii_at(0, "AutoCAD-86 bigfont 1.0") {
+    return shx_bigfont(file)
   }
   guard (
       file.ascii_at(0, "AutoCAD-86 shapes 1.0") ||
@@ -62,7 +67,14 @@ fn shx_load(file : FontBytes) -> R12ShxFont raise FontError {
   }
   let above = info.u8(0).to_double()
   guard above > 0.0 else { raise InvalidFont("SHX 基准字高为零") }
-  { symbols, above, below: info.u8(1).to_double(), unicode: false, }
+  {
+    symbols,
+    above,
+    below: info.u8(1).to_double(),
+    unicode: false,
+    big_width: None,
+    big_extended: false,
+  }
 }
 
 ///|
@@ -128,20 +140,7 @@ fn shx_run(
   let paths = []
   let mut advance = 0.0
   for ch in text {
-    let state : ShxPen = {
-      paths,
-      marks: [],
-      path: None,
-      at: Vec2::new(advance, 0.0),
-      scale: 1.0 / font.above,
-      drawing: true,
-      budget,
-    }
-    shx_execute(font, map(ch), state, 0)
-    guard state.at.x >= advance && state.marks.is_empty() else {
-      raise InvalidFont("SHX 前进宽度或坐标栈无效")
-    }
-    advance = state.at.x
+    advance = shx_glyph(font, map(ch), advance, paths, budget)
   }
   { paths, advance, ascent: 1.0, descent: font.below / font.above, }
 }
@@ -212,13 +211,38 @@ fn shx_execute(
           state.at = p
           state.path = None
         }
-      7 => {
-        let sub = if font.unicode { data.le16(i) } else { data.u8(i) }
-        i += if font.unicode { 2 } else { 1 }
-        if active {
-          shx_execute(font, sub, state, depth + 1)
+      7 =>
+        if font.big_width is Some(width) && data.u8(i) == 0 {
+          guard font.big_extended else {
+            raise InvalidFont("BIGFONT 子形的扩展尺寸编码未声明")
+          }
+          let sub = data.u16(i + 1)
+          let x = data.i8(i + 3)
+          let y = data.i8(i + 4)
+          let w = data.u8(i + 5)
+          let h = data.u8(i + 6)
+          i += 7
+          if active {
+            let origin = state.at.add(
+              Vec2::new(x.to_double(), y.to_double()).scale(state.scale),
+            )
+            shx_primitive(
+              font,
+              sub,
+              state,
+              origin,
+              w.to_double() * state.scale / width,
+              h.to_double() * state.scale / font.above,
+              depth,
+            )
+          }
+        } else {
+          let sub = if font.unicode { data.le16(i) } else { data.u8(i) }
+          i += if font.unicode { 2 } else { 1 }
+          if active {
+            shx_execute(font, sub, state, depth + 1)
+          }
         }
-      }
       8 | 9 | 12 | 13 => {
         let many = command == 9 || command == 13
         let curved = command == 12 || command == 13
@@ -368,5 +392,12 @@ fn shx_unicode(file : FontBytes) -> R12ShxFont raise FontError {
   guard pos == file.size || (file.size - pos == 3 && file.ascii_at(pos, "EOF")) else {
     raise InvalidFont("SHX Unicode 字形数或尾部数据无效")
   }
-  { symbols, above, below, unicode: true, }
+  {
+    symbols,
+    above,
+    below,
+    unicode: true,
+    big_width: None,
+    big_extended: false,
+  }
 }

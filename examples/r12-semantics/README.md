@@ -18,7 +18,7 @@
 | [属性字形](glyph-layout.dxf) | 文件引用自建 STYLE，验证器为 K-9 提供自建的描边字形（含闭合路径）。检查中心/顶部对齐、Fit 与 Aligned 的不同字高、倾斜、镜像、不可见属性和点数预算。示例中的字体名是用来核对 STYLE 传递的标签，字体文件不随示例分发。 |
 | [七类标注](recompute-dimensions.dxf) | 旋转、对齐、两线角、直径、半径、三点角、坐标标注的量值依次为 3、5、π/2、10、5、3π/2、−1。独立校验线端点、反角、文本锚点、样式倍率和省零。定义点修改后，重算值由 3 变为 8，标签由 `[6 mm]` 变为 `[16 mm]`。 |
 
-开放 Bézier 方向使用单一张量积参数区间。采样网格由调用方指定，闭合方向不重复起点。组码 75 标出曲面类型，生成的样点以本库结点约定为准。属性需要调用方提供字体整形、度量以及带孔的轮廓或开路径。本库负责 R12 排版和仿射放置，支持的字形集合由提供器决定。标注重算输出量值、十进制标签、基本线和圆弧，支持选定样式项 `DIMLFAC`、`DIMRND`、`DIMZIN` 和 `DIMPOST`。箭头造型、容差格式、自动挪让、编辑目标绑定及外部字体解码未覆盖。
+开放 Bézier 方向使用单一张量积参数区间。采样网格由调用方指定，闭合方向不重复起点。组码 75 标出曲面类型，生成的样点以本库结点约定为准。属性需要调用方提供字体整形、度量以及带孔的轮廓或开路径。本库负责 R12 排版和仿射放置，支持的字形集合由提供器决定。基础重算输出量值、十进制标签、基本线和圆弧，并应用选定的量值样式。编辑绑定、容差文本与箭头的独立案例见下表。
 
 曲面类型和标注定义点参考 [Autodesk PEDIT 曲面说明](https://help.autodesk.com/cloudhelp/2027/ENG/AutoCAD-Core/files/GUID-88A3C094-3001-439D-8AE8-6F57412AFE70.htm)与 [R12 DXF Reference](https://forums.autodesk.com/autodesk/attachments/autodesk/autocad-lt-forum-en/25135/1/DXF%20Reference.pdf)。
 
@@ -27,11 +27,34 @@
 | 案例 | 验证结果与边界 |
 | --- | --- |
 | [TrueType](fixture.ttf)、[传统 SHX](fixture.shx)、[Unicode SHX](fixture-unicode.shx) | 项目自建字体原件按 Apache-2.0 分发。验证 TrueType 的二次轮廓中点、平移复合字形和前进宽度，以及两种 SHX 签名、16 位子字形、递归超限与截断。字形字节可直接用于属性排版。 |
+| [BIGFONT](fixture-bigfont.shx) | 项目自建。搭配普通 SHX 后，测试含双字节索引、扩展子形、独立 XY 缩放及错索引和截断拒绝。连续排版的第二条路径由 (1.4, 0.3) 指向 (2.4, 1.1)，总宽 3.2。 |
+| [附着与整形](fixture-attachment.ttf) · [HarfBuzz 位置](shaped-attachment.json) | 项目自建单字体。复合字形 B 把缩放后的附属控制点对齐到前一轮廓的点 2。子轮廓起点 x=2，曲线中点 (2.5, 0.5)。GSUB 将 AB 替换为 glyph 2，1200 设计单位对应排版宽 2.4。另拒绝越界附着点。 |
+| [进阶标注样式](advanced-dimension.dxf) | 项目自建。10 的测量值显示非对称容差 +0.20/−0.10 和等值替代单位。另校验极限值 10.20/9.90、非零块基点、不对称箭头的端点、箭头缺失、窄标注移出箭头及过宽文字外移。 |
 | [编辑绑定与样式](bound-style.dxf) | 句柄 A0 的线段端点从 10 改到 14 后，D1 的标注重算为 14。验证句柄缺失和重复、文字高度、颜色、间隙、箭头及延伸线抑制。 |
 | [逐点误差](mesh-compare.dxf) | 9 个 M-major WCS 点中，仅中心点人为加入 0.125 偏差。比较器返回 9 个误差、最大误差 0.125、索引 4、超差数 1。此案例为自建数值真值。 |
 
-字体读入有字节、递归和工作预算。TrueType 范围为单 sfnt、水平度量、Unicode cmap 4/12、简单二次轮廓与 XY 偏移复合字形。SHX 支持传统和 Unicode 横排笔画。BIGFONT、点对点复合附件、CFF、指令 hinting、GSUB/GPOS、复杂字形整形不在当前字节解码范围。[OpenType 格式](https://learn.microsoft.com/en-us/typography/opentype/spec/glyf) · [SHX 笔画定义](https://help.autodesk.com/cloudhelp/2024/ENU/AutoCAD-Customization/files/GUID-06832147-16BE-4A66-A6D0-3ADF98DC8228.htm) · [SHX 容器布局参考](https://github.com/mozman/ezdxf/blob/v1.4.4/src/ezdxf/fonts/shapefile.py)
+TrueType 支持单 sfnt、Unicode cmap 4/12、二次轮廓、XY 偏移和实际轮廓点附件。幻点、hinting、字体变化轴、CFF 保留为边界。BIGFONT 读横排索引与已覆盖的扩展原语，`bigfont_run()` 接收调用者指定的 Unicode 到双字节字形编号映射。换码表不替调用者扫描原始文字，竖排和厂商特有的模式未验证。[OpenType 格式](https://learn.microsoft.com/en-us/typography/opentype/spec/glyf) · [SHX 笔画定义](https://help.autodesk.com/cloudhelp/2024/ENU/AutoCAD-Customization/files/GUID-06832147-16BE-4A66-A6D0-3ADF98DC8228.htm) · [BIGFONT 原语定义](https://help.autodesk.com/cloudhelp/2015/ENU/AutoCAD-Customization/files/GUID-00ED0CC6-A4BE-4591-93FA-598CC40AA43D.htm) · [BIGFONT 容器索引对照](https://github.com/mlightcad/shx-parser/blob/main/src/contentParser.ts)
 
-关联由编辑器保存，R12 DXF 可缺少与源实体的连结，库不从相同坐标猜测对象。重渲染支持默认闭合箭头或短划、ACI 颜色、延伸线偏移和抑制、直线标签间隙及文字高度。自定义箭头块、容差与替代单位、自动挪让等样式仍应读取已存图块或交给上层绘制。[Autodesk 的 R12 降版限制](https://help.autodesk.com/cloudhelp/2022/ENU/AutoCAD-Core/files/GUID-C36C0AF2-6925-4E7F-BDAD-F57897D837B2.htm)
+关联由编辑器保存，R12 DXF 可缺少与源实体的连结。重渲染支持默认闭合箭头、短划及本地平面图块箭头，以及 ACI 颜色、延伸线偏移、抑制与文字高度。直线布局使用调用方传入的实际宽度，空间不足时将相应部分移出，尊重 `DIMTIX` 和 `DIMSOXD`。容差与替代单位以单行十进制文本返回。完整堆叠排版、绘图中的全局避碰和跨图元引线仍取决于上层渲染。[Autodesk 的 R12 降版限制](https://help.autodesk.com/cloudhelp/2022/ENU/AutoCAD-Core/files/GUID-C36C0AF2-6925-4E7F-BDAD-F57897D837B2.htm)
 
-**旧版 CAD 样本未取得。** 当前真实 CAD 案例与第三方语料中，没有经核实从旧版 CAD 原生导出且同时保留拟合控制框和样点的 AC1009 文件。真实对照需记录软件版本、原件来源和许可、采样网格尺寸与闭合位，再以 `compare_refit()` 记录逐点 WCS 误差。现代程序仅写出 AC1009 版本号不构成旧版 CAD 的验证。
+### 用实际整形器重放
+
+[HarfBuzz 适配器](shape-harfbuzz.mjs)为一段已选定方向、脚本、语言与字体的文字输出字形编号及设计单位位移。MoonBit 的 `positioned_run()` 用相同字体还原轮廓，并能交给 `r12_layout_attribute()`。字体选择、Unicode 双向段落分段和复杂脚本的整形由调用者及 HarfBuzz 完成。
+
+```sh
+npm install --prefix ./hb-example --no-audit --ignore-scripts harfbuzzjs@1.5.0
+node examples/r12-semantics/shape-harfbuzz.mjs ./hb-example/node_modules/harfbuzzjs/dist/index.mjs examples/r12-semantics/fixture-attachment.ttf AB > shaped.json
+moon run examples/r12-semantics/runner --target wasm --deny-warn -- shape examples/r12-semantics/fixture-attachment.ttf shaped.json
+```
+
+HarfBuzz 14.3.0 实际输出与提交的 [整形数据](shaped-attachment.json) 一致。另用本机 Arial 和阿拉伯文 `السَّلَام`（RTL、`Arab`、`ar`）联调，得到 7 个字形、9 条轮廓、归一化前进宽度约 2.629175，含零前进宽度和非零偏移的附标。系统字体由运行环境提供，仓库分发的字体均为可按 Apache-2.0 使用的自建案例。[HarfBuzz API](https://github.com/harfbuzz/harfbuzzjs)
+
+### 旧版 CAD 曲面的证据
+
+核对了 LibreDWG 的 R11 归档中的三份 ASCII DXF。三份都是 AC1009，`Constraints_12.dxf` 没有 POLYLINE，`entities-2d.dxf` 和 `entities-3d.dxf` 各有一个普通 POLYLINE，组码 70 和 75 均缺省或为零。目前仍缺可核实由旧版 CAD 原生导出、同时保留拟合控制框与采样点的文件。[归档文件](https://github.com/LibreDWG/libredwg/tree/27e828d212852b8cd08c1cd5d2721e5b738ca8a9/test/test-data/r11)
+
+```sh
+moon run examples/r12-semantics/runner --target wasm --deny-warn -- compare-mesh examples/r12-semantics/mesh-compare.dxf 0.01
+```
+
+命令输出记录下标、M/N 序号和 WCS 欧氏误差。取得授权原件后可替换输入，另外记录 CAD 软件版本、导出设置、来源、许可、SHA-256、网格尺寸、闭合位及容差。

@@ -1,6 +1,9 @@
 import {
   "mik1e80/dxfkit",
   "moonbitlang/x/fs",
+  "moonbitlang/core/env",
+  "moonbitlang/core/json",
+  "moonbitlang/core/string",
 }
 
 supported_targets = "-all+wasm+native"

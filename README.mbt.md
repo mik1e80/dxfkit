@@ -20,8 +20,8 @@
 - `R12FittedMesh::refit(m,n)` 按明确的结点和闭合约定生成 WCS 样点，返回可继续调用 `quad()` 的网格，原样点保持可用。
 - `r12_layout_attribute(cell, shape)` 接收经调用方字体整形的单行字形路径。库处理居中、基线与垂直对齐、Fit/Aligned、倾斜、镜像及所在空间的仿射变换。字体文件名只随 STYLE 传给回调。
 - `r12_recompute_dimension(record, tol, definition=edited)` 由当前定义点重算量值、十进制标签和基本线/弧。距离单位沿用原图，角度量值为弧度，显示标签使用度。返回结果可供应用更新自己的标注图层。
-- `load_r12_truetype(bytes)` 和 `load_r12_shx(bytes)` 将调用方提供的字体字节转成可供 `r12_layout_attribute()` 使用的字形路径。支持 Unicode cmap 4/12 和 TrueType 二次轮廓，以及 SHX shapes 1.0/1.1、Unicode 横排笔画。库不会打开图纸中的字体路径。
-- 编辑器保存 `R12DimensionBinding` 后，可用 `r12_refresh_bound_dimension()` 从最新文档按句柄更新定义点。支持顶层线段、圆、圆弧和点的指定特征，缺失和歧义会返回错误。`r12_render_dimension()` 可生成选定样式的尺寸线、延伸线、箭头或短划及文字参数。
+- `load_r12_truetype(bytes)` 和 `load_r12_shx(bytes)` 将调用方提供的字体字节转成可供 `r12_layout_attribute()` 使用的字形路径。支持 Unicode cmap 4/12、TrueType 二次轮廓和 XY 或实际轮廓点附件，以及 SHX shapes 1.0/1.1、Unicode SHX 和受限横排 BIGFONT。用 `bigfont_run()` 组合普通 SHX 与 BIGFONT，由调用方提供双字节字形映射。用 `positioned_run()` 接收同一字体的外部整形结果。库不会打开图纸中的字体路径。
+- 编辑器保存 `R12DimensionBinding` 后，可用 `r12_refresh_bound_dimension()` 从最新文档按句柄更新定义点。支持顶层线段、圆、圆弧和点的指定特征，缺失和歧义会返回错误。`r12_render_dimension()` 可生成尺寸线、延伸线、箭头或短划及文字参数，`custom_arrows` 返回本地箭头图块的 WCS 图元。直线标注可传测量后的文字宽度以获得短跨距布局。重算支持线性尺寸的十进制容差、极限值和替代单位。
 - `R12FittedMesh::compare_refit()` 对文件保存的 WCS 样点逐索引输出误差及超差计数。它需要同一文件的控制框和采样网格。
 
 当前开发版默认启用`ReadLimits::default()`；可用`scan_tags_with_limits`、`read_document_with_limits`或`TagStream::with_limits`指定读取预算。超限保留部分扫描结果及明确警告，不可当完整文件；流式调用者见`is_limited()`应停止喂入。
@@ -164,7 +164,7 @@ CLI `stats` 分块读文件、统计 tag、段、版本、编码，不保存全�
 
 ## 暂未实现
 
-二进制DXF、文件写回、通用编辑、全部R12必填字段和引用约束验证、完整HATCH边界、完整 CAD 标注样式、从 R12 文件恢复未保存的实体关联、BIGFONT、复合文字整形及字体指令执行、通用三维几何检查、刀路生成和参数化草图约束求解。OCS/WCS 与 INSERT 行列几何已实现，不再列作全未支持；受限实体和适用平面见矩阵。
+二进制DXF、文件写回、通用编辑、全部R12必填字段和引用约束验证、完整HATCH边界、完整 CAD 标注样式、从 R12 文件恢复未保存的实体关联、竖排 BIGFONT、内置 Unicode 双向段落分段及字体回退、CFF 和字体指令执行、通用三维几何检查、刀路生成和参数化草图约束求解。OCS/WCS 与 INSERT 行列几何已实现，不再列作全未支持；受限实体和适用平面见矩阵。
 
 ## 来源
 

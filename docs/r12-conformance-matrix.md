@@ -12,8 +12,8 @@
 | POLYLINE 序列与类型 | 二维顶点与 SEQEND，另有 3D、M/N 网格、Polyface 及拟合网格的控制框、已存样点拓扑和二次/三次 B 样条及 Bézier 重拟合 | r12_semantics_test.mbt、[闭合拟合网格](../examples/r12-semantics/README.md) | 空间拓扑不进入二维检查，逐点比较器有解析模型断言。旧版 CAD 原始拟合网格对照仍待补，非零宽度区域不检查 |
 | OCS/WCS | 按实体语义变换，保留XYZ | r12_world_wbtest.mbt、六模型坐标对照及 [实际倾斜圆](../examples/cad-ocs/README.md) | 非当前检查平面不参与二维检查；并非完整3D建模 |
 | TABLES 的显式引用 | 在已声明的 LAYER、LTYPE、STYLE、DIMSTYLE、APPID 中审计对应名称，另审计实体 XDATA 的本地 1005 句柄 | maintenance_foundation_test.mbt | 名称按大写匹配，跳过内建默认项和未声明的表；尚未校验所有表项字段和应用私有 XDATA 语义 |
-| BLOCK/INSERT 引用与阵列 | 基点、变换、全部行列、嵌套来源，按忽略大小写的名称查找，诊断缺失或歧义。ATTRIB 关联到所属 INSERT 与对应 ATTDEF，并可按单元查询已存属性和常量定义的变换结果 | expand_wbtest.mbt、r12_semantics_test.mbt、[真实 CAD](../examples/cad-ocs/README.md) | 支持 TrueType `glyf`、SHX 横排及 Unicode 笔画解码。BIGFONT、排版引擎和文字厚度未覆盖 |
-| 标注、SHAPE、VIEWPORT、3DFACE | 类型化读取标注定义点、图块图元与嵌套箭头、DIMSTYLE 和 DSTYLE、符号参数、MVIEW v16、冻结层及面隐边 | r12_semantics_test.mbt、QCAD 实际 MVIEW 导出 | 可由定义点重算七类量值、标签和基本标注线弧。应用保存的编辑句柄可联动重算。支持常用标注样式，完整样式、视口投影及裁剪未覆盖 |
+| BLOCK/INSERT 引用与阵列 | 基点、变换、全部行列、嵌套来源，按忽略大小写的名称查找，诊断缺失或歧义。ATTRIB 关联到所属 INSERT 与对应 ATTDEF，并可按单元查询已存属性和常量定义的变换结果 | expand_wbtest.mbt、r12_semantics_test.mbt、[真实 CAD](../examples/cad-ocs/README.md) | 支持 TrueType 实际轮廓点附件、传统/Unicode SHX、受限横排 BIGFONT 及预分段 HarfBuzz 结果。字形幻点、竖排 BIGFONT、全段落分段和字体回退未覆盖 |
+| 标注、SHAPE、VIEWPORT、3DFACE | 类型化读取标注定义点、图块图元与嵌套箭头、DIMSTYLE 和 DSTYLE、符号参数、MVIEW v16、冻结层及面隐边 | r12_semantics_test.mbt、QCAD 实际 MVIEW 导出 | 可由定义点重算七类量值、标签和基本标注线弧。应用保存的编辑句柄可联动重算。支持定义点重算、局部块箭头、十进制容差/极限及替代单位。短跨距自动调整适用于直线标注；全图避碰、排版堆叠、视口投影及裁剪未覆盖。见[定向样式案例](../examples/r12-semantics/README.md) |
 | 几何检查完整性 | 解析和展开警告贯通，预算耗尽不能作完整结论 | completeness_wbtest.mbt、security_wbtest.mbt、maintenance_security_test.mbt | 完整仅指已选检查范围，不是图纸认证、CAM判断或无漏洞承诺 |
 
 新增语义前先列出格式字段、缺省规则、参考资料、正/反例与独立预期；更新实现、公开API及对应文档后再把该项标为已验证。旧的全量记录不能替代当前改动验证。
