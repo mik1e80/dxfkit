@@ -132,7 +132,7 @@
     "conformance/main.mbt": "cb476d196c036a93a9336f13a7e465c85627a6051d426fb79a31b5f400505887",
     "diagnostic_budget.mbt": "5ee708b1590704c28d5c8892ca51a06253ad6ad5337960b275c08b673cee8c26",
     "entity.mbt": "97e12dbc3c0a4d9e177c280bc2fcbcefa5adb683b7fa698da82e4aa0e455e40e",
-    "expand.mbt": "2b87a4a33ee94c506edaad58f69c6121918e7aafea521605495992d78e1a1881",
+    "expand.mbt": "b001156b31f86c300a0f763f448008e334bafb937ed8a5d8cff8d84eab015c8e",
     "flatten.mbt": "314fdbcc20c3bf07d878d66e859679a0b3f3da32401e7f2ea9dfada3abf844ee",
     "flatten_checked.mbt": "c929bcf1e4de148ff567f19c0d6e5058f78c4f40731b700c40dfaec09cb625de",
     "gbk.mbt": "19861a2372f3d19b67c17d9e0b354aedf58c32f7d64070f3972ed3ec978bcc59",
@@ -140,12 +140,15 @@
     "header.mbt": "8c114a6e3e0d4a1241696203709d420c29a953bb2d62d99d39e69cefe6fd1739",
     "moon.mod": "944bb43f31bb1f73b56870e3dd2275c754fe90aacc7027fd97569fdcaf85fcb0",
     "numeric_safety.mbt": "63364b64dcf9a23d273c071b23ce12832a062e2411e9ffe8ca3a2aa192fe278c",
-    "ocs.mbt": "0b5b4378c4b47463762dd63246f2c66e8842b7e793928e99dea6df31e41cedb2",
+    "ocs.mbt": "652148dca9f1c7f7a67bab3906e12defe0ec9cab324123c029439b009ab208ef",
     "preview.mbt": "e5a5137410da5248eb940e8b80ea8fc025c27de1f86a9b2b07a9646d813d4d26",
+    "r12_array_attributes.mbt": "c0879a2516a5de047b6878b22edd2859fb0c28deb941069f4d684b388769cc85",
     "r12_audit.mbt": "ec0cfc35771f0babd51641a50c8c7686d24cabdd5b04e4c64f99a55a07faef6e",
+    "r12_dimension_picture.mbt": "4e6734f50113d30b7d1bebb0e60cd7a71fbf8ddb2c952b8c49d476cb19acf6a8",
     "r12_entity_links.mbt": "8e6d86d20a233d29debb3803c9b847573fda2a3f12d6a21a654b7736f8297d14",
-    "r12_semantics.mbt": "bd2177b14e7bd357cef31f554bc215e2b1d79563919f509a6aeb3cd2720dc0ae",
-    "r12_spatial.mbt": "adfaef7b7380363ea2a549a50f71741e77ecf20f42ed6872cebdd802fba40b30",
+    "r12_mesh.mbt": "b1e29eb84eabaa9f5e2d8d9fe2b9a01e38bc5e852a898986ac15513fda04ce5b",
+    "r12_semantics.mbt": "ef6e6e5e17a2d2c774df2988264ab1942157120d04f4b4606880cdc12ffce8cf",
+    "r12_spatial.mbt": "b4ca95d0a698eeac9ff707b57a310b562de3342e31bda4737b56146d6700858d",
     "r12_viewport.mbt": "be2619b82bccf045bf825dc5b3a92d83e101f00b90842605346e915a60ceb18b",
     "read_document.mbt": "ec413ca1107c04933c8a32c4c394ed42787152847c4217ae07dbf243e4507d1b",
     "reader_ascii.mbt": "80adb2840407dfad053983ff2759cedf9083651c35a985d56cb4f0c7d2d829a8",
@@ -2935,13 +2938,13 @@
         ],
         "expanded_outlines": 50,
         "expansion_warnings": [
-          "INSERT 3B 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
+          "INSERT 3B 的关联 ATTRIB 记录已保留，轮廓检查未覆盖属性排版；检查不完整"
         ],
         "findings": [
           {
             "category": "解析",
             "severity": "警告",
-            "message": "INSERT 3B 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
+            "message": "INSERT 3B 的关联 ATTRIB 记录已保留，轮廓检查未覆盖属性排版；检查不完整"
           },
           {
             "category": "文字未转曲线",
@@ -3098,7 +3101,7 @@
         "expanded_outlines": 125,
         "expansion_warnings": [
           "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证",
-          "INSERT 756 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
+          "INSERT 756 的关联 ATTRIB 记录已保留，轮廓检查未覆盖属性排版；检查不完整"
         ],
         "findings": [
           {
@@ -3109,7 +3112,7 @@
           {
             "category": "解析",
             "severity": "警告",
-            "message": "INSERT 756 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
+            "message": "INSERT 756 的关联 ATTRIB 记录已保留，轮廓检查未覆盖属性排版；检查不完整"
           },
           {
             "category": "检查覆盖",
@@ -3822,7 +3825,7 @@
         "expanded_outlines": 125,
         "expansion_warnings": [
           "LWPOLYLINE 含非零宽度或厚度；本工具仅检查中心线，区域/厚度未验证",
-          "INSERT 756 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
+          "INSERT 756 的关联 ATTRIB 记录已保留，轮廓检查未覆盖属性排版；检查不完整"
         ],
         "findings": [
           {
@@ -3833,7 +3836,7 @@
           {
             "category": "解析",
             "severity": "警告",
-            "message": "INSERT 756 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
+            "message": "INSERT 756 的关联 ATTRIB 记录已保留，轮廓检查未覆盖属性排版；检查不完整"
           },
           {
             "category": "检查覆盖",
@@ -4557,7 +4560,7 @@
         "expansion_warnings": [
           "POLYLINE 标志 64 超出普通二维折线范围；保留记录，轮廓未检查",
           "POLYLINE 标志 64 超出普通二维折线范围；保留记录，轮廓未检查",
-          "INSERT 5FA 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
+          "INSERT 5FA 的关联 ATTRIB 记录已保留，轮廓检查未覆盖属性排版；检查不完整"
         ],
         "findings": [
           {
@@ -4573,7 +4576,7 @@
           {
             "category": "解析",
             "severity": "警告",
-            "message": "INSERT 5FA 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整"
+            "message": "INSERT 5FA 的关联 ATTRIB 记录已保留，轮廓检查未覆盖属性排版；检查不完整"
           },
           {
             "category": "检查覆盖",

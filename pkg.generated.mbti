@@ -339,6 +339,22 @@ pub(all) struct R12Attribute {
   vertical : Int
 }
 
+pub(all) struct R12CellAttribute {
+  source_record : Int
+  definition_record : Int
+  from_constant_definition : Bool
+  data : R12Attribute
+  anchor : Vec3
+  alignment : Vec3?
+  baseline : Vec3
+  up : Vec3
+}
+
+pub(all) struct R12DimStyleOverride {
+  group : Int
+  value : Tag
+}
+
 pub(all) struct R12Dimension {
   block_name : String
   block : R12Link
@@ -359,10 +375,18 @@ pub(all) struct R12Dimension {
   text : String?
 }
 
+pub(all) struct R12DimensionPicture {
+  block_record : Int
+  style_record : R12Link
+  overrides : Array[R12DimStyleOverride]
+  world : WorldExpansion
+}
+
 pub(all) enum R12EntitySemantics {
   SpatialLine(start~ : Vec3, end~ : Vec3)
   SpatialPolyline(points~ : Array[Vec3], closed~ : Bool)
   PolygonMesh(points~ : Array[Vec3], m~ : Int, n~ : Int, closed_m~ : Bool, closed_n~ : Bool)
+  FittedMesh(R12FittedMesh)
   Polyface(points~ : Array[Vec3], faces~ : Array[Array[Int]])
   Symbol(name~ : String, insertion~ : Vec3, size~ : Double, rotation~ : Double, x_scale~ : Double, oblique~ : Double, thickness~ : Double, extrusion~ : Vec3)
   Viewport(center~ : Vec3, width~ : Double, height~ : Double, status~ : Int, id~ : Int, view~ : R12ViewportView?)
@@ -396,10 +420,29 @@ pub(all) enum R12FieldIssue {
   AmbiguousLocalHandle
 }
 
+pub struct R12FittedMesh {
+  fit : R12MeshFit
+  controls : Array[Vec3]
+  samples : Array[Vec3]
+  m : Int
+  n : Int
+  sample_m : Int
+  sample_n : Int
+  closed_m : Bool
+  closed_n : Bool
+}
+pub fn R12FittedMesh::quad(Self, Int, Int) -> (Vec3, Vec3, Vec3, Vec3)?
+
 pub(all) enum R12Link {
   Resolved(Int)
   Missing
   Ambiguous
+}
+
+pub(all) enum R12MeshFit {
+  QuadraticBSpline
+  CubicBSpline
+  Bezier
 }
 
 pub(all) struct R12SemanticEntry {
@@ -459,6 +502,8 @@ pub(all) struct ReadDocument {
 }
 pub fn ReadDocument::audit_r12_fields(Self) -> R12FieldAudit
 pub fn ReadDocument::diagnostics(Self) -> Array[Diagnostic]
+pub fn ReadDocument::r12_cell_attributes(Self, Int, Int, Int) -> Result[Array[R12CellAttribute], String]
+pub fn ReadDocument::r12_dimension_picture(Self, Int, Double, limits? : ExpandLimits) -> Result[R12DimensionPicture, String]
 pub fn ReadDocument::r12_semantics(Self) -> R12SemanticReport
 pub fn ReadDocument::read_status(Self) -> ReadStatus
 

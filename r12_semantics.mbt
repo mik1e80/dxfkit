@@ -59,6 +59,7 @@ pub(all) enum R12EntitySemantics {
     closed_m~ : Bool,
     closed_n~ : Bool
   )
+  FittedMesh(R12FittedMesh)
   /// Each face stores signed, one-based indices; a negative index hides its outgoing edge.
   Polyface(points~ : Array[Vec3], faces~ : Array[Array[Int]])
   Symbol(

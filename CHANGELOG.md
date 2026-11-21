@@ -2,6 +2,8 @@
 
 ## 0.2.0 开发版（2026-11-21）
 
+- 增加拟合网格控制框及已存采样面读取、INSERT 逐单元属性位置，以及标注图块、DIMSTYLE 和 DSTYLE 覆盖读取。见[三个 R12 语义案例](examples/r12-semantics/README.md)。
+
 - 增加 R12 空间多段线/网格、3DFACE 隐边、SHAPE、VIEWPORT MVIEW、DIMENSION 和属性关联的类型化读取。
 - 块名匹配忽略大小写，字段审计覆盖声明的 DIMSTYLE、APPID 和本地 XDATA 句柄。
 - 保存 FreeCAD、QCAD 和 NotoCAD 的 [AC1009 原始导出](examples/cad-ocs/README.md)，定向验证 OCS、阵列和视口字段。

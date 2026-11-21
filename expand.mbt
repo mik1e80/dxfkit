@@ -218,7 +218,7 @@ fn expand_entity_world(
       }
       if r.get_int(66, 0) == 1 {
         ctx.warnings.push(
-          "INSERT \{e.handle()} 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整",
+          "INSERT \{e.handle()} 的关联 ATTRIB 记录已保留，轮廓检查未覆盖属性排版；检查不完整",
         )
       }
       if path.any(p => p.block.to_upper() == name) {

@@ -148,10 +148,13 @@ fn insert_transform3(
     z: ocs.to_wcs(Vec3::new(0.0, 0.0, scale.z)),
     origin: Vec3::zero(),
   }
-  let grid = Vec3::new(
-    c * offset.x - s * offset.y,
-    s * offset.x + c * offset.y,
-    0.0,
-  )
+  let grid = insert_grid_vector(rotation, offset)
   { ..t, origin: ocs.to_wcs(add3(at, grid)).sub(t.vector(base)), }
+}
+
+///|
+fn insert_grid_vector(rotation : Double, offset : Vec3) -> Vec3 {
+  let c = @math.cos(rotation)
+  let s = @math.sin(rotation)
+  Vec3::new(c * offset.x - s * offset.y, s * offset.x + c * offset.y, 0.0)
 }

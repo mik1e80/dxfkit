@@ -9,9 +9,11 @@ fn r12_spatial(
 ) -> R12EntitySemantics raise R12SemanticError {
   let header = records[first]
   let mode = flags & 88
-  guard (mode == 8 || mode == 16 || mode == 64) &&
-    (flags & 6) == 0 &&
-    r12_integer(header, 75, Some(0)) == 0 else {
+  let fit = r12_integer(header, 75, Some(0))
+  if mode == 16 && fit != 0 {
+    return r12_fitted_mesh(records, first, flags, fit)
+  }
+  guard (mode == 8 || mode == 16 || mode == 64) && (flags & 6) == 0 && fit == 0 else {
     raise InvalidSemantic(
       "空间 POLYLINE 类型标志冲突或使用未实现的拟合",
     )

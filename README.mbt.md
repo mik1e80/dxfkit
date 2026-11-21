@@ -14,11 +14,15 @@
 
 `ReadDocument::r12_semantics()` 为 AC1009 返回空间折线和网格拓扑、SHAPE 参数、MVIEW、标注块和局部属性关联。`entries` 和 `findings` 均可回查 `records`，而 `complete` 表示本次遍历有没有受读取诊断或诊断预算影响。块内坐标在其所属空间中表示，需要图纸中的块变换时继续使用 `expand_world()`。详见[实体与关联矩阵](docs/r12-profile.md)。
 
+- `FittedMesh` 分开给出控制框和已存 WCS 样点。`quad(m,n)` 返回样点格四角，按闭合方向接缝。只有控制框的输入仍可读取，曲面采样为空。
+- `r12_cell_attributes(insert_record, row, column)` 按零起始行列查询一个单元。已存 ATTRIB 的位置只加网格偏移，常量 ATTDEF 使用含块基点的完整实例变换。结果附记录下标、锚点、对齐点与文字基向量，坐标位于该 INSERT 所在空间。
+- `r12_dimension_picture(record_index, tol)` 返回保存的标注图块、DIMSTYLE 记录关联、ACAD/DSTYLE 覆盖及已放置的图元。支持组 12 偏移和图块里的嵌套箭头，不参与二维轮廓检查。三个案例见[独立消费验证](examples/r12-semantics/README.md)。
+
 当前开发版默认启用`ReadLimits::default()`；可用`scan_tags_with_limits`、`read_document_with_limits`或`TagStream::with_limits`指定读取预算。超限保留部分扫描结果及明确警告，不可当完整文件；流式调用者见`is_limited()`应停止喂入。
 
 结构诊断现由`build_drawing`统一附到`Drawing.warnings`，因此`check`、`check_with_limits`与`analyze`均会报告。`Drawing::check_with_budget(opt, GeometryBudget)`给拓扑/相交/净距设置共享候选访问预算；展开预算独立，`CheckOptions`旧字段保持兼容。`Record::try_double/try_int`以`Ok(None)`表示缺失、`Err`表示类型错误；`require_*`也拒绝缺失，宽松`get_*`/`as_*`仅供旧调用方兼容。`try_int`接收I16/I32，不静默截断浮点/64位值。
 
-新业务使用`Entity::flatten_checked`取得错误原因；`Geometry::flatten_checked`为无实体坐标语义的局部入口。旧`flatten`和`spline_points`的回退结果不应用作完整检查证据。文字标签的字高为面积尺度近似，旋转/镜像/剪切、宽高和字形未忠实渲染；ATTRIB/ATTDEF完整布局与阵列复制未完成。XY数值域、各阶段预算及共用容差边界见[SECURITY](SECURITY.md)。
+新业务使用`Entity::flatten_checked`取得错误原因；`Geometry::flatten_checked`为无实体坐标语义的局部入口。旧`flatten`和`spline_points`的回退结果不应用作完整检查证据。文字标签的字高为面积尺度近似，旋转/镜像/剪切、宽高和字形未忠实渲染；AC1009 的阵列属性位置可由独立的读取 API 查询，文字标签仍为简化预览。XY数值域、各阶段预算及共用容差边界见[SECURITY](SECURITY.md)。
 
 单条多段线/样条内部或段分组达到诊断预算时会停止派生解析，并明确报告不完整；原始source/records仍保留其对应视图，不把恢复出的几何当完整验证。详细资源和模型边界见[维护记录](docs/maintenance-20261116.md)、[兼容性](docs/compatibility.md)及[模型验证层次](docs/testing.md)。
 
@@ -154,11 +158,11 @@ CLI `stats` 分块读文件、统计 tag、段、版本、编码，不保存全�
 
 ## 暂未实现
 
-二进制DXF、文件写回、通用编辑、全部R12必填字段和引用约束验证、完整HATCH边界、关联标注/属性布局重建、通用三维几何检查、字体转轮廓、刀路生成和参数化草图约束求解。OCS/WCS 与 INSERT 行列几何已实现，不再列作全未支持；受限实体和适用平面见矩阵。
+二进制DXF、文件写回、通用编辑、全部R12必填字段和引用约束验证、完整HATCH边界、标注自动重算和完整属性排版、通用三维几何检查、字体转轮廓、刀路生成和参数化草图约束求解。OCS/WCS 与 INSERT 行列几何已实现，不再列作全未支持；受限实体和适用平面见矩阵。
 
 ## 来源
 
 样条格式参考 [Autodesk SPLINE 文档](https://help.autodesk.com/cloudhelp/2026/ENU/AutoCAD-DXF/files/GUID-E1F884F8-AA90-4864-A215-3182D47A9C74.htm)；能力与公式参考 [ezdxf](https://ezdxf.readthedocs.io/en/stable/)；标准样条算法为节点插入、de Casteljau及de Boor。第三方版权、完整许可及已记录的参考关系见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 
 
-INSERT 非默认 OCS 现进入三维变换链。倾斜几何保留在 `expand_world`，二维入口依据转换后的平面诊断，禁止静默丢掉 Z。关联 ATTRIB 的完整布局/阵列复制尚未重建，会另行提示不完整。
+INSERT 非默认 OCS 现进入三维变换链。倾斜几何保留在 `expand_world`，二维入口依据转换后的平面诊断，禁止静默丢掉 Z。二维检查对关联属性保留覆盖提示。AC1009 单元内属性位置可另用 `r12_cell_attributes()` 查询。
