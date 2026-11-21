@@ -25,5 +25,6 @@ examples/cad-exports/** -text
 examples/cad-r12/models/** -text
 examples/cad-r12/actual/** text eol=lf
 web/licenses/whatwg-encoding.LICENSE -text
-examples/cad-ocs/spatial-circle.dxf -text
-examples/cad-ocs/spatial-circle.FCStd -text
+examples/cad-ocs/*.dxf -text -whitespace
+examples/cad-ocs/*.FCStd -text
+examples/cad-ocs/SHA256SUMS text eol=lf

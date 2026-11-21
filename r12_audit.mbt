@@ -7,6 +7,8 @@ pub(all) enum R12FieldIssue {
   AmbiguousBlock
   MissingTableEntry
   AmbiguousTableEntry
+  MissingLocalHandle
+  AmbiguousLocalHandle
 }
 
 ///|
@@ -25,20 +27,24 @@ pub(all) struct R12FieldAudit {
 }
 
 ///|
-/// Check only the common R12 geometry fields consumed by this library. An
-/// empty audit never certifies fields outside that scope.
+/// Check selected R12 geometry fields, declared table names, and local XDATA
+/// handle references. MissingLocalHandle describes this file only; external
+/// Xref databases are never opened.
 pub fn ReadDocument::audit_r12_fields(self : ReadDocument) -> R12FieldAudit {
   let findings : Array[R12FieldFinding] = []
   if self.profile != R12 {
     return { findings, complete: false, }
   }
   let blocks : Map[String, Int] = Map([])
+  let handles : Map[String, Int] = Map([])
   let tables : Map[String, Map[String, Int]] = Map([])
   let mut current_table = ""
   for r in self.records {
     if r.section == "TABLES" && r.kind == "TABLE" {
       current_table = r12_raw_name(r)
-      if ["LAYER", "LTYPE", "STYLE"].contains(current_table) &&
+      if ["LAYER", "LTYPE", "STYLE", "DIMSTYLE", "APPID"].contains(
+          current_table,
+        ) &&
         !tables.contains(current_table) {
         tables[current_table] = Map([])
       }
@@ -51,10 +57,23 @@ pub fn ReadDocument::audit_r12_fields(self : ReadDocument) -> R12FieldAudit {
         names[name] = names.get(name).unwrap_or(0) + 1
       }
     }
+    if ["TABLES", "ENTITIES", "BLOCKS"].contains(r.section) {
+      let code = if r.kind == "DIMSTYLE" { 105 } else { 5 }
+      for t in r.tags {
+        if t.code == code &&
+          t.value is Str(raw) &&
+          r12_handle_key(raw) is Some(key) &&
+          key != "0" {
+          handles[key] = handles.get(key).unwrap_or(0) + 1
+          break
+        }
+      }
+    }
     if r.section == "BLOCKS" && r.kind == "BLOCK" {
       for tag in r.tags {
         if tag.code == 2 && tag.value is Str(name) && name != "" {
-          blocks[name] = blocks.get(name).unwrap_or(0) + 1
+          let key = name.to_upper()
+          blocks[key] = blocks.get(key).unwrap_or(0) + 1
           break
         }
       }
@@ -104,7 +123,7 @@ pub fn ReadDocument::audit_r12_fields(self : ReadDocument) -> R12FieldAudit {
       } else if invalid {
         Some(InvalidField)
       } else if code == 2 && r.kind == "INSERT" {
-        match blocks.get(name) {
+        match blocks.get(name.to_upper()) {
           None => Some(MissingBlock)
           Some(count) => if count > 1 { Some(AmbiguousBlock) } else { None }
         }
@@ -119,9 +138,32 @@ pub fn ReadDocument::audit_r12_fields(self : ReadDocument) -> R12FieldAudit {
       }
     }
     for tag in r.tags {
+      if tag.code == 1005 {
+        let issue = match tag.value {
+          Str(value) =>
+            match r12_handle_key(value) {
+              Some("0") => continue
+              Some(key) =>
+                match handles.get(key) {
+                  None => MissingLocalHandle
+                  Some(count) if count > 1 => AmbiguousLocalHandle
+                  _ => continue
+                }
+              None => InvalidField
+            }
+          _ => InvalidField
+        }
+        if findings.length() == cap {
+          return { findings, complete: false, }
+        }
+        findings.push({ record_index: index, kind: r.kind, group: 1005, issue, })
+        continue
+      }
       let table = match tag.code {
+        3 if r.kind == "DIMENSION" => "DIMSTYLE"
         6 => "LTYPE"
-        8 => "LAYER"
+        8 | 1003 => "LAYER"
+        1001 => "APPID"
         7 if ["TEXT", "ATTDEF", "ATTRIB"].contains(r.kind) => "STYLE"
         _ => continue
       }
@@ -134,7 +176,8 @@ pub fn ReadDocument::audit_r12_fields(self : ReadDocument) -> R12FieldAudit {
           ["BYLAYER", "BYBLOCK", "CONTINUOUS"].contains(name)
         ) ||
         (table == "LAYER" && name == "0") ||
-        (table == "STYLE" && name == "STANDARD") {
+        (table == "APPID" && name == "ACAD") ||
+        ((table == "STYLE" || table == "DIMSTYLE") && name == "STANDARD") {
         continue
       }
       let issue = match entries.get(name) {
@@ -163,4 +206,22 @@ fn r12_raw_name(r : RawRecord) -> String {
     }
   }
   ""
+}
+
+///|
+fn r12_handle_key(raw : String) -> String? {
+  if raw.length() == 0 || raw.length() > 16 {
+    return None
+  }
+  let hex = raw.to_upper()
+  let mut start = 0
+  for c in hex {
+    if !(('0' <= c && c <= '9') || ('A' <= c && c <= 'F')) {
+      return None
+    }
+  }
+  while start + 1 < hex.length() && hex[start] == '0' {
+    start += 1
+  }
+  Some(hex[start:].to_owned())
 }

@@ -10,7 +10,9 @@
 
 `Drawing::check_with_tolerances({ curve, plane, comparison }, min_gap)` 分开指定离散、WCS 平面及几何比较容差。`Drawing::check_with_budgets()` 同时接收展开和候选预算。`Drawing::svg_with_limit(tol, max_bytes)` 超限返回 `SvgByteLimit`，默认限额为 32 MiB UTF-8。
 
-`ReadDocument::audit_r12_fields()` 对部分常用实体返回原始记录下标、组码和问题类别。`complete` 表示声明范围内的审计执行完毕，审计结果见 `findings`。`read_document_with_legacy_decoder` 和 `TagStream::with_legacy_decoder` 接收可信同步回调，为未内置的旧代码页提供字符串解码。回调返回 `None` 后扫描器会保留降级文本并告警。
+`ReadDocument::audit_r12_fields()` 对部分常用实体、已声明表项和本地 XDATA 句柄返回原始记录下标、组码和问题类别。`complete` 表示声明范围内的审计执行完毕，审计结果见 `findings`。`read_document_with_legacy_decoder` 和 `TagStream::with_legacy_decoder` 接收可信同步回调，为未内置的旧代码页提供字符串解码。回调返回 `None` 后扫描器会保留降级文本并告警。
+
+`ReadDocument::r12_semantics()` 为 AC1009 返回空间折线和网格拓扑、SHAPE 参数、MVIEW、标注块和局部属性关联。`entries` 和 `findings` 均可回查 `records`，而 `complete` 表示本次遍历有没有受读取诊断或诊断预算影响。块内坐标在其所属空间中表示，需要图纸中的块变换时继续使用 `expand_world()`。详见[实体与关联矩阵](docs/r12-profile.md)。
 
 当前开发版默认启用`ReadLimits::default()`；可用`scan_tags_with_limits`、`read_document_with_limits`或`TagStream::with_limits`指定读取预算。超限保留部分扫描结果及明确警告，不可当完整文件；流式调用者见`is_limited()`应停止喂入。
 

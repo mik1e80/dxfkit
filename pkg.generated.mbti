@@ -320,6 +320,58 @@ pub(all) struct PolyVertex {
   mut bulge : Double
 }
 
+pub(all) struct R12Attribute {
+  tag : String
+  value : String
+  prompt : String?
+  flags : Int
+  style : String
+  anchor : Vec3
+  alignment : Vec3?
+  normal : Vec3
+  thickness : Double
+  height : Double
+  rotation : Double
+  width_scale : Double
+  oblique : Double
+  generation_flags : Int
+  horizontal : Int
+  vertical : Int
+}
+
+pub(all) struct R12Dimension {
+  block_name : String
+  block : R12Link
+  style : String
+  flags : Int
+  definition : Vec3
+  text_midpoint : Vec3
+  block_offset : Vec3?
+  extension_start : Vec3?
+  extension_end : Vec3?
+  pick_or_vertex : Vec3?
+  arc_point : Vec3?
+  leader_length : Double?
+  rotation : Double?
+  horizontal_direction : Double?
+  oblique : Double?
+  text_rotation : Double?
+  text : String?
+}
+
+pub(all) enum R12EntitySemantics {
+  SpatialLine(start~ : Vec3, end~ : Vec3)
+  SpatialPolyline(points~ : Array[Vec3], closed~ : Bool)
+  PolygonMesh(points~ : Array[Vec3], m~ : Int, n~ : Int, closed_m~ : Bool, closed_n~ : Bool)
+  Polyface(points~ : Array[Vec3], faces~ : Array[Array[Int]])
+  Symbol(name~ : String, insertion~ : Vec3, size~ : Double, rotation~ : Double, x_scale~ : Double, oblique~ : Double, thickness~ : Double, extrusion~ : Vec3)
+  Viewport(center~ : Vec3, width~ : Double, height~ : Double, status~ : Int, id~ : Int, view~ : R12ViewportView?)
+  Dimension(R12Dimension)
+  FaceEdges(corners~ : Array[Vec3], invisible_mask~ : Int)
+  AttributeDefinition(data~ : R12Attribute, block_record~ : Int?)
+  Attribute(data~ : R12Attribute, insert_record~ : Int?, definition~ : R12Link)
+}
+
 pub(all) struct R12FieldAudit {
   findings : Array[R12FieldFinding]
   complete : Bool
@@ -340,6 +392,55 @@ pub(all) enum R12FieldIssue {
   AmbiguousBlock
   MissingTableEntry
   AmbiguousTableEntry
+  MissingLocalHandle
+  AmbiguousLocalHandle
+}
+
+pub(all) enum R12Link {
+  Resolved(Int)
+  Missing
+  Ambiguous
+}
+
+pub(all) struct R12SemanticEntry {
+  record_index : Int
+  entity : R12EntitySemantics
+}
+
+pub(all) struct R12SemanticFinding {
+  record_index : Int
+  message : String
+}
+
+pub(all) struct R12SemanticReport {
+  entries : Array[R12SemanticEntry]
+  findings : Array[R12SemanticFinding]
+  complete : Bool
+}
+
+pub(all) struct R12ViewportView {
+  target : Vec3
+  direction : Vec3
+  twist : Double
+  height : Double
+  center : Vec2
+  lens_length : Double
+  front_clip_z : Double
+  back_clip_z : Double
+  mode : Int
+  circle_zoom : Int
+  fast_zoom : Int
+  ucs_icon : Int
+  snap_on : Int
+  grid_on : Int
+  snap_style : Int
+  snap_iso_pair : Int
+  snap_angle : Double
+  snap_base : Vec2
+  snap_spacing : Vec2
+  grid_spacing : Vec2
+  hide_plot : Int
+  frozen_layers : Array[String]
 }
 
 pub(all) struct RawRecord {
@@ -358,6 +459,7 @@ pub(all) struct ReadDocument {
 }
 pub fn ReadDocument::audit_r12_fields(Self) -> R12FieldAudit
 pub fn ReadDocument::diagnostics(Self) -> Array[Diagnostic]
+pub fn ReadDocument::r12_semantics(Self) -> R12SemanticReport
 pub fn ReadDocument::read_status(Self) -> ReadStatus
 
 pub(all) struct ReadLimits {

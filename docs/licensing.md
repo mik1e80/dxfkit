@@ -11,7 +11,7 @@
 | MoonBit Core编译代码 | 按固定SDK所附许可与NOTICE | [Core许可](../web/licenses/moonbit-core.LICENSE)、[NOTICE](../web/licenses/moonbit-core.NOTICE)，网站构建携带副本 |
 | WHATWG 双字节编码索引 | 纳入源码的映射数据采用 BSD-3-Clause | [上游许可证](../web/licenses/whatwg-encoding.LICENSE)随浏览器产物分发，生成来源见[第三方声明](../THIRD_PARTY_NOTICES.md) |
 | moonbitlang/x、moonbitlang/async | 按依赖自身Apache-2.0许可，固定版本见[复现配置](../reproduction.json) | 包来源、版本及原有版权；不宣称项目拥有依赖版权 |
-| FreeCAD/OpenSCAD、编译器、其他开发工具 | 仅记录实际使用的外部工具；不把工具本身改为项目许可证 | 工具版本、下载来源和导出设置；本仓库不分发CAD应用二进制 |
+| FreeCAD、OpenSCAD、QCAD、NotoCAD、编译器和其他开发工具 | 仅记录实际使用的外部工具；不把工具本身改为项目许可证 | 工具版本、下载来源和导出设置；本仓库不分发CAD应用二进制 |
 
 47份历史语料的上游commit/blob未记录，清单中的null是未知事实；本地SHA-256只证明本仓库文件身份，不证明与当前上游一致，也不独立证明授权。不得猜测补填上游版本。新增第三方输入须先确认可再分发授权，保存固定上游提交、路径、许可和本地哈希；无法确认的材料先不纳入公开仓库。
 

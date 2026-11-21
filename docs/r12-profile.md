@@ -2,7 +2,7 @@
 
 2026-11-07新增读取/几何预算、统一结构诊断、字段/数值与厚度边界，见[安全整改](security-20261107.md)和[机器能力矩阵](capabilities.json)。读取层超限时原始source仍保留，派生记录可能仅为前缀；不能沿用无条件“全部字段保留”的解释。
 
-核对日期：2026-10-27。本文对应当前main的未发布0.2.0实现，不改写Mooncakes0.1.1或`submission-0.1.1-20261022-r2`的行为与验收记录。[本轮自查反馈整改](resubmission-20261027.md)记录新增结构诊断和接触误报修复。
+最近核对日期为 2026-11-21。本文对应当前main的未发布0.2.0实现，不改写Mooncakes0.1.1或`submission-0.1.1-20261022-r2`的行为与验收记录。[本轮自查反馈整改](resubmission-20261027.md)记录新增结构诊断和接触误报修复。
 
 项目定位为 **MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库**。选择 `$ACADVER=AC1009` 为明确基线，但目前不使用“完整符合 R12 标准”的表述：有序保留记录和字段，与逐实体验证全部必填字段、关联语义和几何重建，是不同工作。二进制 DXF、DWG、写回、完整 CAD 绘制和 CAM 决策不在范围内。
 
@@ -41,16 +41,21 @@
 | LINE、POINT | 全部 tag 及源字节 | WCS 端点/位置，父 INSERT 变换 | XY 线参与；点不作为闭合轮廓 |
 | CIRCLE、ARC | 同上 | OCS 平面曲线→WCS XYZ | 位于检查平面时参与 |
 | 普通二维 POLYLINE、VERTEX、SEQEND | 同上，序列控制记录不丢 | 顶点、bulge；使用 POLYLINE 头部标高，OCS→WCS | 中心线；宽度/厚度另报覆盖限制 |
-| 三维、拟合、网格/多面 POLYLINE 变体 | 同上 | 尚未重建，空间坐标保留在原字段 | 不参与，明确不完整 |
+| 三维、拟合、网格/多面 POLYLINE 变体 | 同上 | `r12_semantics()` 读取未拟合 3D 折线、M/N 顶点网格、Polyface 顶点与带符号的面索引。拟合变体给出诊断 | 空间结果由读取 API 返回，二维检查仍报告覆盖不足 |
 | SOLID、TRACE | 同上 | 局部同 Z 的角点按 0→1→3→2 形成边界后转 WCS；不改写原始顺序 | 零厚度且位于检查平面时参与 |
-| 3DFACE | 同上 | `Face3` 保留原顺序 WCS 角点及父变换 | 不推断二维切割边界 |
+| 3DFACE | 同上 | `Face3` 保留原顺序 WCS 角点及父变换。`FaceEdges` 提供 R12 隐边掩码 | 不推断二维切割边界 |
 | INSERT | 同上 | XYZ 基点、3轴缩放、旋转、OCS、行列与间距、嵌套和来源 | 已重建子轮廓按适用性检查 |
-| TEXT、ATTRIB、ATTDEF | 同上 | 已有文本与插入点的简化预览；适用字段转换 OCS | 字形不检查；多实例关联属性的完整布局尚未重建 |
-| SHAPE、VIEWPORT、DIMENSION、其他记录 | 同上 | 保留已有解码或原字段；完整显示、关联语义尚未实现 | 轮廓覆盖不足时提示不完整 |
+| TEXT、ATTRIB、ATTDEF | 同上 | 简化预览。类型化读取提供属性文字与样式字段、OCS 锚点/对齐点、所属 INSERT 和块内 ATTDEF 关联 | 完整字形、排版与每个阵列实例的属性复制尚未覆盖 |
+| SHAPE | 同上 | 读取符号名、大小、角度和参数，按 R12 的实体坐标系转换插入点 | 不加载 SHX |
+| VIEWPORT | 同上 | 读取图纸空间矩形、状态、编号，以及有序的 ACAD/MVIEW v16 相机和冻结图层数据 | 不渲染视口投影 |
+| DIMENSION | 同上 | 读取标注类型、定义点、文字和标注块引用。组 3 样式名可随字段审计校验 | 不重新求值或生成标注图形 |
+| 3DLINE 旧式兼容记录 | 同上 | 读取 XYZ 两端点。R12 文档中的标准直线类型为 LINE | 兼容记录的数据读取不扩大二维范围 |
 
 TABLES 中 LAYER、LTYPE、STYLE、VIEW、UCS、VPORT、DIMSTYLE、APPID，以及自定义/未知记录均由有序 RawRecord 保留。没有因为只做二维检查而删除这些记录；当前不承诺全部表项的约束、字体、视口、符号及扩展数据应用语义均已解释。
 
 ELLIPSE、SPLINE、LWPOLYLINE、HATCH、MTEXT 等不属于本 R12 标准实体集合；现有支持作为扩展保留，不将其混入 R12 符合性计数。非 XY 椭圆/空间样条不会用局部 XY 离散冒充 WCS 曲线。
+
+`r12_semantics()` 的 `complete` 表示语义遍历覆盖到文件尾且读取阶段无诊断。调用方同时检查 `findings`。输出的 `record_index` 与关联索引均指向 `ReadDocument.records`。参照 [Autodesk AutoCAD Release 12 DXF Reference](https://forums.autodesk.com/autodesk/attachments/autodesk/autocad-lt-forum-en/25135/1/DXF%20Reference.pdf) 的实体、标注和坐标系统章节。重点坐标和引用断言见 `r12_semantics_test.mbt`。[原生 CAD 模型](../examples/cad-ocs/README.md)另外保存实际导出字节与不同导出器的行为。
 
 ## 变换依据与方案修正
 

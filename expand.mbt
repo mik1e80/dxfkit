@@ -102,10 +102,11 @@ pub fn Drawing::expand_world_with_limits(
   let index : Map[String, Block] = Map([])
   let duplicates : Map[String, Bool] = Map([])
   for block in blocks.blocks {
-    if index.contains(block.name) {
-      duplicates[block.name] = true
+    let name = block.name.to_upper()
+    if index.contains(name) {
+      duplicates[name] = true
     } else {
-      index[block.name] = block
+      index[name] = block
     }
   }
   let ctx : ExpandCtx = {
@@ -195,13 +196,14 @@ fn expand_entity_world(
         )
         return
       }
-      if ctx.duplicates.contains(block) {
+      let name = block.to_upper()
+      if ctx.duplicates.contains(name) {
         ctx.warnings.push(
           "块名「\{block}」重复，引用含歧义；未展开，检查不完整",
         )
         return
       }
-      let b = match ctx.blocks.get(block) {
+      let b = match ctx.blocks.get(name) {
         Some(b) => b
         None => {
           ctx.warnings.push(
@@ -219,7 +221,7 @@ fn expand_entity_world(
           "INSERT \{e.handle()} 的关联 ATTRIB 记录已保留，完整属性布局/阵列复制未重建；检查不完整",
         )
       }
-      if path.any(p => p.block == block) {
+      if path.any(p => p.block.to_upper() == name) {
         ctx.warnings.push(
           "INSERT \{e.handle()} 的块「\{block}」在展开链上重复出现（循环引用），已截断",
         )

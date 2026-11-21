@@ -18,7 +18,7 @@
 - 离散七类既有核心轮廓及受限 SOLID/TRACE；对落在 WCS Z=0 检查平面的几何辅助检查闭合、自交、重复、退化和指定净距，输出报告和 SVG。
 - 未重建语义、关联属性布局、非检查平面、损坏输入及资源截断明确报告不完整；`--strict` 将警告作为失败。
 
-**原始记录保留不等于完整 R12 标准符合性。** 全部必填字段、引用约束、SHAPE/VIEWPORT/空间网格等完整语义、字形和标注重建仍未完成；HATCH、ELLIPSE、SPLINE、LWPOLYLINE 等按声明的非 R12 扩展处理。不提供写回、DWG、刀路或可加工性认证。详见[读取终点与分层矩阵](docs/r12-profile.md)。
+`ReadDocument::r12_semantics()` 读取空间 POLYLINE/网格拓扑、3DFACE 隐边、SHAPE 位置、VIEWPORT/MVIEW、DIMENSION 定义点与标注块，以及 INSERT 属性序列。完整 R12 字段符合性、外部资源、字形、标注与视口渲染仍未覆盖。HATCH、ELLIPSE、SPLINE、LWPOLYLINE 按非 R12 扩展处理。详见[读取终点与分层矩阵](docs/r12-profile.md)。
 
 ## 快速运行
 
@@ -52,6 +52,7 @@ moon run cli svg examples/plate.dxf > plate.svg
 | 证据 | 可确认的内容 |
 | --- | --- |
 | [六份 AC1009 模型](examples/r12-validation/README.md) | 行列、缩放、旋转、XYZ 基点、嵌套与 OCS；22实例、132个坐标分量对照 |
+| [真实 CAD 的 OCS 与阵列](examples/cad-ocs/README.md) | NotoCAD 倾斜圆保留非默认法向，FreeCAD 导出反例省略法向。QCAD dxflib 保留 6 个 INSERT 单元并通过 36 个坐标分量断言 |
 | [第三方阵列专项](examples/r12-validation/EXTERNAL.md) | 25个FLAG的100个WCS顶点、25个圆采样；独立格式审计与解析数学对照分开记录 |
 | [十类参数模型](examples/model-validation/README.md) | 正常板、孔、弧、椭圆、bulge、样条、块、图层、错误和覆盖限制；[实际总结](examples/model-validation/SUMMARY.md) |
 | [47文件逐层记录](docs/corpus-validation.md) | 读取、解码、展开与诊断回归；整图独立真值仍为0/47，专项部分验证单列 |

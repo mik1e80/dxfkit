@@ -42,7 +42,7 @@ jobs:
           ulimit -v 1048576
           timeout --kill-after=5s 45s /usr/bin/time -f 'peak_rss_kib=%M' "$benchmark" > _build/resource-benchmark.txt 2>&1
           cat _build/resource-benchmark.txt
-      - name: 重放实际 CAD 空间圆反例
+      - name: 重放真实 CAD 的 OCS、阵列和 VIEWPORT 案例
         if: github.event.inputs.validation != 'full'
         run: |
           sha256sum --check examples/cad-ocs/SHA256SUMS

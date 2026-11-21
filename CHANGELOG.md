@@ -1,5 +1,11 @@
 # 变更记录
 
+## 0.2.0 开发版（2026-11-21）
+
+- 增加 R12 空间多段线/网格、3DFACE 隐边、SHAPE、VIEWPORT MVIEW、DIMENSION 和属性关联的类型化读取。
+- 块名匹配忽略大小写，字段审计覆盖声明的 DIMSTYLE、APPID 和本地 XDATA 句柄。
+- 保存 FreeCAD、QCAD 和 NotoCAD 的 [AC1009 原始导出](examples/cad-ocs/README.md)，定向验证 OCS、阵列和视口字段。
+
 ## 0.2.0 开发版（2026-11-20）
 
 - 增加 ANSI_936 双字节解码、其他旧代码页回调及坏编码诊断，拒绝数值字段中的非法字节。
