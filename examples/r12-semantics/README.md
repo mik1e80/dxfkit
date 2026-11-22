@@ -72,7 +72,7 @@ moon run examples/r12-semantics/runner --target wasm --deny-warn -- paragraph pa
 
 ### 旧版 CAD 曲面的证据
 
-核对了 LibreDWG 的 R11 归档中的三份 ASCII DXF。三份都是 AC1009，`Constraints_12.dxf` 没有 POLYLINE，`entities-2d.dxf` 和 `entities-3d.dxf` 各有一个普通 POLYLINE，组码 70 和 75 均缺省或为零。本轮又查到 FlySong 的 AC1009 激光切割文件，其两条闭合 POLYLINE 的组码 70 均为 1，均无组码 75。考古论文《Visualising Danebury》记载使用 GRASS 生成 DXF 输入和 AutoCAD 曲面，公开档案中未找到对应的原始拟合 DXF 及授权。迄今仍缺可核实由旧版 CAD 原生导出、同时保留拟合控制框与采样点的文件。[FlySong 原件](https://github.com/janelia-experimental-technology/FlySong/blob/d5d611d2937f28aef9fb42064c50096401d9a7d6/Mechanical/LaserCuts/laserMesh.dxf) · [Danebury 论文](https://proceedings.caaconference.org/files/1997/43_Earl_CAA_1997.pdf)[归档文件](https://github.com/LibreDWG/libredwg/tree/27e828d212852b8cd08c1cd5d2721e5b738ca8a9/test/test-data/r11)
+核对了 LibreDWG 的 R11 归档中的三份 ASCII DXF。三份都是 AC1009，`Constraints_12.dxf` 没有 POLYLINE，`entities-2d.dxf` 和 `entities-3d.dxf` 各有一个普通 POLYLINE，组码 70 和 75 均缺省或为零。本轮又查到 FlySong 的 AC1009 激光切割文件，其两条闭合 POLYLINE 的组码 70 均为 1，均无组码 75。考古论文《Visualising Danebury》记载使用 GRASS 生成 DXF 输入和 AutoCAD 曲面，公开档案中未找到对应的原始拟合 DXF 及授权。迄今仍缺可核实由旧版 CAD 原生导出、同时保留拟合控制框与采样点的文件。[FlySong 原件](https://github.com/janelia-experimental-technology/FlySong/blob/d5d611d2937f28aef9fb42064c50096401d9a7d6/Mechanical/LaserCuts/laserMesh.dxf) · [Danebury 论文](https://proceedings.caaconference.org/files/1997/43_Earl_CAA_1997.pdf) · [LibreDWG 归档](https://github.com/LibreDWG/libredwg/tree/27e828d212852b8cd08c1cd5d2721e5b738ca8a9/test/test-data/r11)
 
 继续检查了 UK VR-SIG 的 13 份历史 DXF。三份为 AC1009，其中 `balloon.dxf`、`lights.dxf` 各有两个多边形网格，组码 75 均缺省或不属于拟合类型 5、6、8。另查阅了 Simtel 于 1992 年公开归档的 `STREK.DXF`，其 4324 条 POLYLINE 均只有普通轮廓标志（0 或 1），没有拟合网格。这些外部文件仅用于筛查，仓库只记录来源及结果。[UK VR-SIG 档案](https://www.martinreddy.net/ukvrsig/ftp.html) · [Simtel 档案](https://infania.net/misc/simtelnet/msdos/autocad.html)
 
@@ -81,3 +81,12 @@ moon run examples/r12-semantics/runner --target wasm --deny-warn -- compare-mesh
 ```
 
 命令输出记录下标、M/N 序号和 WCS 欧氏误差。取得授权原件后可替换输入，另外记录 CAD 软件版本、导出设置、来源、许可、SHA-256、网格尺寸、闭合位及容差。
+
+又检查了 JSCAD 样例库的 10 份候选。AC1009 的 heart.dxf 只有一条非网格 POLYLINE，pyramid-base.dxf 的 60 个多边形网格均未拟合，文件版本为 AC1014。AeroHydro 的 1998 年手册记录了 PEDIT 曲面拟合及早期 AutoCAD 示例，但未取得其中含控制点和拟合样点且有许可说明的原始 DXF。 [JSCAD 样例目录](https://github.com/jscad/sample-files/tree/master/dxf) · [AeroHydro 手册](https://www.aerohydro.com/msdownload/test/MS48Manual/1f-MS40Apps.pdf)
+
+#### 在授权的旧版 CAD 中取得可分发的证据
+
+[自建控制框](legacy-refit-input.dxf)按 Apache-2.0 分发。它有一个 5×4 开放多边形网格，保留 20 个输入点。该文件只用于输入测试，拟合采样须由 CAD 生成。本地定向验证已核对网格类型、顺序、尺寸及坐标。
+
+1. 在有权使用的旧版 CAD 中导入控制框。对支持这些命令的 AutoCAD 版本，设置 `SURFTYPE=6`、`SURFU=7`、`SURFV=6`，选中图层 `FITINPUT` 的唯一网格，执行 `PEDIT` 的 Smooth Surface，再用 `DXFOUT` 导出未改写的 ASCII DXF。保留 CAD 版本、导出选项、操作记录和文件哈希。密度设置与导出的实际样点数分别记录。 [Autodesk PEDIT 网格选项](https://help.autodesk.com/cloudhelp/2023/ENU/AutoCAD-MAC-Core/files/GUID-88A3C094-3001-439D-8AE8-6F57412AFE70.htm) · [AutoCAD R12 DXF 参考](https://damassets.autodesk.net/content/dam/autodesk/www/developer-network/platform-technologies/autocad-dxf-archive/acad_r12_dxf.pdf)
+2. 用上面的 `compare-mesh` 命令读取原始导出。确认父网格的拟合类型和控制点数、样点数均符合实际导出，再保存导出文件、许可依据及逐点 CSV。真实证据以实际采样结果为准，即使超出容差也应保留原始差异。当前仍未取得该导出。

@@ -200,5 +200,6 @@ fn main raise {
   bidi_case()
   tolerance_stacking_case()
   drawing_avoid_case()
+  legacy_mesh_export_input()
   refit_comparison_case()
 }
