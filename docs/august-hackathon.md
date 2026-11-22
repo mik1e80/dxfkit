@@ -3,7 +3,7 @@
 **项目：** MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库；[公开源码](https://github.com/mik1e80/dxfkit)，Apache-2.0。参赛者于2026-11-16反馈报名初审已通过；本页转为项目范围记录，不表示当前开发版已通过最终验收。
 
 ## 已有基础
-已有 Mooncakes [0.1.1](https://mooncakes.io/docs/mik1e80/dxfkit)、实体解码与轮廓检查 API、CLI/SVG、独立消费示例、测试和 CI。当前源码为未发布的 0.2.0 开发版；新增 API 与安全防护不能用旧发布版或历史 Pages 演示替代验证。
+已有 Mooncakes [0.1.1](https://mooncakes.io/docs/mik1e80/dxfkit)、实体解码与轮廓检查 API、CLI/SVG、独立消费示例、测试和 CI。新增 API 与安全防护见[0.2.0 发布与验收证据](acceptance-0.2.0.md)。历史 Pages 演示的版本另有记录。
 
 ## 本次新增成果与技术路线
 在已有库上新增预算范围内的 R12/AC1009 源字节及有序记录保留、结构诊断、OCS→WCS、INSERT 全行列展开与来源链；统一检查不完整诊断，增加读取/几何资源预算及网页 Worker。流程为字节→Tag/RawRecord/Drawing→实体与世界坐标→适用的二维轮廓→Report/SVG。以上是截至 2026-11-14 的实际开发成果，不冒充在八月报名期限内完成；计入活动的工作范围由主办方确认。

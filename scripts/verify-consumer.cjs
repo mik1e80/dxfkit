@@ -21,6 +21,7 @@ const r12 = args.includes('--r12');
 const unpacked = option('--library', null);
 assert(!registry || !unpacked, '--library and --registry select different sources');
 const profile = require('../reproduction.json');
+const legacyVersion = profile.legacy_consumer_version ?? profile.published_version;
 const example = path.join(root, 'examples/consumer');
 const temporaryRoot = fs.realpathSync(os.tmpdir());
 const work = fs.mkdtempSync(path.join(temporaryRoot, 'dxfkit-consumer-'));
@@ -43,7 +44,7 @@ try {
     fs.copyFileSync(path.join(example, 'r12-check/r12_consumer_test.mbt'), path.join(work, 'r12_consumer_test.mbt'));
     fs.copyFileSync(path.join(root, 'examples/r12-validation/models/06-ocs-array.dxf'), path.join(work, 'fixtures/ocs-array.dxf'));
     const manifest = path.join(work, 'moon.mod');
-    const old = `${profile.module}@${profile.published_version}`;
+    const old = `${profile.module}@${legacyVersion}`;
     const source = fs.readFileSync(manifest, 'utf8');
     assert(source.includes(old), 'Consumer dependency pin differs from the release profile');
     fs.writeFileSync(manifest, source.replace(old, `${profile.module}@${profile.version}`));
@@ -80,7 +81,7 @@ try {
       assert(found, 'Consumer failed to resolve dxfkit');
       if (registry) assert.equal(found.source.kind, 'registry', 'Consumer must resolve dxfkit from registry');
       else assert.notEqual(found.source.kind, 'registry', 'Consumer must resolve the supplied source');
-      assert.equal(found.version, r12 || !registry ? profile.version : profile.published_version, 'Unexpected resolved version');
+      assert.equal(found.version, r12 || !registry ? profile.version : legacyVersion, 'Unexpected resolved version');
       resolvedLibrary = {module: found.name, version: found.version, source: found.source.kind};
     }
     if (r12) run('r12-records-ocs-array', ['test', '--package', 'example/dxfkit-consumer', '--file', 'r12_consumer_test.mbt', '--target', target,

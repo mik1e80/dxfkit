@@ -1,6 +1,6 @@
 # dxfkit — MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库
 
-把 ASCII DXF 转为可访问的原始记录、实体字段、WCS XYZ、受支持的二维轮廓、诊断和 SVG，供其他 MoonBit 程序、CLI 和浏览器使用。当前 main 为 **未发布的 0.2.0 开发版**，以 AC1009 为 R12 记录读取配置；其他版本按已实现能力尽力读取。
+把 ASCII DXF 转为可访问的原始记录、实体字段、WCS XYZ、受支持的二维轮廓、诊断和 SVG，供其他 MoonBit 程序、CLI 和浏览器使用。当前可安装版本为 [0.2.0](https://mooncakes.io/docs/mik1e80/dxfkit%400.2.0)，以 AC1009 为 R12 记录读取配置；其他版本按已实现能力尽力读取。
 
 [接口与迁移](README.mbt.md) · [R12 范围矩阵](docs/r12-profile.md) · [本轮维护与验证](docs/maintenance-20261120.md) · [许可与模型来源](docs/licensing.md)
 
@@ -37,11 +37,11 @@ moon run cli svg examples/plate.dxf > plate.svg
 
 | 版本 | 身份与可用入口 | 验证范围 |
 | --- | --- | --- |
-| 当前 main / 0.2.0 开发版 | 本提交的代码、README、项目说明、PDF及当前证据；新增 R12 API 尚未发布 | `targeted-r12` 定向 CI，明确 `full_suite_run=false`；精确 SHA 见同提交 CI 和构建清单 |
+| 已发布 0.2.0 | [Mooncakes](https://mooncakes.io/docs/mik1e80/dxfkit%400.2.0)，[发布源码 bb8d70a](https://github.com/mik1e80/dxfkit/commit/bb8d70ac166a7a60775ecb5d869e7f9913331d96) | [完整验收与注册表验证](docs/acceptance-0.2.0.md) |
 | 已发布 0.1.1 | [Mooncakes](https://mooncakes.io/docs/mik1e80/dxfkit)，发布源 `dc3acc8` | [发布及 registry 消费记录](docs/mooncakes-0.1.1.md)；不包含新 R12 API |
 | 历史 r2 | [固定标签](https://github.com/mik1e80/dxfkit/tree/submission-0.1.1-20261022-r2)，源码 `94509f3`；[线上演示](https://mik1e80.github.io/dxfkit/) | [历史完整 CI #26](https://github.com/mik1e80/dxfkit/actions/runs/39761104538)，不用于证明当前 R12 已完成全量验收 |
 
-安装已发布包使用 `moon add mik1e80/dxfkit@0.1.1`。在 0.2.0 候选阶段，使用新增 R12 API 请检出当前源码；[独立消费工程](examples/consumer/README.md)区分 registry 与本地源码模式。当前修改不覆盖历史标签、不发布 0.2.0，也不自动替换旧演示。
+安装当前发布版使用 `moon add mik1e80/dxfkit@0.2.0`。独立消费工程可重跑注册表版本和本地源码的验证，网页演示的版本见上表。 [独立消费工程](examples/consumer/README.md)
 
 ## 模型与正确性证据
 
@@ -77,9 +77,9 @@ node scripts/verify-advisor.cjs
 
 ## 审阅与申报材料
 
-[0.2.0 候选验收证据](docs/acceptance-0.2.0.md) · [发布与验收流程](docs/release-process.md) · [当前项目说明](docs/submission.md) · [退回意见响应](docs/review-response.md) · [证据索引](docs/resubmission-evidence.md) · [材料导航](docs/verification-guide.md) · [路线图](docs/roadmap.md)
+[0.2.0 发布与验收证据](docs/acceptance-0.2.0.md) · [发布与验收流程](docs/release-process.md) · [当前项目说明](docs/submission.md) · [退回意见响应](docs/review-response.md) · [证据索引](docs/resubmission-evidence.md) · [材料导航](docs/verification-guide.md) · [路线图](docs/roadmap.md)
 
-当前材料描述0.2.0开发候选；初审状态来自参赛者反馈，不代替当前源码的功能验证或最终验收。主赛退回响应及一页PDF保留其原修订背景，当前维护变化见上方维护记录；本仓库修改不代表已更新报名表。
+当前项目说明对应 0.2.0；初审状态来自参赛者反馈，不代替当前源码的功能验证或最终验收。主赛退回响应及一页PDF保留其原修订背景，当前维护变化见上方维护记录；本仓库修改不代表已更新报名表。
 
 ## 许可
 

@@ -19,14 +19,15 @@ moon run . --target wasm --deny-warn -- fixtures/normal.dxf --strict
 
 ## 通过 Mooncakes 使用
 
-独立工程保留 `moon.mod`、`moon.pkg`、`main.mbt` 和 `fixtures/`，不复制 `moon.work`。模块依赖固定为 `mik1e80/dxfkit@0.1.1`，由 registry 解析，不引用本仓库源码。仓库根目录执行以下定向验证会自动复制出独立工程，并核对依赖树来源与八项用例：
+仓库根目录执行下列命令会创建独立工程，从 Mooncakes 固定安装 `mik1e80/dxfkit@0.2.0`，核对依赖来源并运行九项用例。R12 用例通过公开 API 检查 AC1009 原始记录、非默认 OCS、阵列列号和 WCS 端点。
 
 ```sh
 moon update
-node scripts/verify-consumer.cjs --registry
+node scripts/verify-consumer.cjs --registry --r12
+node scripts/verify-consumer.cjs --registry --r12 --target native
 ```
 
-该命令需要已发布的固定版本及网络，不能用本地工作区的通过结果替代。
+验证需要访问 Mooncakes。省略 `--r12` 可重跑 `0.1.1` 的八项历史兼容用例。
 
 正常样例的关键输出：
 

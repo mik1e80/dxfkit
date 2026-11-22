@@ -1,6 +1,6 @@
 {
   "schema":"dxfkit-capabilities-v1",
-  "version":"0.2.0-unpublished",
+  "version":"0.2.0",
   "baseline":"AC1009 record profile; not complete R12 semantic certification",
   "read_boundary":"within ReadLimits; source caller-owned; exhaustion incomplete",
   "check_plane":"WCS Z=0; CheckOptions shares tolerance; CheckTolerances can separate curve/plane/comparison",

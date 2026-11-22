@@ -4,7 +4,7 @@
 
 **名称：** MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库。
 **项目方向：** 工业软件基础库／开发者工具；[GitHub源码](https://github.com/mik1e80/dxfkit)。
-**当前身份：** main中的未发布0.2.0开发版；本文、[一页PDF](../output/pdf/dxfkit-submission-one-page.pdf)、代码及本轮证据随同一提交保存，精确SHA见该提交CI。历史r2与已发布0.1.1分别保留，不作为当前R12全量验收证明。
+**当前身份：** Mooncakes 0.2.0 已发布。固定提交、工程验证与注册表结果见[发布与验收证据](acceptance-0.2.0.md)。[一页PDF](../output/pdf/dxfkit-submission-one-page.pdf)保留此前重审背景。
 
 ## 用途与交付终点
 为MoonBit程序提供ASCII DXF原始记录读取、选择性实体解码、OCS/WCS和块实例展开、受限二维轮廓及辅助报告，服务图纸导入、预览与CAM前人工复核。
@@ -19,10 +19,10 @@ INSERT处理全部行列、XYZ基点、缩放、旋转、OCS和八层内嵌套�
 ## 测试、文档与真实证据
 六份AC1009模型保存22实例、132坐标分量的设计对照；第三方阵列专项核对25个FLAG、100个WCS顶点及25个圆采样，另以ezdxf1.4.4作格式审计；不把格式审计当坐标真值。
 十类参数模型、47文件回归、真实CLI报告/SVG、接口调用工程及三份既有CAD导出记录可复核。[当前证据索引](resubmission-evidence.md)区分整图认证、部分几何验证和不变量回归。
-CI覆盖格式/API、类型检查、受影响库测试、含两个曾失败用例的语料子集及网页回归；本轮为targeted-r12，不运行或宣称整仓库全量验收。
+CI覆盖格式/API、类型检查、受影响库测试、含两个曾失败用例的语料子集及网页回归；日常使用 targeted-r12。0.2.0 固定提交通过四后端测试和同提交完整 CI。
 
 ## 来源、差异与边界
 核心由MoonBit实现；参考Autodesk格式资料、标准曲线算法及MIT许可的ezdxf资料/语料，来源与许可证见[第三方声明](../THIRD_PARTY_NOTICES.md)；项目采用Apache-2.0。
 对比包含现有MoonBit DXF读写模块，独立贡献是记录来源、坐标/块实例、轮廓和完整性诊断的组合；[生态比较](../COMPARISON.md)不宣称唯一。
 尚未完成全部R12必填字段/引用约束、完整关联属性/视口/网格/字形/标注语义；不提供DWG、写回、刀路或可加工性认证。是否认可该明确交付终点需主办方判断；[退回响应](review-response.md)不写成已通过审核。
-Mooncakes0.1.1已发布，0.2.0与新增R12 API尚未发布；[线上演示](https://mik1e80.github.io/dxfkit/)仍为历史r2。Gitlink同步及报名信息由参赛者自行核对，本轮只更新GitHub材料和代码。
+[Mooncakes 0.2.0](https://mooncakes.io/docs/mik1e80/dxfkit%400.2.0)包含新增 R12 API；[线上演示](https://mik1e80.github.io/dxfkit/)仍为历史r2。Gitlink同步及报名信息由参赛者自行核对，本轮只更新GitHub材料和代码。
