@@ -182,6 +182,10 @@ fn main raise {
     inspect_mesh_refit(args[2], args[3])
     return
   }
+  if args.length() >= 4 && args[1] == "paragraph" {
+    inspect_paragraph(args[2], [ for i in 3..<args.length() => args[i] ])
+    return
+  }
   mesh()
   attributes()
   dimension()
@@ -192,5 +196,9 @@ fn main raise {
   advanced_fonts()
   bound_style_cases()
   styled_dimensions()
+  vertical_bigfont_case()
+  bidi_case()
+  tolerance_stacking_case()
+  drawing_avoid_case()
   refit_comparison_case()
 }

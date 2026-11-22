@@ -20,6 +20,10 @@ fn styled_dimensions() -> Unit raise {
     fail("expected distinct arrows from scaled blocks")
   }
   assert_eq(fit.arrows.length(), 0)
+  guard fit.r12_dimension_obstacles() is Ok(mark_boxes) else {
+    fail("expected dimension obstacle boxes")
+  }
+  assert_eq(mark_boxes.length(), 5)
   assert_xyz(first[0], 0.0, 4.0, 0.0)
   assert_xyz(first[1], 1.0, 4.0, 0.0)
   assert_xyz(second[1], 8.0, 5.0, 0.0)
@@ -175,6 +179,14 @@ fn positioned_file(path : String) -> Array[@dxfkit.R12PositionedGlyph] raise {
   guard parsed is Array(rows) && rows.length() <= 65536 else {
     fail("expected a bounded JSON array of shaped glyphs")
   }
+  positioned_rows(rows)
+}
+
+///|
+fn positioned_rows(
+  rows : Array[Json],
+) -> Array[@dxfkit.R12PositionedGlyph] raise {
+  guard rows.length() <= 65536 else { fail("too many positioned glyphs") }
   let glyphs : Array[@dxfkit.R12PositionedGlyph] = []
   for row in rows {
     guard row

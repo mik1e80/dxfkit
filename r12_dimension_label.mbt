@@ -1,20 +1,20 @@
 ///|
-fn r12_dimension_label(
+fn r12_dimension_label_parts(
   doc : ReadDocument,
   raw : RawRecord,
   dim : R12Dimension,
   value : Double,
   angular : Bool,
   precision : Int,
-) -> String? raise R12SemanticError {
+) -> Array[R12DimensionLabelPart] raise R12SemanticError {
   if dim.text is Some(" ") {
-    return None
+    return []
   }
   if dim.text is Some(custom) && custom != "" && !custom.contains("<>") {
     guard custom.length() <= 65536 else {
       raise InvalidSemantic("标注文字超过长度预算")
     }
-    return Some(custom)
+    return [LabelText(custom)]
   }
   let style : RawRecord? = match
     r12_table_link(doc.records, "DIMSTYLE", dim.style) {
@@ -60,19 +60,15 @@ fn r12_dimension_label(
       _ => raise InvalidSemantic("DIMZIN 类型无效")
     }
   }
-  let number = if angular {
-    r12_decimal_label(numeric, precision, suppress)
+  let base : Array[R12DimensionLabelPart] = if angular {
+    [LabelText(r12_decimal_label(numeric, precision, suppress) + "°")]
   } else {
-    r12_dimension_number(numeric, precision, suppress, read)
-  }
-  let base = if angular {
-    number + "°"
-  } else {
-    match dim.flags & 15 {
-      3 => "⌀" + number
-      4 => "R" + number
-      _ => number
+    let prefix = match dim.flags & 15 {
+      3 => "⌀"
+      4 => "R"
+      _ => ""
     }
+    r12_dimension_number(numeric, precision, suppress, read, prefix~)
   }
   let display = if angular {
     base
@@ -81,12 +77,9 @@ fn r12_dimension_label(
       None | Some(Str("")) => base
       Some(Str(post)) =>
         if post.contains("<>") {
-          r12_replace_dimension_text(post, base)
+          r12_replace_dimension_parts(post, base, "<>")
         } else {
-          guard post.length() <= 65536 - base.length() else {
-            raise InvalidSemantic("标注文字超过长度预算")
-          }
-          base + post
+          r12_append_dimension_parts(base, [LabelText(post)])
         }
       _ => raise InvalidSemantic("DIMPOST 类型无效")
     }
@@ -103,21 +96,29 @@ fn r12_dimension_label(
       factor~,
     )
     match read(4, "$DIMAPOST") {
-      None | Some(Str("")) => display + " [" + alternate + "]"
+      None | Some(Str("")) =>
+        r12_append_dimension_parts(
+          display,
+          [LabelText(" ["), ..alternate, LabelText("]")],
+        )
       Some(Str(post)) if post.contains("[]") =>
-        display + " " + r12_replace_dimension_text(post, alternate, marker="[]")
-      Some(Str(post)) => display + " [" + alternate + post + "]"
+        r12_append_dimension_parts(
+          display,
+          [LabelText(" "), ..r12_replace_dimension_parts(post, alternate, "[]")],
+        )
+      Some(Str(post)) =>
+        r12_append_dimension_parts(
+          display,
+          [LabelText(" ["), ..alternate, LabelText(post), LabelText("]")],
+        )
       _ => raise InvalidSemantic("DIMAPOST 类型无效")
     }
   } else {
     display
   }
-  guard display.length() <= 65_536 else {
-    raise InvalidSemantic("标注文字超过长度预算")
-  }
   match dim.text {
-    Some(text) if text != "" => Some(r12_replace_dimension_text(text, display))
-    _ => Some(display)
+    Some(text) if text != "" => r12_replace_dimension_parts(text, display, "<>")
+    _ => display
   }
 }
 
@@ -141,30 +142,54 @@ fn r12_dimension_number(
   suppress : Int,
   read : (Int, String) -> TagValue? raise R12SemanticError,
   factor? : Double = 1.0,
-) -> String raise R12SemanticError {
-  let base = r12_decimal_label(value * factor, places, suppress)
+  prefix? : String = "",
+) -> Array[R12DimensionLabelPart] raise R12SemanticError {
+  let base = prefix + r12_decimal_label(value * factor, places, suppress)
   let tolerance = r12_label_int(read(71, "$DIMTOL"), 0, 1) == 1
   let limits = r12_label_int(read(72, "$DIMLIM"), 0, 1) == 1
   if !tolerance && !limits {
-    return base
+    return [LabelText(base)]
   }
   guard !(tolerance && limits) else {
     raise InvalidSemantic("DIMTOL 与 DIMLIM 同时启用")
   }
   let plus = r12_label_real(read(47, "$DIMTP"), 0.0)
   let minus = r12_label_real(read(48, "$DIMTM"), 0.0)
+  let height_factor = r12_label_real(read(146, "$DIMTFAC"), 1.0)
+  guard height_factor > 0.0 else {
+    raise InvalidSemantic("DIMTFAC 必须为正数")
+  }
   if limits {
     let high = r12_decimal_label((value + plus) * factor, places, suppress)
     let low = r12_decimal_label((value - minus) * factor, places, suppress)
-    high + " / " + low
+    [
+      ToleranceStack(
+        upper=prefix + high,
+        lower=Some(prefix + low),
+        height_factor~,
+        limits=true,
+      ),
+    ]
   } else if plus == minus && plus >= 0.0 {
-    base + " ±" + r12_decimal_label(plus * factor, places, suppress)
+    let upper = "±" + r12_decimal_label(plus * factor, places, suppress)
+    [
+      LabelText(base + " "),
+      ToleranceStack(upper~, lower=None, height_factor~, limits=false),
+    ]
   } else {
     let high = r12_decimal_label(plus * factor, places, suppress)
     let low = r12_decimal_label(-minus * factor, places, suppress)
     let high_sign = if high.has_prefix("-") { "" } else { "+" }
     let low_sign = if low.has_prefix("-") { "" } else { "+" }
-    base + " " + high_sign + high + "/" + low_sign + low
+    [
+      LabelText(base + " "),
+      ToleranceStack(
+        upper=high_sign + high,
+        lower=Some(low_sign + low),
+        height_factor~,
+        limits=false,
+      ),
+    ]
   }
 }
 
@@ -247,24 +272,82 @@ fn r12_decimal_label(
 }
 
 ///|
-fn r12_replace_dimension_text(
+fn r12_replace_dimension_parts(
   template : String,
-  value : String,
-  marker? : String = "<>",
-) -> String raise R12SemanticError {
-  let maximum = 65_536
-  guard template.length() <= maximum else {
+  parts : Array[R12DimensionLabelPart],
+  marker : StringView,
+) -> Array[R12DimensionLabelPart] raise R12SemanticError {
+  guard template.length() <= 65536 else {
     raise InvalidSemantic("标注文字超过长度预算")
   }
-  let mut count = 0
-  for i in 0..<(template.length() - 1) {
-    if template[i] == marker[0] && template[i + 1] == marker[1] {
-      count += 1
+  let output = []
+  let payload = r12_parts_length(parts)
+  let mut size = 0
+  let mut first = true
+  for chunk in template.split(marker) {
+    size += chunk.length()
+    if !first {
+      size += payload
+      guard size <= 65536 else {
+        raise InvalidSemantic("标注文字超过长度预算")
+      }
+      output.append(parts)
+    }
+    first = false
+    if !chunk.is_empty() {
+      output.push(LabelText(chunk.to_owned()))
     }
   }
-  let literal_length = template.length() - count * 2
-  guard count == 0 || value.length() <= (maximum - literal_length) / count else {
-    raise InvalidSemantic("标注文字替换后超过长度预算")
+  output
+}
+
+///|
+fn r12_append_dimension_parts(
+  left : Array[R12DimensionLabelPart],
+  right : Array[R12DimensionLabelPart],
+) -> Array[R12DimensionLabelPart] raise R12SemanticError {
+  guard r12_parts_length(left) <= 65536 - r12_parts_length(right) else {
+    raise InvalidSemantic("标注文字超过长度预算")
   }
-  template.replace_all(old=marker, new=value)
+  let result = left.copy()
+  result.append(right)
+  result
+}
+
+///|
+fn r12_parts_length(parts : Array[R12DimensionLabelPart]) -> Int {
+  let mut size = 0
+  for part in parts {
+    size += match part {
+      LabelText(text) => text.length()
+      ToleranceStack(upper~, lower~, limits~, ..) =>
+        upper.length() +
+        (match lower {
+          Some(text) => text.length() + (if limits { 3 } else { 1 })
+          None => 0
+        })
+    }
+  }
+  size
+}
+
+///|
+fn r12_flat_dimension_label(parts : Array[R12DimensionLabelPart]) -> String? {
+  if parts.is_empty() {
+    return None
+  }
+  let buf = StringBuilder()
+  for part in parts {
+    match part {
+      LabelText(text) => buf.write_string(text)
+      ToleranceStack(upper~, lower~, limits~, ..) => {
+        buf.write_string(upper)
+        if lower is Some(text) {
+          buf.write_string(if limits { " / " } else { "/" })
+          buf.write_string(text)
+        }
+      }
+    }
+  }
+  Some(buf.to_string())
 }

@@ -15,6 +15,7 @@ pub(all) struct R12DimensionUpdate {
   value : Double
   angular : Bool
   label : String?
+  label_parts : Array[R12DimensionLabelPart]
   text_at : Vec3
   lines : Array[(Vec3, Vec3)]
   arc : R12DimensionArc?
@@ -65,7 +66,7 @@ fn r12_recompute_dimension_impl(
   let dim = definition.unwrap_or(original)
   let ocs = r12_extrusion(r)
   let result = r12_measure(dim, ocs, tol)
-  let label = r12_dimension_label(
+  let label_parts = r12_dimension_label_parts(
     doc,
     r,
     dim,
@@ -73,7 +74,8 @@ fn r12_recompute_dimension_impl(
     result.angular,
     precision,
   )
-  { ..result, label, }
+  let label = r12_flat_dimension_label(label_parts)
+  { ..result, label, label_parts, }
 }
 
 ///|
@@ -265,7 +267,15 @@ fn r12_measure(
     ) else {
     raise InvalidSemantic("重算后的标注几何超出有限坐标")
   }
-  { value, angular, label: None, text_at, lines: world_lines, arc: world_arc, }
+  {
+    value,
+    angular,
+    label: None,
+    label_parts: [],
+    text_at,
+    lines: world_lines,
+    arc: world_arc,
+  }
 }
 
 ///|

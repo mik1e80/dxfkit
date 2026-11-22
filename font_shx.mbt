@@ -7,6 +7,7 @@ pub struct R12ShxFont {
   priv unicode : Bool
   priv big_width : Double?
   priv big_extended : Bool
+  priv vertical_mode : Bool
 }
 
 ///|
@@ -74,6 +75,7 @@ fn shx_load(file : FontBytes) -> R12ShxFont raise FontError {
     unicode: false,
     big_width: None,
     big_extended: false,
+    vertical_mode: false,
   }
 }
 
@@ -85,6 +87,7 @@ priv struct ShxPen {
   mut at : Vec2
   mut scale : Double
   mut drawing : Bool
+  vertical : Bool
   budget : FontBudget
 }
 
@@ -311,7 +314,7 @@ fn shx_execute(
           shx_arc(state, state.at.sub(radial), radial, sweep, None)
         }
       }
-      14 => skip = active
+      14 => skip = active && !state.vertical
       _ if command >= 16 =>
         if active {
           let d = command & 15
@@ -399,5 +402,6 @@ fn shx_unicode(file : FontBytes) -> R12ShxFont raise FontError {
     unicode: true,
     big_width: None,
     big_extended: false,
+    vertical_mode: false,
   }
 }

@@ -11,7 +11,7 @@
 | MoonBit Core编译代码 | 按固定SDK所附许可与NOTICE | [Core许可](../web/licenses/moonbit-core.LICENSE)、[NOTICE](../web/licenses/moonbit-core.NOTICE)，网站构建携带副本 |
 | WHATWG 双字节编码索引 | 纳入源码的映射数据采用 BSD-3-Clause | [上游许可证](../web/licenses/whatwg-encoding.LICENSE)随浏览器产物分发，生成来源见[第三方声明](../THIRD_PARTY_NOTICES.md) |
 | moonbitlang/x、moonbitlang/async | 按依赖自身Apache-2.0许可，固定版本见[复现配置](../reproduction.json) | 包来源、版本及原有版权；不宣称项目拥有依赖版权 |
-| [自建 R12 字体和样式案例](../examples/r12-semantics/README.md) | 字体、DXF、适配脚本及自建字体的整形数据采用 Apache-2.0 | HarfBuzz 外部包使用自身许可，系统 Arial 字体和外部 CAD 图纸仅作本地核对或索引，仓库无这些原件 |
+| [自建 R12 字体和样式案例](../examples/r12-semantics/README.md) | 字体、DXF、适配脚本及自建字体的整形数据采用 Apache-2.0 | HarfBuzz、bidi-js、unicode-properties 的 npm 包各使用自身 MIT 许可，系统 Arial 字体和外部 CAD 图纸仅作本地核对或索引，仓库无这些原件 |
 | FreeCAD、OpenSCAD、QCAD、NotoCAD、编译器和其他开发工具 | 仅记录实际使用的外部工具；不把工具本身改为项目许可证 | 工具版本、下载来源和导出设置；本仓库不分发CAD应用二进制 |
 
 47份历史语料的上游commit/blob未记录，清单中的null是未知事实；本地SHA-256只证明本仓库文件身份，不证明与当前上游一致，也不独立证明授权。不得猜测补填上游版本。新增第三方输入须先确认可再分发授权，保存固定上游提交、路径、许可和本地哈希；无法确认的材料先不纳入公开仓库。

@@ -41,7 +41,46 @@ pub fn ReadDocument::r12_layout_attribute(
   if self.profile != R12 {
     return Err("属性字形排版需要 AC1009")
   }
-  Ok(r12_layout_attribute_impl(self, attribute, shape, max_points)) catch {
+  Ok(r12_layout_attribute_impl(self, attribute, shape, max_points, false)) catch {
+    InvalidSemantic(message) => Err(message)
+  }
+}
+
+///|
+/// Place a vertical BIGFONT column using the attribute's OCS-derived basis.
+/// Horizontal Fit and Aligned would rescale a column by its width and are excluded.
+pub fn ReadDocument::r12_layout_vertical_attribute(
+  self : ReadDocument,
+  attribute : R12CellAttribute,
+  shape : (R12FontStyle, String) -> R12VerticalGlyphRun?,
+  max_points? : Int = 100_000,
+) -> Result[R12GlyphLayout, String] {
+  if self.profile != R12 {
+    return Err("竖排属性字形排版需要 AC1009")
+  }
+  if attribute.data.horizontal == 3 || attribute.data.horizontal == 5 {
+    return Err("竖排 BIGFONT 不使用水平 Fit / Aligned")
+  }
+  Ok(
+    r12_layout_attribute_impl(
+      self,
+      attribute,
+      (style, value) => {
+        match shape(style, value) {
+          Some(run) if finite_number(run.advance) && run.advance >= 0.0 =>
+            Some({
+              paths: run.paths,
+              advance: run.width,
+              ascent: 0.0,
+              descent: run.advance,
+            })
+          _ => None
+        }
+      },
+      max_points,
+      true,
+    ),
+  ) catch {
     InvalidSemantic(message) => Err(message)
   }
 }
@@ -52,6 +91,7 @@ fn r12_layout_attribute_impl(
   attribute : R12CellAttribute,
   shape : (R12FontStyle, String) -> R12GlyphRun?,
   max_points : Int,
+  column : Bool,
 ) -> R12GlyphLayout raise R12SemanticError {
   let data = attribute.data
   if (data.flags & 1) != 0 {
@@ -129,7 +169,13 @@ fn r12_layout_attribute_impl(
     data.height * data.width_scale
   }
   let sy = if horizontal == 3 { sx / data.width_scale } else { data.height }
-  let shift_x = if horizontal == 1 || horizontal == 4 {
+  let shift_x = if column {
+    if horizontal == 2 {
+      run.advance * 0.5
+    } else {
+      0.0
+    }
+  } else if horizontal == 1 || horizontal == 4 {
     run.advance * 0.5
   } else if horizontal == 2 {
     run.advance

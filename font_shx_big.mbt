@@ -44,12 +44,13 @@ fn shx_bigfont(file : FontBytes) -> R12ShxFont raise FontError {
   let remaining = info.size - start
   let above = info.u8(start).to_double()
   guard above > 0.0 &&
-    (remaining == 4 || remaining == 5) &&
-    info.u8(info.size - 1) == 0 &&
-    info.u8(start + 2) <= 1 else {
-    raise InvalidFont("仅支持采用横排笔画的 BIGFONT 度量记录")
+    (remaining >= 3 && remaining <= 5) &&
+    info.u8(info.size - 1) == 0 else {
+    raise InvalidFont("BIGFONT 度量记录无效")
   }
-  let below = info.u8(start + 1).to_double()
+  let mode = info.u8(start + (if remaining == 3 { 1 } else { 2 }))
+  guard mode <= 2 else { raise InvalidFont("BIGFONT 书写模式未知") }
+  let below = if remaining == 3 { 0.0 } else { info.u8(start + 1).to_double() }
   let width = if remaining == 5 {
     let w = info.u8(start + 3).to_double()
     guard below == 0.0 && w > 0.0 else {
@@ -66,6 +67,7 @@ fn shx_bigfont(file : FontBytes) -> R12ShxFont raise FontError {
     unicode: false,
     big_width: Some(width),
     big_extended: remaining == 5,
+    vertical_mode: mode != 0,
   }
 }
 
@@ -84,6 +86,7 @@ fn shx_glyph(
     at: Vec2::new(advance, 0.0),
     scale: 1.0 / font.above,
     drawing: font.big_width is None,
+    vertical: false,
     budget,
   }
   shx_execute(font, id, state, 0)
@@ -162,6 +165,7 @@ fn shx_primitive(
     at: Vec2::new(0.0, 0.0),
     scale: 1.0,
     drawing: true,
+    vertical: parent.vertical,
     budget: parent.budget,
   }
   shx_execute(font, id, child, depth + 1)

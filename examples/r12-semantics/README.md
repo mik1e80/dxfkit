@@ -33,9 +33,9 @@
 | [编辑绑定与样式](bound-style.dxf) | 句柄 A0 的线段端点从 10 改到 14 后，D1 的标注重算为 14。验证句柄缺失和重复、文字高度、颜色、间隙、箭头及延伸线抑制。 |
 | [逐点误差](mesh-compare.dxf) | 9 个 M-major WCS 点中，仅中心点人为加入 0.125 偏差。比较器返回 9 个误差、最大误差 0.125、索引 4、超差数 1。此案例为自建数值真值。 |
 
-TrueType 支持单 sfnt、Unicode cmap 4/12、二次轮廓、XY 偏移和实际轮廓点附件。幻点、hinting、字体变化轴、CFF 保留为边界。BIGFONT 读横排索引与已覆盖的扩展原语，`bigfont_run()` 接收调用者指定的 Unicode 到双字节字形编号映射。换码表不替调用者扫描原始文字，竖排和厂商特有的模式未验证。[OpenType 格式](https://learn.microsoft.com/en-us/typography/opentype/spec/glyf) · [SHX 笔画定义](https://help.autodesk.com/cloudhelp/2024/ENU/AutoCAD-Customization/files/GUID-06832147-16BE-4A66-A6D0-3ADF98DC8228.htm) · [BIGFONT 原语定义](https://help.autodesk.com/cloudhelp/2015/ENU/AutoCAD-Customization/files/GUID-00ED0CC6-A4BE-4591-93FA-598CC40AA43D.htm) · [BIGFONT 容器索引对照](https://github.com/mlightcad/shx-parser/blob/main/src/contentParser.ts)
+TrueType 支持单 sfnt、Unicode cmap 4/12、二次轮廓、XY 偏移和实际轮廓点附件。幻点、hinting、字体变化轴、CFF 保留为边界。BIGFONT 读横排索引与已覆盖的扩展原语，`bigfont_run()` 接收调用者指定的 Unicode 到双字节字形编号映射。调用方提供原始编码到字形编号的映射。竖排支持传统条件指令 14 和下移命令，厂商专用模式尚未验证。[OpenType 格式](https://learn.microsoft.com/en-us/typography/opentype/spec/glyf) · [SHX 笔画定义](https://help.autodesk.com/cloudhelp/2024/ENU/AutoCAD-Customization/files/GUID-06832147-16BE-4A66-A6D0-3ADF98DC8228.htm) · [BIGFONT 原语定义](https://help.autodesk.com/cloudhelp/2015/ENU/AutoCAD-Customization/files/GUID-00ED0CC6-A4BE-4591-93FA-598CC40AA43D.htm) · [BIGFONT 容器索引对照](https://github.com/mlightcad/shx-parser/blob/main/src/contentParser.ts)
 
-关联由编辑器保存，R12 DXF 可缺少与源实体的连结。重渲染支持默认闭合箭头、短划及本地平面图块箭头，以及 ACI 颜色、延伸线偏移、抑制与文字高度。直线布局使用调用方传入的实际宽度，空间不足时将相应部分移出，尊重 `DIMTIX` 和 `DIMSOXD`。容差与替代单位以单行十进制文本返回。完整堆叠排版、绘图中的全局避碰和跨图元引线仍取决于上层渲染。[Autodesk 的 R12 降版限制](https://help.autodesk.com/cloudhelp/2022/ENU/AutoCAD-Core/files/GUID-C36C0AF2-6925-4E7F-BDAD-F57897D837B2.htm)
+关联由编辑器保存，R12 DXF 可缺少与源实体的连结。重渲染支持默认闭合箭头、短划及本地平面图块箭头，以及 ACI 颜色、延伸线偏移、抑制与文字高度。直线布局使用调用方传入的实际宽度，空间不足时将相应部分移出，尊重 `DIMTIX` 和 `DIMSOXD`。容差和替代单位同时提供单行文本与可测量的堆叠片段。整图避碰返回标签位置。前端负责绘制文字轮廓及跨图元引线。[Autodesk 的 R12 降版限制](https://help.autodesk.com/cloudhelp/2022/ENU/AutoCAD-Core/files/GUID-C36C0AF2-6925-4E7F-BDAD-F57897D837B2.htm)
 
 ### 用实际整形器重放
 
@@ -49,9 +49,30 @@ moon run examples/r12-semantics/runner --target wasm --deny-warn -- shape exampl
 
 HarfBuzz 14.3.0 实际输出与提交的 [整形数据](shaped-attachment.json) 一致。另用本机 Arial 和阿拉伯文 `السَّلَام`（RTL、`Arab`、`ar`）联调，得到 7 个字形、9 条轮廓、归一化前进宽度约 2.629175，含零前进宽度和非零偏移的附标。系统字体由运行环境提供，仓库分发的字体均为可按 Apache-2.0 使用的自建案例。[HarfBuzz API](https://github.com/harfbuzz/harfbuzzjs)
 
+### 竖排、整段双向与标注避碰
+
+| 案例 | 独立预期 |
+| --- | --- |
+| [自建竖排 BIGFONT](fixture-bigfont-vertical.shx) | `中A中` 触发 14 后的竖排原语，A 使用普通 SHX。三个字形合计下移 5.2，第一条路径起点为 (0.2, −0.8)，经倾斜属性坐标基放置后为 WCS (9.8, 10, 1.2)。横排跳过同一原语。 |
+| [回退字体](fixture-hebrew.ttf) · [整段数据](shaped-paragraph.json) | 对 `אב AB אב`，以首个希伯来字确定 RTL 段落。消费者验证视觉顺序为尾段、Latin 连字、首段，字体下标依次是 1、0、1。两种自建字体合成 8 条轮廓，总前进宽度 13。 |
+| [堆叠容差](advanced-dimension.dxf) | 主字号 2 时，`DIMTFAC=0.6` 得到字号 1.2 的上下容差行（+0.20、−0.10），含行距的高度 2.52。替代单位也堆叠，单行字符串兼容原用法。 |
+| [整图标签避碰](drawing-label-avoid.dxf) | 两条图线和两个标签共同占位。第一个标签向下移到 (0, −2)，第二个保留 (0, 2)。案例另外断言原位阻挡和检查预算耗尽的两种状态。 |
+
+`bigfont_vertical_run()` 的原点是列顶端中心，Y 向上。它按竖排指令取负 Y 下移，普通 SHX 回退保留直立造型。列可通过 `r12_layout_vertical_attribute()` 放置到属性坐标系。字体文件和自建 DXF 均采用 [Apache-2.0](../../LICENSE)。[Autodesk 指令说明](https://help.autodesk.com/cloudhelp/2022/ENU/AutoCAD-Customization/files/GUID-06832147-16BE-4A66-A6D0-3ADF98DC8228.htm)
+
+[整段适配器](shape-paragraph.mjs)以 bidi-js 1.0.3 的 Unicode 13 数据解析方向和视觉顺序，以字素簇选择 TrueType 回退，按区段交给 HarfBuzz 整形。一个完整的脚本区段优先由单一字体整形。缺字报告 UTF-16 位置。入口处理一段未折行的文字，使用调用方明确提供的字体路径。已用本机 Arial 复查 `AB السَّلَام AB`，得到三个区段和 13 条轮廓。系统字体与 npm 包不随仓库分发。[Unicode 双向算法](https://unicode.org/reports/tr9/) · [bidi-js](https://github.com/lojjic/bidi-js)
+
+```sh
+npm install --prefix ./hb-example --no-audit --ignore-scripts harfbuzzjs@1.5.0 bidi-js@1.0.3 unicode-properties@1.4.1
+node examples/r12-semantics/shape-paragraph.mjs ./hb-example auto "אב AB אב" examples/r12-semantics/fixture-attachment.ttf examples/r12-semantics/fixture-hebrew.ttf > paragraph.json
+moon run examples/r12-semantics/runner --target wasm --deny-warn -- paragraph paragraph.json examples/r12-semantics/fixture-attachment.ttf examples/r12-semantics/fixture-hebrew.ttf
+```
+
+整图避碰先用 `layout_text()` 测量堆叠片段，再用 `WorldExpansion::r12_dimension_obstacles()` 和 `R12StyledDimension::r12_dimension_obstacles()` 取得 WCS XY 保守包围盒。调用方补充实测文字盒，并传入全部标签与障碍。搜索按输入优先级选择有限网格位置，只移动标签中心。圆弧、斜边的保守包围盒可能阻挡其实可用的区域。画线联动、引线、三维避碰和全局最优解未覆盖。
+
 ### 旧版 CAD 曲面的证据
 
-核对了 LibreDWG 的 R11 归档中的三份 ASCII DXF。三份都是 AC1009，`Constraints_12.dxf` 没有 POLYLINE，`entities-2d.dxf` 和 `entities-3d.dxf` 各有一个普通 POLYLINE，组码 70 和 75 均缺省或为零。目前仍缺可核实由旧版 CAD 原生导出、同时保留拟合控制框与采样点的文件。[归档文件](https://github.com/LibreDWG/libredwg/tree/27e828d212852b8cd08c1cd5d2721e5b738ca8a9/test/test-data/r11)
+核对了 LibreDWG 的 R11 归档中的三份 ASCII DXF。三份都是 AC1009，`Constraints_12.dxf` 没有 POLYLINE，`entities-2d.dxf` 和 `entities-3d.dxf` 各有一个普通 POLYLINE，组码 70 和 75 均缺省或为零。本轮又查到 FlySong 的 AC1009 激光切割文件，其两条闭合 POLYLINE 的组码 70 均为 1，均无组码 75。考古论文《Visualising Danebury》记载使用 GRASS 生成 DXF 输入和 AutoCAD 曲面，公开档案中未找到对应的原始拟合 DXF 及授权。迄今仍缺可核实由旧版 CAD 原生导出、同时保留拟合控制框与采样点的文件。[FlySong 原件](https://github.com/janelia-experimental-technology/FlySong/blob/d5d611d2937f28aef9fb42064c50096401d9a7d6/Mechanical/LaserCuts/laserMesh.dxf) · [Danebury 论文](https://proceedings.caaconference.org/files/1997/43_Earl_CAA_1997.pdf)[归档文件](https://github.com/LibreDWG/libredwg/tree/27e828d212852b8cd08c1cd5d2721e5b738ca8a9/test/test-data/r11)
 
 ```sh
 moon run examples/r12-semantics/runner --target wasm --deny-warn -- compare-mesh examples/r12-semantics/mesh-compare.dxf 0.01

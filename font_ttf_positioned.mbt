@@ -35,9 +35,63 @@ pub fn R12TrueType::positioned_run(
   tol? : Double = 0.001,
   max_work? : Int = 100_000,
 ) -> Result[R12GlyphRun, String] {
-  Ok(ttf_positioned(self, glyphs, tol, max_work)) catch {
+  r12_positioned_fonts([{ font: self, glyphs, }], tol~, max_work~)
+}
+
+///|
+/// One shaped span in visual order, paired with the exact font face used to shape it.
+pub(all) struct R12PositionedFontRun {
+  font : R12TrueType
+  glyphs : Array[R12PositionedGlyph]
+}
+
+///|
+/// Join fallback spans in visual order under one outline budget. Each face
+/// uses its own cap-height normalization and shares the horizontal baseline.
+pub fn r12_positioned_fonts(
+  runs : Array[R12PositionedFontRun],
+  tol? : Double = 0.001,
+  max_work? : Int = 100_000,
+) -> Result[R12GlyphRun, String] {
+  Ok(ttf_positioned_spans(runs, tol, max_work)) catch {
     InvalidFont(msg) => Err(msg)
   }
+}
+
+///|
+fn ttf_positioned_spans(
+  runs : Array[R12PositionedFontRun],
+  tol : Double,
+  max_work : Int,
+) -> R12GlyphRun raise FontError {
+  guard positive_tolerance(tol) &&
+    max_work > 0 &&
+    max_work <= 2_000_000 &&
+    runs.length() <= max_work else {
+    raise InvalidFont("整形结果超过工作预算或容差无效")
+  }
+  let budget = { remaining: max_work, }
+  let paths : Array[Array[Vec2]] = []
+  let mut advance = 0.0
+  let mut ascent = 0.0
+  let mut descent = 0.0
+  for run in runs {
+    budget.take(1)
+    let shaped = ttf_positioned(run.font, run.glyphs, tol, budget)
+    let offset = Vec2::new(advance, 0.0)
+    for path in shaped.paths {
+      if advance != 0.0 {
+        budget.take(path.length())
+        paths.push(path.map(p => p.add(offset)))
+      } else {
+        paths.push(path)
+      }
+    }
+    advance += shaped.advance
+    ascent = ascent.max(shaped.ascent)
+    descent = descent.max(shaped.descent)
+  }
+  { paths, advance, ascent, descent, }
 }
 
 ///|
@@ -45,15 +99,11 @@ fn ttf_positioned(
   font : R12TrueType,
   glyphs : Array[R12PositionedGlyph],
   tol : Double,
-  max_work : Int,
+  budget : FontBudget,
 ) -> R12GlyphRun raise FontError {
-  guard positive_tolerance(tol) &&
-    max_work > 0 &&
-    max_work <= 2_000_000 &&
-    glyphs.length() <= max_work else {
-    raise InvalidFont("整形结果超过工作预算或容差无效")
+  guard glyphs.length() <= budget.remaining else {
+    raise InvalidFont("整形结果超过工作预算")
   }
-  let budget = { remaining: max_work, }
   let paths : Array[Array[Vec2]] = []
   let mut pen = Vec2::new(0.0, 0.0)
   for g in glyphs {

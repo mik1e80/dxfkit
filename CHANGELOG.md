@@ -1,5 +1,9 @@
 # 变更记录
 
+## 0.2.0 开发版（2026-11-22）
+
+- 增加竖排 BIGFONT 条件指令与属性放置、整段双向和字体回退示例、堆叠容差及整图 XY 标签避碰。见[定向案例与边界](examples/r12-semantics/README.md)。
+
 ## 0.2.0 开发版（2026-11-21）
 
 - 扩展横排 BIGFONT、TrueType 点对点轮廓附件和 HarfBuzz 整形结果接入。标注新增本地自定义箭头、十进制容差/极限、替代单位和直线短跨距布局。增加[定向案例和逐点 CSV 入口](examples/r12-semantics/README.md)。

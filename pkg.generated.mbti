@@ -50,6 +50,10 @@ pub fn point_code_parts(Int) -> (Int, Int)?
 
 pub fn polyline_points(Array[PolyVertex], Bool, Double) -> Array[Vec2]
 
+pub fn r12_avoid_dimension_labels(Array[R12DimensionLabelBox], Array[Aabb2], Double, clearance? : Double, rings? : Int, max_checks? : Int) -> Result[Array[R12DimensionLabelPosition], String]
+
+pub fn r12_positioned_fonts(Array[R12PositionedFontRun], tol? : Double, max_work? : Int) -> Result[R12GlyphRun, String]
+
 pub fn read_document(Bytes) -> ReadDocument
 
 pub fn read_document_with_legacy_decoder(Bytes, ReadLimits, (Int, Bytes) -> String?) -> ReadDocument
@@ -397,6 +401,22 @@ pub(all) struct R12DimensionBinding {
   anchors : Array[R12DimensionAnchor]
 }
 
+pub(all) struct R12DimensionLabelBox {
+  center : Vec2
+  size : Vec2
+}
+
+pub(all) enum R12DimensionLabelPart {
+  LabelText(String)
+  ToleranceStack(upper~ : String, lower~ : String?, height_factor~ : Double, limits~ : Bool)
+}
+
+pub(all) enum R12DimensionLabelPosition {
+  LabelPlaced(Vec2)
+  LabelBlocked(Vec2)
+  LabelSearchLimited(Vec2)
+}
+
 pub(all) struct R12DimensionPicture {
   block_record : Int
   style_record : R12Link
@@ -412,14 +432,27 @@ pub(all) enum R12DimensionSlot {
   ArcPoint
 }
 
+pub(all) struct R12DimensionTextFragment {
+  text : String
+  at : Vec2
+  height : Double
+}
+
+pub(all) struct R12DimensionTextLayout {
+  fragments : Array[R12DimensionTextFragment]
+  size : Vec2
+}
+
 pub(all) struct R12DimensionUpdate {
   value : Double
   angular : Bool
   label : String?
+  label_parts : Array[R12DimensionLabelPart]
   text_at : Vec3
   lines : Array[(Vec3, Vec3)]
   arc : R12DimensionArc?
 }
+pub fn R12DimensionUpdate::layout_text(Self, Double, (String, Double) -> Double) -> Result[R12DimensionTextLayout, String]
 
 pub(all) enum R12EntitySemantics {
   SpatialLine(start~ : Vec3, end~ : Vec3)
@@ -521,6 +554,11 @@ pub(all) enum R12MeshFit {
   Bezier
 }
 
+pub(all) struct R12PositionedFontRun {
+  font : R12TrueType
+  glyphs : Array[R12PositionedGlyph]
+}
+
 pub(all) struct R12PositionedGlyph {
   glyph_id : Int
   x_advance : Double
@@ -549,6 +587,7 @@ pub struct R12ShxFont {
   // private fields
 }
 pub fn R12ShxFont::bigfont_run(Self, Self, String, (Char) -> Int?, max_work? : Int) -> Result[R12GlyphRun, String]
+pub fn R12ShxFont::bigfont_vertical_run(Self, Self, String, (Char) -> Int?, max_work? : Int) -> Result[R12VerticalGlyphRun, String]
 pub fn R12ShxFont::glyph_run(Self, String, map? : (Char) -> Int, max_work? : Int) -> Result[R12GlyphRun, String]
 
 pub(all) struct R12StyledDimension {
@@ -565,6 +604,7 @@ pub(all) struct R12StyledDimension {
   extension_color : Int
   text_color : Int
 }
+pub fn R12StyledDimension::r12_dimension_obstacles(Self) -> Result[Array[Aabb2], String]
 
 pub struct R12TrueType {
   glyphs : Int
@@ -577,6 +617,12 @@ pub struct R12TrueType {
 }
 pub fn R12TrueType::glyph_run(Self, String, tol? : Double, max_work? : Int) -> Result[R12GlyphRun, String]
 pub fn R12TrueType::positioned_run(Self, Array[R12PositionedGlyph], tol? : Double, max_work? : Int) -> Result[R12GlyphRun, String]
+
+pub(all) struct R12VerticalGlyphRun {
+  paths : Array[Array[Vec2]]
+  advance : Double
+  width : Double
+}
 
 pub(all) struct R12ViewportView {
   target : Vec3
@@ -622,6 +668,7 @@ pub fn ReadDocument::diagnostics(Self) -> Array[Diagnostic]
 pub fn ReadDocument::r12_cell_attributes(Self, Int, Int, Int) -> Result[Array[R12CellAttribute], String]
 pub fn ReadDocument::r12_dimension_picture(Self, Int, Double, limits? : ExpandLimits) -> Result[R12DimensionPicture, String]
 pub fn ReadDocument::r12_layout_attribute(Self, R12CellAttribute, (R12FontStyle, String) -> R12GlyphRun?, max_points? : Int) -> Result[R12GlyphLayout, String]
+pub fn ReadDocument::r12_layout_vertical_attribute(Self, R12CellAttribute, (R12FontStyle, String) -> R12VerticalGlyphRun?, max_points? : Int) -> Result[R12GlyphLayout, String]
 pub fn ReadDocument::r12_recompute_dimension(Self, Int, Double, definition? : R12Dimension, precision? : Int) -> Result[R12DimensionUpdate, String]
 pub fn ReadDocument::r12_refresh_bound_dimension(Self, R12DimensionBinding, Double, precision? : Int) -> Result[R12DimensionUpdate, String]
 pub fn ReadDocument::r12_render_dimension(Self, Int, R12DimensionUpdate, label_width? : Double) -> Result[R12StyledDimension, String]
@@ -794,6 +841,7 @@ pub(all) struct WorldExpansion {
   placed : Array[WorldPlaced]
   warnings : Array[String]
 }
+pub fn WorldExpansion::r12_dimension_obstacles(Self, Double, max_boxes? : Int) -> Result[Array[Aabb2], String]
 
 pub(all) enum WorldFlat {
   Outline3(points~ : Array[Vec3], closed~ : Bool)
