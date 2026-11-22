@@ -74,6 +74,8 @@ moon run examples/r12-semantics/runner --target wasm --deny-warn -- paragraph pa
 
 核对了 LibreDWG 的 R11 归档中的三份 ASCII DXF。三份都是 AC1009，`Constraints_12.dxf` 没有 POLYLINE，`entities-2d.dxf` 和 `entities-3d.dxf` 各有一个普通 POLYLINE，组码 70 和 75 均缺省或为零。本轮又查到 FlySong 的 AC1009 激光切割文件，其两条闭合 POLYLINE 的组码 70 均为 1，均无组码 75。考古论文《Visualising Danebury》记载使用 GRASS 生成 DXF 输入和 AutoCAD 曲面，公开档案中未找到对应的原始拟合 DXF 及授权。迄今仍缺可核实由旧版 CAD 原生导出、同时保留拟合控制框与采样点的文件。[FlySong 原件](https://github.com/janelia-experimental-technology/FlySong/blob/d5d611d2937f28aef9fb42064c50096401d9a7d6/Mechanical/LaserCuts/laserMesh.dxf) · [Danebury 论文](https://proceedings.caaconference.org/files/1997/43_Earl_CAA_1997.pdf)[归档文件](https://github.com/LibreDWG/libredwg/tree/27e828d212852b8cd08c1cd5d2721e5b738ca8a9/test/test-data/r11)
 
+继续检查了 UK VR-SIG 的 13 份历史 DXF。三份为 AC1009，其中 `balloon.dxf`、`lights.dxf` 各有两个多边形网格，组码 75 均缺省或不属于拟合类型 5、6、8。另查阅了 Simtel 于 1992 年公开归档的 `STREK.DXF`，其 4324 条 POLYLINE 均只有普通轮廓标志（0 或 1），没有拟合网格。这些外部文件仅用于筛查，仓库只记录来源及结果。[UK VR-SIG 档案](https://www.martinreddy.net/ukvrsig/ftp.html) · [Simtel 档案](https://infania.net/misc/simtelnet/msdos/autocad.html)
+
 ```sh
 moon run examples/r12-semantics/runner --target wasm --deny-warn -- compare-mesh examples/r12-semantics/mesh-compare.dxf 0.01
 ```
