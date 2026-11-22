@@ -51,7 +51,7 @@ moon run examples/r12-validation/external
 
 | 身份 | 对应范围 |
 | --- | --- |
-| 当前main／0.2.0未发布 | 新R12结构和坐标能力，使用当前提交的定向证据；尚无全量验收结论 |
+| 当前main／0.2.0未发布 | 新R12结构和坐标能力，日常使用当前提交的定向证据；固定候选的完整结果见[验收记录](acceptance-0.2.0.md) |
 | Mooncakes0.1.1／源`dc3acc8` | [已发布包及registry验证](mooncakes-0.1.1.md)，不含新R12 API |
 | `submission-0.1.1-20261022-r2`／`94509f3` | [完整CI #26及同提交Pages](https://github.com/mik1e80/dxfkit/actions/runs/39761104538)；固定历史结果与旧演示，不移动 |
 

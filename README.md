@@ -77,7 +77,7 @@ node scripts/verify-advisor.cjs
 
 ## 审阅与申报材料
 
-[发布与验收流程](docs/release-process.md) · [当前项目说明](docs/submission.md) · [退回意见响应](docs/review-response.md) · [证据索引](docs/resubmission-evidence.md) · [材料导航](docs/verification-guide.md) · [路线图](docs/roadmap.md)
+[0.2.0 候选验收证据](docs/acceptance-0.2.0.md) · [发布与验收流程](docs/release-process.md) · [当前项目说明](docs/submission.md) · [退回意见响应](docs/review-response.md) · [证据索引](docs/resubmission-evidence.md) · [材料导航](docs/verification-guide.md) · [路线图](docs/roadmap.md)
 
 当前材料描述0.2.0开发候选；初审状态来自参赛者反馈，不代替当前源码的功能验证或最终验收。主赛退回响应及一页PDF保留其原修订背景，当前维护变化见上方维护记录；本仓库修改不代表已更新报名表。
 
