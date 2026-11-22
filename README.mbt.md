@@ -1,8 +1,8 @@
 # dxfkit：接口与实现边界
 
-**MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库**。当前main为未发布0.2.0开发版；以下registry安装命令获得已发布0.1.1，不包含新增R12接口。当前结构诊断、自交接触容差和版本迁移见[本轮记录](docs/resubmission-20261027.md)；安装、CLI和版本区别见[README](README.md)。
+**MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库**。本文对应模块版本 0.2.0。通过 Mooncakes 使用时请安装与本文同版本的依赖；从 GitHub 使用时请检出对应源码提交。当前结构诊断、自交接触容差和版本迁移见[本轮记录](docs/resubmission-20261027.md)；安装、CLI和版本区别见[README](README.md)。
 
-## 当前 main：R12 读取和 WCS
+## R12 读取和 WCS
 
 `Report::status()` 区分完成、完成且有发现、检查不完整和参数错误。`Finding::diagnostic()` 提供稳定类别、级别和消息，`InputOrExpansion` 汇总既有输入和展开警告。
 
@@ -54,17 +54,17 @@ test "R12 document and WCS API" {
 
 当前 `Drawing::expand()` 和 `Entity::flatten_checked()` 只把转换后落在 WCS Z=0（容差内）的轮廓交给 XY 检查；其他平面保留世界坐标并拒绝二维结论。`Geometry::flatten_checked()` 仍是没有实体 OCS/来源身份的局部几何接口，调用方不得把它当作 WCS 转换入口。
 
-## 已发布 0.1.1 与既有接口
+## 安装与兼容版本
 
 在 MoonBit 工程中添加固定版本依赖：
 
 ```sh
-moon add mik1e80/dxfkit@0.1.1
+moon add mik1e80/dxfkit@0.2.0
 ```
 
-包导入名为 `mik1e80/dxfkit`；独立使用不依赖网页或本库源码工作区。注册表消费验证命令为 `node scripts/verify-consumer.cjs --registry`，与本地 `moon.work` 验证分别记录。
+包导入名为 `mik1e80/dxfkit`；独立使用不依赖网页或本库源码工作区。注册表消费验证命令为 `node scripts/verify-consumer.cjs --registry --r12`，同时断言版本、注册表来源与 R12 接口行为。
 
-本次范围为七类核心轮廓实体、受限二维 SOLID/TRACE 边界和普通 INSERT；逐字段输入、输出、限制与案例见[交付范围](docs/delivery-scope.md)，追加行为见[补充几何审查](docs/review-cases.md)。
+既有 0.1.1 提供七类核心轮廓实体、受限二维 SOLID/TRACE 边界和普通 INSERT。0.2.0 新增的 R12 读取、OCS/WCS 与阵列展开使用上文的接口；逐字段输入、输出、限制与案例见[交付范围](docs/delivery-scope.md)，追加行为见[补充几何审查](docs/review-cases.md)。
 
 ## 为什么选择这个范围
 

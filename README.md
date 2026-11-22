@@ -41,7 +41,7 @@ moon run cli svg examples/plate.dxf > plate.svg
 | 已发布 0.1.1 | [Mooncakes](https://mooncakes.io/docs/mik1e80/dxfkit)，发布源 `dc3acc8` | [发布及 registry 消费记录](docs/mooncakes-0.1.1.md)；不包含新 R12 API |
 | 历史 r2 | [固定标签](https://github.com/mik1e80/dxfkit/tree/submission-0.1.1-20261022-r2)，源码 `94509f3`；[线上演示](https://mik1e80.github.io/dxfkit/) | [历史完整 CI #26](https://github.com/mik1e80/dxfkit/actions/runs/39761104538)，不用于证明当前 R12 已完成全量验收 |
 
-安装已发布包使用 `moon add mik1e80/dxfkit@0.1.1`。使用新增 R12 API 请检出当前源码；[独立消费工程](examples/consumer/README.md)区分 registry 与本地源码模式。当前修改不覆盖历史标签、不发布 0.2.0，也不自动替换旧演示。
+安装已发布包使用 `moon add mik1e80/dxfkit@0.1.1`。在 0.2.0 候选阶段，使用新增 R12 API 请检出当前源码；[独立消费工程](examples/consumer/README.md)区分 registry 与本地源码模式。当前修改不覆盖历史标签、不发布 0.2.0，也不自动替换旧演示。
 
 ## 模型与正确性证据
 

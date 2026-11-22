@@ -55,4 +55,4 @@ moon run examples/r12-validation/external
 | Mooncakes0.1.1／源`dc3acc8` | [已发布包及registry验证](mooncakes-0.1.1.md)，不含新R12 API |
 | `submission-0.1.1-20261022-r2`／`94509f3` | [完整CI #26及同提交Pages](https://github.com/mik1e80/dxfkit/actions/runs/39761104538)；固定历史结果与旧演示，不移动 |
 
-只有明确需要最终完整验收时，才手动选择CI的`validation=full`或在新的干净检出执行`node scripts/verify-reproduction.cjs --fresh`。它会运行各目标完整测试、消费工程及额外回归，工作量大于日常定向检查。本轮没有执行此流程，不因当前材料已统一就称其完成。
+只有明确需要最终完整验收时，才手动选择CI的`validation=full`或在新的干净检出执行`node scripts/verify-reproduction.cjs --fresh`。它会运行各目标完整测试、含 R12 接口的独立消费工程及额外回归，工作量大于日常定向检查。完整验收结果以候选提交实际生成的机器记录为准。Pages 部署在 GitHub 上由手动 `deploy_pages` 选项控制。
