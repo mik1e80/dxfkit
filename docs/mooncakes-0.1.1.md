@@ -1,6 +1,6 @@
 # Mooncakes 0.1.1 发布记录
 
-日期：2026-10-26。模块 [`mik1e80/dxfkit@0.1.1`](https://mooncakes.io/docs/mik1e80/dxfkit) 已正式发布；Mooncakes 返回 `200 OK`，随后 `moon view mik1e80/dxfkit@0.1.1 --json` 返回 success，版本非 yanked。
+日期：2026-10-26。模块 [`mik1e80/dxfkit@0.1.1`](https://mooncakes.io/docs/mik1e80/dxfkit%400.1.1) 已正式发布；Mooncakes 返回 `200 OK`，随后 `moon view mik1e80/dxfkit@0.1.1 --json` 返回 success，版本非 yanked。
 
 - 发布源提交：[dc3acc8ed4fc68242728214e0575c098a893c8cb](https://github.com/mik1e80/dxfkit/commit/dc3acc8ed4fc68242728214e0575c098a893c8cb)。实际发布前确认 main 为该提交、工作区干净、登录账号为 mik1e80。
 - 包大小：1,819,443 字节。
