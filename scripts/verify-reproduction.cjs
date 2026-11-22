@@ -31,8 +31,9 @@ try {
   execute('moon',['build','--frozen','--deny-warn']);
   for(const target of ['wasm','js','native','wasm-gc']) execute('moon',['test','--target',target,'--frozen','--deny-warn']);
   for(const script of ['scripts/verify-corpus-records.cjs','scripts/verify-test-sensitivity.cjs','cli/smoke.cjs']) execute('node',[script]);
-  execute('node',['scripts/verify-consumer.cjs']);
-  execute('node',['scripts/verify-consumer.cjs','--target','native']);
+  execute('node',['scripts/verify-consumer.cjs','--r12']);
+  execute('node',['scripts/verify-consumer.cjs','--r12','--target','native']);
+  for(const target of ['wasm','native']) execute('moon',['run','examples/r12-semantics/runner','--target',target,'--frozen','--deny-warn']);
   execute('node',['scripts/verify-submission-evidence.cjs']);
   execute('node',['examples/model-validation/generate-models.cjs']);
   execute('node',['examples/model-validation/verify.cjs']);

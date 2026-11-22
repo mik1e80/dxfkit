@@ -17,6 +17,9 @@ const target = option('--target', 'wasm');
 assert(['wasm', 'native'].includes(target), 'file example supports wasm or native');
 const reportPath = option('--report', null);
 const registry = args.includes('--registry');
+const r12 = args.includes('--r12');
+const unpacked = option('--library', null);
+assert(!registry || !unpacked, '--library and --registry select different sources');
 const profile = require('../reproduction.json');
 const example = path.join(root, 'examples/consumer');
 const temporaryRoot = fs.realpathSync(os.tmpdir());
@@ -36,7 +39,16 @@ try {
   assert(files.includes('moon.mod'));
   assert(!files.includes('entity.mbt'));
   assert(!files.includes('web'));
-  const library = root.replaceAll('\\', '/');
+  if (r12) {
+    fs.copyFileSync(path.join(example, 'r12-check/r12_consumer_test.mbt'), path.join(work, 'r12_consumer_test.mbt'));
+    fs.copyFileSync(path.join(root, 'examples/r12-validation/models/06-ocs-array.dxf'), path.join(work, 'fixtures/ocs-array.dxf'));
+    const manifest = path.join(work, 'moon.mod');
+    const old = `${profile.module}@${profile.published_version}`;
+    const source = fs.readFileSync(manifest, 'utf8');
+    assert(source.includes(old), 'Consumer dependency pin differs from the release profile');
+    fs.writeFileSync(manifest, source.replace(old, `${profile.module}@${profile.version}`));
+  }
+  const library = path.resolve(unpacked || root).replaceAll('\\', '/');
   if (!registry) fs.writeFileSync(path.join(work, 'moon.work'),
     `members = [".", ${JSON.stringify(library)}]\n`);
   if (registry) assert(!fs.existsSync(path.join(work, 'moon.work')));
@@ -60,15 +72,19 @@ try {
     return !failure;
   }
   if (run('external-module-check', ['check', '--target', target, '--deny-warn'], 0, [])) {
-    if (registry) {
+    if (registry || unpacked || r12) {
       const tree = spawnSync('moon', ['tree', '--json'], {cwd: work, encoding: 'utf8', timeout: 120000});
       if (tree.error) throw tree.error;
       assert.equal(tree.status, 0, tree.stdout + tree.stderr);
       const found = JSON.parse(tree.stdout).modules.find(m => m.name === profile.module);
-      assert(found && found.source.kind === 'registry', 'Consumer must resolve dxfkit from registry');
-      assert.equal(found.version, profile.published_version || profile.version, 'Unexpected registry version');
+      assert(found, 'Consumer failed to resolve dxfkit');
+      if (registry) assert.equal(found.source.kind, 'registry', 'Consumer must resolve dxfkit from registry');
+      else assert.notEqual(found.source.kind, 'registry', 'Consumer must resolve the supplied source');
+      assert.equal(found.version, r12 || !registry ? profile.version : profile.published_version, 'Unexpected resolved version');
       resolvedLibrary = {module: found.name, version: found.version, source: found.source.kind};
     }
+    if (r12) run('r12-records-ocs-array', ['test', '--package', 'example/dxfkit-consumer', '--file', 'r12_consumer_test.mbt', '--target', target,
+      '--frozen', '--deny-warn'], 0, [/1.*test|test.*1/i]);
     const command = ['run', '.', '--target', target, '--frozen', '--deny-warn', '--'];
     run('read-extract-discretize-check', [...command, 'fixtures/normal.dxf', '--strict'], 0,
       [/ENTITIES=1/, /CIRCLE center=10,20 radius=2/,
@@ -92,7 +108,8 @@ try {
       .update(fs.readFileSync(path.join(example, 'main.mbt'))).digest('hex'),
     copied_files: files, library_source: registry ? 'Mooncakes registry (no moon.work)' : 'local moon.work member',
     ...(resolvedLibrary ? {resolved_library: resolvedLibrary} : {}),
-    passed: results.filter(r => r.passed).length, total: 8, cases: results,
+    ...(unpacked ? { unpacked_library: true } : {}),
+    passed: results.filter(r => r.passed).length, total: r12 ? 9 : 8, cases: results,
   };
   if (reportPath) fs.writeFileSync(path.resolve(reportPath), JSON.stringify(result, null, 2) + '\n');
   console.log(`${result.passed}/${result.total} external consumer cases passed`);

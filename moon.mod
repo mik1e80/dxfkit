@@ -18,7 +18,7 @@ keywords = [
   "moonbit",
 ]
 
-description = "MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库：原始字段保留、OCS/WCS、块阵列展开、诊断与SVG；当前新增API尚未发布"
+description = "MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库：原始字段保留、OCS/WCS、块阵列展开、诊断与SVG"
 
 // **库本体（仓库根包）只用 MoonBit 自带的核心库，零第三方依赖。**
 //
