@@ -186,6 +186,10 @@ fn main raise {
     inspect_paragraph(args[2], [ for i in 3..<args.length() => args[i] ])
     return
   }
+  if args.length() == 2 && args[1] == "bricscad-fit" {
+    bricscad_fitted_mesh_case()
+    return
+  }
   mesh()
   attributes()
   dimension()
@@ -201,5 +205,6 @@ fn main raise {
   tolerance_stacking_case()
   drawing_avoid_case()
   legacy_mesh_export_input()
+  bricscad_fitted_mesh_case()
   refit_comparison_case()
 }

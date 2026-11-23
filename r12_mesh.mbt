@@ -82,7 +82,9 @@ fn r12_fitted_mesh(
         records[i].kind == "VERTEX" {
     let vertex = records[i]
     let vf = r12_integer(vertex, 70, None)
-    guard (vf & 224) == 64 &&
+    // BricsCAD V20 R12 exports use the explicit role alone on fitted vertices.
+    let mesh_vertex = (vf & 224) == 64 || vf == 8 || vf == 16
+    guard mesh_vertex &&
       (vf & 3) == 0 &&
       r12_number(vertex, 42, Some(0.0)) == 0.0 else {
       raise InvalidSemantic(

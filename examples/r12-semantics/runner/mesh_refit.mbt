@@ -46,3 +46,28 @@ fn legacy_mesh_export_input() -> Unit raise {
     "legacy export input: 5 by 4 open control frame, no precomputed samples",
   )
 }
+
+///|
+fn bricscad_fitted_mesh_case() -> Unit raise {
+  let doc = load("legacy-cad/bricscad-v20-cubic-r12.dxf")
+  let meshes = doc.r12_semantics().entries.filter(entry => {
+    entry.entity is @dxfkit.FittedMesh(_)
+  })
+  assert_eq(meshes.length(), 1)
+  guard meshes[0].entity is @dxfkit.FittedMesh(mesh) else {
+    fail("expected fitted mesh from BricsCAD V20")
+  }
+  assert_true(mesh.fit is @dxfkit.CubicBSpline)
+  assert_eq((mesh.m, mesh.n), (5, 4))
+  assert_eq((mesh.sample_m, mesh.sample_n), (8, 7))
+  assert_false(mesh.closed_m || mesh.closed_n)
+  assert_eq(mesh.controls.length(), 20)
+  assert_xyz(mesh.controls[10], 4.0, 6.0, 5.0)
+  assert_xyz(mesh.samples[9], 1.492711370262391, 3.0, 1.154087031638052)
+  guard mesh.compare_refit(1.0e-12) is Ok(result) else {
+    fail("expected a point-by-point BricsCAD comparison")
+  }
+  assert_eq(result.distances.length(), 56)
+  assert_eq(result.outside_tolerance, 0)
+  println("BricsCAD V20 native AC1009: 56 stored samples match the refit")
+}

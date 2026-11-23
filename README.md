@@ -18,7 +18,7 @@
 - 离散七类既有核心轮廓及受限 SOLID/TRACE；对落在 WCS Z=0 检查平面的几何辅助检查闭合、自交、重复、退化和指定净距，输出报告和 SVG。
 - 未重建语义、关联属性布局、非检查平面、损坏输入及资源截断明确报告不完整；`--strict` 将警告作为失败。
 
-`ReadDocument::r12_semantics()` 读取空间 POLYLINE/网格拓扑、3DFACE 隐边、SHAPE 位置、VIEWPORT/MVIEW、DIMENSION 定义点与标注块，以及 INSERT 属性序列。本版还读取拟合网格的控制框和已存样点，支持按单元放置阵列属性，并可单独展开保存的标注图块。新增从控制框重拟合曲面、基于字体提供器的属性字形排版，以及从定义点重算七类标注的数值、标签和基本图元。字体入口支持传统指令的横排与竖排 BIGFONT、TrueType 点对点复合字形和多字体轮廓。HarfBuzz 示例处理一个完整双向段落并按字素簇回退。标注支持自定义箭头、堆叠容差与替代单位，另可在 WCS XY 内为整张图纸的标签避开图元和彼此。曲面比较器能导出逐点误差。现有对照使用自建样点，旧版 CAD 原始拟合网格仍待取得，见[公开样本筛查](examples/r12-semantics/legacy-mesh-search.md)。详情见[案例与复现方法](examples/r12-semantics/README.md)。HATCH、ELLIPSE、SPLINE、LWPOLYLINE 按非 R12 扩展处理。详见[读取终点与分层矩阵](docs/r12-profile.md)。
+`ReadDocument::r12_semantics()` 读取空间 POLYLINE/网格拓扑、3DFACE 隐边、SHAPE 位置、VIEWPORT/MVIEW、DIMENSION 定义点与标注块，以及 INSERT 属性序列。本版还读取拟合网格的控制框和已存样点，支持按单元放置阵列属性，并可单独展开保存的标注图块。新增从控制框重拟合曲面、基于字体提供器的属性字形排版，以及从定义点重算七类标注的数值、标签和基本图元。字体入口支持传统指令的横排与竖排 BIGFONT、TrueType 点对点复合字形和多字体轮廓。HarfBuzz 示例处理一个完整双向段落并按字素簇回退。标注支持自定义箭头、堆叠容差与替代单位，另可在 WCS XY 内为整张图纸的标签避开图元和彼此。BricsCAD V20.1.08 原生导出的开放三次 B 样条网格已完成 56 点对照，最大误差约 2.18×10⁻¹⁵。覆盖范围和原件见[拟合网格验证](examples/r12-semantics/legacy-cad/README.md)。详情见[案例与复现方法](examples/r12-semantics/README.md)。HATCH、ELLIPSE、SPLINE、LWPOLYLINE 按非 R12 扩展处理。详见[读取终点与分层矩阵](docs/r12-profile.md)。
 
 ## 快速运行
 

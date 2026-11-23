@@ -14,4 +14,4 @@
 
 仓库的日常 CI 仍使用定向模式。手动完整验证另有网页部署开关，便于单独验证候选。复现需要 README 中的固定工具链和依赖。 [复现说明](reproducibility.md) · [发布流程](release-process.md)
 
-可复用接口覆盖 ASCII R12 记录、坐标和阵列、已支持的轮廓与诊断。真实旧版 CAD 拟合网格的逐点一致性仍待验证，当前证据为解析案例和自建控制框。 [R12 兼容矩阵](r12-conformance-matrix.md) · [曲面证据](../examples/r12-semantics/README.md#旧版-cad-曲面的证据)
+可复用接口覆盖 ASCII R12 记录、坐标和阵列、已支持的轮廓与诊断。此发布提交的拟合网格证据为解析案例和自建控制框。发布之后的主分支另有 [BricsCAD V20.1.08 原生逐点对照](../examples/r12-semantics/legacy-cad/README.md)。 [R12 兼容矩阵](r12-conformance-matrix.md) · [曲面证据](../examples/r12-semantics/README.md#旧版-cad-曲面的证据)

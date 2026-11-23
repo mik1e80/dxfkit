@@ -1,5 +1,7 @@
 # 旧版 CAD 拟合网格来源筛查
 
+后续已使用 [BricsCAD V20.1.08 生成并核对原件](legacy-cad/README.md)。以下保留独立公开来源的历史筛查记录。
+
 2026-11-23 核对公开 DXF 样本，目标是由可确认版本的旧版 CAD 直接导出的 ASCII AC1009 文件。逐点对照需要同一 `POLYLINE` 原样保留控制框和拟合样点，并有适用于该图纸的公开再分发许可。
 
 先读 `$ACADVER`，再按实体记录检查父 `POLYLINE` 的组码 70 是否设置多边形网格位（16），组码 75 是否为 5、6 或 8。命中后，检查子 `VERTEX` 的控制点位（16）与拟合生成点位（8），以及两组实存顶点数量是否与父记录的网格尺寸一致。闭合位、样点顺序和容差在取得可用原件后单独核对。 [Autodesk R12 DXF 格式参考](https://damassets.autodesk.net/content/dam/autodesk/www/developer-network/platform-technologies/autocad-dxf-archive/acad_r12_dxf.pdf)
@@ -18,7 +20,7 @@
 
 netDxf 的 `TestDxfDocument/sample.dxf` 确实含一组二次 B 样条网格。父记录句柄 `1A66`，组码 70 为 20，组码 75 为 5，控制框为 6×4，拟合采样为 20×10。子记录实存 24 个标志 80 的控制点、200 个标志 72 的拟合点。对该路径的 14 个历史修订核对了组码，只有 2022 和 2023 年的两个 AC1032 版本含拟合网格，其余版本为 AC1024 或 AC1032。上游根目录为 MIT，当前未取得该图纸来自旧版 CAD 原生导出的证据。 [原件](https://github.com/haplokuon/netDxf/blob/3d24d7c23418bd3a077d0e32a639f2ffe95bff51/TestDxfDocument/sample.dxf) · [文件历史](https://github.com/haplokuon/netDxf/commits/master/TestDxfDocument/sample.dxf) · [上游许可](https://github.com/haplokuon/netDxf/blob/3d24d7c23418bd3a077d0e32a639f2ffe95bff51/LICENSE)
 
-对照工具的 Wasm 定向验证使用现有的[自建样例](mesh-compare.dxf)，输出 9 个点。容差为 0.01 图纸单位，中心点误差为 0.125，其余 8 点误差为 0。用当前 netDxf 原件作为版本边界输入时，命令退出码为 1，未输出逐点数据。旧版 CAD 的逐点外部验证仍待取得符合条件的原始 DXF。本次提交仅包含筛查记录。
+对照工具的 Wasm 定向验证使用现有的[自建样例](mesh-compare.dxf)，输出 9 个点。容差为 0.01 图纸单位，中心点误差为 0.125，其余 8 点误差为 0。用当前 netDxf 原件作为版本边界输入时，命令退出码为 1，未输出逐点数据。当时仍待取得符合条件的原始 DXF。
 
 ## 补查 BricsCAD 原生导出及历史教材
 
@@ -38,4 +40,4 @@ Sembiance 的 `abydos.dxf` 声明 AC1009，另外 10 份文件没有 `$ACADVER`�
 
 ### 用旧版 CAD 生成独立参考
 
-OpenCADCodec 已记录在有授权的 BricsCAD V20.1.07 中直接输出 AC1009 的路径，使用 `SaveAs` 的 `acR12_dxf = 1`。若在该版本成功执行拟合，可用 dxfkit 自建控制框复现并保留 CAD 原始输出。需检查原件是否同时保存组码 75 及两组实存顶点，再执行比较器。Bricsys 的旧版下载需要登录，V20 的曲面拟合与导出组合尚未实际运行。 [V20.1.07 原生导出记录](https://github.com/buianhduc-ai/opencadcodec/blob/ff75fddc322bda4cf817c5f68535c5c2b316b9c4/tests/bricscad/ac1009-validation-2026-10-13.md) · [Bricsys 旧版下载说明](https://help.bricsys.com/en-us/document/knowledge-base/installation/where-can-i-download-older-bricscad-releases)
+OpenCADCodec 已记录在有授权的 BricsCAD V20.1.07 中直接输出 AC1009 的路径，使用 `SaveAs` 的 `acR12_dxf = 1`。若在该版本成功执行拟合，可用 dxfkit 自建控制框复现并保留 CAD 原始输出。需检查原件是否同时保存组码 75 及两组实存顶点，再执行比较器。Bricsys 的旧版下载需要登录，V20.1.08 的曲面拟合与导出组合后来已在项目自建控制框上验证。 [V20.1.07 原生导出记录](https://github.com/buianhduc-ai/opencadcodec/blob/ff75fddc322bda4cf817c5f68535c5c2b316b9c4/tests/bricscad/ac1009-validation-2026-10-13.md) · [Bricsys 旧版下载说明](https://help.bricsys.com/en-us/document/knowledge-base/installation/where-can-i-download-older-bricscad-releases)
