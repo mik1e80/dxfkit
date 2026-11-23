@@ -19,3 +19,9 @@
 netDxf 的 `TestDxfDocument/sample.dxf` 确实含一组二次 B 样条网格。父记录句柄 `1A66`，组码 70 为 20，组码 75 为 5，控制框为 6×4，拟合采样为 20×10。子记录实存 24 个标志 80 的控制点、200 个标志 72 的拟合点。对该路径的 14 个历史修订核对了组码，只有 2022 和 2023 年的两个 AC1032 版本含拟合网格，其余版本为 AC1024 或 AC1032。上游根目录为 MIT，当前未取得该图纸来自旧版 CAD 原生导出的证据。 [原件](https://github.com/haplokuon/netDxf/blob/3d24d7c23418bd3a077d0e32a639f2ffe95bff51/TestDxfDocument/sample.dxf) · [文件历史](https://github.com/haplokuon/netDxf/commits/master/TestDxfDocument/sample.dxf) · [上游许可](https://github.com/haplokuon/netDxf/blob/3d24d7c23418bd3a077d0e32a639f2ffe95bff51/LICENSE)
 
 对照工具的 Wasm 定向验证使用现有的[自建样例](mesh-compare.dxf)，输出 9 个点。容差为 0.01 图纸单位，中心点误差为 0.125，其余 8 点误差为 0。用当前 netDxf 原件作为版本边界输入时，命令退出码为 1，未输出逐点数据。旧版 CAD 的逐点外部验证仍待取得符合条件的原始 DXF。本次提交仅包含筛查记录。
+
+## 补查 BricsCAD 原生导出及历史教材
+
+- OpenCADCodec 收录两份 BricsCAD V20.1.07 的原生几何导出。实查 `native-geometry.dxf` 与 `native-geometry-edited.dxf` 均为 ASCII AC1009，各含组码 70 = 16、71 = 2、72 = 3 的 2×3 多边形网格，均没有组码 75。这两份文件提供旧格式的真实网格记录，缺少逐点重拟合对照所需的已存样点。 [上游导出说明](https://github.com/buianhduc-ai/opencadcodec/blob/ff75fddc322bda4cf817c5f68535c5c2b316b9c4/src/docs/ac1009_support.md) · [两份 DXF 原件](https://github.com/buianhduc-ai/opencadcodec/tree/ff75fddc322bda4cf817c5f68535c5c2b316b9c4/tests/fixtures/r12/cad-created)
+- Kabeja 的 `draft2.dxf`、`draft3.dxf` 和 `draft4.dxf` 声明 AC1009，均未发现多边形网格。 `hatch_1.dxf` 和 `hatch_16.dxf` 声明 AC1014。另一个 `draft1.dxf` 未能完整读取，仍未核实。 [固定上游样本目录](https://github.com/fuzziness/kabeja/tree/dd499942c8421e826ee1e04ab2960f23a94d3b78/samples/dxf)
+- Wiley 教材第 23 章的图 23-10 展示了 AutoCAD 2005 的 PEDIT 曲面平滑，图中未标出对应的 DXF 文件。出版社提供配套图纸下载，尚未找到该图对应的 AC1009 原件和允许公开再分发的条款。 [教材第 23 章与附录](https://home.agh.edu.pl/~milenin/Dydaktyka/CADCAM/eBooks/Finkelstejn.pdf) · [出版社配套资源](https://uat.store.wiley.com/en-us/autocad-2005-and-autocad-lt-2005-bible-p-9780764569890)

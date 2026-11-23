@@ -9,7 +9,7 @@
 | 文件结构：段、表、块、子实体结束与EOF | 已诊断缺失/孤立/中断并保留原始记录 | r12_structure_test.mbt、security_wbtest.mbt、maintenance_security_test.mbt | 所有合法组合与版本例外未穷举；超限后只保留派生前缀 |
 | 记录：组码顺序、重复/未知字段、XDATA | 扫描预算范围内保留，source保留原字节 | r12_read_test.mbt、encoding_boundary_test.mbt | 保留不等于字段合法；GBK 已内置，其他旧双字节代码页需提供解码回调 |
 | 常用几何必填字段 | LINE/POINT坐标、CIRCLE半径、ARC角度等有缺失/数值错误诊断；Z可按当前二维约定缺省 | entity_wbtest.mbt、security_test.mbt、security_wbtest.mbt | 不是全部实体全部必填字段/重复字段审计；严格解析与宽松兼容入口不同 |
-| POLYLINE 序列与类型 | 二维顶点与 SEQEND，另有 3D、M/N 网格、Polyface 及拟合网格的控制框、已存样点拓扑和二次/三次 B 样条及 Bézier 重拟合 | r12_semantics_test.mbt、[闭合拟合网格](../examples/r12-semantics/README.md) | 空间拓扑不进入二维检查，逐点比较器有解析模型断言。已筛查的 20 份 AC1009 文件中没有拟合网格，旧版 CAD 原始样点对照仍待补。非零宽度区域不检查。[筛查记录](../examples/r12-semantics/legacy-mesh-search.md) |
+| POLYLINE 序列与类型 | 二维顶点与 SEQEND，另有 3D、M/N 网格、Polyface 及拟合网格的控制框、已存样点拓扑和二次/三次 B 样条及 Bézier 重拟合 | r12_semantics_test.mbt、[闭合拟合网格](../examples/r12-semantics/README.md) | 空间拓扑不进入二维检查，逐点比较器有解析模型断言。已核对的 CAD 原生 AC1009 网格仅含未拟合顶点，旧版 CAD 原始拟合样点对照仍待补。非零宽度区域不检查。[筛查记录](../examples/r12-semantics/legacy-mesh-search.md) |
 | OCS/WCS | 按实体语义变换，保留XYZ | r12_world_wbtest.mbt、六模型坐标对照及 [实际倾斜圆](../examples/cad-ocs/README.md) | 非当前检查平面不参与二维检查；并非完整3D建模 |
 | TABLES 的显式引用 | 在已声明的 LAYER、LTYPE、STYLE、DIMSTYLE、APPID 中审计对应名称，另审计实体 XDATA 的本地 1005 句柄 | maintenance_foundation_test.mbt | 名称按大写匹配，跳过内建默认项和未声明的表；尚未校验所有表项字段和应用私有 XDATA 语义 |
 | BLOCK/INSERT 引用与阵列 | 基点、变换、全部行列、嵌套来源，按忽略大小写的名称查找，诊断缺失或歧义。ATTRIB 关联到所属 INSERT 与对应 ATTDEF，并可按单元查询已存属性和常量定义的变换结果 | expand_wbtest.mbt、r12_semantics_test.mbt、[真实 CAD](../examples/cad-ocs/README.md) | 支持 TrueType 实际轮廓点附件、传统/Unicode SHX、传统指令的横排和竖排 BIGFONT。示例验证整段双向视觉顺序与字体回退，库共用轮廓预算。字形幻点、专用竖排变体和自动断行仍未验证 |
