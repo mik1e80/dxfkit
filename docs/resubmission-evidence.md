@@ -1,6 +1,6 @@
-# 当前重新申报候选的证据索引
+# 2026-10-27 R12 重新申报候选的历史证据索引
 
-2026-10-27，当前main／未发布0.2.0。[项目说明](submission.md)、[一页PDF](../output/pdf/dxfkit-submission-one-page.pdf)、代码与本页证据随同一GitHub提交保存；精确源码身份由该提交CI的`source_commit`核对。旧r2、旧发布包和旧演示单独记录，不能代替本轮验证。
+2026-10-27，当前main／未发布0.2.0。[当轮项目说明](https://github.com/mik1e80/dxfkit/blob/68f49bc7e43d5bcaf4939546a1b5d103edc9480c/docs/submission.md)、[历史 R12 一页 PDF](https://github.com/mik1e80/dxfkit/blob/68f49bc7e43d5bcaf4939546a1b5d103edc9480c/output/pdf/dxfkit-submission-one-page.pdf)、代码与本页证据随同一GitHub提交保存；精确源码身份由该提交CI的`source_commit`核对。旧r2、旧发布包和旧演示单独记录，不能代替本轮验证。
 
 | 核对事项 | 入口 | 可得结论 |
 | --- | --- | --- |

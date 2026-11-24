@@ -78,9 +78,9 @@ node scripts/verify-advisor.cjs
 
 ## 审阅与申报材料
 
-[0.2.1 八月黑客松验收证据](docs/acceptance-0.2.1.md) · [发布与验收流程](docs/release-process.md) · [当前项目说明](docs/submission.md) · [退回意见响应](docs/review-response.md) · [证据索引](docs/resubmission-evidence.md) · [材料导航](docs/verification-guide.md) · [路线图](docs/roadmap.md)
+[0.2.1 一页 PDF](output/pdf/dxfkit-submission-one-page.pdf) · [0.2.1 八月黑客松验收证据](docs/acceptance-0.2.1.md) · [发布与验收流程](docs/release-process.md) · [当前项目说明](docs/submission.md) · [退回意见响应](docs/review-response.md) · [证据索引](docs/resubmission-evidence.md) · [材料导航](docs/verification-guide.md) · [路线图](docs/roadmap.md)
 
-当前项目说明对应 0.2.1；初审状态来自参赛者反馈，不代替当前源码的功能验证或最终验收。主赛退回响应及一页PDF保留其原修订背景，当前维护变化见上方维护记录；本仓库修改不代表已更新报名表。
+当前项目说明和一页 PDF 引用 `v0.2.1` / `e07ec17` 及其[完整 CI](https://github.com/mik1e80/dxfkit/actions/runs/45405781541)。主赛退回响应与[历史 r2 PDF](https://github.com/mik1e80/dxfkit/blob/submission-0.1.1-20261022-r2/output/pdf/dxfkit-submission-one-page.pdf)保留各自的修订背景。正式验收结果以主办方通知为准。
 
 ## 许可
 

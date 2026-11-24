@@ -2,7 +2,7 @@
 
 当前维护新增[诊断洪泛与维护记录](maintenance-20261116.md)、[模型来源和验证层次](testing.md)、[许可适用范围](licensing.md)、[兼容性](compatibility.md)、[资源预算](resource-limits.md)及[R12分层清单](r12-conformance-matrix.md)。本轮只做必要验证，下面保留此前各轮证据入口。
 
-当前交付版本为 0.2.1，源码、发布包、在线演示与定向测试见[发布记录](acceptance-0.2.1.md)。先看[本轮修改](resubmission-20261027.md)、[范围矩阵](r12-profile.md)、[当前证据索引](resubmission-evidence.md)和[退回响应](review-response.md)。这些材料随源码提交保存，不能套用旧r2的全量结论。
+当前交付版本为 `v0.2.1` / `e07ec17`。[一页 PDF](../output/pdf/dxfkit-submission-one-page.pdf)、[完整 CI](https://github.com/mik1e80/dxfkit/actions/runs/45405781541)和[验收说明](acceptance-0.2.1.md)记录当前发布身份。早期 R12 整改见[历史说明](resubmission-20261027.md)、[证据索引](resubmission-evidence.md)和[退回响应](review-response.md)。
 
 | 名称 | 入口 | 验证角色 |
 | --- | --- | --- |
@@ -18,4 +18,4 @@
 
 日常命令为`node scripts/verify-advisor.cjs`，CI使用干净检出的`--fresh`。结果明确为`targeted-r12`、`full_suite_run=false`；具体范围和精确源码身份见[复现说明](reproducibility.md)。格式/API维护门禁只证明格式与公开接口快照，不冒充功能或全量测试。
 
-一页 PDF 记录早期 R12 候选；旧r2标签仍保留其原PDF及完整验收。0.2.0 的完整验证、固定源码和发布状态见[候选验收证据](acceptance-0.2.0.md)。历史提交继续使用原证据。
+历史版本包括[r2 原版 PDF](https://github.com/mik1e80/dxfkit/blob/submission-0.1.1-20261022-r2/output/pdf/dxfkit-submission-one-page.pdf)与[0.2.0 发布证据](acceptance-0.2.0.md)，各自保留对应提交和完整验收记录。

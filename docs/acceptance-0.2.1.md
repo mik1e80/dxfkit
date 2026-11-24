@@ -7,6 +7,7 @@
 | GitHub 固定源码 | [v0.2.1](https://github.com/mik1e80/dxfkit/tree/v0.2.1) |
 | Mooncakes | [mik1e80/dxfkit@0.2.1](https://mooncakes.io/docs/mik1e80/dxfkit%400.2.1) |
 | 线上演示 | [Pages](https://mik1e80.github.io/dxfkit/) · [构建版本和源码 SHA](https://mik1e80.github.io/dxfkit/dist/release.json) |
+| 0.2.1 一页 PDF | [项目说明](../output/pdf/dxfkit-submission-one-page.pdf) · [历史 r2 PDF](https://github.com/mik1e80/dxfkit/blob/submission-0.1.1-20261022-r2/output/pdf/dxfkit-submission-one-page.pdf) |
 | 同提交完整 CI | [完整验收 #45405781541](https://github.com/mik1e80/dxfkit/actions/runs/45405781541) · [验证记录归档](https://github.com/mik1e80/dxfkit/actions/runs/45405781541#artifacts) |
 | 同提交定向 CI | [GitHub Actions](https://github.com/mik1e80/dxfkit/actions/workflows/ci.yml) · [线上验证摘要与源码 SHA](https://mik1e80.github.io/dxfkit/verification.json) |
 | BricsCAD 原件及逐点结果 | [原始 DXF、CSV、来源与许可证](../examples/r12-semantics/legacy-cad/README.md) |
@@ -21,6 +22,8 @@ node scripts/verify-consumer.cjs --registry --r12 --target native
 ```
 
 BricsCAD V20.1.08 开放三次 B 样条案例保留 20 个控制点与 56 个拟合样点，最大误差约 2.18×10⁻¹⁵ 图纸单位。浏览器提供二维轮廓检查演示。曲面逐点重放通过库 API 或仓库命令进行。兼容边界及尚未获得外部拟合证据的类型见 [R12 兼容矩阵](r12-conformance-matrix.md)。上一版本的四后端完整验证见 [0.2.0 发布证据](acceptance-0.2.0.md)。
+
+一页 PDF 为发布后的验收材料更新，引用固定源码 `v0.2.1` / `e07ec17` 及已通过的完整 CI。
 
 ## 初审范围与交付对照
 
