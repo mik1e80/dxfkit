@@ -1,5 +1,10 @@
 # 变更记录
 
+## 0.2.1（2026-11-24）
+
+- 修复 BricsCAD V20 原生 R12 拟合网格顶点角色解析，保留其控制框和已存样点。新增 [56 点原件及逐点误差](examples/r12-semantics/legacy-cad/README.md)。
+- GitHub、Mooncakes 和 Pages 使用同一版本源码，发布验证覆盖注册表消费及网页构建。见[验收记录](docs/acceptance-0.2.1.md)。
+
 ## 0.2.0 开发版（2026-11-22）
 
 - 增加竖排 BIGFONT 条件指令与属性放置、整段双向和字体回退示例、堆叠容差及整图 XY 标签避碰。见[定向案例与边界](examples/r12-semantics/README.md)。

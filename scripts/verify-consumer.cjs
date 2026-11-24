@@ -43,6 +43,7 @@ try {
   if (r12) {
     fs.copyFileSync(path.join(example, 'r12-check/r12_consumer_test.mbt'), path.join(work, 'r12_consumer_test.mbt'));
     fs.copyFileSync(path.join(root, 'examples/r12-validation/models/06-ocs-array.dxf'), path.join(work, 'fixtures/ocs-array.dxf'));
+    fs.copyFileSync(path.join(root, 'examples/r12-semantics/legacy-cad/bricscad-v20-cubic-r12.dxf'), path.join(work, 'fixtures/bricscad-v20-cubic-r12.dxf'));
     const manifest = path.join(work, 'moon.mod');
     const old = `${profile.module}@${legacyVersion}`;
     const source = fs.readFileSync(manifest, 'utf8');
@@ -84,8 +85,8 @@ try {
       assert.equal(found.version, r12 || !registry ? profile.version : legacyVersion, 'Unexpected resolved version');
       resolvedLibrary = {module: found.name, version: found.version, source: found.source.kind};
     }
-    if (r12) run('r12-records-ocs-array', ['test', '--package', 'example/dxfkit-consumer', '--file', 'r12_consumer_test.mbt', '--target', target,
-      '--frozen', '--deny-warn'], 0, [/1.*test|test.*1/i]);
+    if (r12) run('r12-records-ocs-array-bricscad-fit', ['test', '--package', 'example/dxfkit-consumer', '--file', 'r12_consumer_test.mbt', '--target', target,
+      '--frozen', '--deny-warn'], 0, [/Total tests: 2, passed: 2, failed: 0/]);
     const command = ['run', '.', '--target', target, '--frozen', '--deny-warn', '--'];
     run('read-extract-discretize-check', [...command, 'fixtures/normal.dxf', '--strict'], 0,
       [/ENTITIES=1/, /CIRCLE center=10,20 radius=2/,

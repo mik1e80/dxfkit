@@ -2,7 +2,7 @@
 
 当前维护新增[诊断洪泛与维护记录](maintenance-20261116.md)、[模型来源和验证层次](testing.md)、[许可适用范围](licensing.md)、[兼容性](compatibility.md)、[资源预算](resource-limits.md)及[R12分层清单](r12-conformance-matrix.md)。本轮只做必要验证，下面保留此前各轮证据入口。
 
-当前发布版本为 0.2.0，源码与工程验收结果见[发布记录](acceptance-0.2.0.md)。先看[本轮修改](resubmission-20261027.md)、[范围矩阵](r12-profile.md)、[当前证据索引](resubmission-evidence.md)和[退回响应](review-response.md)。这些材料随源码提交保存，不能套用旧r2的全量结论。
+当前交付版本为 0.2.1，源码、发布包、在线演示与定向测试见[发布记录](acceptance-0.2.1.md)。先看[本轮修改](resubmission-20261027.md)、[范围矩阵](r12-profile.md)、[当前证据索引](resubmission-evidence.md)和[退回响应](review-response.md)。这些材料随源码提交保存，不能套用旧r2的全量结论。
 
 | 名称 | 入口 | 验证角色 |
 | --- | --- | --- |

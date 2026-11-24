@@ -19,7 +19,7 @@ moon run . --target wasm --deny-warn -- fixtures/normal.dxf --strict
 
 ## 通过 Mooncakes 使用
 
-仓库根目录执行下列命令会创建独立工程，从 Mooncakes 固定安装 `mik1e80/dxfkit@0.2.0`，核对依赖来源并运行九项用例。R12 用例通过公开 API 检查 AC1009 原始记录、非默认 OCS、阵列列号和 WCS 端点。
+仓库根目录执行下列命令会创建独立工程，从 Mooncakes 固定安装 `mik1e80/dxfkit@0.2.1`，核对依赖来源并运行九项用例。R12 用例通过公开 API 检查 AC1009 原始记录、非默认 OCS、阵列列号、WCS 端点及 BricsCAD 原件的 56 个拟合样点。
 
 ```sh
 moon update

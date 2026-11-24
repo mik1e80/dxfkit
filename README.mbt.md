@@ -1,6 +1,6 @@
 # dxfkit：接口与实现边界
 
-**MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库**。本文对应模块版本 0.2.0。通过 Mooncakes 使用时请安装与本文同版本的依赖；从 GitHub 使用时请检出对应源码提交。当前结构诊断、自交接触容差和版本迁移见[本轮记录](docs/resubmission-20261027.md)；安装、CLI和版本区别见[README](README.md)。
+**MoonBit ASCII DXF R12 记录读取与二维轮廓辅助检查库**。本文对应模块版本 0.2.1。通过 Mooncakes 使用时请安装与本文同版本的依赖；从 GitHub 使用时请检出对应源码提交。当前结构诊断、自交接触容差和版本迁移见[本轮记录](docs/resubmission-20261027.md)；安装、CLI和版本区别见[README](README.md)。
 
 ## R12 读取和 WCS
 
@@ -59,12 +59,12 @@ test "R12 document and WCS API" {
 在 MoonBit 工程中添加固定版本依赖：
 
 ```sh
-moon add mik1e80/dxfkit@0.2.0
+moon add mik1e80/dxfkit@0.2.1
 ```
 
 包导入名为 `mik1e80/dxfkit`；独立使用不依赖网页或本库源码工作区。注册表消费验证命令为 `node scripts/verify-consumer.cjs --registry --r12`，同时断言版本、注册表来源与 R12 接口行为。
 
-既有 0.1.1 提供七类核心轮廓实体、受限二维 SOLID/TRACE 边界和普通 INSERT。0.2.0 新增的 R12 读取、OCS/WCS 与阵列展开使用上文的接口；逐字段输入、输出、限制与案例见[交付范围](docs/delivery-scope.md)，追加行为见[补充几何审查](docs/review-cases.md)。
+既有 0.1.1 提供七类核心轮廓实体、受限二维 SOLID/TRACE 边界和普通 INSERT。0.2.0 新增的 R12 读取、OCS/WCS 与阵列展开使用上文的接口。0.2.1 修复 BricsCAD V20 原生拟合网格的顶点角色读取，验证见[原件与 56 点对照](examples/r12-semantics/legacy-cad/README.md)；逐字段输入、输出、限制与案例见[交付范围](docs/delivery-scope.md)，追加行为见[补充几何审查](docs/review-cases.md)。
 
 ## 为什么选择这个范围
 
