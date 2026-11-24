@@ -6,7 +6,7 @@
     "license": "MIT",
     "local_import_commit": "6f5d18250170d52921e9cc35cee583c045355ab5",
     "upstream_commit": null,
-    "note": "首次收录未记录上游提交；master 来源链接可能变动，本地 SHA-256 标识实际被测字节，不代表已校验当前上游一致"
+    "note": "原下载版本未记录。逐文件固定链接指向导入前的内容匹配快照，匹配方式与双方哈希见 testdata/ezdxf/MANIFEST.json。"
   },
   "parameters": {
     "target": "wasm",
@@ -203,8 +203,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/3dface.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/3dface.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/3dface.dxf"
       },
       "reading": {
         "status": "success",
@@ -321,8 +321,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/Minimal_DXF_AC1006.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/Minimal_DXF_AC1006.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/Minimal_DXF_AC1006.dxf"
       },
       "reading": {
         "status": "success",
@@ -423,8 +423,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/Minimal_DXF_AC1009.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/Minimal_DXF_AC1009.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/Minimal_DXF_AC1009.dxf"
       },
       "reading": {
         "status": "success",
@@ -492,8 +492,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/Minimal_DXF_AC1021.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/Minimal_DXF_AC1021.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/Minimal_DXF_AC1021.dxf"
       },
       "reading": {
         "status": "success",
@@ -559,8 +559,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/VP4.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/VP4.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/VP4.dxf"
       },
       "reading": {
         "status": "success",
@@ -694,8 +694,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/acad_table_simple.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/acad_table_simple.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/acad_table_simple.dxf"
       },
       "reading": {
         "status": "success",
@@ -777,8 +777,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/acad_table_with_blk_ref.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/acad_table_with_blk_ref.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/acad_table_with_blk_ref.dxf"
       },
       "reading": {
         "status": "success",
@@ -860,8 +860,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/caret_encoding.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/caret_encoding.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/caret_encoding.dxf"
       },
       "reading": {
         "status": "success",
@@ -943,8 +943,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/circle_radius_le_0.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/circle_radius_le_0.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/circle_radius_le_0.dxf"
       },
       "reading": {
         "status": "success",
@@ -1027,8 +1027,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/clockwise_arcs_hatch.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/clockwise_arcs_hatch.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/clockwise_arcs_hatch.dxf"
       },
       "reading": {
         "status": "success",
@@ -1115,8 +1115,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/colors.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/colors.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/colors.dxf"
       },
       "reading": {
         "status": "success",
@@ -1223,8 +1223,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/columns_R2007.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/columns_R2007.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/columns_R2007.dxf"
       },
       "reading": {
         "status": "success",
@@ -1316,8 +1316,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/columns_R2018.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/columns_R2018.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/columns_R2018.dxf"
       },
       "reading": {
         "status": "success",
@@ -1409,8 +1409,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/dimension_in_block.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/dimension_in_block.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/dimension_in_block.dxf"
       },
       "reading": {
         "status": "success",
@@ -1507,8 +1507,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/dimension_in_nested_blocks.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/dimension_in_nested_blocks.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/dimension_in_nested_blocks.dxf"
       },
       "reading": {
         "status": "success",
@@ -1605,8 +1605,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/hatch_issues.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/hatch_issues.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/hatch_issues.dxf"
       },
       "reading": {
         "status": "success",
@@ -1693,8 +1693,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/hatch_text_box_in_fill.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/hatch_text_box_in_fill.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/hatch_text_box_in_fill.dxf"
       },
       "reading": {
         "status": "success",
@@ -1796,8 +1796,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/hatch_text_box_in_hole.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/hatch_text_box_in_hole.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/hatch_text_box_in_hole.dxf"
       },
       "reading": {
         "status": "success",
@@ -1899,8 +1899,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/hatch_text_box_overlapping_fill_and_hole.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/hatch_text_box_overlapping_fill_and_hole.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/hatch_text_box_overlapping_fill_and_hole.dxf"
       },
       "reading": {
         "status": "success",
@@ -2002,8 +2002,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/hatches_1.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/hatches_1.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/hatches_1.dxf"
       },
       "reading": {
         "status": "success",
@@ -2100,8 +2100,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/hatches_2.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/hatches_2.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/hatches_2.dxf"
       },
       "reading": {
         "status": "success",
@@ -2232,9 +2232,9 @@
       "sha256": "e8d0e3b7ad3145d0c708cd2541610b206b45da9f6679e01b24f9c9b3280eca0a",
       "source": {
         "repository": "mozman/ezdxf",
-        "upstream_path": "examples_dxf/images.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/images.dxf"
+        "upstream_path": "examples_dxf/image/images.dxf",
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/image/images.dxf"
       },
       "reading": {
         "status": "success",
@@ -2378,8 +2378,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/insert_bricscad_level_1.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/insert_bricscad_level_1.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/insert_bricscad_level_1.dxf"
       },
       "reading": {
         "status": "success",
@@ -2486,8 +2486,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/mtext_columns_R2000.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/mtext_columns_R2000.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/mtext_columns_R2000.dxf"
       },
       "reading": {
         "status": "success",
@@ -2584,8 +2584,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/mtext_columns_R2007.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/mtext_columns_R2007.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/mtext_columns_R2007.dxf"
       },
       "reading": {
         "status": "success",
@@ -2682,8 +2682,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/mtext_columns_R2018.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/mtext_columns_R2018.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/mtext_columns_R2018.dxf"
       },
       "reading": {
         "status": "success",
@@ -2780,8 +2780,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/mtext_complex_inline_codes.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/mtext_complex_inline_codes.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/mtext_complex_inline_codes.dxf"
       },
       "reading": {
         "status": "success",
@@ -2873,8 +2873,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/multi_insert_with_attribs.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/multi_insert_with_attribs.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/multi_insert_with_attribs.dxf"
       },
       "reading": {
         "status": "success",
@@ -2989,8 +2989,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/text.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/text.dxf"
       },
       "reading": {
         "status": "success",
@@ -3162,8 +3162,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/text_alignments.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_alignments.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/text_alignments.dxf"
       },
       "reading": {
         "status": "success",
@@ -3275,8 +3275,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/text_fonts.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_fonts.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/text_fonts.dxf"
       },
       "reading": {
         "status": "success",
@@ -3383,8 +3383,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/text_in_viewports.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_in_viewports.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/text_in_viewports.dxf"
       },
       "reading": {
         "status": "success",
@@ -3497,8 +3497,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/text_mirror_shx_font.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_mirror_shx_font.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/text_mirror_shx_font.dxf"
       },
       "reading": {
         "status": "success",
@@ -3605,8 +3605,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/text_mirror_true_type_font.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_mirror_true_type_font.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/text_mirror_true_type_font.dxf"
       },
       "reading": {
         "status": "success",
@@ -3713,8 +3713,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/text_negative_extrusion.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_negative_extrusion.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/text_negative_extrusion.dxf"
       },
       "reading": {
         "status": "success",
@@ -3886,8 +3886,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/text_oblique_rotate.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_oblique_rotate.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/text_oblique_rotate.dxf"
       },
       "reading": {
         "status": "success",
@@ -3994,8 +3994,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/text_stacked_shx_font.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_stacked_shx_font.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/text_stacked_shx_font.dxf"
       },
       "reading": {
         "status": "success",
@@ -4102,8 +4102,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/text_stacked_true_type_font.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/text_stacked_true_type_font.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/text_stacked_true_type_font.dxf"
       },
       "reading": {
         "status": "success",
@@ -4210,8 +4210,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/transform_hatch_pattern.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/transform_hatch_pattern.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/transform_hatch_pattern.dxf"
       },
       "reading": {
         "status": "success",
@@ -4318,8 +4318,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/uncommon.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/uncommon.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/uncommon.dxf"
       },
       "reading": {
         "status": "success",
@@ -4676,8 +4676,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/valid_lineweights.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/valid_lineweights.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/valid_lineweights.dxf"
       },
       "reading": {
         "status": "success",
@@ -4769,8 +4769,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/viewport_frozen_layers.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/viewport_frozen_layers.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/viewport_frozen_layers.dxf"
       },
       "reading": {
         "status": "success",
@@ -4887,9 +4887,9 @@
       "sha256": "f890b657108b04b4787e17b1d6e1e9044485be239246bd2af965b720447c5f7d",
       "source": {
         "repository": "mozman/ezdxf",
-        "upstream_path": "examples_dxf/viewports.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/viewports.dxf"
+        "upstream_path": "examples_dxf/image/viewports.dxf",
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/image/viewports.dxf"
       },
       "reading": {
         "status": "success",
@@ -5029,8 +5029,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/visibility.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/visibility.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/visibility.dxf"
       },
       "reading": {
         "status": "success",
@@ -5137,8 +5137,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/wipeout_door.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/wipeout_door.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/wipeout_door.dxf"
       },
       "reading": {
         "status": "success",
@@ -5291,8 +5291,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/wipeout_random.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/wipeout_random.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/wipeout_random.dxf"
       },
       "reading": {
         "status": "success",
@@ -5384,8 +5384,8 @@
       "source": {
         "repository": "mozman/ezdxf",
         "upstream_path": "examples_dxf/xclip.dxf",
-        "upstream_commit": null,
-        "reference_url": "https://github.com/mozman/ezdxf/blob/master/examples_dxf/xclip.dxf"
+        "upstream_commit": "7c64bce52c9d60b9db2dad4d2793c1168c8d3f64",
+        "reference_url": "https://github.com/mozman/ezdxf/blob/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf/xclip.dxf"
       },
       "reading": {
         "status": "success",

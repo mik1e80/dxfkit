@@ -52,7 +52,11 @@ const externalFiles=fs.readdirSync(path.join(root,'testdata/ezdxf')).filter(f=>f
 assert.deepEqual(external.files.map(f=>f.local_file).sort(),externalFiles);
 assert.equal(external.files.length,47);
 for(const entry of external.files){
- assert.equal(entry.upstream_commit,null);assert.equal(entry.upstream_blob_sha,null);
+ assert.match(entry.upstream_commit,/^[0-9a-f]{40}$/);
+ assert.match(entry.upstream_blob_sha,/^[0-9a-f]{40}$/);
+ assert.match(entry.upstream_sha256,/^[0-9a-f]{64}$/);
+ assert(['exact','crlf-lf-only'].includes(entry.upstream_match));
+ assert.equal(entry.local_sha256===entry.upstream_sha256,entry.upstream_match==='exact');
  assert.equal(entry.license,'MIT');
  assert.equal(entry.local_sha256,sha256(fs.readFileSync(path.join(root,'testdata/ezdxf',entry.local_file))));
 }

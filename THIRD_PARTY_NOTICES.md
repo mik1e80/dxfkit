@@ -5,7 +5,7 @@
 
 统一的[许可适用范围](docs/licensing.md)和[模型来源/验证索引](docs/testing.md)区分项目自建内容、第三方语料、参考实现及构建工具；这些说明不替换或修改下面的原许可文本。
 
-项目Apache-2.0不将第三方语料或代码重新授权。来源按实际用途区分：第1节为测试语料，第2节为格式/公式与实现移植参考，第3节为构建/运行依赖；浏览器携带的core代码另带上游LICENSE和NOTICE。`tag.mbt`类型区间与`flatten.mbt`的bulge移植保留ezdxf来源及MIT全文，不笼统宣称全部算法独立原创。新增材料应固定上游提交、路径、blob、日期与本地哈希；历史47份文件的上游提交未知，不猜测补写。
+项目Apache-2.0不将第三方语料或代码重新授权。来源按实际用途区分：第1节为测试语料，第2节为格式/公式与实现移植参考，第3节为构建/运行依赖；浏览器携带的core代码另带上游LICENSE和NOTICE。`tag.mbt`类型区间与`flatten.mbt`的bulge移植保留ezdxf来源及MIT全文，不笼统宣称全部算法独立原创。新增材料应固定上游提交、路径、blob、日期与本地哈希；历史 47 份文件已核对导入前的上游匹配快照，原下载版本未记录。
 
 维护门禁将浏览器分发的core LICENSE/NOTICE与固定编译器SDK实际文件按LF规范化后比较，变更工具链须重新核对。x/async的固定版本及来源由`reproduction.json`与依赖图核对；这不是全面供应链/CVE安全审计。贡献与授权规则见[CONTRIBUTING](CONTRIBUTING.md)。
 
@@ -13,14 +13,14 @@
 
 ## 1. DXF 测试语料
 
-[逐文件来源及许可清单](testdata/ezdxf/MANIFEST.json)记录47个原始文件的本地SHA-256、来源路径、MIT和首次导入日期；未知的历史上游commit/blob保持null。[FreeCAD、QCAD 与 NotoCAD 原生导出证据](examples/cad-ocs/README.md)来自项目自建模型，按 Apache-2.0 分发。CAD 软件及其扩展按其自身条款使用，安装包不随本项目分发。六个自建AC1009模型另见[专用许可](examples/r12-validation/LICENSE.md)及[来源清单](examples/r12-validation/provenance.json)，不混用第三方MIT身份。
+[逐文件来源及许可清单](testdata/ezdxf/MANIFEST.json)记录47个原始文件的本地SHA-256、来源路径、MIT和首次导入日期；并逐文件记录匹配快照、上游 blob、原始 SHA-256 和匹配方式。[FreeCAD、QCAD 与 NotoCAD 原生导出证据](examples/cad-ocs/README.md)来自项目自建模型，按 Apache-2.0 分发。CAD 软件及其扩展按其自身条款使用，安装包不随本项目分发。六个自建AC1009模型另见[专用许可](examples/r12-validation/LICENSE.md)及[来源清单](examples/r12-validation/provenance.json)，不混用第三方MIT身份。
 
 **位置**：`testdata/ezdxf/`（47 个 `.dxf` 文件）
 
 **来源**：[mozman/ezdxf](https://github.com/mozman/ezdxf) 的 `examples_dxf/` 目录。
 收录的是原文件，未做任何修改。
 
-本轮保留现有语料字节，逐文件来源路径、大小、SHA-256 及实际验证层次见[第三方图纸案例表](docs/corpus-validation.md)。本仓库首次收录提交为 6f5d18250170d52921e9cc35cee583c045355ab5；未记录上游提交号，来源 master 链接不构成当前上游字节一致性证明。
+本轮保留现有语料字节，逐文件来源路径、大小、SHA-256 及实际验证层次见[第三方图纸案例表](docs/corpus-validation.md)。本仓库首次收录提交为 6f5d18250170d52921e9cc35cee583c045355ab5；原下载提交未记录。已逐文件核对导入前的 [ezdxf 固定快照](https://github.com/mozman/ezdxf/tree/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf)，44 份原始字节一致，3 份仅有换行差异。
 
 **用途**：真实文件回归测试。自己造的测试数据干净规整，测不出真实世界的问题——
 前导空白、三种换行、老版本的格式差异、退化的几何、第三方导出器的怪写法，

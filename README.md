@@ -37,7 +37,7 @@ moon run cli svg examples/plate.dxf > plate.svg
 
 | 版本 | 身份与可用入口 | 验证范围 |
 | --- | --- | --- |
-| 0.2.1 | [GitHub 固定源码](https://github.com/mik1e80/dxfkit/tree/v0.2.1) · [Mooncakes](https://mooncakes.io/docs/mik1e80/dxfkit%400.2.1) · [线上演示](https://mik1e80.github.io/dxfkit/) | [同版本验收](docs/acceptance-0.2.1.md)，包含 BricsCAD 修复 |
+| 0.2.1 | [GitHub 固定源码](https://github.com/mik1e80/dxfkit/tree/v0.2.1) · [Mooncakes](https://mooncakes.io/docs/mik1e80/dxfkit%400.2.1) · [线上演示](https://mik1e80.github.io/dxfkit/) | [同版本验收](docs/acceptance-0.2.1.md)，包含 BricsCAD 修复及[四后端完整 CI](https://github.com/mik1e80/dxfkit/actions/runs/45405781541) |
 | 已发布 0.2.0 | [Mooncakes](https://mooncakes.io/docs/mik1e80/dxfkit%400.2.0)，[发布源码 bb8d70a](https://github.com/mik1e80/dxfkit/commit/bb8d70ac166a7a60775ecb5d869e7f9913331d96) | [完整验收与注册表验证](docs/acceptance-0.2.0.md) |
 | 已发布 0.1.1 | [Mooncakes](https://mooncakes.io/docs/mik1e80/dxfkit)，发布源 `dc3acc8` | [发布及 registry 消费记录](docs/mooncakes-0.1.1.md)；不包含新 R12 API |
 | 历史 r2 | [固定标签](https://github.com/mik1e80/dxfkit/tree/submission-0.1.1-20261022-r2)，源码 `94509f3` | [历史完整 CI #26](https://github.com/mik1e80/dxfkit/actions/runs/39761104538)，不用于证明当前 R12 已完成全量验收 |

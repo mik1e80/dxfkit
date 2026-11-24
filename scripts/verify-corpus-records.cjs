@@ -16,6 +16,7 @@ const root = path.resolve(__dirname, '..');
 const write = process.argv.includes('--write');
 const hash = data => createHash('sha256').update(data).digest('hex');
 const read = file => fs.readFileSync(path.join(root, file));
+const upstreamByFile = new Map(JSON.parse(read('testdata/ezdxf/MANIFEST.json')).files.map(entry => [entry.local_file, entry]));
 function moon(args, status = 0) {
   const child = spawnSync('moon', args, {cwd:root,encoding:'utf8',timeout:120000,maxBuffer:16*1024*1024});
   if (child.error) throw child.error;
@@ -78,10 +79,11 @@ const cases = files.map(file => {
   limitations.push(file==='multi_insert_with_attribs.dxf'?'已验证25个FLAG的WCS顶点；其余几何未独立验证':'缺少逐图纸独立几何真值');
   const participating = tests.filter(t => t.scope==='all'||t.scope.includes(file)).map(t => t.id);
   if(file==='Minimal_DXF_AC1009.dxf') participating.push('CLI1');
+  const upstream = upstreamByFile.get(file);
   return {
     file,bytes:read(`testdata/ezdxf/${file}`).length,sha256:hash(read(`testdata/ezdxf/${file}`)),
-    source:{repository:'mozman/ezdxf',upstream_path:`examples_dxf/${file}`,upstream_commit:null,
-      reference_url:`https://github.com/mozman/ezdxf/blob/master/examples_dxf/${file}`},
+    source:{repository:'mozman/ezdxf',upstream_path:upstream.source_path,upstream_commit:upstream.upstream_commit,
+      reference_url:`${upstream.source_repository}/blob/${upstream.upstream_commit}/${upstream.source_path}`},
     reading:{status:'success',meaning:'字节读取及扫描不变量成立；不表示完整标准读取'},
     decoding:{status:total===0?'not-applicable':decoded===total?'all-observed-entities':'partial',
       observed:total,decoded,meaning:'is_decoded 字段输出计数，不是全字段语义认证'},
@@ -97,7 +99,7 @@ const report = {
   schema:'dxfkit-third-party-corpus-v1',
   provenance:{repository:'mozman/ezdxf',directory:'examples_dxf',license:'MIT',
     local_import_commit:'6f5d18250170d52921e9cc35cee583c045355ab5',upstream_commit:null,
-    note:'首次收录未记录上游提交；master 来源链接可能变动，本地 SHA-256 标识实际被测字节，不代表已校验当前上游一致'},
+    note:'原下载版本未记录。逐文件固定链接指向导入前的内容匹配快照，匹配方式与双方哈希见 testdata/ezdxf/MANIFEST.json。'},
   parameters:{target:'wasm',flatten_invariant_tol:0.01,expansion_and_check_tol:0.05,min_gap:0.0},
   tests:[...tests,{id:'CLI1',name:'空外部最小文件 strict 门禁',scope:['Minimal_DXF_AC1009.dxf'],
     source:'cli/smoke.cjs',meaning:'实际退出 1，报告无可检查轮廓'}],
@@ -118,9 +120,9 @@ const lines = [
   `实测读取 ${cases.length}/${cases.length}；顶层实体输出 ${report.summary.observed_entities}，其中 ${report.summary.decoded_entities} 个 is_decoded=true；${report.summary.incomplete_reports} 份检查报告标为不完整。`,
   '**整图独立几何真值验证：0/47。** 本轮另对 multi_insert_with_attribs.dxf 的25个FLAG轮廓、100个WCS顶点执行解析矩阵对照；这项部分验证不升级为整张文件认证。其他文件仍仅有离散、展开和检查不变量。','',
   '## 来源与身份','',
-  '来源：[mozman/ezdxf examples_dxf](https://github.com/mozman/ezdxf/tree/master/examples_dxf)，MIT；完整许可见[第三方声明](../THIRD_PARTY_NOTICES.md)。',
-  '本仓库首次收录提交：[6f5d182](https://github.com/mik1e80/dxfkit/commit/6f5d18250170d52921e9cc35cee583c045355ab5)。未记录上游提交号，不能补猜。表中来源链接是历史文件路径引用，master 的文件可能移动或删除。',
-  '本轮保留全部 DXF 字节；每个文件的大小、SHA-256、上游路径及实际诊断见[机器记录](corpus-validation.json)。DXF 哈希取原始字节，审计依赖的源码哈希规范化为 LF，以便跨平台复核。本地哈希标识被测文件，不是与当前上游逐字节一致的证明。','',
+  '来源：[mozman/ezdxf examples_dxf](https://github.com/mozman/ezdxf/tree/7c64bce52c9d60b9db2dad4d2793c1168c8d3f64/examples_dxf)，MIT。完整许可见[第三方声明](../THIRD_PARTY_NOTICES.md)。',
+  '本仓库首次收录提交：[6f5d182](https://github.com/mik1e80/dxfkit/commit/6f5d18250170d52921e9cc35cee583c045355ab5)。原下载版本未记录。逐文件链接固定到导入前经核验的上游快照。',
+  '44 份与上游原始字节一致，另 3 份仅有 CRLF/LF 差异。上游 blob、双方原始 SHA-256 和匹配方式见[来源清单](../testdata/ezdxf/MANIFEST.json)。语料字节及本次来源核对之前记录的测试结论保持原样。','',
   '## 判读方式','',
   '- 读取“成功”：文件读取、tag、EOF、组码范围不变量成立，完整结构语义仍受限。扫描和结构警告分别保存在机器记录。',
   '- 解码“d/n”：ENTITIES 解码结果中 d 个提供字段、n 个实体外壳；Unknown 仍保留。全部可解码也不代表所有字段被实现，文字、面、填充和标注可能仅保留元数据。0/0 表示无顶层实体，不算解码通过。',
