@@ -11,9 +11,9 @@
     "legacy_consumer_version": "0.1.1",
     "submission_ref": "main",
     "historical_submission_ref": "submission-0.1.1-20261022-r2",
-    "moon_release": "0.10.14+7d59c7ec9",
-    "moon_version": "0.1.20260920",
-    "moonc_version": "v0.10.14+7d59c7ec9",
+    "moon_release": "1.0.0-rc1+3c0520448",
+    "moon_version": "0.1.20261126",
+    "moonc_version": "v1.0.0-rc1+3c0520448",
     "node_minimum_major": 22,
     "ci_node_version": "24.19.0",
     "dependencies": {
