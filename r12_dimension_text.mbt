@@ -7,7 +7,7 @@ pub(all) enum R12DimensionLabelPart {
     upper~ : String,
     lower~ : String?,
     height_factor~ : Double,
-    limits~ : Bool
+    limits~ : Bool,
   )
 }
 

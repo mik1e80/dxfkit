@@ -51,8 +51,8 @@ pub(all) enum TagType {
 /// 而且取用时不用每次都重新解析文本（一张图几万个 tag，省下来的是实打实的）。
 pub(all) enum TagValue {
   Str(String)
-  I16(Int)
-  I32(Int)
+  I16(Int32)
+  I32(Int32)
   I64(Int64)
   F64(Double)
   Bool(Bool)
@@ -85,7 +85,7 @@ pub fn TagValue::as_double(self : TagValue) -> Double {
 
 ///|
 /// 取整数。浮点会截断，其它类型返回 0。
-pub fn TagValue::as_int(self : TagValue) -> Int {
+pub fn TagValue::as_int(self : TagValue) -> Int32 {
   match self {
     I16(v) | I32(v) => v
     I64(v) => v.to_int()
@@ -110,12 +110,12 @@ pub fn TagValue::as_bool(self : TagValue) -> Bool {
 ///|
 /// 一个 tag：组码 + 值。
 pub(all) struct Tag {
-  code : Int
+  code : Int32
   value : TagValue
 }
 
 ///|
-pub fn Tag::new(code : Int, value : TagValue) -> Tag {
+pub fn Tag::new(code : Int32, value : TagValue) -> Tag {
   { code, value, }
 }
 
@@ -155,7 +155,7 @@ pub fn Tag::to_display(self : Tag) -> String {
 /// 区间照抄 ezdxf 的 `lldxf/types.py`（已核对）。没列到的组码一律当字符串——
 /// 这不只是兜底：DXF 里「名字」类的字段散落在各个区间之外，
 /// 而字符串是唯一能安全容纳未知内容的类型。
-pub fn code_type(code : Int) -> TagType {
+pub fn code_type(code : Int32) -> TagType {
   if in_ranges(code, [
       (60, 79),
       (170, 179),
@@ -188,7 +188,7 @@ pub fn code_type(code : Int) -> TagType {
 
 ///|
 /// 组码是否落在给定的若干闭区间里。
-fn in_ranges(code : Int, ranges : Array[(Int, Int)]) -> Bool {
+fn in_ranges(code : Int32, ranges : Array[(Int32, Int32)]) -> Bool {
   for r in ranges {
     if code >= r.0 && code <= r.1 {
       return true
@@ -207,7 +207,7 @@ fn in_ranges(code : Int, ranges : Array[(Int, Int)]) -> Bool {
 ///
 /// DXF 的坐标是**成组**出现的：`10/20/30` 是一个点的 x/y/z，
 /// `11/21/31` 是第二个点，以此类推。规律是「个位数定轴、十位数定第几个点」。
-pub fn is_point_code(code : Int) -> Bool {
+pub fn is_point_code(code : Int32) -> Bool {
   code >= 10 && code <= 39
 }
 
@@ -217,7 +217,7 @@ pub fn is_point_code(code : Int) -> Bool {
 /// 轴用 0/1/2 表示 x/y/z。不是坐标组码时返回 `None`。
 ///
 /// 例：`10` → (0, 0)、`21` → (1, 1)、`32` → (2, 2)。
-pub fn point_code_parts(code : Int) -> (Int, Int)? {
+pub fn point_code_parts(code : Int32) -> (Int32, Int32)? {
   if !is_point_code(code) {
     return None
   }
@@ -236,7 +236,7 @@ pub fn point_code_parts(code : Int) -> (Int, Int)? {
 ///
 /// 句柄是对象在文件内的唯一编号（十六进制字符串），`330` 之类的引用指向它。
 /// `105` 是 DIMSTYLE 专用的句柄组码——同一个含义用了两个码，是历史包袱。
-pub fn is_handle_code(code : Int) -> Bool {
+pub fn is_handle_code(code : Int32) -> Bool {
   code == 5 || code == 105
 }
 
@@ -245,7 +245,7 @@ pub fn is_handle_code(code : Int) -> Bool {
 ///
 /// 值是另一个对象的句柄。`330` 是「所有者」，`360` 之类是硬引用。
 /// 靠这些把文件里散落的记录连成一张引用图。
-pub fn is_pointer_code(code : Int) -> Bool {
+pub fn is_pointer_code(code : Int32) -> Bool {
   in_ranges(code, [(320, 369), (390, 399), (480, 481), (1005, 1005)])
 }
 
@@ -254,12 +254,12 @@ pub fn is_pointer_code(code : Int) -> Bool {
 ///
 /// 第三方程序把自己的信息挂在实体上用的。解析时可以整段跳过，
 /// 但**要原样保留**——否则读一遍写回去就把别人的数据弄丢了。
-pub fn is_xdata_code(code : Int) -> Bool {
+pub fn is_xdata_code(code : Int32) -> Bool {
   code >= 1000 && code <= 1071
 }
 
 ///|
 /// 是不是二进制块组码。
-pub fn is_binary_code(code : Int) -> Bool {
+pub fn is_binary_code(code : Int32) -> Bool {
   in_ranges(code, [(310, 319), (1004, 1004)])
 }

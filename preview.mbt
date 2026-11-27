@@ -36,7 +36,7 @@ fn Drawing::svg_from_expansion(self : Drawing, exp : Expansion) -> String {
 fn Drawing::render_svg(
   self : Drawing,
   exp : Expansion,
-  max_bytes : Int,
+  max_bytes : Int32,
 ) -> Result[String, SvgError] {
   if max_bytes <= 0 {
     return Err(SvgByteLimit)
@@ -148,7 +148,7 @@ fn layer_state(tables : Tables?, layer : String) -> (String, String) {
 /// ACI 颜色索引 → 十六进制色值。头几个是标准色盘（1-7）；
 /// 更靠后的索引是渐变色表，先按灰处理——预览不追求色准，
 /// 能分辨图层就行。
-fn aci_color(index : Int) -> String {
+fn aci_color(index : Int32) -> String {
   match index {
     1 => "#ff0000"
     2 => "#ffff00"

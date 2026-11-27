@@ -10,9 +10,9 @@ pub(all) struct R12StyledDimension {
   label : String?
   text_at : Vec3
   text_height : Double
-  dimension_color : Int
-  extension_color : Int
-  text_color : Int
+  dimension_color : Int32
+  extension_color : Int32
+  text_color : Int32
 }
 
 ///|
@@ -20,9 +20,9 @@ pub(all) struct R12StyledDimension {
 /// label width cuts a gap or moves text and arrows on short linear spans.
 pub fn ReadDocument::r12_render_dimension(
   self : ReadDocument,
-  record_index : Int,
+  record_index : Int32,
   update : R12DimensionUpdate,
-  label_width? : Double = 0.0,
+  label_width~ : Double = 0.0,
 ) -> Result[R12StyledDimension, String] {
   Ok(r12_render_dim(self, record_index, update, label_width)) catch {
     InvalidSemantic(msg) => Err(msg)
@@ -32,7 +32,7 @@ pub fn ReadDocument::r12_render_dimension(
 ///|
 fn r12_render_dim(
   doc : ReadDocument,
-  index : Int,
+  index : Int32,
   update : R12DimensionUpdate,
   label_width : Double,
 ) -> R12StyledDimension raise R12SemanticError {
@@ -56,7 +56,7 @@ fn r12_render_dim(
     _ => raise InvalidSemantic("渲染使用的 DIMSTYLE 缺失或含歧义")
   }
   let overrides = r12_dimension_overrides(raw)
-  let get = fn(group : Int, header : String) raise R12SemanticError {
+  let get = fn(group : Int32, header : String) raise R12SemanticError {
     for item in overrides {
       if item.group == group {
         return Some(item.value.value)
@@ -81,7 +81,7 @@ fn r12_render_dim(
     }) else {
     raise InvalidSemantic("标注样式长度、缩放或间隙无效")
   }
-  let read_integer = fn(group : Int, name : String) raise R12SemanticError {
+  let read_integer = fn(group : Int32, name : String) raise R12SemanticError {
     match get(group, name) {
       None => 0
       Some(I16(v)) if v >= 0 && v <= 256 => v
@@ -98,7 +98,7 @@ fn r12_render_dim(
   let normal = r12_extrusion(raw).normal
   let separate = read_integer(173, "$DIMSAH") != 0
   let force_inside = read_integer(174, "$DIMTIX") != 0
-  let arrow_name = fn(i : Int) raise R12SemanticError {
+  let arrow_name = fn(i : Int32) raise R12SemanticError {
     let name = if separate {
       if i == 0 {
         get(6, "$DIMBLK1")

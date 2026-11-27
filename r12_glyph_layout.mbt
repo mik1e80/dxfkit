@@ -5,7 +5,7 @@ pub(all) struct R12FontStyle {
   name : String
   font_file : String
   big_font_file : String
-  flags : Int
+  flags : Int32
 }
 
 ///|
@@ -36,7 +36,7 @@ pub fn ReadDocument::r12_layout_attribute(
   self : ReadDocument,
   attribute : R12CellAttribute,
   shape : (R12FontStyle, String) -> R12GlyphRun?,
-  max_points? : Int = 100_000,
+  max_points~ : Int32 = 100_000,
 ) -> Result[R12GlyphLayout, String] {
   if self.profile != R12 {
     return Err("属性字形排版需要 AC1009")
@@ -53,7 +53,7 @@ pub fn ReadDocument::r12_layout_vertical_attribute(
   self : ReadDocument,
   attribute : R12CellAttribute,
   shape : (R12FontStyle, String) -> R12VerticalGlyphRun?,
-  max_points? : Int = 100_000,
+  max_points~ : Int32 = 100_000,
 ) -> Result[R12GlyphLayout, String] {
   if self.profile != R12 {
     return Err("竖排属性字形排版需要 AC1009")
@@ -90,7 +90,7 @@ fn r12_layout_attribute_impl(
   doc : ReadDocument,
   attribute : R12CellAttribute,
   shape : (R12FontStyle, String) -> R12GlyphRun?,
-  max_points : Int,
+  max_points : Int32,
   column : Bool,
 ) -> R12GlyphLayout raise R12SemanticError {
   let data = attribute.data

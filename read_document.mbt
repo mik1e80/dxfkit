@@ -1,10 +1,11 @@
 ///|
 /// AC1009 selects the R12 record-preservation profile; other versions are best effort.
 /// This is not certification of every mandatory field in the Autodesk standard.
+#derive(Eq)
 pub(all) enum ConformanceProfile {
   R12
   BestEffort
-} derive(Eq)
+}
 
 ///|
 pub extend ConformanceProfile with Eq::{equal, not_equal}
@@ -51,7 +52,7 @@ pub fn read_document_with_limits(
 pub fn read_document_with_legacy_decoder(
   source : Bytes,
   limits : ReadLimits,
-  decoder : (Int, Bytes) -> String?,
+  decoder : (Int32, Bytes) -> String?,
 ) -> ReadDocument {
   let stream = TagStream::with_legacy_decoder(limits, decoder)
   let tags = stream.feed(source)

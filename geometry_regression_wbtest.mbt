@@ -39,7 +39,7 @@ test "S形样条不能退化成直线" {
 
 ///|
 fn assert_spline_distance(
-  degree : Int,
+  degree : Int32,
   knots : Array[Double],
   ctrl : Array[Vec2],
   weights : Array[Double],

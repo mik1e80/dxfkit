@@ -32,7 +32,7 @@
 pub(all) struct Layer {
   name : String
   /// ACI 索引色（1-255）。**负值表示图层被关闭**，绝对值才是颜色
-  color : Int
+  color : Int32
   /// 线型名
   linetype : String
   /// 冻结标志；本工具默认检查跳过，不推断下游加工行为。
@@ -40,7 +40,7 @@ pub(all) struct Layer {
   /// 锁定标志；本工具不将锁定状态作为检查筛选条件。
   locked : Bool
   /// 线宽，单位是百分之一毫米（-3 表示「用默认值」）
-  lineweight : Int
+  lineweight : Int32
 }
 
 ///|
@@ -54,7 +54,7 @@ pub fn Layer::is_off(self : Layer) -> Bool {
 
 ///|
 /// 图层实际的颜色索引（取绝对值）。
-pub fn Layer::color_index(self : Layer) -> Int {
+pub fn Layer::color_index(self : Layer) -> Int32 {
   if self.color < 0 {
     -self.color
   } else {

@@ -5,15 +5,12 @@ import {
 
 // 编译成浏览器能直接 <script src> 加载的 JS。
 //
-// - exports：列出要暴露成全局变量的函数，必须是 pub
+// - web.mbt 的 #export_name 声明浏览器所需的全局函数。
 // - format: "iife"：包成一个立即执行函数，函数名挂到全局。
 //   默认的 "esm" 在 file:// 下会被 CORS 拦掉，页面就不能双击打开了
 
 options(
-  link: {
-    "js": {
-      "exports": [ "analyze", "check", "svg", "svg_error" ],
-      "format": "iife",
-    },
-  },
+  link: { "js": { "format": "iife" } },
 )
+
+pkgtype(kind: "foreign_library")

@@ -1,7 +1,7 @@
 ///|
 /// A named local reference. Indices address ReadDocument::records.
 pub(all) enum R12Link {
-  Resolved(Int)
+  Resolved(Int32)
   Missing
   Ambiguous
 }
@@ -11,7 +11,7 @@ pub(all) struct R12Attribute {
   tag : String
   value : String
   prompt : String?
-  flags : Int
+  flags : Int32
   style : String
   /// OCS converted into the containing space. A block definition still uses its local space.
   anchor : Vec3
@@ -22,9 +22,9 @@ pub(all) struct R12Attribute {
   rotation : Double
   width_scale : Double
   oblique : Double
-  generation_flags : Int
-  horizontal : Int
-  vertical : Int
+  generation_flags : Int32
+  horizontal : Int32
+  vertical : Int32
 }
 
 ///|
@@ -32,7 +32,7 @@ pub(all) struct R12Dimension {
   block_name : String
   block : R12Link
   style : String
-  flags : Int
+  flags : Int32
   definition : Vec3
   text_midpoint : Vec3
   block_offset : Vec3?
@@ -54,14 +54,14 @@ pub(all) enum R12EntitySemantics {
   SpatialPolyline(points~ : Array[Vec3], closed~ : Bool)
   PolygonMesh(
     points~ : Array[Vec3],
-    m~ : Int,
-    n~ : Int,
+    m~ : Int32,
+    n~ : Int32,
     closed_m~ : Bool,
-    closed_n~ : Bool
+    closed_n~ : Bool,
   )
   FittedMesh(R12FittedMesh)
   /// Each face stores signed, one-based indices; a negative index hides its outgoing edge.
-  Polyface(points~ : Array[Vec3], faces~ : Array[Array[Int]])
+  Polyface(points~ : Array[Vec3], faces~ : Array[Array[Int32]])
   Symbol(
     name~ : String,
     insertion~ : Vec3,
@@ -70,31 +70,35 @@ pub(all) enum R12EntitySemantics {
     x_scale~ : Double,
     oblique~ : Double,
     thickness~ : Double,
-    extrusion~ : Vec3
+    extrusion~ : Vec3,
   )
   Viewport(
     center~ : Vec3,
     width~ : Double,
     height~ : Double,
-    status~ : Int,
-    id~ : Int,
-    view~ : R12ViewportView?
+    status~ : Int32,
+    id~ : Int32,
+    view~ : R12ViewportView?,
   )
   Dimension(R12Dimension)
-  FaceEdges(corners~ : Array[Vec3], invisible_mask~ : Int)
-  AttributeDefinition(data~ : R12Attribute, block_record~ : Int?)
-  Attribute(data~ : R12Attribute, insert_record~ : Int?, definition~ : R12Link)
+  FaceEdges(corners~ : Array[Vec3], invisible_mask~ : Int32)
+  AttributeDefinition(data~ : R12Attribute, block_record~ : Int32?)
+  Attribute(
+    data~ : R12Attribute,
+    insert_record~ : Int32?,
+    definition~ : R12Link,
+  )
 }
 
 ///|
 pub(all) struct R12SemanticEntry {
-  record_index : Int
+  record_index : Int32
   entity : R12EntitySemantics
 }
 
 ///|
 pub(all) struct R12SemanticFinding {
-  record_index : Int
+  record_index : Int32
   message : String
 }
 
@@ -113,7 +117,7 @@ priv suberror R12SemanticError {
 }
 
 ///|
-fn r12_single(r : RawRecord, code : Int) -> TagValue? raise R12SemanticError {
+fn r12_single(r : RawRecord, code : Int32) -> TagValue? raise R12SemanticError {
   let mut value = None
   for tag in r.tags {
     if tag.code == code {
@@ -127,7 +131,7 @@ fn r12_single(r : RawRecord, code : Int) -> TagValue? raise R12SemanticError {
 ///|
 fn r12_number(
   r : RawRecord,
-  code : Int,
+  code : Int32,
   fallback : Double?,
 ) -> Double raise R12SemanticError {
   match r12_single(r, code) {
@@ -140,9 +144,9 @@ fn r12_number(
 ///|
 fn r12_integer(
   r : RawRecord,
-  code : Int,
-  fallback : Int?,
-) -> Int raise R12SemanticError {
+  code : Int32,
+  fallback : Int32?,
+) -> Int32 raise R12SemanticError {
   match r12_single(r, code) {
     Some(I16(v)) | Some(I32(v)) => v
     None if fallback is Some(v) => v
@@ -151,7 +155,7 @@ fn r12_integer(
 }
 
 ///|
-fn r12_string(r : RawRecord, code : Int) -> String? raise R12SemanticError {
+fn r12_string(r : RawRecord, code : Int32) -> String? raise R12SemanticError {
   match r12_single(r, code) {
     Some(Str(v)) => Some(v)
     None => None
@@ -162,8 +166,8 @@ fn r12_string(r : RawRecord, code : Int) -> String? raise R12SemanticError {
 ///|
 fn r12_required_string(
   r : RawRecord,
-  code : Int,
-  allow_empty? : Bool = false,
+  code : Int32,
+  allow_empty~ : Bool = false,
 ) -> String raise R12SemanticError {
   guard r12_string(r, code) is Some(v) && (allow_empty || v != "") else {
     raise InvalidSemantic("缺少或为空的字符串组码 \{code}")
@@ -174,8 +178,8 @@ fn r12_required_string(
 ///|
 fn r12_point(
   r : RawRecord,
-  base : Int,
-  require_z? : Bool = false,
+  base : Int32,
+  require_z~ : Bool = false,
 ) -> Vec3 raise R12SemanticError {
   Vec3::new(
     r12_number(r, base, None),
@@ -187,7 +191,7 @@ fn r12_point(
 ///|
 fn r12_optional_point(
   r : RawRecord,
-  base : Int,
+  base : Int32,
 ) -> Vec3? raise R12SemanticError {
   if r.tags.any(t => {
       t.code == base || t.code == base + 10 || t.code == base + 20
@@ -201,7 +205,7 @@ fn r12_optional_point(
 ///|
 fn r12_optional_number(
   r : RawRecord,
-  code : Int,
+  code : Int32,
 ) -> Double? raise R12SemanticError {
   match r12_single(r, code) {
     None => None
@@ -283,7 +287,7 @@ fn r12_attribute(r : RawRecord) -> R12Attribute raise R12SemanticError {
 }
 
 ///|
-fn r12_named_link(names : Map[String, Int], name : String) -> R12Link {
+fn r12_named_link(names : Map[String, Int32], name : String) -> R12Link {
   match names.get(name.to_upper()) {
     None => Missing
     Some(i) if i < 0 => Ambiguous
@@ -293,9 +297,9 @@ fn r12_named_link(names : Map[String, Int], name : String) -> R12Link {
 
 ///|
 fn r12_add_named_index(
-  names : Map[String, Int],
+  names : Map[String, Int32],
   name : String,
-  index : Int,
+  index : Int32,
 ) -> Unit {
   let key = name.to_upper()
   names[key] = if names.contains(key) { -1 } else { index }
@@ -304,7 +308,7 @@ fn r12_add_named_index(
 ///|
 fn r12_standalone(
   r : RawRecord,
-  blocks : Map[String, Int],
+  blocks : Map[String, Int32],
 ) -> R12EntitySemantics? raise R12SemanticError {
   match r.kind {
     "3DLINE" =>

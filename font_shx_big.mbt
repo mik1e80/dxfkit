@@ -12,7 +12,7 @@ fn shx_bigfont(file : FontBytes) -> R12ShxFont raise FontError {
   let index = header + 9 + changes * 4
   let body = index + count * 8
   let _ = file.region(0, body)
-  let symbols : Map[Int, FontBytes] = Map([])
+  let symbols : Map[Int32, FontBytes] = Map([])
   for i in 0..<count {
     let offset = index + i * 8
     let code = file.le16(offset)
@@ -74,7 +74,7 @@ fn shx_bigfont(file : FontBytes) -> R12ShxFont raise FontError {
 ///|
 fn shx_glyph(
   font : R12ShxFont,
-  id : Int,
+  id : Int32,
   advance : Double,
   paths : Array[Array[Vec2]],
   budget : FontBudget,
@@ -106,8 +106,8 @@ pub fn R12ShxFont::bigfont_run(
   self : R12ShxFont,
   primary : R12ShxFont,
   text : String,
-  packed_code : (Char) -> Int?,
-  max_work? : Int = 100_000,
+  packed_code : (Char) -> Int32?,
+  max_work~ : Int32 = 100_000,
 ) -> Result[R12GlyphRun, String] {
   Ok(shx_mixed(self, primary, text, packed_code, max_work)) catch {
     InvalidFont(msg) => Err(msg)
@@ -119,8 +119,8 @@ fn shx_mixed(
   big : R12ShxFont,
   primary : R12ShxFont,
   text : String,
-  packed_code : (Char) -> Int?,
-  max_work : Int,
+  packed_code : (Char) -> Int32?,
+  max_work : Int32,
 ) -> R12GlyphRun raise FontError {
   guard big.big_width is Some(_) &&
     primary.big_width is None &&
@@ -148,12 +148,12 @@ fn shx_mixed(
 ///|
 fn shx_primitive(
   font : R12ShxFont,
-  id : Int,
+  id : Int32,
   parent : ShxPen,
   origin : Vec2,
   sx : Double,
   sy : Double,
-  depth : Int,
+  depth : Int32,
 ) -> Unit raise FontError {
   guard sx > 0.0 && sy > 0.0 else {
     raise InvalidFont("BIGFONT 子形尺寸必须为正")

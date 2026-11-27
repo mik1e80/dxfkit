@@ -93,7 +93,7 @@ pub fn Header::get_string(self : Header, name : String) -> String {
 ///
 /// 注意 HEADER 变量的值**有时是字符串有时是数字**（`$ACADVER` 是字符串，
 /// `$INSUNITS` 是整数），所以两个取值函数都要有。
-pub fn Header::get_int(self : Header, name : String, default : Int) -> Int {
+pub fn Header::get_int(self : Header, name : String, default : Int32) -> Int32 {
   match self.get(name) {
     Some(v) =>
       if v.values.length() > 0 {
@@ -137,7 +137,7 @@ pub fn Header::get_point(self : Header, name : String) -> Vec3? {
 /// `$INSUNITS` 的值是个编号：0 = 没指定、1 = 英寸、4 = 毫米、6 = 米。
 /// **0 是最危险的值**——没指定单位意味着图纸上的「1」到底是 1 毫米还是
 /// 1 英寸无从判断，差 25.4 倍。加工检查会把这一条报出来。
-pub fn Header::insunits(self : Header) -> Int {
+pub fn Header::insunits(self : Header) -> Int32 {
   self.get_int("$INSUNITS", 0)
 }
 
@@ -152,7 +152,7 @@ pub fn Drawing::declared_unit_label(self : Drawing) -> String {
 
 ///|
 /// 单位编号的中文名。
-pub fn unit_name(code : Int) -> String {
+pub fn unit_name(code : Int32) -> String {
   match code {
     0 => "未指定"
     1 => "英寸"
@@ -182,7 +182,7 @@ pub fn unit_name(code : Int) -> String {
 ///|
 /// 一个单位编号对应多少毫米。没指定（0）或认不出时返回 `None`——
 /// **不猜**，猜错了尺寸差几百倍。
-pub fn unit_to_mm(code : Int) -> Double? {
+pub fn unit_to_mm(code : Int32) -> Double? {
   match code {
     1 => Some(25.4)
     2 => Some(304.8)

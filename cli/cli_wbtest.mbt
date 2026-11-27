@@ -14,7 +14,7 @@ test "数字解析：拒绝非法值，不静默退回默认" {
 
 ///|
 /// 把 (组码, 字符串值) 列表变成 tag 数组——测试 StatsTracker 用。
-fn str_tags(pairs : Array[(Int, String)]) -> Array[@dxfkit.Tag] {
+fn str_tags(pairs : Array[(Int32, String)]) -> Array[@dxfkit.Tag] {
   let out : Array[@dxfkit.Tag] = []
   for p in pairs {
     out.push(@dxfkit.Tag::new(p.0, @dxfkit.Str(p.1)))

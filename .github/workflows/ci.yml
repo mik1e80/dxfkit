@@ -29,7 +29,7 @@ jobs:
           node-version: '24.19.0'
       - name: 安装固定版本MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- '0.10.14+7d59c7ec9'
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- '1.0.0-rc1+3c0520448'
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
       - name: R12定向验证（含两个曾失败的语料回归，不是全量）
         if: github.event.inputs.validation != 'full'

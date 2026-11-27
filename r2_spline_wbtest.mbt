@@ -1,5 +1,5 @@
 ///|
-fn r2_cubic(degree : Int?) -> Drawing {
+fn r2_cubic(degree : Int32?) -> Drawing {
   let tag = match degree {
     Some(value) => "71\n\{value}\n"
     None => ""

@@ -211,7 +211,7 @@ fn short_name(path : String) -> String {
 
 ///|
 /// 左侧对齐补空格。
-fn pad(s : String, width : Int) -> String {
+fn pad(s : String, width : Int32) -> String {
   let sb = StringBuilder()
   sb.write_string(s)
   let mut i = s.length()
@@ -224,7 +224,7 @@ fn pad(s : String, width : Int) -> String {
 
 ///|
 /// 右侧对齐补空格。
-fn pad_int(n : Int, width : Int) -> String {
+fn pad_int(n : Int32, width : Int32) -> String {
   let s = n.to_string()
   let sb = StringBuilder()
   let mut i = s.length()

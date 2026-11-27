@@ -30,7 +30,7 @@ fn project_h(p : Vec3) -> Vec2 {
 fn insert_spline_knot(
   ctrl : Array[Vec3],
   knots : Array[Double],
-  degree : Int,
+  degree : Int32,
   value : Double,
 ) -> (Array[Vec3], Array[Double]) {
   // 在包括活动参数域右端点的最后一个等值节点后插入。
@@ -69,7 +69,7 @@ fn insert_spline_knot(
 fn sample_bezier(
   ctrl : Array[Vec3],
   tol : Double,
-  depth : Int,
+  depth : Int32,
   out : Array[Vec2],
 ) -> Bool {
   if out.length() >= 65536 {
@@ -121,7 +121,7 @@ fn sample_bezier(
 /// 将连续、正权重 NURBS 曲线投影到 XY 并离散。
 /// 无效节点、非正权重、非有限坐标、断裂曲线或资源上限返回错误。
 pub fn spline_points_checked(
-  degree : Int,
+  degree : Int32,
   knots : Array[Double],
   control_points : Array[Vec3],
   weights : Array[Double],

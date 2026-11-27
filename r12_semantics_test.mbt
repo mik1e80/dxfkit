@@ -1,8 +1,8 @@
 ///|
 fn r12_semantics_input(
   body : String,
-  blocks? : String = "",
-  tables? : String = "",
+  blocks~ : String = "",
+  tables~ : String = "",
 ) -> @dxfkit.ReadDocument {
   @dxfkit.read_document(
     @utf8.encode(
@@ -21,7 +21,7 @@ fn r12_semantics_input(
 }
 
 ///|
-fn r12_vertex(flags : Int, x : Int, y : Int, z : Int) -> String {
+fn r12_vertex(flags : Int32, x : Int32, y : Int32, z : Int32) -> String {
   "0\nVERTEX\n70\n\{flags}\n10\n\{x}\n20\n\{y}\n30\n\{z}\n"
 }
 
@@ -112,7 +112,7 @@ test "R12 ATTRIB links by tag and keeps its own OCS anchor" {
     is @dxfkit.Attribute(
       data~,
       insert_record=Some(owner),
-      definition=@dxfkit.Resolved(i)
+      definition=@dxfkit.Resolved(i),
     ) else {
     fail("expected linked attribute")
   }

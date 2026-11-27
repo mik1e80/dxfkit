@@ -4,8 +4,8 @@
 pub(all) struct R12MeshComparison {
   distances : Array[Double]
   max_error : Double
-  worst_index : Int
-  outside_tolerance : Int
+  worst_index : Int32
+  outside_tolerance : Int32
 }
 
 ///|
@@ -14,7 +14,7 @@ pub(all) struct R12MeshComparison {
 pub fn R12FittedMesh::compare_refit(
   self : R12FittedMesh,
   tol : Double,
-  max_points? : Int = 100_000,
+  max_points~ : Int32 = 100_000,
 ) -> Result[R12MeshComparison, String] {
   if !positive_tolerance(tol) ||
     !r12_grid_matches(self.samples.length(), self.sample_m, self.sample_n) {

@@ -13,9 +13,9 @@ pub(all) enum R12FieldIssue {
 
 ///|
 pub(all) struct R12FieldFinding {
-  record_index : Int
+  record_index : Int32
   kind : String
-  group : Int
+  group : Int32
   issue : R12FieldIssue
 }
 
@@ -35,9 +35,9 @@ pub fn ReadDocument::audit_r12_fields(self : ReadDocument) -> R12FieldAudit {
   if self.profile != R12 {
     return { findings, complete: false, }
   }
-  let blocks : Map[String, Int] = Map([])
-  let handles : Map[String, Int] = Map([])
-  let tables : Map[String, Map[String, Int]] = Map([])
+  let blocks : Map[String, Int32] = Map([])
+  let handles : Map[String, Int32] = Map([])
+  let tables : Map[String, Map[String, Int32]] = Map([])
   let mut current_table = ""
   for r in self.records {
     if r.section == "TABLES" && r.kind == "TABLE" {

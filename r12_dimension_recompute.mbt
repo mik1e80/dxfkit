@@ -27,10 +27,10 @@ pub(all) struct R12DimensionUpdate {
 /// record supplies the OCS and the per-entity DIMSTYLE overrides.
 pub fn ReadDocument::r12_recompute_dimension(
   self : ReadDocument,
-  record_index : Int,
+  record_index : Int32,
   tol : Double,
   definition? : R12Dimension,
-  precision? : Int = 2,
+  precision~ : Int32 = 2,
 ) -> Result[R12DimensionUpdate, String] {
   Ok(
     r12_recompute_dimension_impl(self, record_index, tol, definition, precision),
@@ -42,10 +42,10 @@ pub fn ReadDocument::r12_recompute_dimension(
 ///|
 fn r12_recompute_dimension_impl(
   doc : ReadDocument,
-  index : Int,
+  index : Int32,
   tol : Double,
   definition : R12Dimension?,
-  precision : Int,
+  precision : Int32,
 ) -> R12DimensionUpdate raise R12SemanticError {
   guard doc.profile == R12 &&
     index >= 0 &&

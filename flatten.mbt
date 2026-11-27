@@ -70,7 +70,7 @@ pub fn arc_from_bulge(a : Vec2, b : Vec2, bulge : Double) -> BulgeArc {
 /// 每段跨角 Δ 的弦高是 `r(1 − cos(Δ/2))`，解出 `Δ = 2·acos(1 − tol/r)`。
 /// 容差给得离谱小（或者非正）时按最小步长兜底，**4096 段封顶**——
 /// 手滑写了个 0 不该把内存炸了。
-fn arc_segments(radius : Double, sweep : Double, tol : Double) -> Int {
+fn arc_segments(radius : Double, sweep : Double, tol : Double) -> Int32 {
   let c = 1.0 - tol / radius
   let step = if c >= 1.0 {
     // 容差为零或负：解不出来，按 4096 段一圈的步长兜底
@@ -291,7 +291,7 @@ pub fn ellipse_points(
 
 ///|
 /// 单个权重的安全取值：数组短了按 1（普通 B 样条）。
-fn weight_at(weights : Array[Double], i : Int) -> Double {
+fn weight_at(weights : Array[Double], i : Int32) -> Double {
   if i < weights.length() {
     weights[i]
   } else {
@@ -305,7 +305,7 @@ fn weight_at(weights : Array[Double], i : Int) -> Double {
 /// 参数域是 [U[p], U[n+1]]——首尾各 p 个钳制节点的写法，端点正好是
 /// 首末控制点。在这个区间里自适应细分；数据不自洽的退回单点。
 pub fn spline_points(
-  degree : Int,
+  degree : Int32,
   knots : Array[Double],
   control_points : Array[Vec3],
   weights : Array[Double],

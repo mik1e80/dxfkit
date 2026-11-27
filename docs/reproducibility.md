@@ -2,18 +2,18 @@
 
 ## 固定发布源
 
-当前main的源码、项目说明、PDF和已保存的模型/回归数据随同一提交保存。`reproduction.json`的`submission_ref=main`是分支定位，精确身份必须使用GitHub提交SHA，并核对同提交CI中的`source_commit`；不能只说“最新版本”。当前交付使用 [v0.2.1](https://github.com/mik1e80/dxfkit/tree/v0.2.1)，定向结果见[八月黑客松验收记录](acceptance-0.2.1.md)。0.2.0 发布源为 `bb8d70a`，本地和 GitHub 完整验证见[验收记录](acceptance-0.2.0.md)。
+11 月验收请按实际仓库快照的提交复现。当前 `main` 固定 MoonBit 1.0 RC1，项目说明和一页 PDF 所列的 0.2.1 发布证据仍对应 `e07ec17`。`reproduction.json`的`submission_ref=main`是分支定位，精确身份必须使用GitHub提交SHA，并核对同提交CI中的`source_commit`；不能只说“最新版本”。当前交付使用 [v0.2.1](https://github.com/mik1e80/dxfkit/tree/v0.2.1)，定向结果见[八月黑客松验收记录](acceptance-0.2.1.md)。0.2.0 发布源为 `bb8d70a`，本地和 GitHub 完整验证见[验收记录](acceptance-0.2.0.md)。
 
 | 项目 | 固定值 |
 | --- | --- |
-| MoonBit发行包 | `0.10.14+7d59c7ec9` |
-| moon/moonrun | `0.1.20260920` |
-| moonc | `v0.10.14+7d59c7ec9` |
+| MoonBit发行包 | `1.0.0-rc1+3c0520448` |
+| moon/moonrun | `0.1.20261126` |
+| moonc | `v1.0.0-rc1+3c0520448` |
 | Node | CI为`24.19.0`；脚本要求22及以上 |
 | CLI依赖 | `moonbitlang/x@0.5.5`、`moonbitlang/async@0.22.1` |
 | 核心库 | 仅MoonBit core |
 
-本机默认工具链可能更新，复现时以`moon version --all`核对上述发行包。独立`.mbtx`开发脚本可使用较新脚本运行器，但内部项目验证明确调用固定SDK，不混用编译器与core。
+在 Linux 或 macOS 可运行 `curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- 1.0.0-rc1+3c0520448`。在 Windows 使用[官方安装脚本](https://www.moonbitlang.com/download)，执行前设置 `$env:MOONBIT_INSTALL_VERSION = "1.0.0-rc1+3c0520448"`。安装后以 `moon version --all` 核对版本。独立`.mbtx`开发脚本可使用较新脚本运行器，但内部项目验证明确调用固定SDK，不混用编译器与core。
 
 首次干净检出并切换到所需SHA后运行：
 
@@ -51,7 +51,7 @@ moon run examples/r12-validation/external
 
 | 身份 | 对应范围 |
 | --- | --- |
-| 0.2.1／`v0.2.1` | BricsCAD 拟合网格修复、Mooncakes 包和 Pages 的同源码定向验证见[验收记录](acceptance-0.2.1.md) |
+| 0.2.1／`v0.2.1` | BricsCAD 拟合网格修复、Mooncakes 包、Pages 部署及原工具链的同源码验证见[验收记录](acceptance-0.2.1.md) |
 | 已发布 0.2.0／`bb8d70a` | 新R12结构和坐标能力，日常使用当前提交的定向证据；固定候选的完整结果见[验收记录](acceptance-0.2.0.md) |
 | Mooncakes0.1.1／源`dc3acc8` | [已发布包及registry验证](mooncakes-0.1.1.md)，不含新R12 API |
 | `submission-0.1.1-20261022-r2`／`94509f3` | [完整CI #26及同提交Pages](https://github.com/mik1e80/dxfkit/actions/runs/39761104538)；固定历史结果与旧演示，不移动 |

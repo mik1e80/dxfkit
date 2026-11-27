@@ -8,7 +8,7 @@ fn advisor_draw(body : String) -> Drawing {
 }
 
 ///|
-fn advisor_spline(flags : Int, weights : String) -> String {
+fn advisor_spline(flags : Int32, weights : String) -> String {
   "0\nSPLINE\n70\n\{flags}\n71\n2\n72\n6\n73\n3\n40\n0\n40\n0\n40\n0\n40\n1\n40\n1\n40\n1\n" +
   weights +
   "10\n0\n20\n0\n10\n1\n20\n2\n10\n2\n20\n0\n"

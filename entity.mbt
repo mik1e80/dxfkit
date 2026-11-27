@@ -51,7 +51,7 @@ pub(all) enum Geometry {
     center~ : Vec3,
     radius~ : Double,
     start_angle~ : Double,
-    end_angle~ : Double
+    end_angle~ : Double,
   )
   /// 椭圆（弧）：圆心、长轴向量（圆心指向长轴端点）、短长轴比、起止参数（弧度）。
   ///
@@ -61,7 +61,7 @@ pub(all) enum Geometry {
     major~ : Vec3,
     ratio~ : Double,
     start_param~ : Double,
-    end_param~ : Double
+    end_param~ : Double,
   )
   /// 多段线：一串顶点，每段可以是直线（bulge = 0）或圆弧（bulge ≠ 0）。
   ///
@@ -99,17 +99,17 @@ pub(all) enum Geometry {
   /// 权重（组码 41）只有有理样条才写；缺省补 1——权重全 1 就是
   /// 普通的 B 样条。
   Spline(
-    degree~ : Int,
+    degree~ : Int32,
     knots~ : Array[Double],
     control_points~ : Array[Vec3],
-    weights~ : Array[Double]
+    weights~ : Array[Double],
   )
   /// 区域填充（HATCH）：标高点、是否实体填充、图案名、边界路径数。
   ///
   /// 边界能由线 / 弧 / 椭圆 / 样条四种边组合，还有老式的多段线写法——
   /// **边界几何这版不展开**（加工切的是轮廓实体，填充多是区域标记），
   /// 先记录身份，让统计和检查环节看得见它。
-  Hatch(at~ : Vec3, solid~ : Bool, pattern~ : String, paths~ : Int)
+  Hatch(at~ : Vec3, solid~ : Bool, pattern~ : String, paths~ : Int32)
   /// 认不出的实体类型。**不等于坏记录**——只是解析器还没解码它
   Unknown
 }
@@ -168,7 +168,7 @@ pub(all) struct Entities {
 /// **缺 z 按 0 处理**——平面图里点就在 z=0 平面上，缺 z 是常态。
 /// **缺 x 或 y 返回 `None`**——那说明记录坏了，交给调用方决定怎么办
 /// （本文件的选择是跳过并警告，而不是拿原点补）。
-pub fn Record::point(self : Record, n : Int) -> Vec3? {
+pub fn Record::point(self : Record, n : Int32) -> Vec3? {
   let x = match self.require_double(10 + n) {
     Ok(v) => v
     Err(_) => return None
@@ -810,7 +810,7 @@ fn parse_polyline_entity(
 ///|
 /// 取一个组码的数值。**没写返回 `None`**——和 `get_double` 的默认值
 /// 是两回事：这里要区分「写了 0」和「根本没写」，缺必填字段是要报警的。
-fn number_of(record : Record, code : Int) -> Double? {
+fn number_of(record : Record, code : Int32) -> Double? {
   match record.require_double(code) {
     Ok(value) => Some(value)
     Err(_) => None
@@ -1129,7 +1129,7 @@ pub fn parse_blocks(section : Section) -> Blocks {
 ///|
 fn warn_polyline_extent(
   record : Record,
-  codes : Array[Int],
+  codes : Array[Int32],
   warnings : Array[String],
 ) -> Unit {
   if record.get_double(39, 0.0) != 0.0 {

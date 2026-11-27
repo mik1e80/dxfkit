@@ -9,7 +9,7 @@
 /// **数据不自洽时退化成第一个控制点**（控制点不够、节点数对不上）：
 /// 不猜形状，也不炸——校验层负责把这种记录报出来。
 fn nurbs_point(
-  degree : Int,
+  degree : Int32,
   knots : Array[Double],
   ctrl : Array[Vec2],
   weights : Array[Double],

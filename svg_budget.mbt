@@ -9,7 +9,7 @@ pub(all) enum SvgError {
 pub fn Drawing::svg_with_limit(
   self : Drawing,
   tol : Double,
-  max_bytes : Int,
+  max_bytes : Int32,
 ) -> Result[String, SvgError] {
   if !positive_tolerance(tol) {
     return Err(InvalidPreviewGeometry)
@@ -21,12 +21,12 @@ pub fn Drawing::svg_with_limit(
 }
 
 ///|
-let default_svg_bytes : Int = 32 * 1024 * 1024
+let default_svg_bytes : Int32 = 32 * 1024 * 1024
 
 ///|
 priv struct SvgWriter {
   data : StringBuilder
-  mut remaining : Int
+  mut remaining : Int32
   mut limited : Bool
 }
 

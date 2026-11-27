@@ -6,15 +6,15 @@ priv suberror FontError {
 ///|
 priv struct FontBytes {
   bytes : Bytes
-  start : Int
-  size : Int
+  start : Int32
+  size : Int32
 }
 
 ///|
 fn FontBytes::region(
   self : FontBytes,
-  offset : Int,
-  size : Int,
+  offset : Int32,
+  size : Int32,
 ) -> FontBytes raise FontError {
   guard offset >= 0 &&
     size >= 0 &&
@@ -26,7 +26,7 @@ fn FontBytes::region(
 }
 
 ///|
-fn FontBytes::u8(self : FontBytes, i : Int) -> Int raise FontError {
+fn FontBytes::u8(self : FontBytes, i : Int32) -> Int32 raise FontError {
   guard i >= 0 && i < self.size else {
     raise InvalidFont("字体记录被截断")
   }
@@ -34,7 +34,7 @@ fn FontBytes::u8(self : FontBytes, i : Int) -> Int raise FontError {
 }
 
 ///|
-fn FontBytes::i8(self : FontBytes, i : Int) -> Int raise FontError {
+fn FontBytes::i8(self : FontBytes, i : Int32) -> Int32 raise FontError {
   let v = self.u8(i)
   if v >= 128 {
     v - 256
@@ -44,12 +44,12 @@ fn FontBytes::i8(self : FontBytes, i : Int) -> Int raise FontError {
 }
 
 ///|
-fn FontBytes::u16(self : FontBytes, i : Int) -> Int raise FontError {
+fn FontBytes::u16(self : FontBytes, i : Int32) -> Int32 raise FontError {
   (self.u8(i) << 8) + self.u8(i + 1)
 }
 
 ///|
-fn FontBytes::i16(self : FontBytes, i : Int) -> Int raise FontError {
+fn FontBytes::i16(self : FontBytes, i : Int32) -> Int32 raise FontError {
   let v = self.u16(i)
   if v >= 32768 {
     v - 65536
@@ -59,12 +59,12 @@ fn FontBytes::i16(self : FontBytes, i : Int) -> Int raise FontError {
 }
 
 ///|
-fn FontBytes::le16(self : FontBytes, i : Int) -> Int raise FontError {
+fn FontBytes::le16(self : FontBytes, i : Int32) -> Int32 raise FontError {
   self.u8(i) + (self.u8(i + 1) << 8)
 }
 
 ///|
-fn FontBytes::u32(self : FontBytes, i : Int) -> Int raise FontError {
+fn FontBytes::u32(self : FontBytes, i : Int32) -> Int32 raise FontError {
   let high = self.u16(i)
   guard high < 32768 else {
     raise InvalidFont("字体偏移或长度无法表示")
@@ -75,7 +75,7 @@ fn FontBytes::u32(self : FontBytes, i : Int) -> Int raise FontError {
 ///|
 fn FontBytes::ascii_at(
   self : FontBytes,
-  i : Int,
+  i : Int32,
   value : String,
 ) -> Bool raise FontError {
   for j in 0..<value.length() {
@@ -96,11 +96,11 @@ fn font_input(data : Bytes) -> FontBytes raise FontError {
 
 ///|
 priv struct FontBudget {
-  mut remaining : Int
+  mut remaining : Int32
 }
 
 ///|
-fn FontBudget::take(self : FontBudget, n : Int) -> Unit raise FontError {
+fn FontBudget::take(self : FontBudget, n : Int32) -> Unit raise FontError {
   guard n >= 0 && self.remaining >= n else {
     raise InvalidFont("字形超过全局工作预算")
   }

@@ -57,7 +57,7 @@ pub fn ReadDocument::read_status(self : ReadDocument) -> ReadStatus {
 /// DocumentWarning collects structural, derived-input and profile warnings.
 pub fn ReadDocument::diagnostics(self : ReadDocument) -> Array[Diagnostic] {
   let result : Array[Diagnostic] = []
-  let scanned : Map[String, Int] = Map([])
+  let scanned : Map[String, Int32] = Map([])
   for message in self.scan.warnings {
     result.push({ code: ScanWarning, severity: Warn, message, })
     scanned[message] = scanned.get(message).unwrap_or(0) + 1

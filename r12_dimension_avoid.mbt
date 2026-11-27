@@ -20,9 +20,9 @@ pub fn r12_avoid_dimension_labels(
   labels : Array[R12DimensionLabelBox],
   obstacles : Array[Aabb2],
   step : Double,
-  clearance? : Double = 0.0,
-  rings? : Int = 8,
-  max_checks? : Int = 100_000,
+  clearance~ : Double = 0.0,
+  rings~ : Int32 = 8,
+  max_checks~ : Int32 = 100_000,
 ) -> Result[Array[R12DimensionLabelPosition], String] {
   guard step > 0.0 &&
     step <= 1.0e100 &&
@@ -62,7 +62,7 @@ pub fn r12_avoid_dimension_labels(
 
 ///|
 priv struct R12AvoidBudget {
-  mut checks_left : Int
+  mut checks_left : Int32
 }
 
 ///|
@@ -70,10 +70,10 @@ fn r12_label_search(
   label : R12DimensionLabelBox,
   obstacles : Array[Aabb2],
   occupancy : Array[Aabb2],
-  index : Int,
+  index : Int32,
   step : Double,
   clearance : Double,
-  rings : Int,
+  rings : Int32,
   budget : R12AvoidBudget,
 ) -> R12DimensionLabelPosition {
   for ring in 0..<=rings {
@@ -103,7 +103,7 @@ fn r12_label_clear(
   bounds : Aabb2,
   obstacles : Array[Aabb2],
   occupancy : Array[Aabb2],
-  index : Int,
+  index : Int32,
   clearance : Double,
   budget : R12AvoidBudget,
 ) -> Bool? {
@@ -153,7 +153,7 @@ fn r12_finite_xy(p : Vec2) -> Bool {
 pub fn WorldExpansion::r12_dimension_obstacles(
   self : WorldExpansion,
   plane_tol : Double,
-  max_boxes? : Int = 100_000,
+  max_boxes~ : Int32 = 100_000,
 ) -> Result[Array[Aabb2], String] {
   Ok(r12_dimension_obstacles_impl(self, plane_tol, max_boxes)) catch {
     InvalidSemantic(message) => Err(message)
@@ -164,7 +164,7 @@ pub fn WorldExpansion::r12_dimension_obstacles(
 fn r12_dimension_obstacles_impl(
   world : WorldExpansion,
   plane_tol : Double,
-  max_boxes : Int,
+  max_boxes : Int32,
 ) -> Array[Aabb2] raise R12SemanticError {
   guard positive_tolerance(plane_tol) &&
     max_boxes > 0 &&

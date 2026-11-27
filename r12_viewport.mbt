@@ -10,19 +10,19 @@ pub(all) struct R12ViewportView {
   lens_length : Double
   front_clip_z : Double
   back_clip_z : Double
-  mode : Int
-  circle_zoom : Int
-  fast_zoom : Int
-  ucs_icon : Int
-  snap_on : Int
-  grid_on : Int
-  snap_style : Int
-  snap_iso_pair : Int
+  mode : Int32
+  circle_zoom : Int32
+  fast_zoom : Int32
+  ucs_icon : Int32
+  snap_on : Int32
+  grid_on : Int32
+  snap_style : Int32
+  snap_iso_pair : Int32
   snap_angle : Double
   snap_base : Vec2
   snap_spacing : Vec2
   grid_spacing : Vec2
-  hide_plot : Int
+  hide_plot : Int32
   frozen_layers : Array[String]
 }
 
@@ -50,7 +50,7 @@ fn r12_viewport_view(r : RawRecord) -> R12ViewportView? raise R12SemanticError {
     1040, 1040, 1040, 1040, 1070, 1002,
   ]
   let numbers : Array[Double] = Array::make(codes.length(), 0.0)
-  let integers : Array[Int] = Array::make(codes.length(), 0)
+  let integers : Array[Int32] = Array::make(codes.length(), 0)
   guard start + codes.length() <= r.tags.length() else {
     raise InvalidSemantic("VIEWPORT 的 MVIEW 描述符被截断")
   }

@@ -41,7 +41,7 @@ pub fn ReadDocument::r12_refresh_bound_dimension(
   self : ReadDocument,
   binding : R12DimensionBinding,
   tol : Double,
-  precision? : Int = 2,
+  precision~ : Int32 = 2,
 ) -> Result[R12DimensionUpdate, String] {
   r12_bound_dimension(self, binding, tol, precision) catch {
     InvalidSemantic(msg) => Err(msg)
@@ -53,14 +53,14 @@ fn r12_bound_dimension(
   doc : ReadDocument,
   binding : R12DimensionBinding,
   tol : Double,
-  precision : Int,
+  precision : Int32,
 ) -> Result[R12DimensionUpdate, String] raise R12SemanticError {
   guard doc.profile == R12 &&
     !binding.anchors.is_empty() &&
     binding.anchors.length() <= 5 else {
     raise InvalidSemantic("绑定需要 AC1009 与 1–5 个定义点")
   }
-  let handles : Map[String, Int] = Map([])
+  let handles : Map[String, Int32] = Map([])
   for i, r in doc.records {
     if r.section == "ENTITIES" &&
       r12_string(r, 5) is Some(raw) &&
@@ -108,9 +108,9 @@ fn r12_bound_dimension(
 
 ///|
 fn r12_bound_handle(
-  handles : Map[String, Int],
+  handles : Map[String, Int32],
   raw : String,
-) -> Int raise R12SemanticError {
+) -> Int32 raise R12SemanticError {
   guard r12_handle_key(raw) is Some(key) &&
     handles.get(key) is Some(index) &&
     index >= 0 else {

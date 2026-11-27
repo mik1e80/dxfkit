@@ -1,7 +1,7 @@
 ///|
 /// Decoder for AutoCAD-86 SHX stroke fonts.
 pub struct R12ShxFont {
-  priv symbols : Map[Int, FontBytes]
+  priv symbols : Map[Int32, FontBytes]
   priv above : Double
   priv below : Double
   priv unicode : Bool
@@ -18,7 +18,7 @@ pub fn load_r12_shx(data : Bytes) -> Result[R12ShxFont, String] {
 }
 
 ///|
-fn shx_after_name(record : FontBytes) -> Int raise FontError {
+fn shx_after_name(record : FontBytes) -> Int32 raise FontError {
   for i in 0..<record.size {
     if record.u8(i) == 0 {
       return i + 1
@@ -49,7 +49,7 @@ fn shx_load(file : FontBytes) -> R12ShxFont raise FontError {
     raise InvalidFont("SHX 索引数量无效")
   }
   let mut offset = 30 + 4 * count
-  let symbols : Map[Int, FontBytes] = Map([])
+  let symbols : Map[Int32, FontBytes] = Map([])
   for i in 0..<count {
     let code = file.le16(30 + 4 * i)
     let size = file.le16(32 + 4 * i)
@@ -121,8 +121,8 @@ fn ShxPen::plot(self : ShxPen, point : Vec2) -> Unit raise FontError {
 pub fn R12ShxFont::glyph_run(
   self : R12ShxFont,
   text : String,
-  map? : (Char) -> Int = ch => ch.to_int(),
-  max_work? : Int = 100_000,
+  map~ : (Char) -> Int32 = ch => ch.to_int(),
+  max_work~ : Int32 = 100_000,
 ) -> Result[R12GlyphRun, String] {
   Ok(shx_run(self, text, map, max_work)) catch {
     InvalidFont(msg) => Err(msg)
@@ -133,8 +133,8 @@ pub fn R12ShxFont::glyph_run(
 fn shx_run(
   font : R12ShxFont,
   text : String,
-  map : (Char) -> Int,
-  max_work : Int,
+  map : (Char) -> Int32,
+  max_work : Int32,
 ) -> R12GlyphRun raise FontError {
   guard max_work > 0 && max_work <= 2_000_000 else {
     raise InvalidFont("SHX 工作预算无效")
@@ -151,9 +151,9 @@ fn shx_run(
 ///|
 fn shx_execute(
   font : R12ShxFont,
-  id : Int,
+  id : Int32,
   state : ShxPen,
-  depth : Int,
+  depth : Int32,
 ) -> Unit raise FontError {
   guard depth < 16 && id != 0 && font.symbols.get(id) is Some(data) else {
     raise InvalidFont("SHX 字形缺失或递归超限")
@@ -379,7 +379,7 @@ fn shx_unicode(file : FontBytes) -> R12ShxFont raise FontError {
   guard above > 0.0 && info.u8(fields + 3) == 0 else {
     raise InvalidFont("SHX Unicode 字高或编码不支持")
   }
-  let symbols : Map[Int, FontBytes] = Map([])
+  let symbols : Map[Int32, FontBytes] = Map([])
   let mut pos = 31 + len
   for _ in 1..<count {
     let id = file.le16(pos)

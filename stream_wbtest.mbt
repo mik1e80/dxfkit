@@ -7,7 +7,7 @@
 
 ///|
 /// 把一段字节按固定块大小喂给流式扫描器，收齐 tag。
-fn streamed_tags(data : Bytes, chunk : Int) -> Array[Tag] {
+fn streamed_tags(data : Bytes, chunk : Int32) -> Array[Tag] {
   let stream = TagStream::new()
   let tags : Array[Tag] = []
   let mut i = 0

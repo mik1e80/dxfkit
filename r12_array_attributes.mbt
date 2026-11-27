@@ -3,8 +3,8 @@
 /// The basis vectors include the applicable parent scale and text rotation,
 /// leaving glyph generation and justification to the caller.
 pub(all) struct R12CellAttribute {
-  source_record : Int
-  definition_record : Int
+  source_record : Int32
+  definition_record : Int32
   from_constant_definition : Bool
   data : R12Attribute
   anchor : Vec3
@@ -16,8 +16,8 @@ pub(all) struct R12CellAttribute {
 ///|
 fn r12_block_end(
   records : Array[RawRecord],
-  start : Int,
-) -> Int raise R12SemanticError {
+  start : Int32,
+) -> Int32 raise R12SemanticError {
   for i in (start + 1)..<records.length() {
     let r = records[i]
     if r.section != "BLOCKS" || r.kind == "BLOCK" || r.kind == "ENDSEC" {
@@ -37,9 +37,9 @@ fn r12_block_end(
 /// Constant ATTDEF points are transformed from the block definition.
 pub fn ReadDocument::r12_cell_attributes(
   self : ReadDocument,
-  insert_record : Int,
-  row : Int,
-  column : Int,
+  insert_record : Int32,
+  row : Int32,
+  column : Int32,
 ) -> Result[Array[R12CellAttribute], String] {
   Ok(r12_cell_attributes_impl(self, insert_record, row, column)) catch {
     InvalidSemantic(message) => Err(message)
@@ -49,9 +49,9 @@ pub fn ReadDocument::r12_cell_attributes(
 ///|
 fn r12_cell_attributes_impl(
   doc : ReadDocument,
-  index : Int,
-  row : Int,
-  column : Int,
+  index : Int32,
+  row : Int32,
+  column : Int32,
 ) -> Array[R12CellAttribute] raise R12SemanticError {
   guard doc.profile == R12 && index >= 0 && index < doc.records.length() else {
     raise InvalidSemantic(
@@ -153,8 +153,8 @@ fn r12_cell_attributes_impl(
 ///|
 fn r12_place_attribute(
   attr : R12Attribute,
-  source_record : Int,
-  definition_record : Int,
+  source_record : Int32,
+  definition_record : Int32,
   from_constant_definition : Bool,
   transform : Transform3,
 ) -> R12CellAttribute raise R12SemanticError {

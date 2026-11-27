@@ -41,7 +41,7 @@ pub(all) struct Report {
 
 ///|
 /// 统计某个严重程度的条数。
-pub fn Report::count(self : Report, severity : Severity) -> Int {
+pub fn Report::count(self : Report, severity : Severity) -> Int32 {
   let mut n = 0
   for f in self.findings {
     let hit = match (f.severity, severity) {
@@ -173,7 +173,7 @@ fn Drawing::check_expansion(
   self : Drawing,
   opt : CheckOptions,
   exp : Expansion,
-  budget? : GeometryBudget = GeometryBudget::default(),
+  budget~ : GeometryBudget = GeometryBudget::default(),
 ) -> Report {
   let tol = opt.tol
   let findings : Array[Finding] = []
@@ -206,7 +206,7 @@ fn Drawing::check_expansion(
     return { findings, }
   }
   // 已解码不等于已检查几何。不能让未支持实体或空图纸得到无问题结论。
-  let unsupported : Array[(String, Int)] = []
+  let unsupported : Array[(String, Int32)] = []
   let mut outlines = 0
   for p in exp.placed {
     match p.flat {
@@ -351,7 +351,7 @@ fn check_radius(
 ///|
 /// 文字未转轮廓：不检查字形几何，下游软件的处理方式由使用者确认。
 fn check_texts(placed : Array[Placed], findings : Array[Finding]) -> Unit {
-  let counts : Array[(String, Int)] = []
+  let counts : Array[(String, Int32)] = []
   for p in placed {
     let is_text = match p.entity.kind() {
       "TEXT" | "MTEXT" | "ATTRIB" | "ATTDEF" => true
@@ -406,7 +406,7 @@ fn check_layers(
     }
   }
   // 引用了图层表里没有的图层：引用完整性问题
-  let unknown : Array[(String, Int)] = []
+  let unknown : Array[(String, Int32)] = []
   for p in placed {
     if p.layer != "" && tables.layer(p.layer) is None {
       bump(unknown, p.layer)
@@ -501,11 +501,11 @@ priv struct CutSeg {
   min_y : Double
   max_y : Double
   /// 属于第几条展开几何（数组下标）
-  owner : Int
+  owner : Int32
   /// 折线里的第几段
-  seg : Int
+  seg : Int32
   /// 折线总段数（判断环绕相邻用）
-  count : Int
+  count : Int32
   closed : Bool
 }
 
@@ -527,7 +527,7 @@ fn check_crossings(
     if segs.length() < 2 {
       continue
     }
-    let self_crossed : Map[Int, Bool] = Map([])
+    let self_crossed : Map[Int32, Bool] = Map([])
     let mut dup_pairs = 0
     let mut dup_len = 0.0
     let mut dup_at = Vec2::zero()
@@ -854,7 +854,7 @@ fn is_uncut_layer(tables : Tables?, name : String) -> Bool {
 
 ///|
 /// 往 (名字, 计数) 表里加一。
-fn bump(counts : Array[(String, Int)], key : String) -> Unit {
+fn bump(counts : Array[(String, Int32)], key : String) -> Unit {
   let mut i = 0
   while i < counts.length() {
     if counts[i].0 == key {

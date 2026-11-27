@@ -55,7 +55,7 @@ pub fn scan_tags_with_limits(data : Bytes, limits : ReadLimits) -> TagScan {
 
 ///|
 /// 这一行是不是只有空白。
-fn line_is_blank(data : Bytes, from : Int, to : Int) -> Bool {
+fn line_is_blank(data : Bytes, from : Int32, to : Int32) -> Bool {
   for i = from; i < to; i = i + 1 {
     let c = data[i].to_int() & 0xFF
     if c != 0x20 && c != 0x09 {
@@ -67,7 +67,7 @@ fn line_is_blank(data : Bytes, from : Int, to : Int) -> Bool {
 
 ///|
 /// 组码那一行的内容摘录，出错信息里用。太长的截断。
-fn preview(data : Bytes, from : Int, to : Int) -> String {
+fn preview(data : Bytes, from : Int32, to : Int32) -> String {
   let sb = StringBuilder()
   let stop = if to - from > 40 { from + 40 } else { to }
   for i = from; i < stop; i = i + 1 {
@@ -86,7 +86,7 @@ fn preview(data : Bytes, from : Int, to : Int) -> String {
 ///
 /// **必须 trim**：组码按 3 位右对齐（`  0`、` 70`、`100`），不 trim 的话
 /// 除了三位数以外全都解析不出来。实测 `circle.dxf` 有一千多行是缩进的。
-fn parse_group_code(data : Bytes, from : Int, to : Int) -> Int? {
+fn parse_group_code(data : Bytes, from : Int32, to : Int32) -> Int32? {
   let (start, stop) = trim_ascii_range(data, from, to)
   if start >= stop {
     return None
@@ -122,7 +122,7 @@ fn parse_group_code(data : Bytes, from : Int, to : Int) -> Int? {
 
 ///|
 /// 去掉一段字节两侧的空格和制表符。返回新的 `[start, stop)`。
-fn trim_ascii_range(data : Bytes, from : Int, to : Int) -> (Int, Int) {
+fn trim_ascii_range(data : Bytes, from : Int32, to : Int32) -> (Int32, Int32) {
   let mut start = from
   let mut stop = to
   while start < stop {
@@ -149,10 +149,10 @@ fn trim_ascii_range(data : Bytes, from : Int, to : Int) -> (Int, Int) {
 ///
 /// **字符串类型不 trim**，数值类型 trim——理由见文件头。
 fn parse_value(
-  code : Int,
+  code : Int32,
   data : Bytes,
-  from : Int,
-  to : Int,
+  from : Int32,
+  to : Int32,
   encoding : Encoding,
 ) -> Result[TagValue, String] {
   let kind = code_type(code)
@@ -206,7 +206,7 @@ fn parse_value(
 
 ///|
 /// 把一段字节复制出来。
-fn slice_range(data : Bytes, from : Int, to : Int) -> Bytes {
+fn slice_range(data : Bytes, from : Int32, to : Int32) -> Bytes {
   let out : Array[Byte] = []
   for i = from; i < to; i = i + 1 {
     out.push(data[i])

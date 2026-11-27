@@ -1,7 +1,7 @@
 ///|
 /// Shared candidate-visit budget for topology, intersections and gap checks.
 pub(all) struct GeometryBudget {
-  max_candidates : Int
+  max_candidates : Int32
 }
 
 ///|
@@ -11,7 +11,7 @@ pub fn GeometryBudget::default() -> GeometryBudget {
 
 ///|
 priv struct CheckWork {
-  mut remaining : Int
+  mut remaining : Int32
   mut stopped : Bool
 }
 
@@ -36,7 +36,7 @@ pub fn Drawing::check_with_budget(
 }
 
 ///|
-fn topology_root(parent : Array[Int], i : Int) -> Int {
+fn topology_root(parent : Array[Int32], i : Int32) -> Int32 {
   let mut root = i
   while parent[root] != root {
     root = parent[root]
@@ -51,7 +51,7 @@ fn topology_root(parent : Array[Int], i : Int) -> Int {
 }
 
 ///|
-fn topology_union(parent : Array[Int], a : Int, b : Int) -> Unit {
+fn topology_union(parent : Array[Int32], a : Int32, b : Int32) -> Unit {
   let x = topology_root(parent, a)
   let y = topology_root(parent, b)
   if x != y {
@@ -66,7 +66,7 @@ fn endpoint_topology(
   edges : Array[(Vec2, Vec2)],
   tol : Double,
   work : CheckWork,
-) -> (Int, Double, Vec2, Bool) {
+) -> (Int32, Double, Vec2, Bool) {
   let points : Array[Vec2] = []
   for edge in edges {
     points.push(edge.0)
@@ -77,7 +77,7 @@ fn endpoint_topology(
   // A vertical column would otherwise visit every pair, even when the
   // vertical separation makes a contact impossible.
   let vertical = points.length() > 0 && points.all(p => p.x == points[0].x)
-  let key = (i : Int) => if vertical { points[i].y } else { points[i].x }
+  let key = (i : Int32) => if vertical { points[i].y } else { points[i].x }
   order.sort_by((a, b) => {
     if key(a) < key(b) {
       -1
@@ -113,7 +113,7 @@ fn endpoint_topology(
       topology_root(parent, i * 2 + 1),
     )
   }
-  let ends : Map[Int, Array[Vec2]] = Map([])
+  let ends : Map[Int32, Array[Vec2]] = Map([])
   let mut branched = false
   for i = 0; i < points.length(); i = i + 1 {
     if degree[i] > 0 && degree[i] != 2 {

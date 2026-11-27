@@ -21,7 +21,7 @@ fn assert_xyz(
 }
 
 ///|
-fn record_index(doc : @dxfkit.ReadDocument, kind : String) -> Int raise {
+fn record_index(doc : @dxfkit.ReadDocument, kind : String) -> Int32 raise {
   for i, record in doc.records {
     if record.kind == kind && record.section == "ENTITIES" {
       return i

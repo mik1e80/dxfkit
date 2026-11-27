@@ -13,10 +13,10 @@ pub struct R12FittedMesh {
   fit : R12MeshFit
   controls : Array[Vec3]
   samples : Array[Vec3]
-  m : Int
-  n : Int
-  sample_m : Int
-  sample_n : Int
+  m : Int32
+  n : Int32
+  sample_m : Int32
+  sample_n : Int32
   closed_m : Bool
   closed_n : Bool
 }
@@ -26,8 +26,8 @@ pub struct R12FittedMesh {
 /// wrap once. A frame-only mesh has no sampled quads.
 pub fn R12FittedMesh::quad(
   self : R12FittedMesh,
-  m : Int,
-  n : Int,
+  m : Int32,
+  n : Int32,
 ) -> (Vec3, Vec3, Vec3, Vec3)? {
   let m_faces = self.sample_m - (if self.closed_m { 0 } else { 1 })
   let n_faces = self.sample_n - (if self.closed_n { 0 } else { 1 })
@@ -52,16 +52,16 @@ pub fn R12FittedMesh::quad(
 }
 
 ///|
-fn r12_grid_matches(length : Int, m : Int, n : Int) -> Bool {
+fn r12_grid_matches(length : Int32, m : Int32, n : Int32) -> Bool {
   m >= 2 && n >= 2 && length / m == n && length % m == 0
 }
 
 ///|
 fn r12_fitted_mesh(
   records : Array[RawRecord],
-  first : Int,
-  flags : Int,
-  fit_code : Int,
+  first : Int32,
+  flags : Int32,
+  fit_code : Int32,
 ) -> R12EntitySemantics raise R12SemanticError {
   let header = records[first]
   let fit = match fit_code {

@@ -1,7 +1,7 @@
 ///|
 /// One per-entity DIMSTYLE override and its original XDATA value.
 pub(all) struct R12DimStyleOverride {
-  group : Int
+  group : Int32
   value : Tag
 }
 
@@ -9,7 +9,7 @@ pub(all) struct R12DimStyleOverride {
 /// Saved annotation primitives and references for one DIMENSION in its
 /// containing space. Primitive coordinates include the group 12 translation.
 pub(all) struct R12DimensionPicture {
-  block_record : Int
+  block_record : Int32
   style_record : R12Link
   overrides : Array[R12DimStyleOverride]
   world : WorldExpansion
@@ -21,9 +21,9 @@ pub(all) struct R12DimensionPicture {
 /// Nested INSERTs in the picture, such as arrow blocks, follow the same limits.
 pub fn ReadDocument::r12_dimension_picture(
   self : ReadDocument,
-  record_index : Int,
+  record_index : Int32,
   tol : Double,
-  limits? : ExpandLimits = expansion_limits(),
+  limits~ : ExpandLimits = expansion_limits(),
 ) -> Result[R12DimensionPicture, String] {
   Ok(r12_dimension_picture_impl(self, record_index, tol, limits)) catch {
     InvalidSemantic(message) => Err(message)
@@ -33,7 +33,7 @@ pub fn ReadDocument::r12_dimension_picture(
 ///|
 fn r12_dimension_picture_impl(
   doc : ReadDocument,
-  index : Int,
+  index : Int32,
   tol : Double,
   limits : ExpandLimits,
 ) -> R12DimensionPicture raise R12SemanticError {
@@ -186,7 +186,7 @@ fn r12_dimension_overrides(
   let mut acad = false
   let mut found = false
   let out : Array[R12DimStyleOverride] = []
-  let keys : Map[Int, Bool] = Map([])
+  let keys : Map[Int32, Bool] = Map([])
   let mut i = 0
   while i < r.tags.length() {
     let t = r.tags[i]

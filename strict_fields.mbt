@@ -1,7 +1,10 @@
 ///|
 /// Missing fields return None; type errors/nonfinite numbers return Err.
 /// Legacy get/as APIs remain permissive for compatibility.
-pub fn Record::try_double(self : Record, code : Int) -> Result[Double?, String] {
+pub fn Record::try_double(
+  self : Record,
+  code : Int32,
+) -> Result[Double?, String] {
   match self.get(code) {
     None => Ok(None)
     Some(t) =>
@@ -22,7 +25,7 @@ pub fn Record::try_double(self : Record, code : Int) -> Result[Double?, String] 
 ///|
 pub fn Record::require_double(
   self : Record,
-  code : Int,
+  code : Int32,
 ) -> Result[Double, String] {
   match self.try_double(code) {
     Ok(Some(value)) => Ok(value)
@@ -32,7 +35,7 @@ pub fn Record::require_double(
 }
 
 ///|
-pub fn Record::try_int(self : Record, code : Int) -> Result[Int?, String] {
+pub fn Record::try_int(self : Record, code : Int32) -> Result[Int32?, String] {
   match self.get(code) {
     None => Ok(None)
     Some(t) =>
@@ -44,7 +47,10 @@ pub fn Record::try_int(self : Record, code : Int) -> Result[Int?, String] {
 }
 
 ///|
-pub fn Record::require_int(self : Record, code : Int) -> Result[Int, String] {
+pub fn Record::require_int(
+  self : Record,
+  code : Int32,
+) -> Result[Int32, String] {
   match self.try_int(code) {
     Ok(Some(value)) => Ok(value)
     Ok(None) => Err("缺少必填组码 \{code}")

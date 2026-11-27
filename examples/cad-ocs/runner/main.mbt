@@ -71,7 +71,7 @@ fn test_freecad_array() -> Unit raise {
   let world = doc.drawing.expand_world(0.002)
   assert_true(world.warnings.is_empty())
   assert_eq(world.placed.length(), 12)
-  let starts : Map[(Int, Int), Bool] = Map([])
+  let starts : Map[(Int32, Int32), Bool] = Map([])
   for placement in world.placed {
     assert_true(placement.instances.is_empty())
     guard placement.flat is @dxfkit.Outline3(points~, closed=false) else {
@@ -112,7 +112,7 @@ fn test_qcad_array() -> Unit raise {
   let world = doc.drawing.expand_world(0.002)
   assert_true(world.warnings.is_empty())
   assert_eq(world.placed.length(), 6)
-  let seen : Map[(Int, Int), Bool] = Map([])
+  let seen : Map[(Int32, Int32), Bool] = Map([])
   for placement in world.placed {
     assert_eq(placement.instances.length(), 1)
     let instance = placement.instances[0]

@@ -1,19 +1,20 @@
 ///|
+#derive(ToJson)
 struct ExternalArrayEvidence {
   file : String
   acadver : String
-  polyline_instances : Int
-  polyline_vertices : Int
-  polyline_xyz_fields : Int
+  polyline_instances : Int32
+  polyline_vertices : Int32
+  polyline_xyz_fields : Int32
   max_coordinate_error : Double
-  circle_instances : Int
-  sampled_circle_points : Int
+  circle_instances : Int32
+  sampled_circle_points : Int32
   max_circle_radius_error : Double
   max_circle_start_error : Double
-  self_intersection_findings : Int
+  self_intersection_findings : Int32
   linked_attributes_complete : Bool
   full_document_geometry_verified : Bool
-} derive(ToJson)
+}
 
 ///|
 fn main raise {

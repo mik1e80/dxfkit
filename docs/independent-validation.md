@@ -8,7 +8,7 @@
 
 ## 可保存和复算的解析对照
 
-运行 `node scripts/verify-submission-evidence.cjs` 会读取 DXF，经实际 CLI 生成 SVG，再由 Node 解析 SVG 点列并检查。公式与点到线段投影单独写在该脚本，不导入 MoonBit 几何辅助函数。脚本版本用[结果 JSON](submission-evidence/results.json)中的 `oracle.script_sha256_lf` 标识；公式本身无软件版本号。MoonBit 发行包固定为 `0.10.14+7d59c7ec9`，本地 Node 为 24.19.0；每次实跑版本、提交及 dirty 状态另写 `_build/submission-evidence.json`。
+运行 `node scripts/verify-submission-evidence.cjs` 会读取 DXF，经实际 CLI 生成 SVG，再由 Node 解析 SVG 点列并检查。公式与点到线段投影单独写在该脚本，不导入 MoonBit 几何辅助函数。脚本版本用[结果 JSON](submission-evidence/results.json)中的 `oracle.script_sha256_lf` 标识；公式本身无软件版本号。原始取证使用 MoonBit `0.10.14+7d59c7ec9` 和 Node 24.19.0，当前复现工具链见[固定配置](reproducibility.md)；每次实跑版本、提交及 dirty 状态另写 `_build/submission-evidence.json`。
 
 | 对照对象 | 独立预期与指标 | 本次实际值 | 允许误差/判定 |
 | --- | --- | --- | --- |

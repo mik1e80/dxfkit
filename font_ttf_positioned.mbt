@@ -1,7 +1,7 @@
 ///|
 fn ttf_outline_point(
   contours : Array[Array[TtfPoint]],
-  index : Int,
+  index : Int32,
   budget : FontBudget,
 ) -> Vec2 raise FontError {
   let mut point = index
@@ -19,7 +19,7 @@ fn ttf_outline_point(
 /// A glyph placement from an OpenType shaper, in font design units. The
 /// array order is the shaper's visual order; glyphs are not remapped via cmap.
 pub(all) struct R12PositionedGlyph {
-  glyph_id : Int
+  glyph_id : Int32
   x_advance : Double
   y_advance : Double
   x_offset : Double
@@ -32,8 +32,8 @@ pub(all) struct R12PositionedGlyph {
 pub fn R12TrueType::positioned_run(
   self : R12TrueType,
   glyphs : Array[R12PositionedGlyph],
-  tol? : Double = 0.001,
-  max_work? : Int = 100_000,
+  tol~ : Double = 0.001,
+  max_work~ : Int32 = 100_000,
 ) -> Result[R12GlyphRun, String] {
   r12_positioned_fonts([{ font: self, glyphs, }], tol~, max_work~)
 }
@@ -50,8 +50,8 @@ pub(all) struct R12PositionedFontRun {
 /// uses its own cap-height normalization and shares the horizontal baseline.
 pub fn r12_positioned_fonts(
   runs : Array[R12PositionedFontRun],
-  tol? : Double = 0.001,
-  max_work? : Int = 100_000,
+  tol~ : Double = 0.001,
+  max_work~ : Int32 = 100_000,
 ) -> Result[R12GlyphRun, String] {
   Ok(ttf_positioned_spans(runs, tol, max_work)) catch {
     InvalidFont(msg) => Err(msg)
@@ -62,7 +62,7 @@ pub fn r12_positioned_fonts(
 fn ttf_positioned_spans(
   runs : Array[R12PositionedFontRun],
   tol : Double,
-  max_work : Int,
+  max_work : Int32,
 ) -> R12GlyphRun raise FontError {
   guard positive_tolerance(tol) &&
     max_work > 0 &&

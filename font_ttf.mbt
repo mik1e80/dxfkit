@@ -5,8 +5,8 @@ pub struct R12TrueType {
   priv glyf : FontBytes
   priv loca : FontBytes
   priv hmtx : FontBytes
-  glyphs : Int
-  horizontal_metrics : Int
+  glyphs : Int32
+  horizontal_metrics : Int32
   long_offsets : Bool
   cap : Double
   ascent : Double
@@ -135,7 +135,7 @@ fn ttf_load(font : FontBytes) -> R12TrueType raise FontError {
 }
 
 ///|
-fn ttf_lookup(cmap : FontBytes, cp : Int) -> Int raise FontError {
+fn ttf_lookup(cmap : FontBytes, cp : Int32) -> Int32 raise FontError {
   if cmap.u16(0) == 12 {
     let mut lo = 0
     let mut hi = cmap.u32(12)
@@ -197,7 +197,10 @@ fn ttf_lookup(cmap : FontBytes, cp : Int) -> Int raise FontError {
 }
 
 ///|
-fn R12TrueType::offset(self : R12TrueType, gid : Int) -> Int raise FontError {
+fn R12TrueType::offset(
+  self : R12TrueType,
+  gid : Int32,
+) -> Int32 raise FontError {
   if self.long_offsets {
     self.loca.u32(4 * gid)
   } else {
@@ -214,10 +217,10 @@ priv struct TtfPoint {
 ///|
 fn ttf_coordinates(
   glyph : FontBytes,
-  flags : Array[Int],
-  pos : Int,
+  flags : Array[Int32],
+  pos : Int32,
   x : Bool,
-) -> (Array[Int], Int) raise FontError {
+) -> (Array[Int32], Int32) raise FontError {
   let short_mask = if x { 2 } else { 4 }
   let same_mask = if x { 16 } else { 32 }
   let mut at = pos
@@ -245,7 +248,7 @@ fn ttf_coordinates(
 ///|
 fn ttf_simple(
   glyph : FontBytes,
-  n : Int,
+  n : Int32,
   budget : FontBudget,
 ) -> Array[Array[TtfPoint]] raise FontError {
   if n == 0 {
@@ -304,8 +307,8 @@ fn ttf_simple(
 ///|
 fn R12TrueType::contours(
   self : R12TrueType,
-  gid : Int,
-  depth : Int,
+  gid : Int32,
+  depth : Int32,
   budget : FontBudget,
 ) -> Array[Array[TtfPoint]] raise FontError {
   budget.take(1)
@@ -331,7 +334,7 @@ fn R12TrueType::contours(
     pos += 4
     let xy = (flags & 2) != 0
     let words = (flags & 1) != 0
-    let arg = fn(at : Int) raise FontError {
+    let arg = fn(at : Int32) raise FontError {
       if words {
         if xy {
           glyph.i16(at)
@@ -415,8 +418,8 @@ fn R12TrueType::contours(
 pub fn R12TrueType::glyph_run(
   self : R12TrueType,
   text : String,
-  tol? : Double = 0.001,
-  max_work? : Int = 100_000,
+  tol~ : Double = 0.001,
+  max_work~ : Int32 = 100_000,
 ) -> Result[R12GlyphRun, String] {
   Ok(ttf_run(self, text, tol, max_work)) catch {
     InvalidFont(msg) => Err(msg)
@@ -428,7 +431,7 @@ fn ttf_run(
   font : R12TrueType,
   text : String,
   tol : Double,
-  max_work : Int,
+  max_work : Int32,
 ) -> R12GlyphRun raise FontError {
   guard positive_tolerance(tol) && max_work > 0 && max_work <= 2_000_000 else {
     raise InvalidFont("字形容差或预算无效")
@@ -503,7 +506,7 @@ fn ttf_quadratic(
   b : Vec2,
   c : Vec2,
   tol : Double,
-  depth : Int,
+  depth : Int32,
   out : Array[Vec2],
   budget : FontBudget,
 ) -> Unit raise FontError {

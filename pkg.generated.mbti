@@ -12,7 +12,7 @@ pub fn build_drawing(TagScan) -> Drawing
 
 pub fn circle_points(Vec2, Double, Double) -> Array[Vec2]
 
-pub fn code_type(Int) -> TagType
+pub fn code_type(Int32) -> TagType
 
 pub fn decide_encoding(Bytes) -> Encoding
 
@@ -22,15 +22,15 @@ pub fn ellipse_points(Vec3, Vec3, Double, Double, Double, Double) -> Array[Vec2]
 
 pub fn find_header_var(Array[Section], String) -> String?
 
-pub fn is_binary_code(Int) -> Bool
+pub fn is_binary_code(Int32) -> Bool
 
-pub fn is_handle_code(Int) -> Bool
+pub fn is_handle_code(Int32) -> Bool
 
-pub fn is_point_code(Int) -> Bool
+pub fn is_point_code(Int32) -> Bool
 
-pub fn is_pointer_code(Int) -> Bool
+pub fn is_pointer_code(Int32) -> Bool
 
-pub fn is_xdata_code(Int) -> Bool
+pub fn is_xdata_code(Int32) -> Bool
 
 pub fn load_r12_shx(Bytes) -> Result[R12ShxFont, String]
 
@@ -46,17 +46,17 @@ pub fn parse_header(Section) -> Header
 
 pub fn parse_tables(Section) -> Tables
 
-pub fn point_code_parts(Int) -> (Int, Int)?
+pub fn point_code_parts(Int32) -> (Int32, Int32)?
 
 pub fn polyline_points(Array[PolyVertex], Bool, Double) -> Array[Vec2]
 
-pub fn r12_avoid_dimension_labels(Array[R12DimensionLabelBox], Array[Aabb2], Double, clearance? : Double, rings? : Int, max_checks? : Int) -> Result[Array[R12DimensionLabelPosition], String]
+pub fn r12_avoid_dimension_labels(Array[R12DimensionLabelBox], Array[Aabb2], Double, clearance? : Double, rings? : Int32, max_checks? : Int32) -> Result[Array[R12DimensionLabelPosition], String]
 
-pub fn r12_positioned_fonts(Array[R12PositionedFontRun], tol? : Double, max_work? : Int) -> Result[R12GlyphRun, String]
+pub fn r12_positioned_fonts(Array[R12PositionedFontRun], tol? : Double, max_work? : Int32) -> Result[R12GlyphRun, String]
 
 pub fn read_document(Bytes) -> ReadDocument
 
-pub fn read_document_with_legacy_decoder(Bytes, ReadLimits, (Int, Bytes) -> String?) -> ReadDocument
+pub fn read_document_with_legacy_decoder(Bytes, ReadLimits, (Int32, Bytes) -> String?) -> ReadDocument
 
 pub fn read_document_with_limits(Bytes, ReadLimits) -> ReadDocument
 
@@ -66,13 +66,13 @@ pub fn scan_tags_with_limits(Bytes, ReadLimits) -> TagScan
 
 pub fn severity_label(Severity) -> String
 
-pub fn spline_points(Int, Array[Double], Array[Vec3], Array[Double], Double) -> Array[Vec2]
+pub fn spline_points(Int32, Array[Double], Array[Vec3], Array[Double], Double) -> Array[Vec2]
 
-pub fn spline_points_checked(Int, Array[Double], Array[Vec3], Array[Double], Double) -> Result[Array[Vec2], String]
+pub fn spline_points_checked(Int32, Array[Double], Array[Vec3], Array[Double], Double) -> Result[Array[Vec2], String]
 
-pub fn unit_name(Int) -> String
+pub fn unit_name(Int32) -> String
 
-pub fn unit_to_mm(Int) -> Double?
+pub fn unit_to_mm(Int32) -> Double?
 
 // Errors
 
@@ -135,10 +135,11 @@ pub(all) struct CheckTolerances {
   comparison : Double
 }
 
+#derive(Eq)
 pub(all) enum ConformanceProfile {
   R12
   BestEffort
-} derive(Eq)
+}
 pub fn ConformanceProfile::equal(Self, Self) -> Bool
 pub fn ConformanceProfile::not_equal(Self, Self) -> Bool
 
@@ -184,7 +185,7 @@ pub fn Drawing::expand_with_limits(Self, Double, ExpandLimits) -> Expansion
 pub fn Drawing::expand_world(Self, Double) -> WorldExpansion
 pub fn Drawing::expand_world_with_limits(Self, Double, ExpandLimits) -> WorldExpansion
 pub fn Drawing::section(Self, String) -> Section?
-pub fn Drawing::svg_with_limit(Self, Double, Int) -> Result[String, SvgError]
+pub fn Drawing::svg_with_limit(Self, Double, Int32) -> Result[String, SvgError]
 pub fn Drawing::to_svg(Self, Double) -> String
 
 pub(all) struct DrawingAnalysis {
@@ -196,7 +197,7 @@ pub(all) struct DrawingAnalysis {
 pub(all) enum Encoding {
   Utf8
   Cp1252
-  Other(Int)
+  Other(Int32)
 }
 pub fn Encoding::is_fallback(Self) -> Bool
 pub fn Encoding::to_display(Self) -> String
@@ -225,9 +226,9 @@ pub(all) struct EntityCommon {
 }
 
 pub(all) struct ExpandLimits {
-  max_placed : Int
-  max_points : Int
-  max_visits : Int
+  max_placed : Int32
+  max_points : Int32
+  max_visits : Int32
 }
 
 pub(all) struct Expansion {
@@ -260,8 +261,8 @@ pub(all) enum Geometry {
   Insert(at~ : Vec3, block~ : String, scale~ : Vec3, rotation~ : Double)
   Face(corners~ : Array[Vec3])
   Dimension(at~ : Vec3, block~ : String, measurement~ : Double)
-  Spline(degree~ : Int, knots~ : Array[Double], control_points~ : Array[Vec3], weights~ : Array[Double])
-  Hatch(at~ : Vec3, solid~ : Bool, pattern~ : String, paths~ : Int)
+  Spline(degree~ : Int32, knots~ : Array[Double], control_points~ : Array[Vec3], weights~ : Array[Double])
+  Hatch(at~ : Vec3, solid~ : Bool, pattern~ : String, paths~ : Int32)
   Unknown
 }
 pub fn Geometry::bounds(Self) -> Aabb2?
@@ -269,7 +270,7 @@ pub fn Geometry::flatten(Self, Double) -> Flat
 pub fn Geometry::flatten_checked(Self, Double) -> Result[Flat, String]
 
 pub(all) struct GeometryBudget {
-  max_candidates : Int
+  max_candidates : Int32
 }
 pub fn GeometryBudget::default() -> Self
 
@@ -279,10 +280,10 @@ pub(all) struct Header {
 pub fn Header::extmax(Self) -> Vec3?
 pub fn Header::extmin(Self) -> Vec3?
 pub fn Header::get(Self, String) -> HeaderVar?
-pub fn Header::get_int(Self, String, Int) -> Int
+pub fn Header::get_int(Self, String, Int32) -> Int32
 pub fn Header::get_point(Self, String) -> Vec3?
 pub fn Header::get_string(Self, String) -> String
-pub fn Header::insunits(Self) -> Int
+pub fn Header::insunits(Self) -> Int32
 
 pub(all) struct HeaderVar {
   name : String
@@ -292,19 +293,19 @@ pub(all) struct HeaderVar {
 pub(all) struct InsertInstance {
   handle : String
   block : String
-  row : Int
-  column : Int
+  row : Int32
+  column : Int32
 }
 
 pub(all) struct Layer {
   name : String
-  color : Int
+  color : Int32
   linetype : String
   frozen : Bool
   locked : Bool
-  lineweight : Int
+  lineweight : Int32
 }
-pub fn Layer::color_index(Self) -> Int
+pub fn Layer::color_index(Self) -> Int32
 pub fn Layer::is_enabled_for_checks(Self) -> Bool
 pub fn Layer::is_machinable(Self) -> Bool
 pub fn Layer::is_off(Self) -> Bool
@@ -332,7 +333,7 @@ pub(all) struct R12Attribute {
   tag : String
   value : String
   prompt : String?
-  flags : Int
+  flags : Int32
   style : String
   anchor : Vec3
   alignment : Vec3?
@@ -342,14 +343,14 @@ pub(all) struct R12Attribute {
   rotation : Double
   width_scale : Double
   oblique : Double
-  generation_flags : Int
-  horizontal : Int
-  vertical : Int
+  generation_flags : Int32
+  horizontal : Int32
+  vertical : Int32
 }
 
 pub(all) struct R12CellAttribute {
-  source_record : Int
-  definition_record : Int
+  source_record : Int32
+  definition_record : Int32
   from_constant_definition : Bool
   data : R12Attribute
   anchor : Vec3
@@ -359,7 +360,7 @@ pub(all) struct R12CellAttribute {
 }
 
 pub(all) struct R12DimStyleOverride {
-  group : Int
+  group : Int32
   value : Tag
 }
 
@@ -367,7 +368,7 @@ pub(all) struct R12Dimension {
   block_name : String
   block : R12Link
   style : String
-  flags : Int
+  flags : Int32
   definition : Vec3
   text_midpoint : Vec3
   block_offset : Vec3?
@@ -418,7 +419,7 @@ pub(all) enum R12DimensionLabelPosition {
 }
 
 pub(all) struct R12DimensionPicture {
-  block_record : Int
+  block_record : Int32
   style_record : R12Link
   overrides : Array[R12DimStyleOverride]
   world : WorldExpansion
@@ -457,15 +458,15 @@ pub fn R12DimensionUpdate::layout_text(Self, Double, (String, Double) -> Double)
 pub(all) enum R12EntitySemantics {
   SpatialLine(start~ : Vec3, end~ : Vec3)
   SpatialPolyline(points~ : Array[Vec3], closed~ : Bool)
-  PolygonMesh(points~ : Array[Vec3], m~ : Int, n~ : Int, closed_m~ : Bool, closed_n~ : Bool)
+  PolygonMesh(points~ : Array[Vec3], m~ : Int32, n~ : Int32, closed_m~ : Bool, closed_n~ : Bool)
   FittedMesh(R12FittedMesh)
-  Polyface(points~ : Array[Vec3], faces~ : Array[Array[Int]])
+  Polyface(points~ : Array[Vec3], faces~ : Array[Array[Int32]])
   Symbol(name~ : String, insertion~ : Vec3, size~ : Double, rotation~ : Double, x_scale~ : Double, oblique~ : Double, thickness~ : Double, extrusion~ : Vec3)
-  Viewport(center~ : Vec3, width~ : Double, height~ : Double, status~ : Int, id~ : Int, view~ : R12ViewportView?)
+  Viewport(center~ : Vec3, width~ : Double, height~ : Double, status~ : Int32, id~ : Int32, view~ : R12ViewportView?)
   Dimension(R12Dimension)
-  FaceEdges(corners~ : Array[Vec3], invisible_mask~ : Int)
-  AttributeDefinition(data~ : R12Attribute, block_record~ : Int?)
-  Attribute(data~ : R12Attribute, insert_record~ : Int?, definition~ : R12Link)
+  FaceEdges(corners~ : Array[Vec3], invisible_mask~ : Int32)
+  AttributeDefinition(data~ : R12Attribute, block_record~ : Int32?)
+  Attribute(data~ : R12Attribute, insert_record~ : Int32?, definition~ : R12Link)
 }
 
 pub(all) enum R12FeaturePoint {
@@ -483,9 +484,9 @@ pub(all) struct R12FieldAudit {
 }
 
 pub(all) struct R12FieldFinding {
-  record_index : Int
+  record_index : Int32
   kind : String
-  group : Int
+  group : Int32
   issue : R12FieldIssue
 }
 
@@ -505,22 +506,22 @@ pub struct R12FittedMesh {
   fit : R12MeshFit
   controls : Array[Vec3]
   samples : Array[Vec3]
-  m : Int
-  n : Int
-  sample_m : Int
-  sample_n : Int
+  m : Int32
+  n : Int32
+  sample_m : Int32
+  sample_n : Int32
   closed_m : Bool
   closed_n : Bool
 }
-pub fn R12FittedMesh::compare_refit(Self, Double, max_points? : Int) -> Result[R12MeshComparison, String]
-pub fn R12FittedMesh::quad(Self, Int, Int) -> (Vec3, Vec3, Vec3, Vec3)?
-pub fn R12FittedMesh::refit(Self, Int, Int, max_points? : Int) -> Result[Self, String]
+pub fn R12FittedMesh::compare_refit(Self, Double, max_points? : Int32) -> Result[R12MeshComparison, String]
+pub fn R12FittedMesh::quad(Self, Int32, Int32) -> (Vec3, Vec3, Vec3, Vec3)?
+pub fn R12FittedMesh::refit(Self, Int32, Int32, max_points? : Int32) -> Result[Self, String]
 
 pub(all) struct R12FontStyle {
   name : String
   font_file : String
   big_font_file : String
-  flags : Int
+  flags : Int32
 }
 
 pub(all) struct R12GlyphLayout {
@@ -536,7 +537,7 @@ pub(all) struct R12GlyphRun {
 }
 
 pub(all) enum R12Link {
-  Resolved(Int)
+  Resolved(Int32)
   Missing
   Ambiguous
 }
@@ -544,8 +545,8 @@ pub(all) enum R12Link {
 pub(all) struct R12MeshComparison {
   distances : Array[Double]
   max_error : Double
-  worst_index : Int
-  outside_tolerance : Int
+  worst_index : Int32
+  outside_tolerance : Int32
 }
 
 pub(all) enum R12MeshFit {
@@ -560,7 +561,7 @@ pub(all) struct R12PositionedFontRun {
 }
 
 pub(all) struct R12PositionedGlyph {
-  glyph_id : Int
+  glyph_id : Int32
   x_advance : Double
   y_advance : Double
   x_offset : Double
@@ -568,12 +569,12 @@ pub(all) struct R12PositionedGlyph {
 }
 
 pub(all) struct R12SemanticEntry {
-  record_index : Int
+  record_index : Int32
   entity : R12EntitySemantics
 }
 
 pub(all) struct R12SemanticFinding {
-  record_index : Int
+  record_index : Int32
   message : String
 }
 
@@ -586,9 +587,9 @@ pub(all) struct R12SemanticReport {
 pub struct R12ShxFont {
   // private fields
 }
-pub fn R12ShxFont::bigfont_run(Self, Self, String, (Char) -> Int?, max_work? : Int) -> Result[R12GlyphRun, String]
-pub fn R12ShxFont::bigfont_vertical_run(Self, Self, String, (Char) -> Int?, max_work? : Int) -> Result[R12VerticalGlyphRun, String]
-pub fn R12ShxFont::glyph_run(Self, String, map? : (Char) -> Int, max_work? : Int) -> Result[R12GlyphRun, String]
+pub fn R12ShxFont::bigfont_run(Self, Self, String, (Char) -> Int32?, max_work? : Int32) -> Result[R12GlyphRun, String]
+pub fn R12ShxFont::bigfont_vertical_run(Self, Self, String, (Char) -> Int32?, max_work? : Int32) -> Result[R12VerticalGlyphRun, String]
+pub fn R12ShxFont::glyph_run(Self, String, map? : (Char) -> Int32, max_work? : Int32) -> Result[R12GlyphRun, String]
 
 pub(all) struct R12StyledDimension {
   dimension_lines : Array[(Vec3, Vec3)]
@@ -600,23 +601,23 @@ pub(all) struct R12StyledDimension {
   label : String?
   text_at : Vec3
   text_height : Double
-  dimension_color : Int
-  extension_color : Int
-  text_color : Int
+  dimension_color : Int32
+  extension_color : Int32
+  text_color : Int32
 }
 pub fn R12StyledDimension::r12_dimension_obstacles(Self) -> Result[Array[Aabb2], String]
 
 pub struct R12TrueType {
-  glyphs : Int
-  horizontal_metrics : Int
+  glyphs : Int32
+  horizontal_metrics : Int32
   long_offsets : Bool
   cap : Double
   ascent : Double
   descent : Double
   // private fields
 }
-pub fn R12TrueType::glyph_run(Self, String, tol? : Double, max_work? : Int) -> Result[R12GlyphRun, String]
-pub fn R12TrueType::positioned_run(Self, Array[R12PositionedGlyph], tol? : Double, max_work? : Int) -> Result[R12GlyphRun, String]
+pub fn R12TrueType::glyph_run(Self, String, tol? : Double, max_work? : Int32) -> Result[R12GlyphRun, String]
+pub fn R12TrueType::positioned_run(Self, Array[R12PositionedGlyph], tol? : Double, max_work? : Int32) -> Result[R12GlyphRun, String]
 
 pub(all) struct R12VerticalGlyphRun {
   paths : Array[Array[Vec2]]
@@ -633,19 +634,19 @@ pub(all) struct R12ViewportView {
   lens_length : Double
   front_clip_z : Double
   back_clip_z : Double
-  mode : Int
-  circle_zoom : Int
-  fast_zoom : Int
-  ucs_icon : Int
-  snap_on : Int
-  grid_on : Int
-  snap_style : Int
-  snap_iso_pair : Int
+  mode : Int32
+  circle_zoom : Int32
+  fast_zoom : Int32
+  ucs_icon : Int32
+  snap_on : Int32
+  grid_on : Int32
+  snap_style : Int32
+  snap_iso_pair : Int32
   snap_angle : Double
   snap_base : Vec2
   snap_spacing : Vec2
   grid_spacing : Vec2
-  hide_plot : Int
+  hide_plot : Int32
   frozen_layers : Array[String]
 }
 
@@ -665,23 +666,23 @@ pub(all) struct ReadDocument {
 }
 pub fn ReadDocument::audit_r12_fields(Self) -> R12FieldAudit
 pub fn ReadDocument::diagnostics(Self) -> Array[Diagnostic]
-pub fn ReadDocument::r12_cell_attributes(Self, Int, Int, Int) -> Result[Array[R12CellAttribute], String]
-pub fn ReadDocument::r12_dimension_picture(Self, Int, Double, limits? : ExpandLimits) -> Result[R12DimensionPicture, String]
-pub fn ReadDocument::r12_layout_attribute(Self, R12CellAttribute, (R12FontStyle, String) -> R12GlyphRun?, max_points? : Int) -> Result[R12GlyphLayout, String]
-pub fn ReadDocument::r12_layout_vertical_attribute(Self, R12CellAttribute, (R12FontStyle, String) -> R12VerticalGlyphRun?, max_points? : Int) -> Result[R12GlyphLayout, String]
-pub fn ReadDocument::r12_recompute_dimension(Self, Int, Double, definition? : R12Dimension, precision? : Int) -> Result[R12DimensionUpdate, String]
-pub fn ReadDocument::r12_refresh_bound_dimension(Self, R12DimensionBinding, Double, precision? : Int) -> Result[R12DimensionUpdate, String]
-pub fn ReadDocument::r12_render_dimension(Self, Int, R12DimensionUpdate, label_width? : Double) -> Result[R12StyledDimension, String]
+pub fn ReadDocument::r12_cell_attributes(Self, Int32, Int32, Int32) -> Result[Array[R12CellAttribute], String]
+pub fn ReadDocument::r12_dimension_picture(Self, Int32, Double, limits? : ExpandLimits) -> Result[R12DimensionPicture, String]
+pub fn ReadDocument::r12_layout_attribute(Self, R12CellAttribute, (R12FontStyle, String) -> R12GlyphRun?, max_points? : Int32) -> Result[R12GlyphLayout, String]
+pub fn ReadDocument::r12_layout_vertical_attribute(Self, R12CellAttribute, (R12FontStyle, String) -> R12VerticalGlyphRun?, max_points? : Int32) -> Result[R12GlyphLayout, String]
+pub fn ReadDocument::r12_recompute_dimension(Self, Int32, Double, definition? : R12Dimension, precision? : Int32) -> Result[R12DimensionUpdate, String]
+pub fn ReadDocument::r12_refresh_bound_dimension(Self, R12DimensionBinding, Double, precision? : Int32) -> Result[R12DimensionUpdate, String]
+pub fn ReadDocument::r12_render_dimension(Self, Int32, R12DimensionUpdate, label_width? : Double) -> Result[R12StyledDimension, String]
 pub fn ReadDocument::r12_semantics(Self) -> R12SemanticReport
 pub fn ReadDocument::read_status(Self) -> ReadStatus
 
 pub(all) struct ReadLimits {
-  max_file_bytes : Int
-  max_line_bytes : Int
-  max_tags : Int
-  max_records : Int
-  max_warnings : Int
-  max_string_bytes : Int
+  max_file_bytes : Int32
+  max_line_bytes : Int32
+  max_tags : Int32
+  max_records : Int32
+  max_warnings : Int32
+  max_string_bytes : Int32
 }
 pub fn ReadLimits::default() -> Self
 
@@ -696,27 +697,27 @@ pub(all) struct Record {
   common : Array[Tag]
   subclasses : Array[Subclass]
 }
-pub fn Record::all_of(Self, Int) -> Array[Tag]
-pub fn Record::count_code(Self, Int) -> Int
+pub fn Record::all_of(Self, Int32) -> Array[Tag]
+pub fn Record::count_code(Self, Int32) -> Int32
 pub fn Record::effective_classes(Self) -> Array[String]
-pub fn Record::get(Self, Int) -> Tag?
-pub fn Record::get_double(Self, Int, Double) -> Double
-pub fn Record::get_in(Self, String, Int) -> Tag?
-pub fn Record::get_int(Self, Int, Int) -> Int
-pub fn Record::get_string(Self, Int) -> String
+pub fn Record::get(Self, Int32) -> Tag?
+pub fn Record::get_double(Self, Int32, Double) -> Double
+pub fn Record::get_in(Self, String, Int32) -> Tag?
+pub fn Record::get_int(Self, Int32, Int32) -> Int32
+pub fn Record::get_string(Self, Int32) -> String
 pub fn Record::has_subclass(Self, String) -> Bool
 pub fn Record::is_legacy(Self) -> Bool
-pub fn Record::point(Self, Int) -> Vec3?
-pub fn Record::require_double(Self, Int) -> Result[Double, String]
-pub fn Record::require_int(Self, Int) -> Result[Int, String]
+pub fn Record::point(Self, Int32) -> Vec3?
+pub fn Record::require_double(Self, Int32) -> Result[Double, String]
+pub fn Record::require_int(Self, Int32) -> Result[Int32, String]
 pub fn Record::subclass_names(Self) -> Array[String]
-pub fn Record::try_double(Self, Int) -> Result[Double?, String]
-pub fn Record::try_int(Self, Int) -> Result[Int?, String]
+pub fn Record::try_double(Self, Int32) -> Result[Double?, String]
+pub fn Record::try_int(Self, Int32) -> Result[Int32?, String]
 
 pub(all) struct Report {
   findings : Array[Finding]
 }
-pub fn Report::count(Self, Severity) -> Int
+pub fn Report::count(Self, Severity) -> Int32
 pub fn Report::has_fatal(Self) -> Bool
 pub fn Report::has_incomplete_checks(Self) -> Bool
 pub fn Report::status(Self) -> CheckStatus
@@ -753,12 +754,12 @@ pub(all) struct Tables {
 pub fn Tables::layer(Self, String) -> Layer?
 
 pub(all) struct Tag {
-  code : Int
+  code : Int32
   value : TagValue
 }
 pub fn Tag::is_record_start(Self) -> Bool
 pub fn Tag::is_subclass_marker(Self) -> Bool
-pub fn Tag::new(Int, TagValue) -> Self
+pub fn Tag::new(Int32, TagValue) -> Self
 pub fn Tag::to_display(Self) -> String
 
 pub(all) struct TagScan {
@@ -776,7 +777,7 @@ pub fn TagStream::finish(Self) -> Array[Tag]
 pub fn TagStream::is_limited(Self) -> Bool
 pub fn TagStream::new() -> Self
 pub fn TagStream::warnings(Self) -> Array[String]
-pub fn TagStream::with_legacy_decoder(ReadLimits, (Int, Bytes) -> String?) -> Self
+pub fn TagStream::with_legacy_decoder(ReadLimits, (Int32, Bytes) -> String?) -> Self
 pub fn TagStream::with_limits(ReadLimits) -> Self
 
 pub(all) enum TagType {
@@ -791,8 +792,8 @@ pub(all) enum TagType {
 
 pub(all) enum TagValue {
   Str(String)
-  I16(Int)
-  I32(Int)
+  I16(Int32)
+  I32(Int32)
   I64(Int64)
   F64(Double)
   Bool(Bool)
@@ -800,7 +801,7 @@ pub(all) enum TagValue {
 }
 pub fn TagValue::as_bool(Self) -> Bool
 pub fn TagValue::as_double(Self) -> Double
-pub fn TagValue::as_int(Self) -> Int
+pub fn TagValue::as_int(Self) -> Int32
 pub fn TagValue::as_string(Self) -> String
 
 pub(all) struct Vec2 {
@@ -841,7 +842,7 @@ pub(all) struct WorldExpansion {
   placed : Array[WorldPlaced]
   warnings : Array[String]
 }
-pub fn WorldExpansion::r12_dimension_obstacles(Self, Double, max_boxes? : Int) -> Result[Array[Aabb2], String]
+pub fn WorldExpansion::r12_dimension_obstacles(Self, Double, max_boxes? : Int32) -> Result[Array[Aabb2], String]
 
 pub(all) enum WorldFlat {
   Outline3(points~ : Array[Vec3], closed~ : Bool)

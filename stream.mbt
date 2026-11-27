@@ -1,12 +1,12 @@
 ///|
 /// Parsing budgets include malformed input; exhaustion stops with an explicit warning.
 pub(all) struct ReadLimits {
-  max_file_bytes : Int
-  max_line_bytes : Int
-  max_tags : Int
-  max_records : Int
-  max_warnings : Int
-  max_string_bytes : Int
+  max_file_bytes : Int32
+  max_line_bytes : Int32
+  max_tags : Int32
+  max_records : Int32
+  max_warnings : Int32
+  max_string_bytes : Int32
 }
 
 ///|
@@ -27,18 +27,18 @@ pub fn ReadLimits::default() -> ReadLimits {
 pub(all) struct TagStream {
   priv prefix : Array[Byte]
   priv mut line : Array[Byte]
-  priv mut line_no : Int
-  priv mut pending : Int?
+  priv mut line_no : Int32
+  priv mut pending : Int32?
   priv warn : Array[String]
   priv mut enc : Encoding?
   priv mut finished : Bool
   priv mut eof_seen : Bool
   priv mut skip_lf : Bool
   priv limits : ReadLimits
-  priv decoder : ((Int, Bytes) -> String?)?
-  priv mut bytes : Int
-  priv mut tags : Int
-  priv mut records : Int
+  priv decoder : ((Int32, Bytes) -> String?)?
+  priv mut bytes : Int32
+  priv mut tags : Int32
+  priv mut records : Int32
   priv mut limited : Bool
 }
 
@@ -57,7 +57,7 @@ pub fn TagStream::with_limits(limits : ReadLimits) -> TagStream {
 /// preserves the fallback and emits a warning; the callback is trusted code.
 pub fn TagStream::with_legacy_decoder(
   limits : ReadLimits,
-  decoder : (Int, Bytes) -> String?,
+  decoder : (Int32, Bytes) -> String?,
 ) -> TagStream {
   make_tag_stream(limits, Some(decoder))
 }
@@ -65,7 +65,7 @@ pub fn TagStream::with_legacy_decoder(
 ///|
 fn make_tag_stream(
   limits : ReadLimits,
-  decoder : ((Int, Bytes) -> String?)?,
+  decoder : ((Int32, Bytes) -> String?)?,
 ) -> TagStream {
   let stream : TagStream = {
     prefix: [],

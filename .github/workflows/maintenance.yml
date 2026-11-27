@@ -21,7 +21,7 @@ jobs:
           node-version: '24.19.0'
       - name: 安装固定 MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- '0.10.14+7d59c7ec9'
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- '1.0.0-rc1+3c0520448'
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
       - name: 获取依赖并检查格式和 API 快照
         run: |

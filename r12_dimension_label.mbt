@@ -5,7 +5,7 @@ fn r12_dimension_label_parts(
   dim : R12Dimension,
   value : Double,
   angular : Bool,
-  precision : Int,
+  precision : Int32,
 ) -> Array[R12DimensionLabelPart] raise R12SemanticError {
   if dim.text is Some(" ") {
     return []
@@ -23,7 +23,7 @@ fn r12_dimension_label_parts(
     _ => raise InvalidSemantic("重算标注的 DIMSTYLE 缺失或含歧义")
   }
   let overrides = r12_dimension_overrides(raw)
-  let read = fn(code : Int, header : String) raise R12SemanticError {
+  let read = fn(code : Int32, header : String) raise R12SemanticError {
     for item in overrides {
       if item.group == code {
         return Some(item.value.value)
@@ -125,9 +125,9 @@ fn r12_dimension_label_parts(
 ///|
 fn r12_label_int(
   value : TagValue?,
-  fallback : Int,
-  maximum : Int,
-) -> Int raise R12SemanticError {
+  fallback : Int32,
+  maximum : Int32,
+) -> Int32 raise R12SemanticError {
   match value {
     None => fallback
     Some(I16(v)) if v >= 0 && v <= maximum => v
@@ -138,11 +138,11 @@ fn r12_label_int(
 ///|
 fn r12_dimension_number(
   value : Double,
-  places : Int,
-  suppress : Int,
-  read : (Int, String) -> TagValue? raise R12SemanticError,
-  factor? : Double = 1.0,
-  prefix? : String = "",
+  places : Int32,
+  suppress : Int32,
+  read : (Int32, String) -> TagValue? raise R12SemanticError,
+  factor~ : Double = 1.0,
+  prefix~ : String = "",
 ) -> Array[R12DimensionLabelPart] raise R12SemanticError {
   let base = prefix + r12_decimal_label(value * factor, places, suppress)
   let tolerance = r12_label_int(read(71, "$DIMTOL"), 0, 1) == 1
@@ -229,8 +229,8 @@ fn r12_label_real(
 ///|
 fn r12_decimal_label(
   value : Double,
-  places : Int,
-  suppress : Int,
+  places : Int32,
+  suppress : Int32,
 ) -> String raise R12SemanticError {
   let mut multiplier = 1L
   for _ in 0..<places {
@@ -315,7 +315,7 @@ fn r12_append_dimension_parts(
 }
 
 ///|
-fn r12_parts_length(parts : Array[R12DimensionLabelPart]) -> Int {
+fn r12_parts_length(parts : Array[R12DimensionLabelPart]) -> Int32 {
   let mut size = 0
   for part in parts {
     size += match part {

@@ -73,7 +73,7 @@ pub(all) struct Drawing {
 ///
 /// **只看组码、不看子类**——需要区分同名组码时用 `get_in`。
 /// 这个函数适合那些含义到处都一样的组码（图层 8、线型 6 之类）。
-pub fn Record::get(self : Record, code : Int) -> Tag? {
+pub fn Record::get(self : Record, code : Int32) -> Tag? {
   for t in self.common {
     if t.code == code {
       return Some(t)
@@ -93,7 +93,7 @@ pub fn Record::get(self : Record, code : Int) -> Tag? {
 /// 在指定的子类里找组码。
 ///
 /// 这是「组码含义随子类变」的正面用法：明确说出我要的是哪个类的字段。
-pub fn Record::get_in(self : Record, subclass : String, code : Int) -> Tag? {
+pub fn Record::get_in(self : Record, subclass : String, code : Int32) -> Tag? {
   for sc in self.subclasses {
     if sc.name == subclass {
       for t in sc.tags {
@@ -108,7 +108,7 @@ pub fn Record::get_in(self : Record, subclass : String, code : Int) -> Tag? {
 
 ///|
 /// 取一个组码的字符串值。没有就是空串。
-pub fn Record::get_string(self : Record, code : Int) -> String {
+pub fn Record::get_string(self : Record, code : Int32) -> String {
   match self.get(code) {
     Some(t) => t.value.as_string()
     None => ""
@@ -122,7 +122,7 @@ pub fn Record::get_string(self : Record, code : Int) -> String {
 /// 但半径缺省成 0 就变成了「一个退化的圆」，性质完全不同。
 pub fn Record::get_double(
   self : Record,
-  code : Int,
+  code : Int32,
   default : Double,
 ) -> Double {
   match self.get(code) {
@@ -133,7 +133,7 @@ pub fn Record::get_double(
 
 ///|
 /// 取一个组码的整数值。
-pub fn Record::get_int(self : Record, code : Int, default : Int) -> Int {
+pub fn Record::get_int(self : Record, code : Int32, default : Int32) -> Int32 {
   match self.get(code) {
     Some(t) => t.value.as_int()
     None => default
@@ -145,7 +145,7 @@ pub fn Record::get_int(self : Record, code : Int, default : Int) -> Int {
 ///
 /// LWPOLYLINE 的顶点就是同一组码重复出现（每个顶点一对 10/20），
 /// 靠这个数出有几个顶点。
-pub fn Record::count_code(self : Record, code : Int) -> Int {
+pub fn Record::count_code(self : Record, code : Int32) -> Int32 {
   let mut n = 0
   for t in self.common {
     if t.code == code {
@@ -164,7 +164,7 @@ pub fn Record::count_code(self : Record, code : Int) -> Int {
 
 ///|
 /// 某个组码出现的所有 tag，按顺序。
-pub fn Record::all_of(self : Record, code : Int) -> Array[Tag] {
+pub fn Record::all_of(self : Record, code : Int32) -> Array[Tag] {
   let out : Array[Tag] = []
   for t in self.common {
     if t.code == code {

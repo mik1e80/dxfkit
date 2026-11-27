@@ -14,8 +14,8 @@ pub fn R12ShxFont::bigfont_vertical_run(
   self : R12ShxFont,
   primary : R12ShxFont,
   text : String,
-  packed_code : (Char) -> Int?,
-  max_work? : Int = 100_000,
+  packed_code : (Char) -> Int32?,
+  max_work~ : Int32 = 100_000,
 ) -> Result[R12VerticalGlyphRun, String] {
   Ok(shx_column(self, primary, text, packed_code, max_work)) catch {
     InvalidFont(message) => Err(message)
@@ -27,8 +27,8 @@ fn shx_column(
   big : R12ShxFont,
   primary : R12ShxFont,
   text : String,
-  packed_code : (Char) -> Int?,
-  max_work : Int,
+  packed_code : (Char) -> Int32?,
+  max_work : Int32,
 ) -> R12VerticalGlyphRun raise FontError {
   guard big.vertical_mode &&
     big.big_width is Some(width) &&

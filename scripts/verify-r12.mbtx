@@ -16,7 +16,7 @@ async fn main {
   let env = { "MOON_HOME": sdk }
   let version = @shell.Cmd(moon, ["version", "--all"], env~).output()
   version.check()
-  if !version.stdout().contains("moonc v0.10.14+7d59c7ec9 ") {
+  if !version.stdout().contains("moonc v1.0.0-rc1+3c0520448 ") {
     fail("Use the pinned project SDK")
   }
   let checks = [

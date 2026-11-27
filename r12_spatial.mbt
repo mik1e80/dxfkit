@@ -4,8 +4,8 @@
 /// order, so vertex (m_index, n_index) is at m_index * n + n_index.
 fn r12_spatial(
   records : Array[RawRecord],
-  first : Int,
-  flags : Int,
+  first : Int32,
+  flags : Int32,
 ) -> R12EntitySemantics raise R12SemanticError {
   let header = records[first]
   let mode = flags & 88
@@ -19,7 +19,7 @@ fn r12_spatial(
     )
   }
   let points : Array[Vec3] = []
-  let faces : Array[Array[Int]] = []
+  let faces : Array[Array[Int32]] = []
   let mut i = first + 1
   while i < records.length() &&
         records[i].section == header.section &&
@@ -27,7 +27,7 @@ fn r12_spatial(
     let r = records[i]
     let vertex_kind = r12_integer(r, 70, Some(0)) & 224
     if mode == 64 && vertex_kind == 128 {
-      let face : Array[Int] = []
+      let face : Array[Int32] = []
       let mut ended = false
       for code in 71..<=74 {
         let v = r12_integer(r, code, Some(0))

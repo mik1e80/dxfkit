@@ -1,9 +1,9 @@
 ///|
 fn r12_block_index(
   records : Array[RawRecord],
-) -> (Map[String, Int], Map[Int, Map[String, Int]]) {
-  let blocks : Map[String, Int] = Map([])
-  let definitions : Map[Int, Map[String, Int]] = Map([])
+) -> (Map[String, Int32], Map[Int32, Map[String, Int32]]) {
+  let blocks : Map[String, Int32] = Map([])
+  let definitions : Map[Int32, Map[String, Int32]] = Map([])
   let mut active = None
   for i, r in records {
     if r.section != "BLOCKS" || r.kind == "ENDBLK" || r.kind == "ENDSEC" {
@@ -40,7 +40,7 @@ pub fn ReadDocument::r12_semantics(self : ReadDocument) -> R12SemanticReport {
   let (blocks, definitions) = r12_block_index(self.records)
   let mut block_record = None
   let mut insert_record = None
-  let mut insert_names : Map[String, Int]? = None
+  let mut insert_names : Map[String, Int32]? = None
   let mut seen : Map[String, Bool] = Map([])
   for i, r in self.records {
     if findings.length() >= 1000 {

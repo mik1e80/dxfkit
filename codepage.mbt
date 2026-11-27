@@ -19,7 +19,7 @@ pub(all) enum Encoding {
   /// Windows 西欧代码页。和 Latin-1 的区别在 0x80-0x9F 这一段
   Cp1252
   /// Legacy code page number. ANSI_936 has a built-in two-byte decoder.
-  Other(Int)
+  Other(Int32)
 }
 
 ///|
@@ -64,7 +64,7 @@ fn parse_codepage_name(name : String) -> Encoding {
 /// `Int::to_char` 返回的是 `Char?`——不是每个整数都是合法码位（代理区
 /// 0xD800-0xDFFF 就不是）。坏字节解出来落在这里时用替换字符顶上，
 /// 而不是崩掉。
-fn code_point_to_char(c : Int) -> Char {
+fn code_point_to_char(c : Int32) -> Char {
   match c.to_char() {
     Some(ch) => ch
     None => '\u{FFFD}'
@@ -77,7 +77,7 @@ fn code_point_to_char(c : Int) -> Char {
 fn probe_header_encoding(data : Bytes) -> (String, String) {
   let limit = data.length().min(1024)
   let mut offset = 0
-  let mut group : Int? = None
+  let mut group : Int32? = None
   let mut awaiting_section = false
   let mut in_header = false
   let mut variable = ""
@@ -142,7 +142,7 @@ fn utf8_bom(data : Bytes) -> Bool {
 ///|
 /// 把一段纯 ASCII 字节转成字符串。非 ASCII 字节丢掉——用在这里的都是
 /// 变量名和版本号，本来就是 ASCII。
-fn bytes_to_ascii(data : Bytes, from : Int, to : Int) -> String {
+fn bytes_to_ascii(data : Bytes, from : Int32, to : Int32) -> String {
   let sb = StringBuilder()
   for i = from; i < to; i = i + 1 {
     let c = data[i].to_int() & 0xFF
@@ -213,8 +213,8 @@ fn decode_cp1252(data : Bytes) -> String {
 ///|
 /// CP1252 在 0x80-0x9F 的映射表。未定义的几个位置按 Unicode 的推荐
 /// 映射成对应的控制字符。
-fn cp1252_high(b : Int) -> Char {
-  let table : Array[Int] = [
+fn cp1252_high(b : Int32) -> Char {
+  let table : Array[Int32] = [
     0x20AC, 0x0081, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021, 0x02C6, 0x2030,
     0x0160, 0x2039, 0x0152, 0x008D, 0x017D, 0x008F, 0x0090, 0x2018, 0x2019, 0x201C,
     0x201D, 0x2022, 0x2013, 0x2014, 0x02DC, 0x2122, 0x0161, 0x203A, 0x0153, 0x009D,

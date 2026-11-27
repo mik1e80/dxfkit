@@ -66,6 +66,8 @@ MoonBit 已有 DXF 读写模块及相邻几何、STEP、G-code、位图轮廓和
 
 ## 验证与开发
 
+当前 `main` 的 11 月验收使用 `moonc v1.0.0-rc1+3c0520448`。Mooncakes 0.2.1、`v0.2.1` 和线上演示仍对应原发布提交 `e07ec17`，其完整 CI 使用当时固定的 v0.10.14。当前工具链及复现入口见[复现说明](docs/reproducibility.md)。
+
 日常使用必要的定向检查，不运行整仓库四后端全量：
 
 本次维护的最小回归为 `moon test maintenance_security_test.mbt security_test.mbt security_wbtest.mbt stream_wbtest.mbt --target wasm --deny-warn`；首次修改解析逻辑时另做相关类型检查与模型消费验证。更广的既有定向集入口为：

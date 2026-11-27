@@ -318,13 +318,13 @@ async fn run_stats(args : ArrayView[String]) -> Unit {
 ///
 /// 只认 tag 序列、不碰文件，所以天然是流式的——喂进来多少统计多少。
 struct StatsTracker {
-  mut count : Int
+  mut count : Int32
   mut ver : String
   /// 当前段名（`ENDSEC` 之后清空）
   mut section : String?
   /// 刚看到 `0 / SECTION`，下一对 `2 / 名字` 是段名
   mut want_section_name : Bool
-  sections : Array[(String, Int)]
+  sections : Array[(String, Int32)]
   /// 刚看到 `9 / $XXX`，下一条是它的值——盯 `$ACADVER`
   mut want_var : String?
 }
@@ -394,7 +394,7 @@ fn StatsTracker::bump_current(self : StatsTracker) -> Unit {
 }
 
 ///|
-fn StatsTracker::tag_count(self : StatsTracker) -> Int {
+fn StatsTracker::tag_count(self : StatsTracker) -> Int32 {
   self.count
 }
 
@@ -404,7 +404,7 @@ fn StatsTracker::version(self : StatsTracker) -> String {
 }
 
 ///|
-fn StatsTracker::sections(self : StatsTracker) -> Array[(String, Int)] {
+fn StatsTracker::sections(self : StatsTracker) -> Array[(String, Int32)] {
   self.sections.copy()
 }
 

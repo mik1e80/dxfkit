@@ -1,6 +1,6 @@
 ///|
 priv struct SurfaceWeights {
-  indices : Array[Int]
+  indices : Array[Int32]
   values : Array[Double]
 }
 
@@ -11,9 +11,9 @@ priv struct SurfaceWeights {
 /// with three controls per span and an implicit return to control zero.
 pub fn R12FittedMesh::refit(
   self : R12FittedMesh,
-  sample_m : Int,
-  sample_n : Int,
-  max_points? : Int = 100_000,
+  sample_m : Int32,
+  sample_n : Int32,
+  max_points~ : Int32 = 100_000,
 ) -> Result[R12FittedMesh, String] {
   Ok(r12_refit_mesh(self, sample_m, sample_n, max_points)) catch {
     InvalidSemantic(message) => Err(message)
@@ -23,9 +23,9 @@ pub fn R12FittedMesh::refit(
 ///|
 fn surface_width(
   fit : R12MeshFit,
-  count : Int,
+  count : Int32,
   closed : Bool,
-) -> Int raise R12SemanticError {
+) -> Int32 raise R12SemanticError {
   let width = match fit {
     QuadraticBSpline => 3
     CubicBSpline => 4
@@ -43,9 +43,9 @@ fn surface_width(
 ///|
 fn r12_refit_mesh(
   mesh : R12FittedMesh,
-  sample_m : Int,
-  sample_n : Int,
-  max_points : Int,
+  sample_m : Int32,
+  sample_n : Int32,
+  max_points : Int32,
 ) -> R12FittedMesh raise R12SemanticError {
   guard r12_grid_matches(mesh.controls.length(), mesh.m, mesh.n) &&
     sample_m >= 2 &&
@@ -84,9 +84,9 @@ fn r12_refit_mesh(
 ///|
 fn surface_axis(
   fit : R12MeshFit,
-  count : Int,
-  samples : Int,
-  width : Int,
+  count : Int32,
+  samples : Int32,
+  width : Int32,
   closed : Bool,
 ) -> Array[SurfaceWeights] {
   let degree = width - 1
@@ -119,7 +119,7 @@ fn surface_axis(
 }
 
 ///|
-fn surface_bezier_weights(degree : Int, u : Double) -> Array[Double] {
+fn surface_bezier_weights(degree : Int32, u : Double) -> Array[Double] {
   let weights = Array::make(degree + 1, 0.0)
   weights[0] = 1.0
   for d in 1..<=degree {
@@ -132,17 +132,22 @@ fn surface_bezier_weights(degree : Int, u : Double) -> Array[Double] {
 }
 
 ///|
-fn surface_knot(i : Int, degree : Int, spans : Int, closed : Bool) -> Double {
+fn surface_knot(
+  i : Int32,
+  degree : Int32,
+  spans : Int32,
+  closed : Bool,
+) -> Double {
   let k = i - degree
   (if closed { k } else { k.max(0).min(spans) }).to_double()
 }
 
 ///|
 fn surface_spline_weights(
-  degree : Int,
-  knot : Int,
+  degree : Int32,
+  knot : Int32,
   u : Double,
-  spans : Int,
+  spans : Int32,
   closed : Bool,
 ) -> Array[Double] {
   let values = Array::make(degree + 1, 0.0)

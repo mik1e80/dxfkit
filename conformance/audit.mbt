@@ -1,26 +1,29 @@
 // Observations are deliberately separate from file-specific geometry truth.
 
 ///|
+#derive(ToJson)
 struct CorpusKind {
   kind : String
-  total : Int
-  decoded : Int
-} derive(ToJson)
+  total : Int32
+  decoded : Int32
+}
 
 ///|
+#derive(ToJson)
 struct CorpusFinding {
   category : String
   severity : String
   message : String
-} derive(ToJson)
+}
 
 ///|
+#derive(ToJson)
 struct CorpusAudit {
   file : String
   read_ok : Bool
   version : String
   encoding : String
-  tags : Int
+  tags : Int32
   eof_ok : Bool
   codes_ok : Bool
   scan_warnings : Array[String]
@@ -28,19 +31,20 @@ struct CorpusAudit {
   entity_kinds : Array[CorpusKind]
   entity_warnings : Array[String]
   expanded_kinds : Array[CorpusKind]
-  expanded_outlines : Int
+  expanded_outlines : Int32
   expansion_warnings : Array[String]
   findings : Array[CorpusFinding]
   incomplete : Bool
   geometry_verified : Bool
-} derive(ToJson)
+}
 
 ///|
+#derive(ToJson)
 struct CorpusReadError {
   file : String
   read_ok : Bool
   error : String
-} derive(ToJson)
+}
 
 ///|
 fn corpus_bump(kinds : Array[CorpusKind], entity : @dxfkit.Entity) -> Unit {

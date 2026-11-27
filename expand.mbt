@@ -14,9 +14,9 @@ pub(all) struct Expansion {
 
 ///|
 pub(all) struct ExpandLimits {
-  max_placed : Int
-  max_points : Int
-  max_visits : Int
+  max_placed : Int32
+  max_points : Int32
+  max_visits : Int32
 }
 
 ///|
@@ -24,8 +24,8 @@ pub(all) struct ExpandLimits {
 pub(all) struct InsertInstance {
   handle : String
   block : String
-  row : Int
-  column : Int
+  row : Int32
+  column : Int32
 }
 
 ///|
@@ -59,8 +59,8 @@ priv struct ExpandCtx {
   tol : Double
   warnings : Array[String]
   limits : ExpandLimits
-  mut visits : Int
-  mut points : Int
+  mut visits : Int32
+  mut points : Int32
   mut stopped : Bool
 }
 

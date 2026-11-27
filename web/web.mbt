@@ -10,6 +10,7 @@
 
 ///|
 /// 页面的一次解码/解析/展开入口；旧函数保留供已有调用方使用。
+#export_name("analyze")
 pub fn analyze(file_base64 : String, min_gap : Double, tol : Double) -> String {
   let data = match decode(file_base64) {
     Ok(data) => data
@@ -36,6 +37,7 @@ pub fn analyze(file_base64 : String, min_gap : Double, tol : Double) -> String {
 /// 加工前检查。返回完整文字报告（页面用 textContent 显示）。
 ///
 /// `min_gap` 是允许的最小净距，0 表示不查。
+#export_name("check")
 pub fn check(file_base64 : String, min_gap : Double) -> String {
   let data = match decode(file_base64) {
     Ok(data) => data
@@ -48,6 +50,7 @@ pub fn check(file_base64 : String, min_gap : Double) -> String {
 
 ///|
 /// 把图纸画成 SVG。失败返回空串（原因问一次 `svg_error`）。
+#export_name("svg")
 pub fn svg(file_base64 : String, tol : Double) -> String {
   match decode(file_base64) {
     Ok(data) => @dxfkit.build_drawing(@dxfkit.scan_tags(data)).to_svg(tol)
@@ -57,6 +60,7 @@ pub fn svg(file_base64 : String, tol : Double) -> String {
 
 ///|
 /// `svg` 失败的原因；成功时是空串。
+#export_name("svg_error")
 pub fn svg_error(file_base64 : String) -> String {
   match decode(file_base64) {
     Ok(_) => ""
